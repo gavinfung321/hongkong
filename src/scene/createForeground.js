@@ -56,6 +56,18 @@ function createRailing(segments, material) {
     walls.setMatrixAt(i, m.compose(mid.clone().setY(a.y - 3), railQ, new Vector3(length + 0.4, 6, 1)));
   });
 
+  // Depth-only twins drawn just before the railing (after the water, before
+  // the wordmark at 10): while the railing fades, only its front surface
+  // blends, so overlapping posts and rails don't pop as the camera moves.
+  const depthOnly = new MeshBasicMaterial({ colorWrite: false, transparent: true });
+  for (const mesh of [posts, rails, walls]) {
+    const twin = new InstancedMesh(mesh.geometry, depthOnly, mesh.count);
+    twin.instanceMatrix = mesh.instanceMatrix;
+    twin.renderOrder = 1;
+    mesh.renderOrder = 2;
+    group.add(twin);
+  }
+
   group.add(posts, rails, walls);
   return group;
 }
