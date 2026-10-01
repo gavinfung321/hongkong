@@ -184,14 +184,21 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
 - A big yellow moon behind the far mountain range, upper right of the opening
   frame, with the ridge hiding its lower edge. Kage's red moon was the
   reference, but its artwork can't be reused, so ours is original.
-- Drawn in code (`src/scene/createMoon.js`): a warm disc lit from the upper
-  left with soft darker patches, plus a faint additive halo. No image file.
+- Drawn in code (`src/scene/createMoon.js`), no image file, plus a faint
+  additive halo. The surface (more dark spots for realism and depth, user
+  request, 2026-10-01):
+  - six clusters of dark "seas" (maria), heavier on the upper left, in the
+    `MARIA` list;
+  - 38 craters with a shadowed upper-left wall and a bright lower-right rim;
+  - spots squashed toward the rim, as on a sphere;
+  - fine grain, then sphere shading: lit from the upper left, darker rim.
 - A fixed object in the world (`WORLD.moon` in `world.js`: position, radius,
   seed), so it stays put as the camera travels: it peeks between towers in 05
   and sits low behind IFC in 06.
 - Far larger than life on purpose (about 9° across) and unaffected by fog.
-- Tweak later: colours in `drawDisc`, halo strength in `drawHalo`, and size or
-  place in `WORLD.moon`. A painted moon can replace the disc in the assets
+- Tweak later: seas in `MARIA`, crater count in `CRATERS`, colours in
+  `drawDisc`, halo strength in `drawHalo`, and size or place in `WORLD.moon`
+  (changing its `seed` reshuffles the spots). A painted moon can replace the disc in the assets
   milestone.
 
 ### 3.10 Cursor ring (user request, 2026-10-01)
