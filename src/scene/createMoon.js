@@ -15,17 +15,14 @@ import { seededRandom } from './random.js';
 const SIZE = 512;
 const HALO_SCALE = 3.2; // halo diameter in moon diameters
 
-// Maria clusters in disc units (-1..1, y down): [x, y, spread, blobs, strength].
-// Loosely arranged like the near side's seas, heavier on the upper left.
+// Maria in disc units (-1..1, y down): [x, y, spread, blobs, strength, size].
+// A few large dark seas rather than many spots (user request, 2026-10-01).
 const MARIA = [
-  [-0.35, -0.3, 0.5, 9, 0.5],
-  [0.05, -0.42, 0.35, 6, 0.45],
-  [0.32, -0.1, 0.4, 7, 0.4],
-  [-0.15, 0.1, 0.45, 8, 0.45],
-  [-0.5, 0.25, 0.3, 5, 0.35],
-  [0.2, 0.38, 0.3, 4, 0.3],
+  [-0.3, -0.28, 0.45, 10, 0.6, 0.22],
+  [0.32, -0.08, 0.35, 8, 0.55, 0.2],
+  [-0.05, 0.22, 0.3, 6, 0.5, 0.17],
 ];
-const CRATERS = 38;
+const CRATERS = 6;
 
 // Places a disc-space point (-1..1) on the canvas, squashed toward the rim as
 // on a sphere, and runs draw(radius) in that frame.
@@ -45,7 +42,7 @@ function blob(ctx, r, x, y, size, colour) {
   onSphere(ctx, r, x, y, () => {
     const g = ctx.createRadialGradient(0, 0, 0, 0, 0, size);
     g.addColorStop(0, colour);
-    g.addColorStop(0.6, colour.replace(/[\d.]+\)$/, (a) => `${parseFloat(a) * 0.6})`));
+    g.addColorStop(0.55, colour.replace(/[\d.]+\)$/, (a) => `${parseFloat(a) * 0.85})`));
     g.addColorStop(1, colour.replace(/[\d.]+\)$/, '0)'));
     ctx.fillStyle = g;
     ctx.fillRect(-size, -size, size * 2, size * 2);
@@ -111,11 +108,11 @@ function drawDisc(seed) {
   const random = seededRandom(seed);
 
   // Maria: clusters of overlapping soft blobs, the moon's dark "seas".
-  for (const [cx, cy, spread, count, strength] of MARIA) {
+  for (const [cx, cy, spread, count, strength, size] of MARIA) {
     for (let i = 0; i < count; i++) {
       const x = cx + (random() - 0.5) * spread;
       const y = cy + (random() - 0.5) * spread;
-      blob(ctx, r, x, y, (0.07 + random() * 0.1) * r, `rgba(168, 98, 30, ${strength * (0.6 + random() * 0.4)})`);
+      blob(ctx, r, x, y, size * (0.6 + random() * 0.6) * r, `rgba(160, 90, 28, ${strength * (0.6 + random() * 0.4)})`);
     }
   }
 
