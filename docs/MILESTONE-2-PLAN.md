@@ -230,14 +230,18 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   not the cause: it moves the camera under 0.6 m/s, and the camera path is
   smooth with or without it. Scroll transitions move the camera up to ~3 m
   per frame, so the 3–15 m ripples jumped about half a wavelength each frame
-  and strobed (the wagon-wheel effect). The water now blends to the same
-  ripple pattern at 3× the size while the camera moves faster than 4 m/s
-  (fully by 24 m/s), and back within about a second after a hold is reached
-  (`CALM` in `src/scene/createWater.js`; `water.update()` receives the camera
-  speed from `main.js`). Holds and mouse parallax keep today's ripples.
+  and strobed (the wagon-wheel effect).
+- **Glassy water** (user choice, 2026-10-01, after a screen recording and a
+  comparison of four blur levels). The ripples are always sampled at least
+  5 mip levels down (`BLUR` in `src/scene/createWater.js`), so the harbour
+  reads as a calm, glassy sheen with a soft moon path rather than sharp chop.
   Measured strobing (second difference between frames on the water) at
-  1.5 m per frame: 54 before, 17 now, 13 for perfectly flat water. A larger
-  tile everywhere fixed it too but turned 03's wave-height water glassy.
+  1.5 m per frame: 54 with sharp ripples, 14 glassy, 13 for perfectly flat
+  water; a small sideways move scores 2.9.
+- Tried and dropped: swapping to 3× larger ripples while the camera moved
+  fast (the swap itself showed as a pop at the start of every scroll, seen in
+  the user's recording), and blurring only while moving (still a visible
+  soften and sharpen). A larger tile everywhere left 03's water patchy.
 
 ### 3.9 Moon (user request, 2026-10-01)
 
@@ -397,8 +401,7 @@ Stop for the user's review after each step, as in the grey-box.
 - `src/data/chapters.js`: `petals` density in chapters 05 and 06; desktop
   `parallax` shares in 01 and 04.
 - `src/scroll/cameraRig.js`: the parallax offset (`setParallax`, `PARALLAX`).
-- `src/scene/createWater.js`: ripples calm to a larger scale while the camera
-  moves fast (`CALM`); `src/main.js` passes it the camera speed.
+- `src/scene/createWater.js`: glassy water, ripples sampled blurred (`BLUR`).
 - `src/ui/debug.js`: wordmark position in the probe; `clearance()` takes a
   `parallax` option.
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font.
