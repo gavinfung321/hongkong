@@ -13,6 +13,7 @@
 
   --page-inset: 24px;
   --measure: 38ch;
+  --header-height: 72px;
 
   color-scheme: dark;
 }
@@ -40,8 +41,25 @@ body {
 
 h1,
 h2,
-p {
+p,
+ol,
+ul {
   margin: 0;
+}
+
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 a {
@@ -179,7 +197,7 @@ a:focus-visible {
   letter-spacing: -0.01em;
 }
 
-h1.chapter__title {
+#chapter-01 .chapter__title {
   font-size: clamp(2.5rem, 5vw, 4.5rem);
 }
 
@@ -204,6 +222,7 @@ h1.chapter__title {
   :root {
     --page-inset: 16px;
     --measure: 30ch;
+    --header-height: 56px;
   }
 
   .chapter {
@@ -218,6 +237,306 @@ h1.chapter__title {
   .chapter__body {
     font-size: 1rem;
   }
+}
+
+/* Site header, menu and chapter counter */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  height: var(--header-height);
+  padding: 0 var(--page-inset);
+  padding-top: env(safe-area-inset-top);
+  background: linear-gradient(to bottom, rgb(14 12 30 / 0.75), rgb(14 12 30 / 0));
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-inline-end: auto;
+  text-decoration: none;
+}
+
+.brand__mark {
+  width: 22px;
+  height: 26px;
+  flex: none;
+}
+
+.brand__mast {
+  stroke: var(--color-cream);
+  stroke-width: 1.2;
+}
+
+.brand__sail {
+  fill: var(--color-coral);
+}
+
+.brand__battens {
+  stroke: rgb(20 18 40 / 0.6);
+  stroke-width: 0.8;
+}
+
+.brand__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brand__name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.brand__tagline {
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+.brand:hover {
+  color: var(--color-cream);
+}
+
+.site-nav__links {
+  display: flex;
+  gap: 28px;
+}
+
+.site-nav a,
+.chapter-counter a {
+  position: relative;
+  text-decoration: none;
+}
+
+.site-nav a {
+  display: block;
+  padding: 8px 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current] {
+  color: var(--color-cream);
+  opacity: 1;
+}
+
+.site-nav a[aria-current]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  height: 2px;
+  background: var(--color-warm);
+}
+
+.menu-button,
+.site-menu__close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-inline-end: -10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-cream);
+  font: inherit;
+  cursor: pointer;
+}
+
+.menu-button__bars,
+.menu-button__bars::before {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: currentColor;
+}
+
+.menu-button__bars {
+  position: relative;
+  transform: translateY(-3px);
+}
+
+.menu-button__bars::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  right: 0;
+  width: 14px;
+}
+
+.menu-button:focus-visible,
+.site-menu__close:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: -4px;
+}
+
+.site-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--header-height) var(--page-inset);
+  background: rgb(14 12 30 / 0.96);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.site-menu[hidden] {
+  display: none;
+}
+
+.site-menu__close {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + (var(--header-height) - 44px) / 2);
+  right: var(--page-inset);
+  font-size: 1.25rem;
+}
+
+.site-menu__list {
+  width: min(100%, 640px);
+  margin: 0 auto;
+}
+
+.site-menu__list a {
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  align-items: baseline;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgb(243 233 210 / 0.12);
+  text-decoration: none;
+}
+
+.site-menu__index {
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.16em;
+  opacity: 0.7;
+}
+
+.site-menu__title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 600;
+}
+
+.site-menu__label {
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+
+.site-menu__list a[aria-current] .site-menu__index {
+  color: var(--color-warm);
+  opacity: 1;
+}
+
+.chapter-counter {
+  position: fixed;
+  left: var(--page-inset);
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 3;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 3px rgb(0 0 0 / 0.8);
+}
+
+.chapter-counter__list {
+  display: flex;
+  gap: 20px;
+  font-size: 1.25rem;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+}
+
+.chapter-counter a {
+  display: block;
+  padding: 4px 0;
+  opacity: 0.45;
+  transition: opacity 200ms ease;
+}
+
+.chapter-counter a:hover,
+.chapter-counter a[aria-current] {
+  color: var(--color-cream);
+  opacity: 1;
+}
+
+.chapter-counter a[aria-current]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--color-warm);
+}
+
+.chapter-counter__compact {
+  display: none;
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+}
+
+.chapter-counter__current {
+  color: var(--color-warm);
+}
+
+/* It tracks scroll progress, which only exists in the 3D story. */
+html:not(.is-enhanced) .chapter-counter {
+  display: none;
+}
+
+[data-hero="true"] .chapter-counter a {
+  opacity: 0.7;
+}
+
+[data-hero="true"] .chapter-counter__current {
+  color: inherit;
+}
+
+@media (max-width: 959px) {
+  .site-nav {
+    display: none;
+  }
+}
+
+@media (max-aspect-ratio: 4/5), (max-width: 600px) {
+  .brand__tagline {
+    font-size: 0.625rem;
+  }
+
+  .chapter-counter__list {
+    display: none;
+  }
+
+  .chapter-counter__compact {
+    display: block;
+  }
+}
+
+/* The hero only takes up scroll length when the 3D story is running. */
+.hero {
+  position: relative;
+}
+
+.is-enhanced .hero {
+  height: 100svh;
 }
 
 /* Enhanced mode: fixed WebGL canvas behind scroll-driven copy */
@@ -311,12 +630,13 @@ h1.chapter__title {
   transition: opacity 150ms linear;
 }
 
+/* Shrinks below 1440 px wide so titles stay on one line in their regions. */
 .is-enhanced .chapter__title {
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 2.9vw, 2.5rem);
 }
 
-.is-enhanced h1.chapter__title {
-  font-size: 3rem;
+.is-enhanced #chapter-01 .chapter__title {
+  font-size: clamp(2.25rem, 3.4vw, 3rem);
 }
 
 .is-enhanced .chapter__body {
@@ -334,7 +654,7 @@ h1.chapter__title {
   font-size: 1.75rem;
 }
 
-[data-breakpoint="mobile"].is-enhanced h1.chapter__title {
+[data-breakpoint="mobile"].is-enhanced #chapter-01 .chapter__title {
   font-size: 2.25rem;
 }
 

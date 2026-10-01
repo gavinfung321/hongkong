@@ -10,6 +10,7 @@ import { createGating, makeFadeable } from './scene/gating.js';
 import { createCameraRig, fovForAspect } from './scroll/cameraRig.js';
 import { createScrollConductor } from './scroll/scrollConductor.js';
 import { createCopyLayer } from './ui/copyLayer.js';
+import { createSiteHeader } from './ui/siteHeader.js';
 import { enterFallback, supportsWebGL2, watchContext } from './ui/fallback.js';
 
 const params = new URLSearchParams(window.location.search);
@@ -20,8 +21,10 @@ const VEIL_IN = 150;
 const VEIL_OUT = 200;
 const MOBILE_ASPECT = 0.8;
 const ADAPTIVE = { desktop: 45, mobile: 28, window: 2, step: 0.25, floor: 1 };
+// Progress at which chapter 01's copy starts to fade in; the hero is above it.
+const HERO_END = 0.5 - SCROLL.copyFull - SCROLL.copyFade;
 
-function start(initGuard) {
+function start(initGuard, header) {
   const canvas = document.getElementById('world');
   const veil = document.querySelector('.veil');
   const sections = [...document.querySelectorAll('.chapter')];
@@ -164,15 +167,22 @@ function start(initGuard) {
   }
 
   document.addEventListener('click', (event) => {
-    const link = event.target.closest?.('a[href^="#chapter-"]');
+    const link = event.target.closest?.('a[href^="#chapter-"], a[href="#top"]');
     if (!link) return;
-    const index = sections.findIndex((s) => `#${s.id}` === link.getAttribute('href'));
-    if (index < 0) return;
+    const href = link.getAttribute('href');
+    let title;
+    if (href === '#top') {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      title = document.getElementById('site-title');
+    } else {
+      const index = sections.findIndex((s) => `#${s.id}` === href);
+      if (index < 0) return;
+      scrollToChapter(index);
+      title = sections[index].querySelector('.chapter__title');
+      title.setAttribute('tabindex', '-1');
+    }
     event.preventDefault();
-    scrollToChapter(index);
-    history.replaceState(null, '', link.getAttribute('href'));
-    const title = sections[index].querySelector('.chapter__title');
-    title.setAttribute('tabindex', '-1');
+    history.replaceState(null, '', href);
     title.focus({ preventScroll: true });
   });
 
@@ -205,7 +215,9 @@ function start(initGuard) {
     const state = conductor.update(dt);
     state.breakpoint = breakpoint;
     state.motion = stepped ? 'stepped' : 'continuous';
-    copy.update(state.p, { stepped, index: state.index });
+    const hero = state.p < HERO_END;
+    copy.update(state.p, { stepped, index: state.index, hero });
+    header.update(state.index, hero);
 
     if (stepped) {
       if (state.index !== shownKeyframe) {
@@ -330,13 +342,15 @@ function start(initGuard) {
 }
 
 function boot() {
+  // The header works in the poster-only fallback too, where links scroll natively.
+  const header = createSiteHeader();
   if (params.has('fallback')) return enterFallback('requested');
   if (!supportsWebGL2()) return enterFallback('no-webgl2');
 
   root.classList.add('is-enhanced');
   const initGuard = window.setTimeout(() => enterFallback('init-timeout'), INIT_TIMEOUT);
   try {
-    start(initGuard);
+    start(initGuard, header);
   } catch (error) {
     window.clearTimeout(initGuard);
     console.error(error);

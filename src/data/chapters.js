@@ -41,8 +41,8 @@ export const chapters = [
       mobile: { position: [-43.1, 9, 99], target: [7.6, 121.5, -281.4], fov: 77.7 },
     },
     copy: {
-      desktop: { left: 22, top: 8, right: 52, bottom: 31 },
-      mobile: { left: 8, top: 6, right: 92, bottom: 36 },
+      desktop: { left: 22, top: 11, right: 52, bottom: 34 },
+      mobile: { left: 8, top: 9, right: 92, bottom: 39 },
     },
     visibility: {
       desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 0, bursts: 0 },
@@ -96,8 +96,8 @@ export const chapters = [
       },
     },
     copy: {
-      desktop: { left: 50, top: 10, right: 92, bottom: 38 },
-      mobile: { left: 8, top: 4, right: 92, bottom: 18 },
+      desktop: { left: 50, top: 11, right: 92, bottom: 39 },
+      mobile: { left: 8, top: 9, right: 92, bottom: 23 },
     },
     visibility: {
       desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bursts: 0 },
@@ -138,8 +138,8 @@ export const chapters = [
       mobile: { position: [-31.2, 1.8, -218.1], target: [41.8, 112.7, -595.4], fov: 80.1, via: [[60, 3, -300]] },
     },
     copy: {
-      desktop: { left: 5, top: 6, right: 42, bottom: 22 },
-      mobile: { left: 8, top: 6, right: 92, bottom: 34 },
+      desktop: { left: 5, top: 11, right: 42, bottom: 27 },
+      mobile: { left: 8, top: 9, right: 92, bottom: 37 },
     },
     visibility: {
       desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bursts: 0 },
@@ -180,8 +180,8 @@ export const chapters = [
       mobile: { position: [152.4, 3, -378.2], target: [173.6, 97.2, -766.4], fov: 78 },
     },
     copy: {
-      desktop: { left: 5, top: 10, right: 34, bottom: 44 },
-      mobile: { left: 8, top: 6, right: 92, bottom: 34 },
+      desktop: { left: 5, top: 11, right: 34, bottom: 45 },
+      mobile: { left: 8, top: 9, right: 92, bottom: 37 },
     },
     // The wheel is gated here: framing alone leaves it peeking past the junk's
     // stern, and it is small and distant while it fades.
@@ -224,8 +224,8 @@ export const chapters = [
       mobile: { position: [568.7, 50, -500], target: [476.2, 139.4, -878.8], fov: 64.1 },
     },
     copy: {
-      desktop: { left: 5, top: 6, right: 50, bottom: 32 },
-      mobile: { left: 6, top: 5, right: 62, bottom: 40 },
+      desktop: { left: 5, top: 11, right: 50, bottom: 37 },
+      mobile: { left: 6, top: 9, right: 62, bottom: 44 },
     },
     visibility: {
       desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bursts: 0 },
@@ -265,7 +265,7 @@ export const chapters = [
     },
     copy: {
       desktop: { left: 5, top: 12, right: 38, bottom: 62 },
-      mobile: { left: 6, top: 4, right: 60, bottom: 30 },
+      mobile: { left: 6, top: 9, right: 60, bottom: 35 },
     },
     visibility: {
       desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bursts: 1 },
