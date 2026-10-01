@@ -7,8 +7,10 @@ export function makeFadeable(object) {
   const fadeable = (source) => {
     if (!materials.has(source)) {
       const copy = source.clone();
-      // clone() drops shader patches such as the city windows.
+      // clone() drops shader patches such as the city windows, and their
+      // program cache keys.
       copy.onBeforeCompile = source.onBeforeCompile;
+      copy.customProgramCacheKey = source.customProgramCacheKey;
       copy.transparent = true;
       materials.set(source, copy);
     }

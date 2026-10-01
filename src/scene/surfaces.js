@@ -3,7 +3,8 @@ import { seededRandom } from './random.js';
 
 // Original surface textures drawn in code (no image files): Clock Tower brick
 // and granite, clock dials, ferry windows and hull, junk sail cloth and hull,
-// the Observation Wheel's hub glow, the promenade railing's granite.
+// the Observation Wheel's hub glow, the promenade railing's granite and the
+// paving slabs.
 // Fine detail is kept to a few pixels per metre so mipmaps average it calmly.
 
 function canvas(width, height) {
@@ -518,6 +519,34 @@ export function railingPanel() {
     }
   }
   return texture(c);
+}
+
+// Promenade paving, one 2.4 m tile: 1.2 m × 0.6 m granite slabs in running
+// bond, each with its own tone, thin dark joints (about 1.5 cm) and a faint
+// grain. The wet look (darkening and reflections) is added in the shader.
+export function promenadePaving() {
+  const S = 240;
+  const SLAB = S / 3;
+  const random = seededRandom(31);
+  const [c, ctx] = canvas(S, S);
+  const base = 0x4a4950;
+  ctx.fillStyle = '#121116';
+  ctx.fillRect(0, 0, S, S);
+  for (let row = 0; row < 3; row++) {
+    for (let col = 0; col < 3; col++) {
+      ctx.fillStyle = shade(base, (random() - 0.5) * 0.08);
+      ctx.fillRect(col * SLAB + 1, row * SLAB + 1, SLAB - 2, SLAB - 2);
+    }
+  }
+  for (let i = 0; i < 2200; i++) {
+    ctx.fillStyle = shade(base, (random() - 0.5) * 0.08);
+    const x = Math.floor(random() * S);
+    const y = Math.floor(random() * S);
+    if (x % SLAB > 1 && x % SLAB < SLAB - 1 && y % SLAB > 1 && y % SLAB < SLAB - 1) ctx.fillRect(x, y, 1, 1);
+  }
+  const t = texture(c);
+  t.anisotropy = 8;
+  return t;
 }
 
 // ---- Junk -------------------------------------------------------------------
