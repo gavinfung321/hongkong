@@ -8,14 +8,19 @@ import {
   InstancedMesh,
   Matrix4,
   Mesh,
+  MeshBasicMaterial,
   MeshLambertMaterial,
+  MeshStandardMaterial,
+  PointLight,
   Quaternion,
   Shape,
   SphereGeometry,
   Vector2,
   Vector3,
 } from 'three';
-import { PALETTE, basic, lambert } from './palette.js';
+import { PALETTE, lambert } from './palette.js';
+import { addCityWindows } from './cityWindows.js';
+import { clockDial, clockTowerShaft, graniteAshlar } from './surfaces.js';
 import { WORLD } from '../data/world.js';
 import { seededRandom } from './random.js';
 
@@ -42,9 +47,12 @@ function deck({ points, top }, material) {
 function createClockTower() {
   const tower = new Group();
   tower.name = 'clockTower';
-  const stone = lambert(0x6a6478);
-  const dark = lambert(PALETTE.proxyDark);
-  const light = lambert(0x8d879a);
+  const shaftMaps = clockTowerShaft();
+  const stone = new MeshStandardMaterial({ ...shaftMaps, bumpScale: 1.5, emissive: 0xffffff, roughness: 0.92 });
+  const ashlar = graniteAshlar();
+  // Warm tints keep the cyan rim light from turning the granite teal.
+  const light = new MeshStandardMaterial({ ...ashlar, color: 0xf2cfae, bumpScale: 1, roughness: 0.85 });
+  const dark = new MeshStandardMaterial({ ...ashlar, color: 0x9a8070, bumpScale: 1, roughness: 0.9 });
 
   // Slim shaft, then a light-stone crown that steps in: cornice, two tiers, dome, spire.
   const plinth = new Mesh(new BoxGeometry(10, 3, 10), dark);
@@ -70,7 +78,7 @@ function createClockTower() {
   const spire = new Mesh(new CylinderGeometry(0.12, 0.12, 6, 6), light);
   spire.position.y = 51;
 
-  const faceMaterial = basic(PALETTE.warm);
+  const faceMaterial = new MeshBasicMaterial({ map: clockDial() });
   const faceY = 33.5;
   const faceFront = new Mesh(new CircleGeometry(1.6, 24), faceMaterial);
   faceFront.position.set(0, faceY, 4.02);
@@ -81,7 +89,12 @@ function createClockTower() {
   faceWest.position.set(-4.02, faceY, 0);
   faceWest.rotation.y = -Math.PI / 2;
 
-  tower.add(plinth, shaft, cornice, lowerTier, upperTier, pinnacles, dome, spire, faceFront, faceEast, faceWest);
+  // Warm floodlight at the foot of the harbour face: bright brick low down,
+  // fading up the shaft.
+  const flood = new PointLight(0xffa860, 420, 60, 2);
+  flood.position.set(0, 1.5, 9);
+
+  tower.add(plinth, shaft, cornice, lowerTier, upperTier, pinnacles, dome, spire, faceFront, faceEast, faceWest, flood);
   const [x, y, z] = WORLD.clockTower.position;
   tower.position.set(x, y, z);
   tower.rotation.y = WORLD.clockTower.yaw;
@@ -91,7 +104,8 @@ function createClockTower() {
 function createKowloonSkyline() {
   const { x, z, count, height, seed } = WORLD.kowloon.skyline;
   const random = seededRandom(seed);
-  const mesh = new InstancedMesh(unitBox, new MeshLambertMaterial({ color: 0xffffff }), count);
+  const material = addCityWindows(new MeshLambertMaterial({ color: 0xffffff }), { lit: 0.22, strength: 0.8 });
+  const mesh = new InstancedMesh(unitBox, material, count);
   const matrix = new Matrix4();
   const q = new Quaternion();
   const color = new Color();

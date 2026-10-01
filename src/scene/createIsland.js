@@ -18,6 +18,7 @@ import {
   Vector3,
 } from 'three';
 import { PALETTE, basic, lambert } from './palette.js';
+import { addCityWindows } from './cityWindows.js';
 import { WORLD } from '../data/world.js';
 import { seededRandom } from './random.js';
 
@@ -36,7 +37,8 @@ function createSkyline() {
   const [ifcX, , ifcZ] = WORLD.ifc.position;
   const [wheelX, , wheelZ] = WORLD.wheel.position;
   const random = seededRandom(seed);
-  const mesh = new InstancedMesh(unitBox, new MeshLambertMaterial({ color: 0xffffff }), count);
+  const material = addCityWindows(new MeshLambertMaterial({ color: 0xffffff }), { lit: 0.3, strength: 0.9 });
+  const mesh = new InstancedMesh(unitBox, material, count);
   const matrix = new Matrix4();
   const q = new Quaternion();
   const color = new Color();
@@ -91,7 +93,13 @@ function taperedSquare(sideBottom, sideTop, height) {
 function createIFC() {
   const ifc = new Group();
   ifc.name = 'ifc';
-  const glass = lambert(0x747a8e);
+  const glass = addCityWindows(new MeshLambertMaterial({ color: 0x747a8e }), {
+    lit: 0.45,
+    floor: 4,
+    bay: 2.6,
+    coolShare: 0.7,
+    strength: 1.1,
+  });
   const tiers = [
     [0, 300, 56, 52],
     [300, 350, 50, 47],

@@ -9,6 +9,8 @@ export function makeFadeable(object) {
     const source = child.material;
     if (!materials.has(source)) {
       const copy = source.clone();
+      // clone() drops shader patches such as the city windows.
+      copy.onBeforeCompile = source.onBeforeCompile;
       copy.transparent = true;
       materials.set(source, copy);
     }

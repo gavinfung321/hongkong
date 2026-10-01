@@ -11,11 +11,15 @@ import {
   LineSegments,
   Matrix4,
   Mesh,
+  MeshBasicMaterial,
+  MeshStandardMaterial,
+  PointLight,
   Shape,
   ShapeGeometry,
   Vector3,
 } from 'three';
-import { PALETTE, basic, lambert } from './palette.js';
+import { basic, lambert } from './palette.js';
+import { ferryHull, ferryWindows, junkPlanks, junkSail } from './surfaces.js';
 
 // Both vessels are built with their bow pointing along local +X.
 
@@ -32,7 +36,7 @@ function createFerry() {
   const hullGeometry = new ExtrudeGeometry(hullShape, { depth: 4, bevelEnabled: false, curveSegments: 8 });
   hullGeometry.rotateX(-Math.PI / 2);
   hullGeometry.translate(0, -0.8, 0);
-  const hull = new Mesh(hullGeometry, lambert(0x2f3d38));
+  const hull = new Mesh(hullGeometry, new MeshStandardMaterial({ map: ferryHull(), roughness: 0.6 }));
 
   const deckMaterial = lambert(0xb4b0a4);
   const lowerDeck = new Mesh(new BoxGeometry(34, 3, 9), deckMaterial);
@@ -44,13 +48,16 @@ function createFerry() {
   const funnel = new Mesh(new CylinderGeometry(1, 1, 2, 10), lambert(0x3a3a3a));
   funnel.position.y = 10.3;
 
-  const windowMaterial = basic(PALETTE.warm);
-  const lowerWindows = new Mesh(new BoxGeometry(30, 1, 9.1), windowMaterial);
+  const lowerWindows = new Mesh(new BoxGeometry(30, 1, 9.1), new MeshBasicMaterial({ map: ferryWindows(24) }));
   lowerWindows.position.y = 4.9;
-  const upperWindows = new Mesh(new BoxGeometry(26, 0.9, 8.6), windowMaterial);
+  const upperWindows = new Mesh(new BoxGeometry(26, 0.9, 8.6), new MeshBasicMaterial({ map: ferryWindows(21) }));
   upperWindows.position.y = 7.7;
 
-  ferry.add(hull, lowerDeck, upperDeck, roof, funnel, lowerWindows, upperWindows);
+  // Cabin light spilling onto the water around the hull.
+  const glow = new PointLight(0xffb36b, 160, 45, 2);
+  glow.position.y = 3;
+
+  ferry.add(hull, lowerDeck, upperDeck, roof, funnel, lowerWindows, upperWindows, glow);
   return ferry;
 }
 
@@ -81,7 +88,7 @@ function createJunk() {
   profile.lineTo(-14, 5.2);
   const hullGeometry = new ExtrudeGeometry(profile, { depth: 7, bevelEnabled: false });
   hullGeometry.translate(0, 0, -3.5);
-  const hull = new Mesh(hullGeometry, lambert(0x2a2226));
+  const hull = new Mesh(hullGeometry, new MeshStandardMaterial({ map: junkPlanks(), roughness: 0.8 }));
 
   const cabin = new Mesh(new BoxGeometry(12, 1.4, 6.2), basic(0xc98a4f));
   cabin.position.set(-2, 3.6, 0);
@@ -94,7 +101,7 @@ function createJunk() {
   ];
 
   const masts = new InstancedMesh(new CylinderGeometry(0.18, 0.18, 1, 6), lambert(0x241c1c), rig.length);
-  const sailMaterial = basic(PALETTE.sail, { side: DoubleSide });
+  const sailMaterial = new MeshBasicMaterial({ map: junkSail(), side: DoubleSide });
   const battenPoints = [];
   const m = new Matrix4();
 
@@ -102,7 +109,7 @@ function createJunk() {
     m.makeScale(1, mh, 1).setPosition(mx, 2.8 + mh / 2, 0);
     masts.setMatrixAt(i, m);
 
-    const sail = new Mesh(new ShapeGeometry(sailShape(w, h), 6), sailMaterial);
+    const sail = new Mesh(normaliseUVs(new ShapeGeometry(sailShape(w, h), 6)), sailMaterial);
     sail.position.set(mx, base, z);
     junk.add(sail);
 
@@ -118,8 +125,24 @@ function createJunk() {
   battenGeometry.setAttribute('position', new Float32BufferAttribute(battenPoints, 3));
   const battens = new LineSegments(battenGeometry, basic(0x5a1f18));
 
-  junk.add(hull, cabin, masts, battens);
+  // Deck lanterns: a warm pool on the water around the junk.
+  const lantern = new PointLight(0xffa860, 110, 35, 2);
+  lantern.position.set(-2, 5, 0);
+
+  junk.add(hull, cabin, masts, battens, lantern);
   return junk;
+}
+
+// ShapeGeometry UVs are in shape units; maps the outline's bounds to 0..1.
+function normaliseUVs(geometry) {
+  geometry.computeBoundingBox();
+  const { min, max } = geometry.boundingBox;
+  const uv = geometry.attributes.uv;
+  const position = geometry.attributes.position;
+  for (let i = 0; i < uv.count; i++) {
+    uv.setXY(i, (position.getX(i) - min.x) / (max.x - min.x), (position.getY(i) - min.y) / (max.y - min.y));
+  }
+  return geometry;
 }
 
 const tangent = new Vector3();
