@@ -111,8 +111,8 @@ function createFerry() {
 
 // ---- Junk -------------------------------------------------------------------
 
-// After Victoria Harbour's red-sailed junks (original, simplified; measured
-// from a side-on photo, sails about 15% larger than life for drama): a
+// After Victoria Harbour's red-sailed junks (original, simplified; hull
+// measured from a side-on photo, sails sized after a closer one): a
 // varnished hull narrowing to a raised bow, a high stern with a lit deckhouse
 // and square transom, a canopy over the waist, three battened sails uplit
 // from the deck, rope fans, pennants and tyre fenders.
@@ -370,10 +370,13 @@ function createJunk() {
   rudder.position.set(junkX(0) - 0.45, -0.45, 0);
 
   // [mastX, mastZ, rake (forward +), mastTop, sailWidth, sailHeight, sailFoot, panels]
+  // Big sails, as on the harbour junks (user request): the main is about
+  // half the hull length tall. The foresail overlaps the main, so it hangs
+  // 0.9 m to one side and the cloths never meet.
   const rig = [
-    [10.6, 0, 0.14, 16, 5.4, 7.8, 6.4, 6],
-    [4, 0, 0, 20.5, 8.3, 10, 7, 6],
-    [-11.2, -0.8, -0.04, 13, 3.4, 4.9, 7.6, 5],
+    [10.6, 0.9, 0.14, 17.5, 8, 10, 5.4, 6],
+    [4, 0, 0, 23.5, 12, 15, 5.6, 7],
+    [-11.2, -0.8, -0.04, 14, 4.2, 5.6, 7, 5],
   ];
   const masts = new InstancedMesh(new CylinderGeometry(0.12, 0.17, 1, 6).translate(0, 0.5, 0), lambert(0x2a1a12), rig.length);
   const sailGeometries = [];
