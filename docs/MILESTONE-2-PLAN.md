@@ -416,17 +416,26 @@ all six.
      GLB files, I will follow that." Checked in Kage's public repository: it
      has no 3D model files (only images, fonts and three.js) and builds its
      shapes in code. So every 3D object here stays built in code; Meshy
-     models are references only (ledger, "Meshy models").
+     models are references only (ledger, "Meshy models"). The user keeps a
+     local copy at `C:\Users\gavin\OneDrive\Desktop\kage-main` (22 files, no
+     models), for studying techniques only: no Kage code, images or copy is
+     reused (licence rule).
    - **Junk, rebuilt (user request, 2026-10-01).** Analysed against the
      user's photos and Meshy renders (reference only). Model: a wooden-hull
      harbour junk, with a side-on night photo as the proportion master,
      because the warm hull and lit stern windows stay readable on dark water
      (a black hull vanishes in 04).
-     - **Sail size (user decision):** real proportions, sails about 15–20%
-       larger for drama. Measured side-on as a share of hull length: main mast
-       ~0.65 above water (was 0.89), main sail ~0.25 wide × 0.30 tall (was
-       0.32 × 0.57). Built: main mast top 20.5 m, sails 8.3 × 10 m (main),
-       5.4 × 7.8 m (fore), 3.4 × 4.9 m (mizzen) on a 28 m hull.
+     - **Sail size: much bigger (user request, 2026-10-01, replacing the
+       first choice of real proportions + 15–20%).** After seeing the build,
+       the user asked for sails "much bigger like the attached photos" (a
+       close daytime photo, where the sails dwarf the hull). Measured there,
+       the main sail is about half the hull length tall and nearly as wide.
+       Built on the 28 m hull: main 12 × 15 m (mast top 23.5 m), fore
+       8 × 10 m, mizzen 4.2 × 5.6 m, about 1.45 times the first build. (The
+       side-on photo had given a main sail of only ~0.25 × 0.30 of the hull
+       length.) The foresail overlaps the main, as in the photo, so it hangs
+       0.9 m to one side and the two cloths never meet or flicker. The
+       mizzen overhangs the stern, as on the real boats.
      - **Hull:** shaped from 40 cross-sections: narrower bow rising to a
        point, raised stern with a wide square transom, sheer sweeping up at
        both ends; varnished planks bent to follow the sheer, a salmon
@@ -437,7 +446,7 @@ all six.
        waist on posts, a rail with posts along both sides, tyre fenders.
      - **Sails:** straight leaning front edge, a yard climbing to the peak at
        the back, a fan-shaped back edge scalloped between batten ends, mast
-       about a quarter back; 6 battens (5 on the mizzen) in pale bamboo,
+       about a quarter back; 7 battens on the main, 6 on the fore, 5 on the mizzen, in pale bamboo,
        cloth bellying between them; vivid red, uplit from the deck so each
        sail is brightest at the foot and each panel darker under the batten
        above.
@@ -448,20 +457,22 @@ all six.
        (was a warm deck lantern), so the glassy water draws a red streak under
        the junk beside the moon path. No new flat pieces on the water; still
        3 point lights.
-     - **Framing:** the smaller rig left 04 with the junk's top at 19% against
-       a 10% target, so the 04 camera was re-solved: desktop eye still 3 m,
-       field of view narrowed from 79.9° to 74.5° (a slight zoom), camera and
-       junk both shifted about 6 m; mobile eye 3 m, camera 9 m closer, junk
-       turned 27° more toward the camera (a three-quarter view, which reads
-       better in portrait). A first solve at 2.5 m eye height brought the
-       camera within 1.2 m of the water, under the 1.5 m clearance rule, so it
-       was rejected. The probe skips the thin rigging, whose bounding box
-       would span the whole boat.
+     - **Framing:** the first, smaller rig left 04 with the junk's top at 19%
+       against a 10% target, and the big sails then put it at 3%, so the 04
+       camera was re-solved each time. Now: desktop eye still 3 m, field of
+       view 76.6° (was 79.9°), camera and junk both shifted about 6 m; mobile
+       eye 3 m, field of view 80°, camera 9 m closer, junk turned 27° more
+       toward the camera (a three-quarter view, which reads better in
+       portrait). A solve at 2.5 m eye height brought the camera within 1.2 m
+       of the water, under the 1.5 m clearance rule, so it was rejected. The
+       probe skips the thin rigging, whose bounding box would span the whole
+       boat.
      - **Checked:** 01 and 04 within ±3% on desktop and mobile; framing at the
        four mouse corners and camera clearance as before. With 1 cm camera
-       steps no surface flickers; 04 changes on edges only (sails, battens,
-       rails, masts move as the junk bobs): 22,183 changing pixels against
-       9,025, from the many more edges. 01 is up 8%.
+       steps no surface flickers, including where the fore and main sails
+       overlap; 04 changes on edges only (sails, battens, rails, masts move as
+       the junk bobs): 20,396 changing pixels against 9,025 for the old junk,
+       from the many more edges. 01 is up 9%.
      - **Open issue (older, not from the junk):** the full probe run shows
        four misses that were already there before this change: the wheel in
        desktop 05 (left 41 against 29), IFC top in mobile 01 (49 against
