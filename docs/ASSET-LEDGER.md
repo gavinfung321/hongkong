@@ -38,8 +38,9 @@ models are references only.
 | Clock Tower | 3D, built in code (`createKowloonEdge.js`) | 01–02 | P0 | — | Original code | Silhouette, clock face, warm openings; textured since 2b. Rebuilt from reference photos 2026-10-01 (user request): real proportions (9 m shaft, cornice 32 m, dome 44 m, mast 51 m), granite pilasters, bracketed cornice, two crown stages with scrolls, columns and balconies, dome and lattice mast, three Roman-numeral dials, lit arched door, golden floodlit glow. No signage or logos |
 | Star Ferry | 3D animated, built in code (`createVessels.js`) | 01–04 | P0 | — | Original code | Reshaped, then rebuilt from reference photos 2026-10-01 (user request): lofted hull, open lower deck, life rings, roof gear, masts, navigation lights |
 | Junk | 3D animated, built in code (`createVessels.js`) | 01, 04 | P0 | — | Original code, from the user's photo and reference-only photos and Meshy renders | Rebuilt 2026-10-01 (user request); hero asset |
-| IFC | 3D, built in code (`createIsland.js`) | 01, 03–06 | P0 | — | Original code | Recognisable crown and proportions; lit windows in the shader |
-| Observation Wheel | 3D, built in code (`createIsland.js`) | 01, 03, 05 | P0 | — | Original code | Ring, spokes, gondolas, supports; co-star scale in 05 |
+| IFC | 3D, built in code (`createIsland.js`) | 01, 03–06 | P0 | — | Original code | Recognisable crown and proportions; lit windows in the shader. Rebuilt from reference photos 2026-10-02 (user request): recessed-corner tiers with pale corner piers, shallow setbacks to a rounded top, face slots, bronze refuge bands, floodlit top tiers, cool white crown fins; lit IFC Mall podium |
+| Observation Wheel | 3D, built in code (`createIsland.js`) | 01, 03, 05 | P0 | — | Original code | Ring, spokes, gondolas, supports; co-star scale in 05. Rebuilt from reference photos 2026-10-02 (user request): true 60 m scale, red-pink lit truss rim, cable spokes, glowing hub, 42 upright violet gondolas, white A-frame legs, boarding tents; turns slowly (still in reduced motion). No sponsor banners or lettering |
+| Central Ferry Piers | 3D, built in code (`createIsland.js`) | 01, 03, 05 | P1 | — | Original code | Added 2026-10-02 (user request): five lit pavilions with colonnades and pitched green roofs along the Central waterfront under IFC |
 | Fireworks | Effect (technique TBD) | 06 | P1 | TBD | Original | Decide after the grey-box: particles, illustrated plate, or alpha cards; 4–5 separated bursts per Frame 06 |
 | Skyline | 3D environment, built in code | All | P0 | — | Original code, modular blocks | Curated silhouette, not a full city twin |
 | `mountain-silhouette.webp` | Alpha WebP | All | P0 | <180 KB | Original | Can remain a depth card if it survives parallax tests |
@@ -108,7 +109,7 @@ midground, background and atmosphere. Each one still has to pass gate 5 below
 | `promenade-lamp.webp` | Alpha WebP | Hero, 01–02 | Foreground | Tsim Sha Tsui promenade lamp at the frame edge; a strong near silhouette |
 | Moon | **Built 2026-10-01** as an original procedural disc and halo (`createMoon.js`), no file | All (world object) | Background | Yellow focal light behind the Peak ridge; a painted `moon.webp` may replace the disc later |
 | Bauhinia petals | **Built 2026-10-01** as an original petal drawn in code (`createPetals.js`), no file | All but 06 | Near and far | The site's constant particle effect, in place of Kage-style leaves or rain |
-| Surface textures | **Built 2026-10-01** (user request), original, drawn in code (`surfaces.js`), no files: Clock Tower shaft brick with stone-framed sash windows and frieze, rusticated granite pilasters and brick crown stages with arched openings (colour and golden glow; redrawn with the tower rebuild, user request, 2026-10-01, replacing the brick, bands, quoins and arched windows with bump); granite ashlar; clock dial with Roman numerals and a minute track; ferry upper deck walls with paired framed windows (sides lit; ends with two dark bridge bays; colour and glow), lit lower cabin with seat backs and passengers, hull with pale line and waterline band, and waterline foam (redrawn with the ferry rebuild, user request, 2026-10-01; the reshape's green and white deck walls are no longer used by the ferry); junk sail cloth, varnished hull with waterline stripe and rail cap, and lit deckhouse walls (rebuilt with the junk, user request, 2026-10-01) | 01–05 | Midground | Textured surfaces instead of flat colour |
+| Surface textures | **Built 2026-10-01** (user request), original, drawn in code (`surfaces.js`), no files: Clock Tower shaft brick with stone-framed sash windows and frieze, rusticated granite pilasters and brick crown stages with arched openings (colour and golden glow; redrawn with the tower rebuild, user request, 2026-10-01, replacing the brick, bands, quoins and arched windows with bump); granite ashlar; clock dial with Roman numerals and a minute track; ferry upper deck walls with paired framed windows (sides lit; ends with two dark bridge bays; colour and glow), lit lower cabin with seat backs and passengers, hull with pale line and waterline band, and waterline foam (redrawn with the ferry rebuild, user request, 2026-10-01; the reshape's green and white deck walls are no longer used by the ferry); junk sail cloth, varnished hull with waterline stripe and rail cap, and lit deckhouse walls (rebuilt with the junk, user request, 2026-10-01); the Observation Wheel's soft hub glow, 64 × 64 (user request, 2026-10-02) | 01–05 | Midground | Textured surfaces instead of flat colour |
 | Lit windows | **Built 2026-10-01** (user request), original, generated in the shader (`cityWindows.js`), no file | All | Background | Window grids on the skyline and IFC; fades to an average glow when windows get too small to show |
 | `mist-band.webp` | Alpha WebP, tiled | All | Between skyline layers | Drifting haze that separates near and far buildings |
 | Black kites | Small animated sprites | Hero, 01–03 | Sky | Hong Kong's signature bird gliding slowly; a living detail |
@@ -167,6 +168,14 @@ stock libraries with watermarks. They were looked at only (to measure
 proportions and read the details) and not stored or traced. Watermarks,
 signage and logos on the buildings behind the tower are not copied; the dial
 numerals are drawn in a system serif font.
+
+The IFC, Observation Wheel and Central Ferry Piers rebuild (user request,
+2026-10-02) uses ten web photos the user shared (IFC by day, at dusk and at
+night, two from Tsim Sha Tsui; the wheel at night from below), some from stock
+libraries with watermarks and one with promo text. They were looked at only,
+to measure proportions and read the details, and not stored or traced.
+Watermarks, promo text, bank logos, building signage and the wheel's sponsor
+banners are not copied.
 
 ## Asset approval gates
 

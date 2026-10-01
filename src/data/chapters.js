@@ -93,7 +93,8 @@ export const chapters = [
       mobile: {
         tower: { left: 5, right: 19, top: 42, bottom: 72 },
         junk: { left: 44, right: 75, bottom: 74 },
-        ifc: { left: 81, right: 88, top: 46 },
+        // Right edge 1% wider than the PNG: the rebuilt IFC has the true 57 m width.
+        ifc: { left: 81, right: 89, top: 46 },
         wheel: { left: 73, right: 79, bottom: 70 },
         horizon: 70,
       },

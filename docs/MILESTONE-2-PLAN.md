@@ -376,6 +376,7 @@ all six.
    couple of pixels, the grid fades to its average glow, so distant towers
    can't shimmer. Still to try: a brighter band of ground-level lights along
    the Central waterfront, as in the storyboard (user reminder, 2026-10-01).
+   Partly done with the lit Central Ferry Piers (2b, 2026-10-02).
 2b. **Lighting and surfaces (user request, 2026-10-01: "why Kage's torii and
    temple look so real … everything looks very plain"; "go ahead and try").**
    Kage's models are as simple as ours; its realism comes from darkness,
@@ -512,6 +513,54 @@ all six.
      - **Rights:** the user's photos (and stock photos) are looked at only,
        never stored or traced; no signage lettering or logos from the
        buildings behind the tower.
+   - **IFC, Observation Wheel and Central Ferry Piers, rebuilt from photos
+     (user request, 2026-10-02).** "Now I think we can focus on the IFC and
+     wheel." The user shared ten photos (day, dusk and night, two of them from
+     Tsim Sha Tsui at our viewing angle). The user's choices, all as
+     recommended: cool white crown, red-pink wheel, true-scale wheel, a slow
+     turn, and the lit piers in this pass.
+     - **IFC:** a 57 m square plan with recessed corners (pale corner piers
+       keep each corner square in silhouette, with the recess behind),
+       straight to 285 m, then seven shallow setbacks that round the top off
+       like the real tower's; a slot down the middle of each upper face. Four
+       horizontal bronze refuge-floor bands on the shaft replace the old
+       vertical bronze stripes, which the real tower doesn't have. Windows
+       at the real storey height (4.6 m), mostly cool white; the upper tiers
+       are lit more densely and the top three tiers are floodlit white. The
+       crown is a ring of 24 tapering fins around a lit core, tallest at the
+       corners and dipping toward each face's slot, about 413 m to the tips
+       (412 m in life; the old proxy reached 417 m). Every wall faces x or z,
+       which the window grid needs.
+     - **IFC Mall podium:** a low lit block at the tower's foot, kept out of
+       the IFC group so the probe measures the tower alone.
+     - **Observation Wheel:** true scale, 60 m to the top of the rim (was
+       66 m). A red-pink lit truss rim (two rings joined by zigzag lacing),
+       28 cable spokes from each side of a wide hub, a glowing white hub disc
+       with a soft halo, 42 violet lit gondolas hung outside the rim and
+       always upright, four white tubular legs in A-frames front and back, and
+       a boarding platform with five white tents. It turns once every 4
+       minutes in continuous mode; in reduced motion it holds still. No
+       sponsor banners or lettering.
+     - **Central Ferry Piers:** five pavilions on decks out over the water
+       between IFC and the east: a warm lit hall behind a pale colonnade
+       under a pitched green roof. They give Central the lit waterfront band
+       from the storyboard (the reminder in step 1).
+     - **Depth gaps:** without a logarithmic depth buffer, surfaces 1.2 km
+       away only separate when about 0.2 m apart, so the bronze bands stand
+       0.6 m proud of the glass and the hub disc 0.5 m in front of the hub.
+     - **Framing:** no camera changed. All chapters pass except the four
+       older misses. Mobile 01's IFC right edge was widened from 88% to 89%
+       for the true 57 m width (it measured 91.1). Re-solving mobile 01 and
+       desktop 05 was tried and didn't help: the targets ask for a slimmer IFC
+       and a wheel about 3.5× too big, so the older misses stay logged. The
+       Clock Tower still hides both buildings at every 02 mouse corner.
+     - **Checked:** every desktop frame within its band at the four mouse
+       corners; camera clearance unchanged (1.67 m). With 1 cm camera steps
+       the IFC and piers change on edges only (05: 8,714 changing pixels;
+       03: 23,814; 01: 11,109; 06: 261). The wheel shows as changing because
+       it turns. Draw calls peak at 85 (03), inside the 100 budget.
+     - **Rights:** the photos are looked at only, never stored or traced; no
+       watermarks, promo text, bank logos or sponsor banners copied.
    - **No GLB models (user decision, 2026-10-01):** "If Kage didn't use any
      GLB files, I will follow that." Checked in Kage's public repository: it
      has no 3D model files (only images, fonts and three.js) and builds its
@@ -669,7 +718,7 @@ Measured with the `?fps` overlay on a production build, as in
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
 | Draw calls | ≤ 100 (was ≤ 80) | ≤ 100 |
-| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
+| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
 | Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
 
@@ -725,7 +774,17 @@ Stop for the user's review after each step, as in the grey-box.
   proportions (pilasters, bracketed cornice, two crown stages with scrolls,
   columns and balconies, dome, lattice mast, three Roman-numeral dials,
   arched lit door, golden glow all the way up; user request, 2026-10-01).
-- `src/scene/createIsland.js`: Central and IFC windows.
+- `src/scene/createIsland.js`: Central and IFC windows. Then IFC rebuilt
+  from photos (recessed-corner tiers, face slots, bronze bands, floodlit
+  top, crown fins), a lit IFC Mall podium, the Central Ferry Piers, and the
+  Observation Wheel rebuilt at true scale (truss rim, cable spokes, glowing
+  hub, 42 gondolas, A-frame legs, tents) and turning (user request,
+  2026-10-02).
+- `src/main.js`: turns the wheel each frame in continuous mode.
+- `src/data/world.js`: IFC podium, wheel radius 27.5 m and hub height,
+  Central Ferry Piers positions.
+- `src/data/chapters.js`: mobile 01 IFC right target 89% for the true width.
+- `src/scene/surfaces.js`: the wheel's hub glow.
 - `src/scene/createVessels.js`: Star Ferry reshaped, then rebuilt from photos
   (lofted hull, rubbing strip, tyres, open lower deck with lit cabin, green
   band, upper deck with bridge ends and life rings, roof canisters, funnel,
@@ -770,7 +829,8 @@ The milestone passes when:
    The side pager (desktop) marks the current chapter and its dashes land on
    the right hold.
 4. Reduced-motion mode shows no sinking, no parallax, no particles and no
-   cursor ring, and still tells the whole story. In continuous mode the water
+   cursor ring, and the Observation Wheel holds still (it turns slowly in
+   continuous mode; user request, 2026-10-02), and still tells the whole story. In continuous mode the water
    does not blink or strobe while the mouse moves or during scroll
    transitions.
 5. The poster-only fallback still works, with a usable nav.
@@ -798,6 +858,6 @@ step.
 
 | Milestone | Content |
 |---|---|
-| 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk and Clock Tower are already rebuilt from reference photos; the IFC and wheel get the same treatment, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals and tree, display fonts. Also the user's stone railing, promenade palms, wet paving tiles and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
+| 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk, Clock Tower, IFC and wheel are already rebuilt from reference photos, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals and tree, display fonts. Also the user's stone railing, promenade palms, wet paving tiles and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
 | 4. Atmosphere, all chapters | Clouds lit from below and searchlight beams from the Central towers (user reminders, 2026-10-01), the look-test layers rolled out to 02–06, extra particles alongside the petals (sea spray, city bokeh, firework embers in 06), real fireworks, a sparkle trail added to the cursor ring (3.10) |
 | 5. Copy and launch | Final copy, poster images, a full performance pass on both iPhones, deployment |
