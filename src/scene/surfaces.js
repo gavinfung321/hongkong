@@ -3,7 +3,7 @@ import { seededRandom } from './random.js';
 
 // Original surface textures drawn in code (no image files): Clock Tower brick
 // and granite, clock dials, ferry windows and hull, junk sail cloth and hull,
-// the Observation Wheel's hub glow.
+// the Observation Wheel's hub glow, the promenade railing's granite.
 // Fine detail is kept to a few pixels per metre so mipmaps average it calmly.
 
 function canvas(width, height) {
@@ -451,6 +451,72 @@ export function hubGlow() {
   glow.addColorStop(1, 'rgba(255, 120, 160, 0)');
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, S, S);
+  return texture(c);
+}
+
+// ---- Promenade railing ----------------------------------------------------------
+
+const GRANITE = 0x515258;
+
+function speckle(ctx, w, h, random, count) {
+  for (let i = 0; i < count; i++) {
+    const light = random() < 0.45;
+    ctx.fillStyle = shade(GRANITE, light ? 0.03 + random() * 0.04 : -0.03 - random() * 0.03);
+    ctx.fillRect(Math.floor(random() * w), Math.floor(random() * h), 1, 1);
+  }
+}
+
+// Dark speckled granite, one 1 m tile (2 cm specks, kept low in contrast so
+// they don't sparkle while the camera moves).
+export function promenadeGranite() {
+  const S = 64;
+  const random = seededRandom(23);
+  const [c, ctx] = canvas(S, S);
+  ctx.fillStyle = shade(GRANITE, 0);
+  ctx.fillRect(0, 0, S, S);
+  speckle(ctx, S, S, random, 900);
+  return texture(c);
+}
+
+// One face of a big railing post, 0.44 m × 0.67 m: granite with a recessed
+// panel and three carved waves.
+export function railingPanel() {
+  const W = 64;
+  const H = 96;
+  const random = seededRandom(29);
+  const [c, ctx] = canvas(W, H);
+  ctx.fillStyle = shade(GRANITE, 0);
+  ctx.fillRect(0, 0, W, H);
+  speckle(ctx, W, H, random, 1300);
+  const [x0, y0, x1, y1] = [8, 10, W - 8, H - 12];
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+  ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = 'rgba(0, 0, 0, 0.45)';
+  ctx.beginPath();
+  ctx.moveTo(x0, y1);
+  ctx.lineTo(x0, y0);
+  ctx.lineTo(x1, y0);
+  ctx.stroke();
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+  ctx.beginPath();
+  ctx.moveTo(x1, y0);
+  ctx.lineTo(x1, y1);
+  ctx.lineTo(x0, y1);
+  ctx.stroke();
+  for (let k = 0; k < 3; k++) {
+    const y = H * 0.4 + k * 9;
+    for (const [offset, colour] of [[0, 'rgba(0, 0, 0, 0.5)'], [1.5, 'rgba(255, 255, 255, 0.12)']]) {
+      ctx.strokeStyle = colour;
+      ctx.beginPath();
+      for (let x = x0 + 5; x <= x1 - 5; x++) {
+        const wy = y + offset + Math.sin(((x - x0) / (x1 - x0)) * Math.PI * 3) * 2.5;
+        if (x === x0 + 5) ctx.moveTo(x, wy);
+        else ctx.lineTo(x, wy);
+      }
+      ctx.stroke();
+    }
+  }
   return texture(c);
 }
 

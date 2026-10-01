@@ -41,6 +41,14 @@ export const WORLD = {
       { from: [-50, 2], to: [-50, 30], y: 2.5 }, // B: promontory's harbour edge (desktop 02)
       { from: [-74, 92.2], to: [-50, 92.3], y: 2.5 }, // C: waterfront (mobile 02)
     ],
+    // Tall cast-iron lamps on the Clock Tower promontory, seen in 02 only:
+    // either side of the tower and short of the ferry on desktop, clear of the
+    // tower on mobile, outside the 01 frames (they line up with the tower there).
+    lamps: [
+      [-74.5, 2.5, 3.5],
+      [-69.5, 2.5, 17],
+      [-66, 2.5, 21],
+    ],
     // Palm silhouette cards around the Clock Tower (frame 02). Yaw faces the cards
     // toward the chapter 02 cameras.
     palms: [

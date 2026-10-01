@@ -46,7 +46,9 @@ models are references only.
 | `mountain-silhouette.webp` | Alpha WebP | All | P0 | <180 KB | Original | Can remain a depth card if it survives parallax tests |
 | `harbour-poster-desktop.webp` | Fallback/poster | All | P0 | <350 KB | Original | 16:10-safe master, no embedded text |
 | `harbour-poster-mobile.webp` | Fallback/poster | All | P0 | <250 KB | Original | Authored portrait composition, no embedded text |
-| `promenade-railing.webp` | Alpha WebP | 01–02 | P1 | <250 KB | Original | Transparent edge-tested cutout |
+| `promenade-railing.webp` | Alpha WebP | 01–02 | P1 | <250 KB | Original | Transparent edge-tested cutout. **Replaced 2026-10-02** (user decision): the stone railing is built in code (next row) |
+| Stone railing and lanterns | 3D, built in code (`createForeground.js`, `lamps.js`) | Hero, 01–02 | P1 | — | Original code, from the user's AI-made railing design (reference only, below) | Built 2026-10-02 (user request): granite plinth and pedestals, square posts with carved wave panels, slim mid posts, round rails, a cast-iron lantern with glow on every second post; warm light pools faked in the materials |
+| Promenade lamps | 3D, built in code (`createForeground.js`) | 02 | P1 | — | Original code, from the user's AI-made lamp design (reference only, below) | Built 2026-10-02 (user request): three 4.2 m cast-iron lamps on the Clock Tower promontory, clear of the tower and ferry |
 | `bauhinia-petals.webp` | Alpha WebP sprite sheet | All but 06 | P1 | <120 KB | Original, made by the user | 4–6 single petals, a few edge-on; replaces the code-drawn petal in `createPetals.js`. References below |
 | `bauhinia-tree.webp` | Alpha WebP | Hero, 01–02 | P2 | <300 KB | Original, made by the user | Blossoming branch or tree cutout at the frame edge, where the petals come from; a foreground layer in Kage's manner |
 | `palm-branch.webp` | Alpha WebP | 02 | P2 | <200 KB | Original | Remove if it reads as generic tropical decoration |
@@ -106,10 +108,10 @@ midground, background and atmosphere. Each one still has to pass gate 5 below
 | Working name | Type | Chapter | Layer | Purpose |
 |---|---|---:|---|---|
 | Railing over the wordmark's feet | Use of `promenade-railing.webp` | Hero | Foreground | Kage's main depth trick: scenery passing in front of the title. Needs the user to reverse the "nothing covers 香港" decision |
-| `promenade-lamp.webp` | Alpha WebP | Hero, 01–02 | Foreground | Tsim Sha Tsui promenade lamp at the frame edge; a strong near silhouette |
+| `promenade-lamp.webp` | Alpha WebP | Hero, 01–02 | Foreground | Tsim Sha Tsui promenade lamp at the frame edge; a strong near silhouette. Superseded 2026-10-02 by the lamps built in code (Phase B) |
 | Moon | **Built 2026-10-01** as an original procedural disc and halo (`createMoon.js`), no file | All (world object) | Background | Yellow focal light behind the Peak ridge; a painted `moon.webp` may replace the disc later |
 | Bauhinia petals | **Built 2026-10-01** as an original petal drawn in code (`createPetals.js`), no file | All but 06 | Near and far | The site's constant particle effect, in place of Kage-style leaves or rain |
-| Surface textures | **Built 2026-10-01** (user request), original, drawn in code (`surfaces.js`), no files: Clock Tower shaft brick with stone-framed sash windows and frieze, rusticated granite pilasters and brick crown stages with arched openings (colour and golden glow; redrawn with the tower rebuild, user request, 2026-10-01, replacing the brick, bands, quoins and arched windows with bump); granite ashlar; clock dial with Roman numerals and a minute track; ferry upper deck walls with paired framed windows (sides lit; ends with two dark bridge bays; colour and glow), lit lower cabin with seat backs and passengers, hull with pale line and waterline band, and waterline foam (redrawn with the ferry rebuild, user request, 2026-10-01; the reshape's green and white deck walls are no longer used by the ferry); junk sail cloth, varnished hull with waterline stripe and rail cap, and lit deckhouse walls (rebuilt with the junk, user request, 2026-10-01); the Observation Wheel's soft hub glow, 64 × 64 (user request, 2026-10-02) | 01–05 | Midground | Textured surfaces instead of flat colour |
+| Surface textures | **Built 2026-10-01** (user request), original, drawn in code (`surfaces.js`), no files: Clock Tower shaft brick with stone-framed sash windows and frieze, rusticated granite pilasters and brick crown stages with arched openings (colour and golden glow; redrawn with the tower rebuild, user request, 2026-10-01, replacing the brick, bands, quoins and arched windows with bump); granite ashlar; clock dial with Roman numerals and a minute track; ferry upper deck walls with paired framed windows (sides lit; ends with two dark bridge bays; colour and glow), lit lower cabin with seat backs and passengers, hull with pale line and waterline band, and waterline foam (redrawn with the ferry rebuild, user request, 2026-10-01; the reshape's green and white deck walls are no longer used by the ferry); junk sail cloth, varnished hull with waterline stripe and rail cap, and lit deckhouse walls (rebuilt with the junk, user request, 2026-10-01); the Observation Wheel's soft hub glow, 64 × 64 (user request, 2026-10-02); the stone railing's dark speckled granite (64 × 64, 1 m tile) and post panel with three carved waves (64 × 96) (user request, 2026-10-02) | 01–05 | Midground | Textured surfaces instead of flat colour |
 | Lit windows | **Built 2026-10-01** (user request), original, generated in the shader (`cityWindows.js`), no file | All | Background | Window grids on the skyline and IFC; fades to an average glow when windows get too small to show |
 | `mist-band.webp` | Alpha WebP, tiled | All | Between skyline layers | Drifting haze that separates near and far buildings |
 | Black kites | Small animated sprites | Hero, 01–03 | Sky | Hong Kong's signature bird gliding slowly; a living detail |
@@ -129,7 +131,7 @@ plan and prompt here before import (as for Meshy above).
 
 | Reminder | Look in the storyboard | Becomes | Made by | When |
 |---|---|---|---|---|
-| Stone railing | Dark stone balustrade along the promenade, square posts topped with warm lanterns | `promenade-railing.webp` (Phase B, P1), or a low-poly model if it must turn corners in 3D; the lantern glow is added in code | User | Milestone 3 (assets) |
+| Stone railing | Dark stone balustrade along the promenade, square posts topped with warm lanterns | **Built 2026-10-02** in code from the user's design, with lanterns and three tall lamps ("Stone railing and lanterns", Phase B) | User design, code | Done |
 | Trees | Rows of palms along the Tsim Sha Tsui promenade, framing the Clock Tower | Palm cutouts replacing the flat palm cards (`palm-branch.webp` widened to a set), plus the bauhinia tree already listed | User | Milestone 3 |
 | Wet tiles | Promenade paving shining with reflected lamp light | A tileable wet-paving texture on the promenade deck, with glossy reflections | User | Milestone 3; the shine is tuned in Milestone 4 |
 | Clouds | Heavy clouds lit coral from below by the city | A cloud layer in the sky (painted cards or a procedural layer), kept clear of the moon | User artwork or code | Milestone 4 (atmosphere) |
@@ -176,6 +178,15 @@ libraries with watermarks and one with promo text. They were looked at only,
 to measure proportions and read the details, and not stored or traced.
 Watermarks, promo text, bank logos, building signage and the wheel's sponsor
 banners are not copied.
+
+The promenade pass (user request, 2026-10-02) uses images the user made with
+an AI image tool, in `docs/references/foreground/generated/`: a stone
+balustrade with a lantern (`promenade-railing-v1.png`), a cast-iron lamp
+(`promenade-lamp-v1.png`), a wet paving strip (`wet-paving-strip-v1.png`),
+plus a ferry bow fragment and harbour spray not used yet. They are design
+references only: the railing, lamps and paving are built in code, and the
+images are never shipped or used as textures. The tool and its terms are
+to be recorded here if any image is ever imported.
 
 ## Asset approval gates
 
