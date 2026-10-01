@@ -141,8 +141,10 @@ How it is built:
 
 ### 3.6 Vertical Chinese text (built 2026-10-01)
 
-- **維港之夜**, written vertically down the right edge below the nav, on every
-  chapter. It moves up with the header when the header slides away.
+- **東方明珠** ("Pearl of the Orient"), written vertically down the right
+  edge below the nav. It replaced 維港之夜, and it slides up and fades out
+  with the header on scroll down and returns with it on scroll up (user
+  request, 2026-10-01).
 - A **per-chapter label** at the bottom right, also vertical, under a short
   hairline. It changes with the current chapter: the old label rises out and
   the new one comes up from below, like the copy. The hero shows 01's label.
