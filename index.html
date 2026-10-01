@@ -106,6 +106,18 @@
       <p class="chapter-counter__compact"><span class="chapter-counter__current">01</span> / 06</p>
     </div>
 
+    <!-- Side pager: duplicates the menu's links, so it is hidden from screen readers and the tab order. -->
+    <div class="side-pager" aria-hidden="true">
+      <ol>
+        <li><a href="#chapter-01" data-nav-index="0" tabindex="-1"><span class="side-pager__label">Harbour at Dusk</span></a></li>
+        <li><a href="#chapter-02" data-nav-index="1" tabindex="-1"><span class="side-pager__label">The Kowloon Edge</span></a></li>
+        <li><a href="#chapter-03" data-nav-index="2" tabindex="-1"><span class="side-pager__label">Across the Water</span></a></li>
+        <li><a href="#chapter-04" data-nav-index="3" tabindex="-1"><span class="side-pager__label">Red Sails</span></a></li>
+        <li><a href="#chapter-05" data-nav-index="4" tabindex="-1"><span class="side-pager__label">City of Light</span></a></li>
+        <li><a href="#chapter-06" data-nav-index="5" tabindex="-1"><span class="side-pager__label">Afterglow</span></a></li>
+      </ol>
+    </div>
+
     <!-- Decorative: the English chapter names already carry the meaning. -->
     <div class="vertical-text" lang="zh-Hant" aria-hidden="true">
       <p class="vertical-text__title">東方明珠</p>
@@ -131,8 +143,7 @@
           <p class="chapter__kicker">Arrival</p>
           <h2 class="chapter__title" id="chapter-01-title">Harbour at Dusk</h2>
           <p class="chapter__body" data-copy="placeholder">
-            Night falls over Victoria Harbour and the island begins to glow. Scroll to cross
-            the water.
+            Night falls over Victoria Harbour and the island begins to glow.
           </p>
         </div>
       </section>

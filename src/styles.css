@@ -590,7 +590,7 @@ a:focus-visible {
 }
 
 [data-hero="true"] .chapter-counter__hint {
-  opacity: 0.8;
+  opacity: 0.5;
 }
 
 .chapter-counter__compact {
@@ -609,7 +609,7 @@ html:not(.is-enhanced) .chapter-counter {
 }
 
 [data-hero="true"] .chapter-counter a {
-  opacity: 0.7;
+  opacity: 0.4;
 }
 
 [data-hero="true"] .chapter-counter__current {
@@ -640,6 +640,84 @@ html:not(.is-enhanced) .chapter-counter {
 
   .chapter-counter__compact {
     display: block;
+  }
+}
+
+/* Side pager: one dash per chapter, centred on the right edge */
+
+.side-pager {
+  position: fixed;
+  top: 50%;
+  right: var(--page-inset);
+  z-index: 3;
+  transform: translateY(-50%);
+}
+
+.side-pager a {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  height: 18px;
+  text-decoration: none;
+}
+
+/* Fixed-width box, so the dash grows leftward from a shared right edge. */
+.side-pager a::after {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: linear-gradient(currentColor, currentColor) right / 12px 100% no-repeat;
+  opacity: 0.45;
+  transition:
+    background-size 400ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 250ms ease;
+}
+
+.side-pager a[aria-current]::after,
+[data-hero="true"] .side-pager li:first-child a::after {
+  background-size: 24px 100%;
+  opacity: 1;
+}
+
+.side-pager__label {
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px rgb(0 0 0 / 0.8);
+  opacity: 0;
+  transform: translateX(6px);
+  transition:
+    opacity 250ms ease,
+    transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) {
+  .side-pager a:hover {
+    color: var(--color-cream);
+  }
+
+  .side-pager a:hover::after {
+    background-size: 24px 100%;
+    opacity: 1;
+  }
+
+  .side-pager a:hover .side-pager__label {
+    opacity: 0.85;
+    transform: none;
+  }
+}
+
+/* It tracks scroll progress, which only exists in the 3D story. */
+html:not(.is-enhanced) .side-pager {
+  display: none;
+}
+
+/* On phones IFC stands at the right edge in 03–05; the vertical label already shows the chapter. */
+@media (max-aspect-ratio: 4/5), (max-width: 600px) {
+  .side-pager {
+    display: none;
   }
 }
 

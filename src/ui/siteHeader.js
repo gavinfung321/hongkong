@@ -9,7 +9,7 @@ export function createSiteHeader() {
   const button = document.querySelector('.menu-button');
   const menu = document.getElementById('site-menu');
   const closeButton = menu.querySelector('.site-menu__close');
-  const background = ['.site-header', '#story', '.chapter-counter', '.site-footer'].map((s) =>
+  const background = ['.site-header', '#story', '.chapter-counter', '.side-pager', '.site-footer'].map((s) =>
     document.querySelector(s),
   );
   let current = null;

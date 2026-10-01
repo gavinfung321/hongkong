@@ -109,6 +109,11 @@ How it is built:
   reserved for the sails).
 - On mobile the counter shrinks to the current number only ("01 / 06"), so it
   never collides with copy.
+- Dimmed so the scene leads: hint at 50% and numbers at 40% opacity, full on
+  hover (user request, 2026-10-01).
+- Chapter 01's body no longer ends with "Scroll to cross the water."; the
+  hint already says it (user request, 2026-10-01). The hint's wording is
+  being chosen by the user.
 
 ### 3.4 Nav bar and mobile menu
 
@@ -212,6 +217,20 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   `drawDisc`, halo strength in `drawHalo`, and size or place in `WORLD.moon`
   (changing its `seed` reshuffles the spots). A painted moon can replace the disc in the assets
   milestone.
+
+### 3.11 Side pager (user request, 2026-10-01)
+
+- After Kage: six short dashes stacked in the middle of the right edge, one
+  per chapter. The current chapter's dash is twice as long and bright (01's
+  in the hero); the others are faint.
+- Each dash is a link to its chapter. On hover it lengthens and the chapter
+  name appears to its left.
+- Desktop only: on phones IFC stands at the right edge in 03–05, and the
+  vertical label already shows the chapter. Hidden in the poster-only
+  fallback. Like the counter, it duplicates the menu, so it is hidden from
+  screen readers and the tab order.
+- Built in `index.html` (`.side-pager`) and `styles.css`; `siteHeader.js`
+  marks the current dash along with the nav and counter.
 
 ### 3.10 Cursor ring (user request, 2026-10-01)
 
@@ -322,7 +341,7 @@ Stop for the user's review after each step, as in the grey-box.
 - `src/data/chapters.js`: copy regions, new `hero` block. (The Chinese labels
   ended up in `index.html`, next to the menu's copies of them.)
 - `src/main.js`: wire up the new pieces.
-- New: `src/ui/siteHeader.js` (nav, menu, counter, vertical label), `src/scene/createWordmark.js`,
+- New: `src/ui/siteHeader.js` (nav, menu, counter, vertical label, side pager), `src/scene/createWordmark.js`,
   `src/scene/createMoon.js`, `src/ui/cursorRing.js`,
   `src/ui/pointerParallax.js`, `src/scene/createPetals.js`,
   `src/scene/createGlow.js`.
@@ -343,6 +362,8 @@ The milestone passes when:
 3. Nav links, counter numbers, the menu and "Return to the harbour" all land
    on the right hold. The menu works with the keyboard and a screen reader.
    The vertical label shows the current chapter and never covers a subject.
+   The side pager (desktop) marks the current chapter and its dashes land on
+   the right hold.
 4. Reduced-motion mode shows no sinking, no parallax, no particles and no
    cursor ring, and still tells the whole story.
 5. The poster-only fallback still works, with a usable nav.
