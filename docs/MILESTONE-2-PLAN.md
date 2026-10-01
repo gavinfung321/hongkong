@@ -244,6 +244,13 @@ all six.
    - **Cost:** two instanced draw calls, 76 petals updated per frame.
    - Built in `src/scene/createPetals.js`; sizes, counts, colours and wind are
      the constants at the top.
+   - **Later (user, 2026-10-01):** the user will make the petal artwork
+     (`bauhinia-petals.webp`) and a blossoming tree or branch cutout
+     (`bauhinia-tree.webp`) from the reference photos in
+     `docs/references/bauhinia/` (ledger, "Reference material"). The real
+     flower is a more vivid fuchsia than our muted tints, with pale (not dark)
+     veins and wavy edges, so colours and veins get re-tuned when the sprites
+     arrive.
 5. **Railing cutout.** Replace the grey railing blocks with a painted,
    transparent `promenade-railing.webp` (ledger item, P1). This needs the
    artwork first (section 9).
@@ -340,6 +347,6 @@ step.
 
 | Milestone | Content |
 |---|---|
-| 3. Assets | GLB models from the ledger (junk, ferry, Clock Tower, IFC, wheel), remaining cutouts, display fonts |
+| 3. Assets | GLB models from the ledger (junk, ferry, Clock Tower, IFC, wheel), remaining cutouts including the user's bauhinia petals and tree, display fonts |
 | 4. Atmosphere, all chapters | The look-test layers rolled out to 02–06, extra particles alongside the petals (sea spray, city bokeh, firework embers in 06), real fireworks, a sparkle trail added to the cursor ring (3.10) |
 | 5. Copy and launch | Final copy, poster images, a full performance pass on both iPhones, deployment |
