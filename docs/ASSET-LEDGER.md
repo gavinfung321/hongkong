@@ -65,6 +65,7 @@ midground, background and atmosphere. Each one still has to pass gate 5 below
 | Railing over the wordmark's feet | Use of `promenade-railing.webp` | Hero | Foreground | Kage's main depth trick: scenery passing in front of the title. Needs the user to reverse the "nothing covers 香港" decision |
 | `promenade-lamp.webp` | Alpha WebP | Hero, 01–02 | Foreground | Tsim Sha Tsui promenade lamp at the frame edge; a strong near silhouette |
 | Moon | **Built 2026-10-01** as an original procedural disc and halo (`createMoon.js`), no file | All (world object) | Background | Yellow focal light behind the Peak ridge; a painted `moon.webp` may replace the disc later |
+| Bauhinia petals | **Built 2026-10-01** as an original petal drawn in code (`createPetals.js`), no file | All but 06 | Near and far | The site's constant particle effect, in place of Kage-style leaves or rain |
 | `mist-band.webp` | Alpha WebP, tiled | All | Between skyline layers | Drifting haze that separates near and far buildings |
 | Black kites | Small animated sprites | Hero, 01–03 | Sky | Hong Kong's signature bird gliding slowly; a living detail |
 | Sampans and distant ferries | Low-poly or cards | 01, 03–04 | Midground | Busy-harbour feel; lit windows and wakes at a distance |

@@ -8,6 +8,7 @@ import { createVessels } from './scene/createVessels.js';
 import { createForeground } from './scene/createForeground.js';
 import { createWordmark } from './scene/createWordmark.js';
 import { createMoon } from './scene/createMoon.js';
+import { createPetals } from './scene/createPetals.js';
 import { createGating, makeFadeable } from './scene/gating.js';
 import { createCameraRig, fovForAspect } from './scroll/cameraRig.js';
 import { createScrollConductor } from './scroll/scrollConductor.js';
@@ -44,7 +45,8 @@ function start(initGuard, header) {
   const foreground = createForeground();
   const wordmark = createWordmark(renderer, HERO.wordmark.text);
   const moon = createMoon();
-  scene.add(moon.group, kowloon.group, island.group, vessels.group, foreground.group, wordmark.mesh);
+  const petals = createPetals();
+  scene.add(moon.group, kowloon.group, island.group, vessels.group, foreground.group, wordmark.mesh, petals.group);
 
   const gating = createGating(chapters, {
     ferry: makeFadeable(vessels.ferry),
@@ -55,6 +57,7 @@ function start(initGuard, header) {
     railing: (value) => foreground.setOpacity('railing', value),
     palms: (value) => foreground.setOpacity('palms', value),
     bursts: (value) => foreground.setOpacity('bursts', value),
+    petals: (value) => petals.setDensity(value),
   });
 
   const rig = createCameraRig(camera, chapters, { hold: SCROLL.hold });
@@ -72,6 +75,7 @@ function start(initGuard, header) {
   function applyMotionMode() {
     root.classList.toggle('is-stepped', stepped);
     root.dataset.motion = stepped ? 'stepped' : 'continuous';
+    petals.setEnabled(!stepped);
     shownKeyframe = -1;
     conductor.snap();
     needsRender = true;
@@ -98,6 +102,7 @@ function start(initGuard, header) {
     rig.setBreakpoint(breakpoint);
     rig.setAspect(width / height);
     vessels.setPaths(chapters, breakpoint);
+    petals.setBreakpoint(breakpoint);
     copy.setBreakpoint(breakpoint);
     const finale = chapters[chapters.length - 1];
     const pose = finale.camera[breakpoint];
@@ -218,6 +223,7 @@ function start(initGuard, header) {
   let fpsOverlay = null;
   let last = 0;
   let time = 0;
+  let lastRendered = 0;
   let ready = false;
 
   function frame(now) {
@@ -254,6 +260,8 @@ function start(initGuard, header) {
       if (!control.free) applyPose(state.pRendered, false, time);
       wordmark.sinkAt(state.pRendered, state.pTop, HERO.sinkEnd, HERO.fadeEnd);
       water.update(dt);
+      petals.update(dt, camera, dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0);
+      lastRendered = state.pRendered;
     }
 
     needsRender = false;

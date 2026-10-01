@@ -30,7 +30,7 @@ depth comes from layers around the simple 3D:
 |---|---|
 | Painted 2D cutouts at the frame edges (grass, pine, wall) that move faster than the scene | The promenade railing as a painted cutout (frame 01) |
 | A giant wordmark inside the scene, with grass covering its feet | 香港 standing on the water in front of the scene, shaded toward its feet, sinking as you scroll |
-| Particles at several depths (red leaves, embers) | Warm specks of light drifting near the promenade (frame 01) |
+| Particles at several depths (red leaves, embers) | Bauhinia petals drifting across the whole site, gone for the fireworks (4.4) |
 | A big moon as the focal light | An original yellow moon behind the Peak ridge, drawn in code (3.9) |
 | Soft glow on the moon, lanterns and windows | Glow on lit windows, the Clock Tower faces and IFC's crown |
 | A ring that trails the mouse pointer | An original cursor ring, desktop only (3.10) |
@@ -225,8 +225,25 @@ all six.
      phones.
    - **B:** a bloom pass from the three.js add-ons (standard, not a custom
      shader). Richer, but costs speed on phones. Desktop only if used.
-4. **Particles.** Warm specks drifting slowly near the promenade: about 150 on
-   desktop and 60 on mobile, as one cheap point cloud. Off in reduced motion.
+4. **Bauhinia petals (built; user request, 2026-10-01).** Replaces the warm
+   specks. Petals of Hong Kong's flower (洋紫荊) drift across every chapter as
+   the site's constant effect, instead of Kage's leaves. Rain was considered
+   and rejected: it contradicts the clear moon and the fireworks, and Kage's
+   "rain" feel mostly comes from the diagonal-line overlay (step 1).
+   - **Look:** single loose petals drawn in code (no artwork), tinted in four
+     muted shades from deep magenta to pale orchid so the coral sails lead.
+   - **Depth:** a near layer of a few large petals (6 desktop / 4 mobile)
+     drawn over everything, including 香港; a far layer of small fogged
+     petals (70 / 32). Both travel with the camera, so moving still gives
+     parallax.
+   - **Motion:** slow fall, sideways breeze, sway and flutter; scrolling adds
+     a short gust.
+   - **Density:** sparse and calm. Full in the hero and 01–04, 0.6 in 05 so
+     the city lights lead, 0 in 06 so the fireworks take over (`petals` in
+     each chapter's `visibility`). Off in reduced motion.
+   - **Cost:** two instanced draw calls, 76 petals updated per frame.
+   - Built in `src/scene/createPetals.js`; sizes, counts, colours and wind are
+     the constants at the top.
 5. **Railing cutout.** Replace the grey railing blocks with a painted,
    transparent `promenade-railing.webp` (ledger item, P1). This needs the
    artwork first (section 9).
@@ -280,9 +297,10 @@ Stop for the user's review after each step, as in the grey-box.
 - `src/main.js`: wire up the new pieces.
 - New: `src/ui/siteHeader.js` (nav, menu, counter), `src/scene/createWordmark.js`,
   `src/scene/createMoon.js`, `src/ui/cursorRing.js`,
-  `src/ui/pointerParallax.js`, `src/scene/createParticles.js`,
+  `src/ui/pointerParallax.js`, `src/scene/createPetals.js`,
   `src/scene/createGlow.js`.
 - `src/data/world.js`: the `moon` block.
+- `src/data/chapters.js`: `petals` density in chapters 05 and 06.
 - `src/ui/debug.js`: wordmark position in the probe.
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font.
 
@@ -323,5 +341,5 @@ step.
 | Milestone | Content |
 |---|---|
 | 3. Assets | GLB models from the ledger (junk, ferry, Clock Tower, IFC, wheel), remaining cutouts, display fonts |
-| 4. Atmosphere, all chapters | The look-test layers rolled out to 02–06, per-chapter particles (sea spray, city bokeh, firework embers), real fireworks, a sparkle trail added to the cursor ring (3.10) |
+| 4. Atmosphere, all chapters | The look-test layers rolled out to 02–06, extra particles alongside the petals (sea spray, city bokeh, firework embers in 06), real fireworks, a sparkle trail added to the cursor ring (3.10) |
 | 5. Copy and launch | Final copy, poster images, a full performance pass on both iPhones, deployment |
