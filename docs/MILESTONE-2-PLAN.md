@@ -242,6 +242,20 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   fast (the swap itself showed as a pop at the start of every scroll, seen in
   the user's recording), and blurring only while moving (still a visible
   soften and sharpen). A larger tile everywhere left 03's water patchy.
+- **Railing shows on holds only** (user report and choice, 2026-10-01: the
+  remaining scroll flicker was on the 01 and 02 railings). Cause: a
+  picket-fence strobe. Near-black posts every 2.6 m with the bright moon path
+  behind them, and the 01 → 02 move passes 2.26 m from the railing at up to
+  ~4 m per frame, so every gap flips between post and water each frame. The
+  railing now fades out over the last 0.06 of each hold (in damped progress,
+  while the camera is still at rest) and back in over the first 0.06 of the
+  next (`holdOnly` and `HOLD_FADE` in `src/scene/gating.js`). Measured: no
+  railing above 15 m/s; the fastest the camera moves while it is more than
+  5% visible is 5 m/s (the settle on arrival). Stepped mode is unchanged.
+- **Clean railing fade:** depth-only twins of the posts, rails and wall are
+  drawn just before the railing (render order 1 and 2, below the wordmark at
+  10), so a half-faded railing is an even veil over the water instead of
+  darker patches where its pieces overlap (`createForeground.js`).
 
 ### 3.9 Moon (user request, 2026-10-01)
 
@@ -342,7 +356,9 @@ all six.
      arrive.
 5. **Railing cutout.** Replace the grey railing blocks with a painted,
    transparent `promenade-railing.webp` (ledger item, P1). This needs the
-   artwork first (section 9).
+   artwork first (section 9). It keeps the holds-only fade (3.8); a solid
+   stone balustrade with fewer gaps would strobe far less if the fade is ever
+   dropped.
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -402,6 +418,9 @@ Stop for the user's review after each step, as in the grey-box.
   `parallax` shares in 01 and 04.
 - `src/scroll/cameraRig.js`: the parallax offset (`setParallax`, `PARALLAX`).
 - `src/scene/createWater.js`: glassy water, ripples sampled blurred (`BLUR`).
+- `src/scene/gating.js` and `src/main.js`: the railing shows on holds only
+  (`holdOnly`); `src/scene/createForeground.js`: depth-only twins for a clean
+  railing fade.
 - `src/ui/debug.js`: wordmark position in the probe; `clearance()` takes a
   `parallax` option.
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font.
