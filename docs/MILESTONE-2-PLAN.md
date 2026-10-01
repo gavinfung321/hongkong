@@ -112,8 +112,8 @@ How it is built:
 - Dimmed so the scene leads: hint at 50% and numbers at 40% opacity, full on
   hover (user request, 2026-10-01).
 - Chapter 01's body no longer ends with "Scroll to cross the water."; the
-  hint already says it (user request, 2026-10-01). The hint's wording is
-  being chosen by the user.
+  hint already says it, and the hint now reads "Let's cross the harbour"
+  instead of "Scroll to cross" (user requests, 2026-10-01).
 
 ### 3.4 Nav bar and mobile menu
 
