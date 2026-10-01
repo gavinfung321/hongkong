@@ -412,6 +412,48 @@ all six.
      - 40 m long including the fender, roof about 8 m up, matching the old
        proxy so the framings hold (the first version was 1 m shorter and its
        end showed in 03 at the far-left mouse position).
+   - **Star Ferry, rebuilt from photos (user request, 2026-10-01).** The
+     user shared six daytime photos and asked for "all the details that make
+     it look good". Compared with them, the reshape read as a black pontoon
+     with a closed lower deck. Rebuilt (still 40 m × 9.5 m, double-ended):
+     - **Hull:** shaped from 48 cross-sections, like the junk's: sides flaring
+       out above the waterline, ends narrowing to a soft point and raking
+       back, sheer rising 0.6 m to both ends. Bright green (was a dark teal
+       that read black at night) with a pale line under a dark wooden
+       rubbing strip and a dark band at the waterline; a faint glow of its
+       own. Black tyre fenders in pairs and a group of three.
+     - **Open lower deck:** a waist-high green bulwark with a rail, green
+       posts every 2.6 m up to the band, a closed casing amidships, and a lit
+       cabin wall 1.1 m behind the posts (strip lights, seat backs, a few
+       passengers), so the light shows between real posts as the mouse
+       moves. The ceiling under the band glows warm.
+     - **Band and upper deck:** the band between the decks is green (was
+       white). The upper deck has paired rectangular windows in pale frames
+       (were rounded panes), lit warm, and dark bridge glass in the middle
+       of each round end; its white glows enough to read white at night.
+       48 white life rings hang all round it below the windows. The two
+       wheelhouse boxes on the roof are gone (the real boat has none).
+     - **Roof:** a slight overhang, twelve white liferaft canisters with red
+       bands, a shorter plain white funnel with a black top (no emblem), and
+       a tripod mast with a yard at each end, with thin stays to the funnel
+       and roof ends and shrouds from the yards.
+     - **Navigation lights:** white at each masthead, green to starboard and
+       red to port at both ends; small unlit-material lamps, no new lights.
+     - **Proportions:** roof 7.1 m above the water (was 8.15 m, about 15% too
+       tall against the photos); mast tops 13.3 m. The night window colour
+       stays warm amber (recommended; the photos are daytime).
+     - **Framing:** the taller masts put the ferry's top at 18% in desktop
+       03 against 24%, so the desktop 03 camera was re-solved (eye still
+       2.2 m, field of view 56.9°, was 55.1°; ferry moved about 1 m). Mobile
+       03 still passes unchanged.
+     - **Checked:** all chapters within ±3% except the four older misses
+       (open issue below); 03 within its band at all four mouse corners;
+       camera clearance as before. With 1 cm camera steps no surface
+       flickers: 03 changes on edges only (rings, window frames, posts,
+       masts, rigging, petals, moon path), 22,350 changing pixels against
+       18,881 after the reshape; 01 9,747.
+     - **Rights:** the photos are looked at only, never stored (ledger,
+       "Reference material"); no boat names, star emblem or watermark.
    - **No GLB models (user decision, 2026-10-01):** "If Kage didn't use any
      GLB files, I will follow that." Checked in Kage's public repository: it
      has no 3D model files (only images, fonts and three.js) and builds its
@@ -569,7 +611,7 @@ Measured with the `?fps` overlay on a production build, as in
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
 | Draw calls | ≤ 100 (was ≤ 80) | ≤ 100 |
-| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 17 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures), about 6.5 MB of GPU memory in all; the Clock Tower shaft maps are 256 × 1088 px. To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
+| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture), about 6.6 MB of GPU memory in all; the Clock Tower shaft maps are 256 × 1088 px. To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
 | Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
 
@@ -612,18 +654,23 @@ Stop for the user's review after each step, as in the grey-box.
   `parallax` multipliers in 05 and 06.
 - `src/scroll/cameraRig.js`: the parallax orbit (`setParallax`, `PARALLAX`).
 - `src/scene/createWater.js`: glassy water, ripples sampled blurred (`BLUR`).
-- New: `src/scene/surfaces.js` (code-drawn surface textures) and
+- New: `src/scene/surfaces.js` (code-drawn surface textures; ferry upper
+  deck, cabin and hull redrawn with the ferry rebuild) and
   `src/scene/cityWindows.js` (lit-window grid shader).
 - `src/scene/createLighting.js`: lower sky fill.
 - `src/scene/createKowloonEdge.js`: textured Clock Tower, dials, floodlight;
   Kowloon windows.
 - `src/scene/createIsland.js`: Central and IFC windows.
-- `src/scene/createVessels.js`: reshaped Star Ferry (rounded decks, windows,
-  fender, canopy, funnel, wheelhouses, foam skirt); rebuilt junk (lofted
+- `src/scene/createVessels.js`: Star Ferry reshaped, then rebuilt from photos
+  (lofted hull, rubbing strip, tyres, open lower deck with lit cabin, green
+  band, upper deck with bridge ends and life rings, roof canisters, funnel,
+  tripod masts, rigging, navigation lights, foam skirt following the hull;
+  shared outline and ribbon helpers); rebuilt junk (lofted
   hull, deckhouse, canopy, rails, tyres, rudder, battened sails, rigging;
   masthead pennants removed, user request, 2026-10-01); vessel lights.
 - `src/data/chapters.js`: re-solved chapter 04 camera and junk positions
-  for the junk's real proportions.
+  for the junk's real proportions; re-solved desktop 03 camera and ferry
+  position for the rebuilt ferry's masts.
 - `src/ui/composition.js`: the probe skips parts marked `noProbe` (rigging).
 - `src/scene/gating.js`: faded copies keep shader patches; meshes with one
   material per face fade too.

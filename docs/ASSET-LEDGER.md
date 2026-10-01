@@ -17,7 +17,7 @@ specifications are in `CURSOR-GREYBOX-BRIEF.md` section 6.
 | Water | Plane with a standard material and a runtime canvas normal map (no custom shader) | 01–05 | Establish horizon, motion, and reflections | Reads as water without post-processing |
 | Kowloon edge | Boxes and a flat promenade strip | 01–03 | Anchor origin of journey | Direction of departure is clear |
 | Clock Tower proxy | Stacked boxes | 01–02 | Test silhouette and copy clearance | Recognisable by proportion and placement |
-| Star Ferry proxy | Rounded two-deck ferry built in code: green hull and lower deck, white upper deck, framed lit windows, fender, canopy, funnel, wheelhouses, foam line (reshaped, user request, 2026-10-01; was box blocks) | 01–04 (hidden on mobile 01–02) | Test crossing path and scale | Path never clips camera or foreground |
+| Star Ferry proxy | Rebuilt in code from the user's reference photos (user request, 2026-10-01; first reshaped from box blocks the same day): lofted double-ended green hull with sheer, flare and waterline band, wooden rubbing strip, tyre fenders; open lower deck with green posts, bulwark and a lit cabin behind; green band, white upper deck with framed lit windows and dark bridge glass at both ends, 48 white life rings; roof with liferaft canisters, funnel, tripod masts and rigging; navigation lights; foam line. No names or emblems | 01–04 (hidden on mobile 01–02) | Test crossing path and scale | Path never clips camera or foreground |
 | Junk proxy | Rebuilt in code (user request, 2026-10-01; was a hull block and three fan sails): lofted varnished hull, lit stern deckhouse, canopy, rails, tyre fenders, three big battened red sails uplit from the deck (enlarged after the user's photo, user request, 2026-10-01), rigging (masthead pennants removed, user request, 2026-10-01) | 01, 04 | Test the hero composition | Red sail remains fully readable on mobile |
 | IFC proxy | Tall tapered/stepped tower block | 01, 03–06 | Test island approach and vertical framing | Crown remains visible at target aspect ratios |
 | Observation Wheel proxy | Torus ring, spokes, hub, A-frame supports | 01, 03, 05 | Test the Central waterfront group and the chapter 05 co-star scale | Small readable circle in 01; about 46% of frame height on desktop 05 |
@@ -36,7 +36,7 @@ models are references only.
 | Filename | Type | Chapter | Priority | Target size | Rights/source | Notes |
 |---|---|---:|---|---:|---|---|
 | Clock Tower | 3D, built in code (`createKowloonEdge.js`) | 01–02 | P0 | — | Original code | Silhouette, clock face, warm openings; textured since 2b |
-| Star Ferry | 3D animated, built in code (`createVessels.js`) | 01–04 | P0 | — | Original code | Reshaped 2026-10-01 (user request): hull, two decks, canopy, foam line |
+| Star Ferry | 3D animated, built in code (`createVessels.js`) | 01–04 | P0 | — | Original code | Reshaped, then rebuilt from reference photos 2026-10-01 (user request): lofted hull, open lower deck, life rings, roof gear, masts, navigation lights |
 | Junk | 3D animated, built in code (`createVessels.js`) | 01, 04 | P0 | — | Original code, from the user's photo and reference-only photos and Meshy renders | Rebuilt 2026-10-01 (user request); hero asset |
 | IFC | 3D, built in code (`createIsland.js`) | 01, 03–06 | P0 | — | Original code | Recognisable crown and proportions; lit windows in the shader |
 | Observation Wheel | 3D, built in code (`createIsland.js`) | 01, 03, 05 | P0 | — | Original code | Ring, spokes, gondolas, supports; co-star scale in 05 |
@@ -108,7 +108,7 @@ midground, background and atmosphere. Each one still has to pass gate 5 below
 | `promenade-lamp.webp` | Alpha WebP | Hero, 01–02 | Foreground | Tsim Sha Tsui promenade lamp at the frame edge; a strong near silhouette |
 | Moon | **Built 2026-10-01** as an original procedural disc and halo (`createMoon.js`), no file | All (world object) | Background | Yellow focal light behind the Peak ridge; a painted `moon.webp` may replace the disc later |
 | Bauhinia petals | **Built 2026-10-01** as an original petal drawn in code (`createPetals.js`), no file | All but 06 | Near and far | The site's constant particle effect, in place of Kage-style leaves or rain |
-| Surface textures | **Built 2026-10-01** (user request), original, drawn in code (`surfaces.js`), no files: Clock Tower brick, granite bands, quoins and arched windows (colour, bump, glow); granite ashlar; clock dial; ferry deck walls with framed windows (green and white, colour and glow), ferry hull and waterline foam (added with the ferry reshape, user request, 2026-10-01); junk sail cloth, varnished hull with waterline stripe and rail cap, and lit deckhouse walls (rebuilt with the junk, user request, 2026-10-01) | 01–05 | Midground | Textured surfaces instead of flat colour |
+| Surface textures | **Built 2026-10-01** (user request), original, drawn in code (`surfaces.js`), no files: Clock Tower brick, granite bands, quoins and arched windows (colour, bump, glow); granite ashlar; clock dial; ferry upper deck walls with paired framed windows (sides lit; ends with two dark bridge bays; colour and glow), lit lower cabin with seat backs and passengers, hull with pale line and waterline band, and waterline foam (redrawn with the ferry rebuild, user request, 2026-10-01; the reshape's green and white deck walls are no longer used by the ferry); junk sail cloth, varnished hull with waterline stripe and rail cap, and lit deckhouse walls (rebuilt with the junk, user request, 2026-10-01) | 01–05 | Midground | Textured surfaces instead of flat colour |
 | Lit windows | **Built 2026-10-01** (user request), original, generated in the shader (`cityWindows.js`), no file | All | Background | Window grids on the skyline and IFC; fades to an average glow when windows get too small to show |
 | `mist-band.webp` | Alpha WebP, tiled | All | Between skyline layers | Drifting haze that separates near and far buildings |
 | Black kites | Small animated sprites | Hero, 01–03 | Sky | Hong Kong's signature bird gliding slowly; a living detail |
@@ -155,6 +155,11 @@ Added 2026-10-01 by the user as a reminder for the petal and tree assets.
 The junk rebuild also uses the user's Meshy renders of a junk and web photos
 of harbour junks, looked at only and not stored (user decision, 2026-10-01:
 Meshy models serve as reference, not as shipped assets).
+
+The Star Ferry rebuild (user request, 2026-10-01) uses six web photos the user
+shared (side-on, three-quarter, bow-on and a close-up at the pier, one with a
+news watermark), looked at only and not stored. Boat names, the funnel star
+emblem and the watermark are not copied.
 
 ## Asset approval gates
 
