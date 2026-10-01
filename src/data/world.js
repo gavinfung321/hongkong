@@ -40,8 +40,8 @@ export const WORLD = {
     // Palm silhouette cards around the Clock Tower (frame 02). Yaw faces the cards
     // toward the chapter 02 cameras.
     palms: [
-      { position: [-76.9, 2.5, 14.5], height: 11, yaw: -0.11 },
-      { position: [-57.8, 2.5, 0.2], height: 9, yaw: -0.57 },
+      { position: [-82.4, 2.5, 9.1], height: 11, yaw: -0.11 },
+      { position: [-52.5, 2.5, 0.2], height: 9, yaw: -0.57 },
       { position: [-66.7, 2.5, 55.1], height: 10, yaw: 0.07 },
       { position: [-55.6, 2.5, 41.6], height: 9, yaw: -0.11 },
     ],

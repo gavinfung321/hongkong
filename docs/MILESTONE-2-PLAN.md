@@ -207,8 +207,9 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   sliding (the target stays put), the swing is 3× larger, and the follow is
   twice as fast. Measured travel between mouse full left and full right at
   1.6 m: Clock Tower ~2%, 03 ferry ~9%, 04 junk ~5%; the near railing and
-  palms move much more. In 02 the IFC peeks out from behind the Clock Tower
-  at the far right of the mouse range.
+  palms move much more. In 02 the IFC used to peek out from behind the Clock
+  Tower at the far right of the mouse range; since the tower rebuild the 02
+  camera keeps both the IFC and the wheel hidden at every corner.
 - At the mouse extremes a subject may drift up to **±6%** from its
   composition target (was ±3%), the price of the stronger swing. The authored
   centre pose still passes the ±3% probe.
@@ -392,6 +393,7 @@ all six.
      quoins, arched windows (two lit) and a granite crown, plus lit clock
      dials with hour marks and hands. The brick is ~2 px on screen, so the
      mortar is faint and flat: sharp courses strobed while scrolling.
+     (Replaced by the rebuild from photos below.)
    - **Star Ferry, reshaped (user request, 2026-10-01).** Compared with a
      reference photo, the box proxy read as a generic barge. The user chose to
      reshape it in code now, reversing the earlier "no interim reshape"
@@ -454,6 +456,62 @@ all six.
        18,881 after the reshape; 01 9,747.
      - **Rights:** the photos are looked at only, never stored (ledger,
        "Reference material"); no boat names, star emblem or watermark.
+   - **Clock Tower, rebuilt from photos and bigger in 02 (user request,
+     2026-10-01).** "In 02, make the clock tower bigger … the tree is
+     blocking the clock tower." Measured against the user's photos, the old
+     tower was too slim (8 m wide) and too tall (crown cornice 37.6 m, top
+     54 m). The user's choices: real proportions and a closer camera; keep
+     the tower's size on narrow windows; a golden floodlight all the way up;
+     move the big palm so its leaves cross the bottom of the moon instead of
+     the tower.
+     - **Shaft:** 9 m square brick core up to 31.5 m on a 1.8 m granite
+       plinth; rusticated granite pilasters at all four corners; three
+       stone-framed sash windows up the harbour face (the middle one lit),
+       three narrow windows under the cornice and an arched, lit doorway at
+       the foot.
+     - **Cornice and crown:** a moulding and a deep cornice on a row of small
+       brackets at 31.8–32.7 m. Above it a brick stage with an arched
+       opening, corner piers and four curved stone scrolls, then a smaller
+       stage with columns and small balconies with railings, a drum and a
+       dome (top about 44 m) and a lattice mast to 51 m, thin bracing lines.
+     - **Clocks:** three lit dials (harbour face and both sides) 3.9 m
+       across in stone rings, with Roman numerals ("IIII"), a minute track
+       and hands at about twelve past seven (dusk).
+     - **Light:** the floodlight stays at the foot of the harbour face (still
+       3 point lights). Every brick and granite surface carries its own
+       golden glow, brightest at the foot and still warm at the top, so the
+       whole tower reads golden at night as in the photos.
+     - **Narrow windows (`keepHeight`):** on desktop windows narrower than
+       1.6, the camera normally widens its vertical field of view to keep
+       the sides, which shrank the tower to about 60% of the screen height
+       at 1024 × 850. Chapter 02 desktop now keeps its height and trims the
+       sides instead (`keepHeight: true` in `chapters.js`, `poseFov` in
+       `cameraRig.js`). The ferry target moved inward (60–84%) so it stays
+       whole down to an aspect of about 1.1.
+     - **Framing:** 02 desktop re-solved: tower 16–34% wide and 3–88% tall
+       (was 18–32, 2–85). The camera is about 7 m closer (57 m from the
+       tower), the eye is lower (4 m above the deck, was 5.1 m) and the view
+       looks up more (horizon at 80%, was 75%), so the tower towers over the
+       viewer; field of view 61.4° (was 60.7°). The camera sits where the
+       IFC and the wheel both hide behind the tower at every mouse corner
+       (the IFC used to peek out at the far right). Ferry target 60–84% wide,
+       71–87% tall; the ferry sits about 10 m farther out. With the lower
+       eye, railing B now crosses the bottom of the ferry's hull (clearing
+       it would need a ferry about 30% bigger). Mobile 02 and 01 pass
+       unchanged.
+     - **Palms:** the big palm by the promenade moved 5.5 m left and 5.4 m
+       farther from the camera (same 11 m height). Its leaves now cross the
+       lower left of the moon and clear the tower at all four mouse
+       corners; on a narrow window it is trimmed off. On mobile the small
+       palm at the tower's foot moved 5.3 m right, clear of the tower base;
+       it now stands just behind the right-hand palm.
+     - **Checked:** all chapters within ±3% except the four older misses;
+       02 within its band at all four mouse corners; camera clearance at
+       least 1.67 m, as before. With 1 cm camera steps no surface flickers:
+       02 changes on edges only (17,711 changing pixels), 01 11,088.
+     - **Rights:** the user's photos (and stock photos) are looked at only,
+       never stored or traced; no signage lettering or logos from the
+       buildings behind the tower.
    - **No GLB models (user decision, 2026-10-01):** "If Kage didn't use any
      GLB files, I will follow that." Checked in Kage's public repository: it
      has no 3D model files (only images, fonts and three.js) and builds its
@@ -611,7 +669,7 @@ Measured with the `?fps` overlay on a production build, as in
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
 | Draw calls | ≤ 100 (was ≤ 80) | ≤ 100 |
-| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture), about 6.6 MB of GPU memory in all; the Clock Tower shaft maps are 256 × 1088 px. To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
+| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
 | Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
 
@@ -652,14 +710,21 @@ Stop for the user's review after each step, as in the grey-box.
 - `src/data/world.js`: the `moon` block.
 - `src/data/chapters.js`: `petals` density in chapters 05 and 06; desktop
   `parallax` multipliers in 05 and 06.
-- `src/scroll/cameraRig.js`: the parallax orbit (`setParallax`, `PARALLAX`).
+- `src/scroll/cameraRig.js`: the parallax orbit (`setParallax`, `PARALLAX`);
+  `poseFov` and the per-pose `keepHeight` option (Clock Tower rebuild).
 - `src/scene/createWater.js`: glassy water, ripples sampled blurred (`BLUR`).
 - New: `src/scene/surfaces.js` (code-drawn surface textures; ferry upper
-  deck, cabin and hull redrawn with the ferry rebuild) and
-  `src/scene/cityWindows.js` (lit-window grid shader).
+  deck, cabin and hull redrawn with the ferry rebuild; Clock Tower shaft,
+  pilaster and crown textures and Roman-numeral dials redrawn with the tower
+  rebuild), `src/scene/cityWindows.js` (lit-window grid shader) and
+  `src/scene/strut.js` (shared helper for thin rods: ferry masts, tower
+  mast).
 - `src/scene/createLighting.js`: lower sky fill.
 - `src/scene/createKowloonEdge.js`: textured Clock Tower, dials, floodlight;
-  Kowloon windows.
+  Kowloon windows. Then the Clock Tower rebuilt from photos at real
+  proportions (pilasters, bracketed cornice, two crown stages with scrolls,
+  columns and balconies, dome, lattice mast, three Roman-numeral dials,
+  arched lit door, golden glow all the way up; user request, 2026-10-01).
 - `src/scene/createIsland.js`: Central and IFC windows.
 - `src/scene/createVessels.js`: Star Ferry reshaped, then rebuilt from photos
   (lofted hull, rubbing strip, tyres, open lower deck with lit cabin, green
@@ -670,13 +735,17 @@ Stop for the user's review after each step, as in the grey-box.
   masthead pennants removed, user request, 2026-10-01); vessel lights.
 - `src/data/chapters.js`: re-solved chapter 04 camera and junk positions
   for the junk's real proportions; re-solved desktop 03 camera and ferry
-  position for the rebuilt ferry's masts.
+  position for the rebuilt ferry's masts; desktop 02 re-solved for the
+  bigger Clock Tower (closer, lower, looking up; new tower, ferry and
+  horizon targets; `keepHeight`).
 - `src/ui/composition.js`: the probe skips parts marked `noProbe` (rigging).
 - `src/scene/gating.js`: faded copies keep shader patches; meshes with one
   material per face fade too.
 - `src/scene/createForeground.js`: depth-only twins for a clean railing
   fade, seawall strip top 5 cm below the deck.
-- `src/data/world.js`: railing B on the promontory's harbour edge.
+- `src/data/world.js`: railing B on the promontory's harbour edge; the
+  big 02 palm moved left, clear of the tower, and the small palm by the
+  tower's foot moved right (user request, 2026-10-01).
 - `src/ui/debug.js`: wordmark position in the probe; `clearance()` takes a
   `parallax` option.
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font.
@@ -688,7 +757,10 @@ The milestone passes when:
 1. All twelve frames still pass the composition probe (±3%) with the nav bar in
    place, and no copy overflows at 1440 × 900, 1156 × 766 and 390 × 844.
    With the mouse at either edge, desktop frames stay within ±6% and the
-   parallax is plainly visible (user request, 2026-10-01).
+   parallax is plainly visible (user request, 2026-10-01). On narrow desktop
+   windows (down to an aspect of about 1.1) the 02 Clock Tower keeps its full
+   height and the ferry stays whole; no palm crosses the tower (user
+   request, 2026-10-01).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
    feet, and sinks and fades out with the 01 copy from the first scroll.
    Mobile shows it horizontal and smaller.
@@ -726,6 +798,6 @@ step.
 
 | Milestone | Content |
 |---|---|
-| 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry and junk are already rebuilt from reference photos; the Clock Tower, IFC and wheel get the same treatment, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals and tree, display fonts. Also the user's stone railing, promenade palms, wet paving tiles and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
+| 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk and Clock Tower are already rebuilt from reference photos; the IFC and wheel get the same treatment, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals and tree, display fonts. Also the user's stone railing, promenade palms, wet paving tiles and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
 | 4. Atmosphere, all chapters | Clouds lit from below and searchlight beams from the Central towers (user reminders, 2026-10-01), the look-test layers rolled out to 02–06, extra particles alongside the petals (sea spray, city bokeh, firework embers in 06), real fireworks, a sparkle trail added to the cursor ring (3.10) |
 | 5. Copy and launch | Final copy, poster images, a full performance pass on both iPhones, deployment |

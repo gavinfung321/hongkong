@@ -35,7 +35,7 @@ models are references only.
 
 | Filename | Type | Chapter | Priority | Target size | Rights/source | Notes |
 |---|---|---:|---|---:|---|---|
-| Clock Tower | 3D, built in code (`createKowloonEdge.js`) | 01–02 | P0 | — | Original code | Silhouette, clock face, warm openings; textured since 2b |
+| Clock Tower | 3D, built in code (`createKowloonEdge.js`) | 01–02 | P0 | — | Original code | Silhouette, clock face, warm openings; textured since 2b. Rebuilt from reference photos 2026-10-01 (user request): real proportions (9 m shaft, cornice 32 m, dome 44 m, mast 51 m), granite pilasters, bracketed cornice, two crown stages with scrolls, columns and balconies, dome and lattice mast, three Roman-numeral dials, lit arched door, golden floodlit glow. No signage or logos |
 | Star Ferry | 3D animated, built in code (`createVessels.js`) | 01–04 | P0 | — | Original code | Reshaped, then rebuilt from reference photos 2026-10-01 (user request): lofted hull, open lower deck, life rings, roof gear, masts, navigation lights |
 | Junk | 3D animated, built in code (`createVessels.js`) | 01, 04 | P0 | — | Original code, from the user's photo and reference-only photos and Meshy renders | Rebuilt 2026-10-01 (user request); hero asset |
 | IFC | 3D, built in code (`createIsland.js`) | 01, 03–06 | P0 | — | Original code | Recognisable crown and proportions; lit windows in the shader |
@@ -108,7 +108,7 @@ midground, background and atmosphere. Each one still has to pass gate 5 below
 | `promenade-lamp.webp` | Alpha WebP | Hero, 01–02 | Foreground | Tsim Sha Tsui promenade lamp at the frame edge; a strong near silhouette |
 | Moon | **Built 2026-10-01** as an original procedural disc and halo (`createMoon.js`), no file | All (world object) | Background | Yellow focal light behind the Peak ridge; a painted `moon.webp` may replace the disc later |
 | Bauhinia petals | **Built 2026-10-01** as an original petal drawn in code (`createPetals.js`), no file | All but 06 | Near and far | The site's constant particle effect, in place of Kage-style leaves or rain |
-| Surface textures | **Built 2026-10-01** (user request), original, drawn in code (`surfaces.js`), no files: Clock Tower brick, granite bands, quoins and arched windows (colour, bump, glow); granite ashlar; clock dial; ferry upper deck walls with paired framed windows (sides lit; ends with two dark bridge bays; colour and glow), lit lower cabin with seat backs and passengers, hull with pale line and waterline band, and waterline foam (redrawn with the ferry rebuild, user request, 2026-10-01; the reshape's green and white deck walls are no longer used by the ferry); junk sail cloth, varnished hull with waterline stripe and rail cap, and lit deckhouse walls (rebuilt with the junk, user request, 2026-10-01) | 01–05 | Midground | Textured surfaces instead of flat colour |
+| Surface textures | **Built 2026-10-01** (user request), original, drawn in code (`surfaces.js`), no files: Clock Tower shaft brick with stone-framed sash windows and frieze, rusticated granite pilasters and brick crown stages with arched openings (colour and golden glow; redrawn with the tower rebuild, user request, 2026-10-01, replacing the brick, bands, quoins and arched windows with bump); granite ashlar; clock dial with Roman numerals and a minute track; ferry upper deck walls with paired framed windows (sides lit; ends with two dark bridge bays; colour and glow), lit lower cabin with seat backs and passengers, hull with pale line and waterline band, and waterline foam (redrawn with the ferry rebuild, user request, 2026-10-01; the reshape's green and white deck walls are no longer used by the ferry); junk sail cloth, varnished hull with waterline stripe and rail cap, and lit deckhouse walls (rebuilt with the junk, user request, 2026-10-01) | 01–05 | Midground | Textured surfaces instead of flat colour |
 | Lit windows | **Built 2026-10-01** (user request), original, generated in the shader (`cityWindows.js`), no file | All | Background | Window grids on the skyline and IFC; fades to an average glow when windows get too small to show |
 | `mist-band.webp` | Alpha WebP, tiled | All | Between skyline layers | Drifting haze that separates near and far buildings |
 | Black kites | Small animated sprites | Hero, 01–03 | Sky | Hong Kong's signature bird gliding slowly; a living detail |
@@ -160,6 +160,13 @@ The Star Ferry rebuild (user request, 2026-10-01) uses six web photos the user
 shared (side-on, three-quarter, bow-on and a close-up at the pier, one with a
 news watermark), looked at only and not stored. Boat names, the funnel star
 emblem and the watermark are not copied.
+
+The Clock Tower rebuild (user request, 2026-10-01) uses web photos of the
+tower the user shared from several angles, by day and at night, some from
+stock libraries with watermarks. They were looked at only (to measure
+proportions and read the details) and not stored or traced. Watermarks,
+signage and logos on the buildings behind the tower are not copied; the dial
+numerals are drawn in a system serif font.
 
 ## Asset approval gates
 
