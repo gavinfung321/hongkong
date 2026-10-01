@@ -34,15 +34,21 @@ one with its storyboard PNG in `docs/storyboards/`.
    desktop the camera is framed for IFC (on target), so the wheel lands at
    about 41–50% across instead of 29–42%. Getting it bigger would push IFC's
    crown out of the top of the frame.
-6. **01 mobile** is within about 3% of every target. IFC's right edge is at 91%
-   (target 88%) and the wheel's left edge at 70% (target 73%).
+6. **01 mobile** is within about 3% of every target. IFC's top is at 49%
+   (target 46%).
 7. **02 mobile** has no water strip at the bottom, because the lowered tower
    and the railing fill it.
 8. **01 desktop — IFC moved right (your request).** It sits at about 78–83%
    instead of the PNG's 70–74%, so the junk's sails no longer hide it. The
    camera moved about 6 m east along the promenade to do this. The copy
    moved 2% right to stay clear of the Clock Tower.
-9. **Brief wording.** The brief swaps the fore and mizzen sail labels in 7.4.
+9. **Clock Tower — slimmer, with a stepped crown (your request).** The shaft
+   is 8 m wide and the light-stone crown steps in: cornice, two tiers, dome,
+   spire. Its frame targets are narrower to match: 9–17% in 01 desktop and
+   18–32% in 02 desktop (the PNG's close-up draws it 15–35%).
+10. **01 — open water between the tower's quay and the ferry (your request).**
+    The land now stops 5 m past the tower.
+11. **Brief wording.** The brief swaps the fore and mizzen sail labels in 7.4.
    The geometry follows the PNG.
 
 Everything else is within ±3% of its section 7 target.
@@ -65,8 +71,8 @@ sits at the centre of the frame.
   - Copy is fully visible through each hold window, then fades out before the
     camera moves far.
 - **Camera paths:**
-  - The camera never passes within 2.5 m of the tower, palms or railing on
-    desktop, or within about 1.7 m on mobile.
+  - The camera never passes within about 2.3 m of the tower, palms or railing
+    on desktop, or within about 2 m on mobile.
   - It stays about 1.5 m or more above ground or water.
   - Pitch changes by about 25° at most in a chapter (05 → 06 on mobile; the
     limit is 30°), and roll is always 0.
