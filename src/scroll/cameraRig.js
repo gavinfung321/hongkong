@@ -26,6 +26,23 @@ export function fovForAspect(fov, aspect, breakpoint) {
   return Math.min(widened, fov + MAX_FOV_WIDENING);
 }
 
+const levelTarget = new Vector3();
+
+// Shift lens: the camera stays level (so verticals stay vertical) and the
+// frustum slides up or down until `target` sits at the centre of the frame.
+// Call after setting fov and aspect.
+export function aimCamera(camera, position, target) {
+  camera.position.copy(position);
+  const dx = target.x - position.x;
+  const dz = target.z - position.z;
+  const tanPitch = (target.y - position.y) / Math.max(Math.hypot(dx, dz), 1e-6);
+  camera.up.set(0, 1, 0);
+  camera.lookAt(levelTarget.set(target.x, position.y, target.z));
+  const halfHeight = Math.tan(MathUtils.degToRad(camera.fov / 2));
+  // setViewOffset also sets aspect = fullWidth / fullHeight.
+  camera.setViewOffset(camera.aspect, 1, 0, -tanPitch / (2 * halfHeight), camera.aspect, 1);
+}
+
 export function createCameraRig(camera, chapters, { hold }) {
   const count = chapters.length;
   let positionCurve;
@@ -102,9 +119,7 @@ export function createCameraRig(camera, chapters, { hold }) {
     const toFov = poses[segment.to].fov;
     const fov = MathUtils.lerp(fromFov, toFov, segment.eased);
     camera.fov = fovForAspect(fov, aspect, breakpoint);
-    camera.up.set(0, 1, 0);
-    camera.lookAt(target);
-    camera.updateProjectionMatrix();
+    aimCamera(camera, camera.position, target);
     return segment;
   }
 

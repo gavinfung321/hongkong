@@ -15,6 +15,7 @@ import {
   Vector3,
 } from 'three';
 import { WORLD } from '../data/world.js';
+import { aimCamera } from '../scroll/cameraRig.js';
 
 function fadeMaterial(color, extra = {}) {
   return new MeshBasicMaterial({ color, transparent: true, opacity: 1, ...extra });
@@ -144,18 +145,18 @@ export function createForeground() {
     placementCamera.aspect = aspect;
     placementCamera.near = 0.5;
     placementCamera.far = 5000;
-    placementCamera.position.fromArray(pose.position);
-    placementCamera.lookAt(new Vector3().fromArray(pose.target));
-    placementCamera.updateProjectionMatrix();
+    aimCamera(placementCamera, new Vector3().fromArray(pose.position), new Vector3().fromArray(pose.target));
     placementCamera.updateMatrixWorld();
 
-    const distance = 1600;
-    const viewWidth = 2 * distance * Math.tan((pose.fov * Math.PI) / 360) * aspect;
+    const depth = 1600;
+    const viewWidth = 2 * depth * Math.tan((pose.fov * Math.PI) / 360) * aspect;
+    const forward = placementCamera.getWorldDirection(new Vector3());
     specs.forEach((spec, i) => {
       const item = bursts.items[i];
       ndc.set((spec.x / 100) * 2 - 1, 1 - (spec.y / 100) * 2, 0.5).unproject(placementCamera);
       const dir = ndc.sub(placementCamera.position).normalize();
-      item.object.position.copy(placementCamera.position).addScaledVector(dir, distance);
+      // Same depth for every marker, so the lens shift doesn't enlarge high ones.
+      item.object.position.copy(placementCamera.position).addScaledVector(dir, depth / dir.dot(forward));
       item.object.scale.setScalar((spec.size / 100) * viewWidth * 0.5);
       item.object.quaternion.copy(placementCamera.quaternion);
       item.material.color.setHex(BURST_COLORS[spec.color]);

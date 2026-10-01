@@ -38,7 +38,7 @@ export const chapters = [
         holdDolly: [0, 0, -4],
         via: [[-50, 7, 58]],
       },
-      mobile: { position: [-43.8, 8.3, 99], target: [6.9, 119.1, -282], fov: 79.9 },
+      mobile: { position: [-43.3, 7.5, 99], target: [7.4, 120.4, -281.4], fov: 77.8 },
     },
     copy: {
       desktop: { left: 22, top: 8, right: 52, bottom: 31 },
@@ -52,7 +52,7 @@ export const chapters = [
     fogDensity: 0.00045,
     vessels: {
       desktop: { ferry: [-29.6, -106.6, 0], junk: [25.2, -54.2, 0] },
-      mobile: { ferry: [-19.7, -89.9, 0], junk: [-17.5, -30.5, 0] },
+      mobile: { ferry: [-19.7, -89.9, 0], junk: [-18.6, -22.1, 0] },
     },
     probes: {
       desktop: {
@@ -83,9 +83,9 @@ export const chapters = [
     },
     camera: {
       desktop: {
-        position: [-79.1, 6, 33.3],
-        target: [179.4, 107.2, -254.6],
-        fov: 55.8,
+        position: [-81.2, 7.5, 38.7],
+        target: [185.3, 107.5, -242.3],
+        fov: 57.3,
         via: [[-28, 7, 22], [5, 5, -90]],
       },
       mobile: {
@@ -105,7 +105,7 @@ export const chapters = [
     },
     fogDensity: 0.00045,
     vessels: {
-      desktop: { ferry: [14.4, -7.5, -0.2], junk: [120, -80, 0] },
+      desktop: { ferry: [7.9, 5.9, -0.2], junk: [120, -80, 0] },
       mobile: { ferry: [20, -120, 0.8], junk: [120, -80, 0] },
     },
     probes: {
@@ -134,7 +134,7 @@ export const chapters = [
     },
     camera: {
       desktop: { position: [76.5, 2.2, -323.3], target: [46.2, 42.3, -720.1], fov: 55.1 },
-      mobile: { position: [-30, 2.1, -220], target: [44.5, 107.1, -598.8], fov: 80.2, via: [[60, 3, -300]] },
+      mobile: { position: [-31.2, 1.8, -218.1], target: [41.8, 112.7, -595.4], fov: 80.1, via: [[60, 3, -300]] },
     },
     copy: {
       desktop: { left: 5, top: 6, right: 42, bottom: 22 },
@@ -147,7 +147,7 @@ export const chapters = [
     fogDensity: 0.00045,
     vessels: {
       desktop: { ferry: [70.4, -358.6, 1.26], junk: [30, -310, 0.3] },
-      mobile: { ferry: [-21.8, -274.2, 1], junk: [-60, -240, 0.3] },
+      mobile: { ferry: [-23.4, -270.9, 1], junk: [-60, -240, 0.3] },
     },
     probes: {
       desktop: {
@@ -175,7 +175,7 @@ export const chapters = [
       mobile: `${SB}/frame-04-red-sails-mobile-rough.png`,
     },
     camera: {
-      desktop: { position: [153.5, 3, -421.3], target: [-21.7, 67.8, -775], fov: 70.9 },
+      desktop: { position: [155.7, 3, -426.1], target: [-34.2, 86.8, -768.1], fov: 79.9 },
       mobile: { position: [152.4, 3, -378.2], target: [173.6, 97.2, -766.4], fov: 78 },
     },
     copy: {
@@ -190,7 +190,7 @@ export const chapters = [
     },
     fogDensity: 0.00063,
     vessels: {
-      desktop: { ferry: [400, -700, 1.2], junk: [148.4, -448.8, 0.46] },
+      desktop: { ferry: [400, -700, 1.2], junk: [151, -451.1, 0.46] },
       mobile: { ferry: [400, -700, 1.2], junk: [153.6, -431, 0.17] },
     },
     probes: {
@@ -219,7 +219,7 @@ export const chapters = [
       mobile: `${SB}/frame-05-city-of-light-mobile-rough.png`,
     },
     camera: {
-      desktop: { position: [462.3, 25, -760], target: [405.4, 152.1, -1135], fov: 55.2 },
+      desktop: { position: [380, 40.4, -779], target: [362.9, 183.7, -1152], fov: 66.5 },
       mobile: { position: [568.7, 50, -500], target: [476.2, 139.4, -878.8], fov: 64.1 },
     },
     copy: {
@@ -237,8 +237,8 @@ export const chapters = [
     },
     // Deviation: the PNG draws the wheel about 3.5× its true size relative to
     // IFC (frames 01 and 03 do not), so the wheel keeps its placement left of
-    // IFC at true scale, and the camera sits ~420 m from IFC rather than the
-    // 650–700 m hint, which would crop IFC's crown (review note).
+    // IFC at true scale. Desktop is solved for IFC; the wheel lands at about
+    // 41–50% instead of 29–42% (review note).
     probes: {
       desktop: {
         ifc: { left: 62, right: 72, top: 3, bottom: 87 },
@@ -259,8 +259,8 @@ export const chapters = [
       mobile: `${SB}/frame-06-afterglow-departure-mobile-rough.png`,
     },
     camera: {
-      desktop: { position: [263.7, 32.9, -450], target: [303.1, 273.6, -767.1], fov: 55 },
-      mobile: { position: [438.3, 48.5, -350.1], target: [431.1, 294.6, -665.4], fov: 71.7 },
+      desktop: { position: [271.8, 32.7, -467.7], target: [299.2, 263.7, -793.2], fov: 54.7 },
+      mobile: { position: [447.2, 57.1, -365.3], target: [434.4, 277.9, -698.6], fov: 63 },
     },
     copy: {
       desktop: { left: 5, top: 12, right: 38, bottom: 62 },

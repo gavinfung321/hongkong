@@ -22,18 +22,18 @@ one with its storyboard PNG in `docs/storyboards/`.
 1. **02 desktop — IFC and wheel.** They sit behind the Clock Tower rather than
    out of frame. The camera is on the IFC–tower line, so the tower hides them.
 2. **03 mobile — IFC is larger than in the PNG.** At the PNG's size it would
-   need a camera far outside the harbour. Its right edge reaches about 98%
-   (target 94%).
+   need a camera far outside the harbour. Its left edge is at about 87%
+   (target 83%), and the ferry's roof sits about 3% lower than drawn.
 3. **04 mobile — IFC is a cropped edge cue** at the right edge, for the same
    reason.
 4. **04 — wheel faded out (both viewports).** Framing alone left it peeking
    past the junk's stern, so it fades out while small and distant, then fades
    back in on the way to 05.
 5. **05 — wheel at true scale.** The PNG draws it about 3.5× too big compared
-   with IFC (frames 01 and 03 don't). It keeps its place left of IFC. To fit
-   both, the wheel moved about 50 m west of its first position, and the
-   desktop camera sits about 420 m from IFC instead of the 650–700 m hint.
-   That hint would crop IFC's crown.
+   with IFC (frames 01 and 03 don't). It keeps its place left of IFC. On
+   desktop the camera is framed for IFC (on target), so the wheel lands at
+   about 41–50% across instead of 29–42%. Getting it bigger would push IFC's
+   crown out of the top of the frame.
 6. **01 mobile** is within about 3% of every target. IFC's right edge is at 91%
    (target 88%) and the wheel's left edge at 70% (target 73%).
 7. **02 mobile** has no water strip at the bottom, because the lowered tower
@@ -46,6 +46,13 @@ one with its storyboard PNG in `docs/storyboards/`.
    The geometry follows the PNG.
 
 Everything else is within ±3% of its section 7 target.
+
+## Camera lens
+
+The camera never tilts. It stays level and the picture slides up or down
+instead (a "shift lens", as in architectural photography), so towers stay
+upright like in the storyboards. `target` in `chapters.js` still says what
+sits at the centre of the frame.
 
 ## Checked automatically
 
