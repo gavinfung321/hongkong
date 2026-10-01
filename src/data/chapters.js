@@ -111,7 +111,6 @@ export const chapters = [
         target: [194.4, 114.6, -228.1],
         fov: 60.7,
         via: [[-28, 7, 22], [5, 5, -90]],
-        parallax: 0.4,
       },
       mobile: {
         position: [-59.6, 4.8, 108.2],
@@ -201,7 +200,7 @@ export const chapters = [
       mobile: `${SB}/frame-04-red-sails-mobile-rough.png`,
     },
     camera: {
-      desktop: { position: [155.7, 3, -426.1], target: [-34.2, 86.8, -768.1], fov: 79.9, parallax: 0.5 },
+      desktop: { position: [155.7, 3, -426.1], target: [-34.2, 86.8, -768.1], fov: 79.9, parallax: 0.8 },
       mobile: { position: [152.4, 3, -378.2], target: [173.6, 97.2, -766.4], fov: 78 },
     },
     copy: {

@@ -190,26 +190,35 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
 
 ### 3.8 Cursor parallax (desktop only; built 2026-10-01)
 
-- The camera shifts up to **±0.5 m** sideways and **±0.25 m** up and down,
-  following the mouse with smooth damping. Near objects (railing, tower) slide
-  more than the distant skyline, which gives real depth.
+- The camera shifts up to **±0.5 m** sideways only, following the mouse with
+  smooth damping. Near objects (railing, tower) slide more than the distant
+  skyline, which gives real depth.
+- **No vertical shift** (user request, 2026-10-01: "the harbor keeps blinking
+  when my cursor is going around"). Raising or lowering the eye changes the
+  viewing angle onto the water, so the moonlit ripple glints sweep across the
+  whole harbour and read as blinking. Measured frame-to-frame change with the
+  mouse moving: up/down only 8.95, sideways only 6.95, still 4.85. With
+  sideways only and the slower follow below it is 6.66, close to the still
+  water's own shimmer.
 - Full strength during holds, fading to zero during scroll transitions.
 - Off on touch devices and in reduced motion.
 - Must keep every frame inside the ±3% composition tolerance at the extremes,
   and the camera clearance above 1.5 m (the current minimum is 1.99 m).
-- **As built:** the mouse position is damped (`FOLLOW` in
-  `src/ui/pointerParallax.js`) and drifts back to centre when the pointer
+- **As built:** the mouse position is damped (`FOLLOW` 1.5 per second in
+  `src/ui/pointerParallax.js`, lowered from 2.5 so the scene drifts lazily
+  rather than tracking every flick) and drifts back to centre when the pointer
   leaves the window. The camera rig slides camera and target together
   (`PARALLAX` in `cameraRig.js`), at full strength on holds and zero halfway
   through each transition. It also runs in the hero, so 香港 shifts slightly
   against the scene. Desktop breakpoint and mouse only; off in reduced motion.
-- **Per-chapter share:** the near subjects in three holds left their targets
+- **Per-chapter share:** the near subjects in two holds left their targets
   at full strength, so their desktop pose has a `parallax` share in
-  `chapters.js`: 01 at 0.8 (Clock Tower), 02 at 0.4 (Clock Tower's foot),
-  04 at 0.5 (the junk's waterline). 03, 05 and 06 take the full amount.
+  `chapters.js`: 01 at 0.8 (Clock Tower; safe up to 0.86) and 04 at 0.8 (the
+  junk; safe up to 0.825). 02, 03, 05 and 06 take the full amount (02 needed
+  0.4 only while there was a vertical shift).
 - **Checked:** at all four mouse corners every desktop frame passes its
   targets (05's wheel misses are the existing documented deviation), and the
-  closest approach is 2.06 m (railing in the 01 → 02 move); the debug
+  closest approach is 2.26 m (railing in the 01 → 02 move); the debug
   `clearance()` takes a `parallax` option for this.
 
 ### 3.9 Moon (user request, 2026-10-01)
@@ -367,7 +376,7 @@ Stop for the user's review after each step, as in the grey-box.
   `src/scene/createGlow.js`.
 - `src/data/world.js`: the `moon` block.
 - `src/data/chapters.js`: `petals` density in chapters 05 and 06; desktop
-  `parallax` shares in 01, 02 and 04.
+  `parallax` shares in 01 and 04.
 - `src/scroll/cameraRig.js`: the parallax offset (`setParallax`, `PARALLAX`).
 - `src/ui/debug.js`: wordmark position in the probe; `clearance()` takes a
   `parallax` option.
