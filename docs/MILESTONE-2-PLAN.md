@@ -413,6 +413,32 @@ all six.
        end showed in 03 at the far-left mouse position).
    - **Junk:** sail cloth with five sagging panels between the battens, seams
      and a warm glow toward the foot; plank strakes on the hull.
+   - **Junk rebuild (planned, not built; user request, 2026-10-01).** Analysed
+     against the user's photos and Meshy renders (reference only). Model: a
+     wooden-hull harbour junk, side-on night photo as the proportion master,
+     because the warm hull and lit stern windows stay readable on dark water
+     (a black hull vanishes in 04). Decisions:
+     - **Sail size (user decision):** real proportions, sails about 15–20%
+       larger for drama. Measured side-on as a share of hull length: main mast
+       ~0.65 above water (ours 0.89), main sail ~0.25 wide × 0.30 tall (ours
+       0.32 × 0.57). Re-check the 01 and 04 compositions afterwards.
+     - **Hull:** shaped from cross-sections, narrower bow rising to a point,
+       raised stern with a lit deckhouse and wide square transom, sheer
+       sweeping up at both ends, varnished wood with a cream waterline stripe,
+       a rudder (no keel fins; Meshy invented them).
+     - **Sails:** straight leaning front edge, top edge climbing to the peak
+       at the back, fan-shaped back edge, mast a quarter to a third back;
+       5–6 battens fanning upward, cloth sagging between them; vivid red,
+       uplit from the deck so they glow brightest near the foot.
+     - **Rig and deck:** foremast raked forward, plain pennants (no
+       lettering), a few rope fans kept thick enough not to shimmer, railing
+       posts, string lights.
+     - **Reflections:** first test a low red light among the sails, so the
+       glassy water draws red streaks the way the cyan light draws the moon
+       path; no new flat pieces on the water.
+     - **Rights:** stock and watermarked photos are looked at only, never
+       stored, traced or copied (including boat names and flag lettering);
+       the user's own photo is in `docs/references/junk/`.
    - All textures are drawn in code (`src/scene/surfaces.js`); no image
      files, all original (ledger, Phase D).
    - **Checked:** 1 cm camera steps show no flicker on the windows (an early

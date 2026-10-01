@@ -128,8 +128,9 @@ plan and prompt here before import (as for Meshy above).
 
 ## Reference material (not for production)
 
-Kept to guide original artwork. Sources and rights are unknown, so these files
-are never shipped, traced or used as textures.
+Kept to guide original artwork and models. Unless a row says the user took the
+photo, sources and rights are unknown. None of these files is ever shipped,
+traced or used as a texture.
 
 | File | Shows | Notes for the artwork |
 |---|---|---|
@@ -138,6 +139,12 @@ are never shipped, traced or used as textures.
 | `docs/references/bauhinia/bauhinia-flower-closeup.jpg` | One open flower | Five narrow petals with wavy edges and pale veins radiating from the base; the top petal is darker with a crimson centre |
 
 Added 2026-10-01 by the user as a reminder for the petal and tree assets.
+
+| `docs/references/junk/junks-at-night-promenade.jpg` | Two red-sailed junks at night off Central, seen from the Tsim Sha Tsui promenade | Taken by the user (their own photo, 2026-10-01). Uplit sails glow vivid red over dark hulls; long broken red reflections on the water; warm deck lights. Reference for the junk rebuild |
+
+The junk rebuild also uses the user's Meshy renders of a junk and web photos
+of harbour junks, looked at only and not stored (user decision, 2026-10-01:
+Meshy models serve as reference, not as shipped assets).
 
 ## Asset approval gates
 
