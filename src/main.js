@@ -59,7 +59,7 @@ function start(initGuard, header) {
     palms: (value) => foreground.setOpacity('palms', value),
     bursts: (value) => foreground.setOpacity('bursts', value),
     petals: (value) => petals.setDensity(value),
-  }, { holdOnly: ['railing'], hold: SCROLL.hold });
+  });
 
   const rig = createCameraRig(camera, chapters, { hold: SCROLL.hold });
   const parallax = createPointerParallax();
