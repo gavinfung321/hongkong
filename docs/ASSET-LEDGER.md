@@ -18,7 +18,7 @@ specifications are in `CURSOR-GREYBOX-BRIEF.md` section 6.
 | Kowloon edge | Boxes and a flat promenade strip | 01–03 | Anchor origin of journey | Direction of departure is clear |
 | Clock Tower proxy | Stacked boxes | 01–02 | Test silhouette and copy clearance | Recognisable by proportion and placement |
 | Star Ferry proxy | Rounded two-deck ferry built in code: green hull and lower deck, white upper deck, framed lit windows, fender, canopy, funnel, wheelhouses, foam line (reshaped, user request, 2026-10-01; was box blocks) | 01–04 (hidden on mobile 01–02) | Test crossing path and scale | Path never clips camera or foreground |
-| Junk proxy | Hull block and three fan sails | 01, 04 | Test the hero composition | Red sail remains fully readable on mobile |
+| Junk proxy | Rebuilt in code (user request, 2026-10-01; was a hull block and three fan sails): lofted varnished hull, lit stern deckhouse, canopy, rails, tyre fenders, three battened red sails uplit from the deck, rigging, plain pennants | 01, 04 | Test the hero composition | Red sail remains fully readable on mobile |
 | IFC proxy | Tall tapered/stepped tower block | 01, 03–06 | Test island approach and vertical framing | Crown remains visible at target aspect ratios |
 | Observation Wheel proxy | Torus ring, spokes, hub, A-frame supports | 01, 03, 05 | Test the Central waterfront group and the chapter 05 co-star scale | Small readable circle in 01; about 46% of frame height on desktop 05 |
 | Skyline and mountain proxy | Instanced boxes plus silhouette plane | All | Test depth layers and fog | Major layers separate in grayscale |
@@ -27,15 +27,21 @@ specifications are in `CURSOR-GREYBOX-BRIEF.md` section 6.
 
 ## Phase B — launch-critical production assets
 
+**No GLB files (user decision, 2026-10-01):** "If Kage didn't use any GLB
+files, I will follow that." Kage's public repository has no 3D model files
+(only images, fonts and three.js) and builds its shapes in code. So the 3D
+rows below are built in code, original, with no files; photos and Meshy
+models are references only.
+
 | Filename | Type | Chapter | Priority | Target size | Rights/source | Notes |
 |---|---|---:|---|---:|---|---|
-| `clock-tower.glb` | 3D | 01–02 | P0 | <700 KB | Original model from owned/licensed references | Silhouette, clock face, warm openings; no tiny masonry |
-| `star-ferry.glb` | 3D animated | 01–04 | P0 | <1 MB | Made by the user in Meshy.ai (user decision, 2026-10-01); rights depend on the Meshy plan, see "Meshy models" below | Hull, two decks, canopy; wake remains procedural. Replaces the code-built ferry (reshaped 2026-10-01), which stays until then |
-| `junk-boat.glb` | 3D animated | 01, 04 | P0 | <1.5 MB | Original model from owned/licensed references | Hero asset; hull and red sails, minimal rig only if needed |
-| `ifc.glb` | 3D | 01, 03–06 | P0 | <500 KB | Original model from owned/licensed references | Recognisable crown and proportions; windows procedural/material-based |
-| `observation-wheel.glb` | 3D | 01, 03, 05 | P0 | <500 KB | Original model from owned/licensed references | Ring, spokes, gondolas, supports; co-star scale in 05; lighting material-based |
+| Clock Tower | 3D, built in code (`createKowloonEdge.js`) | 01–02 | P0 | — | Original code | Silhouette, clock face, warm openings; textured since 2b |
+| Star Ferry | 3D animated, built in code (`createVessels.js`) | 01–04 | P0 | — | Original code | Reshaped 2026-10-01 (user request): hull, two decks, canopy, foam line |
+| Junk | 3D animated, built in code (`createVessels.js`) | 01, 04 | P0 | — | Original code, from the user's photo and reference-only photos and Meshy renders | Rebuilt 2026-10-01 (user request); hero asset |
+| IFC | 3D, built in code (`createIsland.js`) | 01, 03–06 | P0 | — | Original code | Recognisable crown and proportions; lit windows in the shader |
+| Observation Wheel | 3D, built in code (`createIsland.js`) | 01, 03, 05 | P0 | — | Original code | Ring, spokes, gondolas, supports; co-star scale in 05 |
 | Fireworks | Effect (technique TBD) | 06 | P1 | TBD | Original | Decide after the grey-box: particles, illustrated plate, or alpha cards; 4–5 separated bursts per Frame 06 |
-| `skyline.glb` | 3D environment | All | P0 | <1.5 MB | Original modular blocks | Curated silhouette, not a full city twin |
+| Skyline | 3D environment, built in code | All | P0 | — | Original code, modular blocks | Curated silhouette, not a full city twin |
 | `mountain-silhouette.webp` | Alpha WebP | All | P0 | <180 KB | Original | Can remain a depth card if it survives parallax tests |
 | `harbour-poster-desktop.webp` | Fallback/poster | All | P0 | <350 KB | Original | 16:10-safe master, no embedded text |
 | `harbour-poster-mobile.webp` | Fallback/poster | All | P0 | <250 KB | Original | Authored portrait composition, no embedded text |
@@ -48,8 +54,12 @@ specifications are in `CURSOR-GREYBOX-BRIEF.md` section 6.
 
 ### Meshy models
 
-The user builds `star-ferry.glb` in Meshy.ai (user decision, 2026-10-01).
-Checked against Meshy's terms on 2026-10-01:
+**Reference only (user decision, 2026-10-01).** Meshy models are looked at
+(screenshots, measurements) to build the code models more realistically, and
+are never shipped or stored in the site. The earlier plan for a Meshy
+`star-ferry.glb` on the site is dropped with the "no GLB" decision above.
+The terms and fit notes below are kept for the record. Checked against Meshy's
+terms on 2026-10-01:
 
 - **Paid plan:** the user owns the model; no credit needed. The model must not
   be published to the Meshy Community.
@@ -98,7 +108,7 @@ midground, background and atmosphere. Each one still has to pass gate 5 below
 | `promenade-lamp.webp` | Alpha WebP | Hero, 01–02 | Foreground | Tsim Sha Tsui promenade lamp at the frame edge; a strong near silhouette |
 | Moon | **Built 2026-10-01** as an original procedural disc and halo (`createMoon.js`), no file | All (world object) | Background | Yellow focal light behind the Peak ridge; a painted `moon.webp` may replace the disc later |
 | Bauhinia petals | **Built 2026-10-01** as an original petal drawn in code (`createPetals.js`), no file | All but 06 | Near and far | The site's constant particle effect, in place of Kage-style leaves or rain |
-| Surface textures | **Built 2026-10-01** (user request), original, drawn in code (`surfaces.js`), no files: Clock Tower brick, granite bands, quoins and arched windows (colour, bump, glow); granite ashlar; clock dial; ferry deck walls with framed windows (green and white, colour and glow), ferry hull and waterline foam (added with the ferry reshape, user request, 2026-10-01); junk sail cloth and hull planks | 01–05 | Midground | Textured surfaces instead of flat colour; the GLB models may replace them later |
+| Surface textures | **Built 2026-10-01** (user request), original, drawn in code (`surfaces.js`), no files: Clock Tower brick, granite bands, quoins and arched windows (colour, bump, glow); granite ashlar; clock dial; ferry deck walls with framed windows (green and white, colour and glow), ferry hull and waterline foam (added with the ferry reshape, user request, 2026-10-01); junk sail cloth, varnished hull with waterline stripe and rail cap, and lit deckhouse walls (rebuilt with the junk, user request, 2026-10-01) | 01–05 | Midground | Textured surfaces instead of flat colour |
 | Lit windows | **Built 2026-10-01** (user request), original, generated in the shader (`cityWindows.js`), no file | All | Background | Window grids on the skyline and IFC; fades to an average glow when windows get too small to show |
 | `mist-band.webp` | Alpha WebP, tiled | All | Between skyline layers | Drifting haze that separates near and far buildings |
 | Black kites | Small animated sprites | Hero, 01–03 | Sky | Hong Kong's signature bird gliding slowly; a living detail |
@@ -123,7 +133,7 @@ plan and prompt here before import (as for Meshy above).
 | Wet tiles | Promenade paving shining with reflected lamp light | A tileable wet-paving texture on the promenade deck, with glossy reflections | User | Milestone 3; the shine is tuned in Milestone 4 |
 | Clouds | Heavy clouds lit coral from below by the city | A cloud layer in the sky (painted cards or a procedural layer), kept clear of the moon | User artwork or code | Milestone 4 (atmosphere) |
 | Light beams | Searchlights rising from the Central towers | "Searchlight beams" in Phase D, now including 01 | Code | Milestone 4 |
-| More realistic buildings | Recognisable towers (Bank of China, Central Plaza) with lit window grids | `skyline.glb` (Phase B, P0), with a few landmark towers modelled more closely | User (Meshy or similar) | Milestone 3 |
+| More realistic buildings | Recognisable towers (Bank of China, Central Plaza) with lit window grids The code-built skyline (Phase B, P0), with a few landmark towers modelled more closely in code (no GLB, user decision 2026-10-01) | Code, from the user's references (photos, Meshy models) | Milestone 3 |
 | More light at ground level in Central | A bright band of street and podium lights along the Central waterfront, with long reflections | A waterfront light strip plus the "Skyline reflections" layer in Phase D | Code | Milestone 2 look test (lit windows) or Milestone 4 |
 
 ## Reference material (not for production)
@@ -151,7 +161,8 @@ Meshy models serve as reference, not as shipped assets).
 1. Grey-box camera approval comes before final modelling.
 2. Every production asset gets a source URL/file, creator, licence, and date in
    this ledger before import.
-3. Test each GLB alone in the browser before integrating it into the world.
+3. Test each new 3D model (built in code) alone in the browser before
+   integrating it into the world.
 4. Test alpha cutouts against both light and dark backgrounds at desktop and
    mobile scale.
 5. A new asset must replace a named placeholder or solve a documented visual

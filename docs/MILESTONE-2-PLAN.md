@@ -394,8 +394,9 @@ all six.
      mortar is faint and flat: sharp courses strobed while scrolling.
    - **Star Ferry, reshaped (user request, 2026-10-01).** Compared with a
      reference photo, the box proxy read as a generic barge. The user chose to
-     reshape it in code now and swap in the Meshy model later, reversing the
-     earlier "no interim reshape" decision. Built from rounded (stadium)
+     reshape it in code now, reversing the earlier "no interim reshape"
+     decision. (A Meshy model was to replace it later; since the "no GLB"
+     decision below, the code-built ferry is the final one.) Built from rounded (stadium)
      plan shapes, so both ends are round like the real double-ended boats:
      - green hull with a dark waterline, under a dark rubbing strip (fender);
      - lower deck painted green and upper deck white, each with big framed
@@ -411,31 +412,61 @@ all six.
      - 40 m long including the fender, roof about 8 m up, matching the old
        proxy so the framings hold (the first version was 1 m shorter and its
        end showed in 03 at the far-left mouse position).
-   - **Junk:** sail cloth with five sagging panels between the battens, seams
-     and a warm glow toward the foot; plank strakes on the hull.
-   - **Junk rebuild (planned, not built; user request, 2026-10-01).** Analysed
-     against the user's photos and Meshy renders (reference only). Model: a
-     wooden-hull harbour junk, side-on night photo as the proportion master,
+   - **No GLB models (user decision, 2026-10-01):** "If Kage didn't use any
+     GLB files, I will follow that." Checked in Kage's public repository: it
+     has no 3D model files (only images, fonts and three.js) and builds its
+     shapes in code. So every 3D object here stays built in code; Meshy
+     models are references only (ledger, "Meshy models").
+   - **Junk, rebuilt (user request, 2026-10-01).** Analysed against the
+     user's photos and Meshy renders (reference only). Model: a wooden-hull
+     harbour junk, with a side-on night photo as the proportion master,
      because the warm hull and lit stern windows stay readable on dark water
-     (a black hull vanishes in 04). Decisions:
+     (a black hull vanishes in 04).
      - **Sail size (user decision):** real proportions, sails about 15–20%
        larger for drama. Measured side-on as a share of hull length: main mast
-       ~0.65 above water (ours 0.89), main sail ~0.25 wide × 0.30 tall (ours
-       0.32 × 0.57). Re-check the 01 and 04 compositions afterwards.
-     - **Hull:** shaped from cross-sections, narrower bow rising to a point,
-       raised stern with a lit deckhouse and wide square transom, sheer
-       sweeping up at both ends, varnished wood with a cream waterline stripe,
-       a rudder (no keel fins; Meshy invented them).
-     - **Sails:** straight leaning front edge, top edge climbing to the peak
-       at the back, fan-shaped back edge, mast a quarter to a third back;
-       5–6 battens fanning upward, cloth sagging between them; vivid red,
-       uplit from the deck so they glow brightest near the foot.
-     - **Rig and deck:** foremast raked forward, plain pennants (no
-       lettering), a few rope fans kept thick enough not to shimmer, railing
-       posts, string lights.
-     - **Reflections:** first test a low red light among the sails, so the
-       glassy water draws red streaks the way the cyan light draws the moon
-       path; no new flat pieces on the water.
+       ~0.65 above water (was 0.89), main sail ~0.25 wide × 0.30 tall (was
+       0.32 × 0.57). Built: main mast top 20.5 m, sails 8.3 × 10 m (main),
+       5.4 × 7.8 m (fore), 3.4 × 4.9 m (mizzen) on a 28 m hull.
+     - **Hull:** shaped from 40 cross-sections: narrower bow rising to a
+       point, raised stern with a wide square transom, sheer sweeping up at
+       both ends; varnished planks bent to follow the sheer, a salmon
+       waterline stripe, a gold line under a dark rail cap; a faint glow of
+       its own so it reads at night. A rudder mostly under water (no keel
+       fins; Meshy invented them).
+     - **Deck:** a stern deckhouse with lit windows, a cream canopy over the
+       waist on posts, a rail with posts along both sides, tyre fenders.
+     - **Sails:** straight leaning front edge, a yard climbing to the peak at
+       the back, a fan-shaped back edge scalloped between batten ends, mast
+       about a quarter back; 6 battens (5 on the mizzen) in pale bamboo,
+       cloth bellying between them; vivid red, uplit from the deck so each
+       sail is brightest at the foot and each panel darker under the batten
+       above.
+     - **Rig:** foremast raked forward, rope fans from the batten ends,
+       shrouds and a forestay as thin lines, plain gold and rose pennants (no
+       lettering). String lights are left out for now.
+     - **Reflections:** the junk's light is now red and sits among the sails
+       (was a warm deck lantern), so the glassy water draws a red streak under
+       the junk beside the moon path. No new flat pieces on the water; still
+       3 point lights.
+     - **Framing:** the smaller rig left 04 with the junk's top at 19% against
+       a 10% target, so the 04 camera was re-solved: desktop eye still 3 m,
+       field of view narrowed from 79.9° to 74.5° (a slight zoom), camera and
+       junk both shifted about 6 m; mobile eye 3 m, camera 9 m closer, junk
+       turned 27° more toward the camera (a three-quarter view, which reads
+       better in portrait). A first solve at 2.5 m eye height brought the
+       camera within 1.2 m of the water, under the 1.5 m clearance rule, so it
+       was rejected. The probe skips the thin rigging, whose bounding box
+       would span the whole boat.
+     - **Checked:** 01 and 04 within ±3% on desktop and mobile; framing at the
+       four mouse corners and camera clearance as before. With 1 cm camera
+       steps no surface flickers; 04 changes on edges only (sails, battens,
+       rails, masts move as the junk bobs): 22,183 changing pixels against
+       9,025, from the many more edges. 01 is up 8%.
+     - **Open issue (older, not from the junk):** the full probe run shows
+       four misses that were already there before this change: the wheel in
+       desktop 05 (left 41 against 29), IFC top in mobile 01 (49 against
+       46), and IFC and the wheel in mobile 03 (3–4% off). To fix in a later
+       pass.
      - **Rights:** stock and watermarked photos are looked at only, never
        stored, traced or copied (including boat names and flag lettering);
        the user's own photo is in `docs/references/junk/`.
@@ -499,7 +530,8 @@ all six.
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
 
-**Not in the look test:** 3D models (GLBs), real fireworks, the sparkle cursor,
+**Not in the look test:** 3D models (GLBs; later dropped altogether, all 3D
+is built in code, user decision 2026-10-01), real fireworks, the sparkle cursor,
 particles in other chapters, sound, final copy and fonts.
 
 ## 5. Performance budget
@@ -512,8 +544,8 @@ Measured with the `?fps` overlay on a production build, as in
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
 | Draw calls | ≤ 100 (was ≤ 80) | ≤ 100 |
-| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 15 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip), about 6.2 MB of GPU memory in all; the Clock Tower shaft maps are 256 × 1088 px. To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
-| Point lights | 3 (Clock Tower flood, ferry, junk) since 2b | same |
+| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 17 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures), about 6.5 MB of GPU memory in all; the Clock Tower shaft maps are 256 × 1088 px. To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
+| Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
 
 If the iPhone 11 misses its target, layers are switched off on mobile in this
@@ -562,8 +594,12 @@ Stop for the user's review after each step, as in the grey-box.
   Kowloon windows.
 - `src/scene/createIsland.js`: Central and IFC windows.
 - `src/scene/createVessels.js`: reshaped Star Ferry (rounded decks, windows,
-  fender, canopy, funnel, wheelhouses, foam skirt), junk sails and planks,
-  vessel lights.
+  fender, canopy, funnel, wheelhouses, foam skirt); rebuilt junk (lofted
+  hull, deckhouse, canopy, rails, tyres, rudder, battened sails, rigging,
+  pennants); vessel lights.
+- `src/data/chapters.js`: re-solved chapter 04 camera and junk positions
+  for the junk's real proportions.
+- `src/ui/composition.js`: the probe skips parts marked `noProbe` (rigging).
 - `src/scene/gating.js`: faded copies keep shader patches; meshes with one
   material per face fade too.
 - `src/scene/createForeground.js`: depth-only twins for a clean railing
@@ -618,6 +654,6 @@ step.
 
 | Milestone | Content |
 |---|---|
-| 3. Assets | GLB models from the ledger (junk, ferry, Clock Tower, IFC, wheel), remaining cutouts including the user's bauhinia petals and tree, display fonts. The Star Ferry is made by the user in Meshy.ai; until then the code-built ferry stands in; it was reshaped to look like the real boat (user request, 2026-10-01, reversing the earlier "no interim reshape" decision; section 4, step 2b). Specs and licence notes are in `ASSET-LEDGER.md`, "Meshy models". Also the user's stone railing, promenade palms, wet paving tiles and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
+| 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry and junk are already rebuilt from reference photos; the Clock Tower, IFC and wheel get the same treatment, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals and tree, display fonts. Also the user's stone railing, promenade palms, wet paving tiles and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
 | 4. Atmosphere, all chapters | Clouds lit from below and searchlight beams from the Central towers (user reminders, 2026-10-01), the look-test layers rolled out to 02–06, extra particles alongside the petals (sea spray, city bokeh, firework embers in 06), real fireworks, a sparkle trail added to the cursor ring (3.10) |
 | 5. Copy and launch | Final copy, poster images, a full performance pass on both iPhones, deployment |

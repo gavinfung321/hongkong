@@ -2,7 +2,7 @@ import { CanvasTexture, Color, RepeatWrapping, SRGBColorSpace } from 'three';
 import { seededRandom } from './random.js';
 
 // Original surface textures drawn in code (no image files): Clock Tower brick
-// and granite, clock dials, ferry windows and hull, junk sails and planks.
+// and granite, clock dials, ferry windows and hull, junk sail cloth and hull.
 // Fine detail is kept to a few pixels per metre so mipmaps average it calmly.
 
 function canvas(width, height) {
@@ -262,56 +262,62 @@ export function waterlineFoam() {
 
 // ---- Junk -------------------------------------------------------------------
 
-// Sail cloth in normalised UVs: five panels between battens, each sagging
-// darker toward its lower edge, warmer toward the foot where deck lanterns
-// light it, faint vertical seams and cloth mottling.
-export function junkSail() {
+// Red sail cloth, normalised UVs over the whole sail. The light and the
+// pockets between battens are vertex colours on the sail mesh; this only
+// adds faint vertical cloth seams and mottling.
+export function junkCloth() {
   const W = 128;
-  const H = 256;
+  const H = 128;
   const random = seededRandom(31);
   const [c, ctx] = canvas(W, H);
-  const base = ctx.createLinearGradient(0, 0, 0, H);
-  base.addColorStop(0, '#b8402f');
-  base.addColorStop(0.7, '#d9533a');
-  base.addColorStop(1, '#f07a4a');
-  ctx.fillStyle = base;
+  ctx.fillStyle = '#e8432a';
   ctx.fillRect(0, 0, W, H);
-  for (let p = 0; p < 5; p++) {
-    const top = (p / 5) * H;
-    const sag = ctx.createLinearGradient(0, top, 0, top + H / 5);
-    sag.addColorStop(0, 'rgba(255, 210, 170, 0.14)');
-    sag.addColorStop(0.6, 'rgba(0, 0, 0, 0)');
-    sag.addColorStop(1, 'rgba(40, 0, 0, 0.28)');
-    ctx.fillStyle = sag;
-    ctx.fillRect(0, top, W, H / 5);
-  }
-  for (let x = 10; x < W; x += 14) {
-    ctx.fillStyle = 'rgba(60, 10, 5, 0.18)';
+  for (let x = 9; x < W; x += 16) {
+    ctx.fillStyle = 'rgba(90, 10, 5, 0.12)';
     ctx.fillRect(x, 0, 1, H);
   }
-  for (let i = 0; i < 300; i++) {
-    ctx.fillStyle = `rgba(${random() < 0.5 ? '255, 200, 160' : '50, 0, 0'}, 0.05)`;
+  for (let i = 0; i < 260; i++) {
+    ctx.fillStyle = `rgba(${random() < 0.5 ? '255, 190, 150' : '60, 0, 0'}, 0.05)`;
     ctx.fillRect(random() * W, random() * H, 2 + random() * 6, 1 + random() * 3);
   }
   return texture(c);
 }
 
-// Hull planks in metres (the hull's profile faces carry UVs in metres):
-// 0.35 m strakes with their own tones, 8 m × 4 m per tile.
-export function junkPlanks() {
-  const [c, ctx] = canvas(256, 128);
+// Junk hull side, 8 m per tile. V runs from 1.2 m under the waterline to the
+// sheer, with the strakes bent to follow the sheer (createVessels.js): a
+// salmon waterline stripe, varnished planks, a gold line and a dark rail cap.
+export function junkHull() {
+  const W = 256;
+  const H = 128;
   const random = seededRandom(37);
-  ctx.fillStyle = '#1e1512';
-  ctx.fillRect(0, 0, 256, 128);
-  const strake = 128 / (4 / 0.35);
-  for (let y = 0; y < 128; y += strake) {
+  const [c, ctx] = canvas(W, H);
+  ctx.fillStyle = '#5c361d';
+  ctx.fillRect(0, 0, W, H);
+  const cap = 7;
+  const stripeTop = 80; // 0.35 m above the waterline
+  const strakes = 8;
+  const plank = (stripeTop - cap - 3) / strakes;
+  for (let s = 0; s < strakes; s++) {
+    const y = cap + 3 + s * plank;
     let x = -random() * 80;
-    while (x < 256) {
-      const len = 60 + random() * 90;
-      ctx.fillStyle = shade(0x4a3326, (random() - 0.5) * 0.08);
-      ctx.fillRect(x, y + 1, len - 1, strake - 1.5);
+    while (x < W) {
+      const len = 50 + random() * 90;
+      ctx.fillStyle = shade(0x6e4224, (random() - 0.5) * 0.1);
+      ctx.fillRect(x, y, len - 1, plank - 1);
       x += len;
     }
   }
-  return texture(c, { repeat: [0.125, 0.25] });
+  for (let i = 0; i < 120; i++) {
+    ctx.fillStyle = `rgba(${random() < 0.5 ? '255, 200, 140' : '20, 8, 0'}, 0.08)`;
+    ctx.fillRect(random() * W, cap + 3 + random() * (stripeTop - cap - 6), 8 + random() * 30, 1);
+  }
+  ctx.fillStyle = '#2a170d';
+  ctx.fillRect(0, 0, W, cap);
+  ctx.fillStyle = '#c99a4a';
+  ctx.fillRect(0, cap, W, 2);
+  ctx.fillStyle = '#d98b5c';
+  ctx.fillRect(0, stripeTop, W, H - stripeTop);
+  ctx.fillStyle = '#3a2214';
+  ctx.fillRect(0, stripeTop, W, 2);
+  return texture(c);
 }
