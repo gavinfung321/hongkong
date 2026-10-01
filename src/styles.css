@@ -504,7 +504,13 @@ a:focus-visible {
   transition: opacity 200ms ease;
 }
 
-.chapter-counter a:hover,
+.chapter-counter a span {
+  display: block;
+  transition:
+    color 250ms ease,
+    transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .chapter-counter a[aria-current] {
   color: var(--color-cream);
   opacity: 1;
@@ -532,12 +538,36 @@ a:focus-visible {
   transition: opacity 400ms ease;
 }
 
+/* A bright stroke draws in from the left over a faint track, then leaves to the right. */
 .chapter-counter__hint::after {
   content: "";
-  width: 40px;
+  width: 56px;
   height: 1px;
-  background: currentColor;
-  opacity: 0.6;
+  background:
+    linear-gradient(currentColor, currentColor) 0 0 / 0% 100% no-repeat,
+    rgb(243 233 210 / 0.22);
+  animation: hint-line 2.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/* The anchor flips to the right while the stroke is full width, so the jump is invisible. */
+@keyframes hint-line {
+  0% {
+    background-size: 0% 100%, auto;
+    background-position: left, 0 0;
+  }
+  45% {
+    background-size: 100% 100%, auto;
+    background-position: left, 0 0;
+  }
+  55% {
+    background-size: 100% 100%, auto;
+    background-position: right, 0 0;
+  }
+  90%,
+  100% {
+    background-size: 0% 100%, auto;
+    background-position: right, 0 0;
+  }
 }
 
 [data-hero="true"] .chapter-counter__hint {
@@ -565,6 +595,17 @@ html:not(.is-enhanced) .chapter-counter {
 
 [data-hero="true"] .chapter-counter__current {
   color: inherit;
+}
+
+@media (hover: hover) {
+  .chapter-counter a:hover {
+    opacity: 1;
+  }
+
+  .chapter-counter a:hover span {
+    color: var(--color-coral);
+    transform: translateY(-6px);
+  }
 }
 
 @media (max-width: 959px) {
@@ -765,5 +806,15 @@ html:not(.is-enhanced) .chapter-counter {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .chapter-counter__hint::after {
+    animation: none;
+    background: currentColor;
+    opacity: 0.6;
+  }
+
+  .chapter-counter a:hover span {
+    transform: none;
   }
 }
