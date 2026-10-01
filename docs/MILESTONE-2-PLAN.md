@@ -152,10 +152,15 @@ How it is built:
 ### 3.6 Vertical Chinese text (built 2026-10-01)
 
 - **東方明珠** ("Pearl of the Orient"), written vertically down the right
-  edge below the nav. It replaced 維港之夜, and it slides up and fades out
-  with the header on scroll down and returns with it on scroll up. Large and
-  bright so it reads as a second title: 1.75rem on desktop, 1.125rem on
-  mobile, near-full ivory (user requests, 2026-10-01).
+  edge below the nav. It replaced 維港之夜. Large and bright so it reads as
+  a second title: 1.75rem on desktop, 1.125rem on mobile, near-full ivory
+  (user requests, 2026-10-01).
+- It leaves together with chapter 01's copy ("Harbour at Dusk"): the same
+  scroll-linked fade and 48 px rise, at the same speed, and comes back with
+  it when you scroll to the top (user request, 2026-10-01: "they should
+  scroll away together"). It first followed the header's timed slide, which
+  ran at a different speed. `copyLayer.js` publishes chapter 01's values as
+  `--intro-copy-opacity` / `--intro-copy-shift` and the title uses them.
 - A **per-chapter label** at the bottom right, also vertical, under a short
   hairline. It changes with the current chapter: the old label rises out and
   the new one comes up from below, like the copy. The hero shows 01's label.
@@ -383,6 +388,7 @@ Stop for the user's review after each step, as in the grey-box.
 - `src/data/chapters.js`: copy regions, new `hero` block. (The Chinese labels
   ended up in `index.html`, next to the menu's copies of them.)
 - `src/main.js`: wire up the new pieces.
+- `src/ui/copyLayer.js`: shares chapter 01's fade with the vertical title.
 - New: `src/ui/siteHeader.js` (nav, menu, counter, vertical label, side pager), `src/scene/createWordmark.js`,
   `src/scene/createMoon.js`, `src/ui/cursorRing.js`,
   `src/ui/pointerParallax.js`, `src/scene/createPetals.js`,
