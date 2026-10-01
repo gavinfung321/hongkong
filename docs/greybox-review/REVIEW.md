@@ -38,7 +38,11 @@ one with its storyboard PNG in `docs/storyboards/`.
    (target 88%) and the wheel's left edge at 70% (target 73%).
 7. **02 mobile** has no water strip at the bottom, because the lowered tower
    and the railing fill it.
-8. **Brief wording.** The brief swaps the fore and mizzen sail labels in 7.4.
+8. **01 desktop — IFC moved right (your request).** It sits at about 78–83%
+   instead of the PNG's 70–74%, so the junk's sails no longer hide it. The
+   camera moved about 6 m east along the promenade to do this. The copy
+   moved 2% right to stay clear of the Clock Tower.
+9. **Brief wording.** The brief swaps the fore and mizzen sail labels in 7.4.
    The geometry follows the PNG.
 
 Everything else is within ±3% of its section 7 target.

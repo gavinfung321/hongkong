@@ -32,16 +32,16 @@ export const chapters = [
     },
     camera: {
       desktop: {
-        position: [-19.6, 6.1, 100.9],
-        target: [24.8, 28.4, -296],
-        fov: 43.3,
+        position: [-14, 5.4, 99.5],
+        target: [-2.4, 30.1, -299.5],
+        fov: 41,
         holdDolly: [0, 0, -4],
         via: [[-50, 7, 58]],
       },
       mobile: { position: [-43.8, 8.3, 99], target: [6.9, 119.1, -282], fov: 79.9 },
     },
     copy: {
-      desktop: { left: 20, top: 8, right: 50, bottom: 31 },
+      desktop: { left: 22, top: 8, right: 52, bottom: 31 },
       mobile: { left: 8, top: 6, right: 92, bottom: 36 },
     },
     visibility: {
@@ -51,7 +51,7 @@ export const chapters = [
     },
     fogDensity: 0.00045,
     vessels: {
-      desktop: { ferry: [-19.7, -89.9, 0], junk: [30.1, -36.9, 0] },
+      desktop: { ferry: [-29.6, -106.6, 0], junk: [25.2, -54.2, 0] },
       mobile: { ferry: [-19.7, -89.9, 0], junk: [-17.5, -30.5, 0] },
     },
     probes: {
@@ -59,8 +59,9 @@ export const chapters = [
         tower: { left: 8, right: 18, top: 7, bottom: 60 },
         ferry: { left: 33, right: 49, bottom: 64 },
         junk: { left: 61, right: 77, bottom: 64 },
-        ifc: { left: 70, right: 74, top: 18 },
-        wheel: { left: 62.4, right: 65.6, bottom: 56 },
+        // IFC sits right of the PNG (70–74) so the junk's sails don't hide it.
+        ifc: { left: 79, right: 83, top: 18 },
+        wheel: { left: 71.4, right: 74.6, bottom: 56 },
         horizon: 57.5,
       },
       mobile: {
