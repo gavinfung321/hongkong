@@ -15,6 +15,7 @@ import { createScrollConductor } from './scroll/scrollConductor.js';
 import { createCopyLayer } from './ui/copyLayer.js';
 import { createSiteHeader } from './ui/siteHeader.js';
 import { createCursorRing } from './ui/cursorRing.js';
+import { createPointerParallax } from './ui/pointerParallax.js';
 import { enterFallback, supportsWebGL2, watchContext } from './ui/fallback.js';
 
 const params = new URLSearchParams(window.location.search);
@@ -61,6 +62,7 @@ function start(initGuard, header) {
   });
 
   const rig = createCameraRig(camera, chapters, { hold: SCROLL.hold });
+  const parallax = createPointerParallax();
   const conductor = createScrollConductor(sections, SCROLL);
   const copy = createCopyLayer(sections, chapters, SCROLL);
 
@@ -257,6 +259,10 @@ function start(initGuard, header) {
     } else {
       if (state.jumped && !veilActive) runVeil(() => conductor.snap());
       time += dt;
+      // Mouse only, and only on the desktop framings, which were checked at its extremes.
+      const offset = parallax.update(dt);
+      const parallaxOn = parallax.enabled && breakpoint === 'desktop';
+      rig.setParallax(parallaxOn ? offset.x : 0, parallaxOn ? offset.y : 0);
       if (!control.free) applyPose(state.pRendered, false, time);
       wordmark.sinkAt(state.pRendered, state.pTop, HERO.sinkEnd, HERO.fadeEnd);
       water.update(dt);

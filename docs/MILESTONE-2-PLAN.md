@@ -188,7 +188,7 @@ to start at **11% or lower** (desktop) and **9% or lower** (mobile).
 Afterwards, re-run the composition probe, the copy-overflow check and the
 landmark-overlap check for all twelve frames, exactly as in the grey-box.
 
-### 3.8 Cursor parallax (desktop only)
+### 3.8 Cursor parallax (desktop only; built 2026-10-01)
 
 - The camera shifts up to **±0.5 m** sideways and **±0.25 m** up and down,
   following the mouse with smooth damping. Near objects (railing, tower) slide
@@ -197,6 +197,20 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
 - Off on touch devices and in reduced motion.
 - Must keep every frame inside the ±3% composition tolerance at the extremes,
   and the camera clearance above 1.5 m (the current minimum is 1.99 m).
+- **As built:** the mouse position is damped (`FOLLOW` in
+  `src/ui/pointerParallax.js`) and drifts back to centre when the pointer
+  leaves the window. The camera rig slides camera and target together
+  (`PARALLAX` in `cameraRig.js`), at full strength on holds and zero halfway
+  through each transition. It also runs in the hero, so 香港 shifts slightly
+  against the scene. Desktop breakpoint and mouse only; off in reduced motion.
+- **Per-chapter share:** the near subjects in three holds left their targets
+  at full strength, so their desktop pose has a `parallax` share in
+  `chapters.js`: 01 at 0.8 (Clock Tower), 02 at 0.4 (Clock Tower's foot),
+  04 at 0.5 (the junk's waterline). 03, 05 and 06 take the full amount.
+- **Checked:** at all four mouse corners every desktop frame passes its
+  targets (05's wheel misses are the existing documented deviation), and the
+  closest approach is 2.06 m (railing in the 01 → 02 move); the debug
+  `clearance()` takes a `parallax` option for this.
 
 ### 3.9 Moon (user request, 2026-10-01)
 
@@ -261,7 +275,8 @@ all six.
 2. **Lit windows.** Sparse warm window rectangles on the skyline buildings and
    brighter ones on IFC, drawn from one small generated texture. The world
    bible says the skyline must not compete, so the windows stay sparse and dim
-   except on IFC.
+   except on IFC. Also try a brighter band of ground-level lights along the
+   Central waterfront, as in the storyboard (user reminder, 2026-10-01).
 3. **Glow.** Two options, tested side by side:
    - **A (recommended first):** soft glow sprites behind each bright light
      (clock faces, IFC crown, ferry windows). Cheap, art-directable, works on
@@ -351,8 +366,11 @@ Stop for the user's review after each step, as in the grey-box.
   `src/ui/pointerParallax.js`, `src/scene/createPetals.js`,
   `src/scene/createGlow.js`.
 - `src/data/world.js`: the `moon` block.
-- `src/data/chapters.js`: `petals` density in chapters 05 and 06.
-- `src/ui/debug.js`: wordmark position in the probe.
+- `src/data/chapters.js`: `petals` density in chapters 05 and 06; desktop
+  `parallax` shares in 01, 02 and 04.
+- `src/scroll/cameraRig.js`: the parallax offset (`setParallax`, `PARALLAX`).
+- `src/ui/debug.js`: wordmark position in the probe; `clearance()` takes a
+  `parallax` option.
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font.
 
 ## 8. Acceptance checks

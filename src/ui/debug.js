@@ -387,7 +387,8 @@ export function createDebug(ctx) {
   // Samples the camera path for both breakpoints and lists every stretch where
   // the eye comes within `margin` metres of a static mesh (per instance) or
   // less than `eye` metres above the ground. Vessels are ignored.
-  function clearance({ step = 0.002, margin = 3, eye = 1.5 } = {}) {
+  // `parallax` [x, y] (-1..1) holds the desktop mouse offset at that value.
+  function clearance({ step = 0.002, margin = 3, eye = 1.5, parallax = [0, 0] } = {}) {
     const moving = new Set();
     for (const k of ['ferry', 'junk']) landmarks[k].object.traverse((o) => moving.add(o));
     const boxes = [];
@@ -418,6 +419,7 @@ export function createDebug(ctx) {
     for (const bp of ['desktop', 'mobile']) {
       rig.setBreakpoint(bp);
       rig.setAspect(ASPECT[bp]);
+      rig.setParallax(...(bp === 'desktop' ? parallax : [0, 0]));
       const groups = {};
       const hit = (what, p, d) => {
         const g = (groups[what] ??= { from: p, to: p, min: Infinity });
