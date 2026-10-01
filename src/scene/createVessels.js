@@ -226,16 +226,17 @@ function hullStrip(u0, u1, edge, thickness = 0) {
 }
 
 // A battened junk sail in mast coordinates (mast at x 0, foot at y 0, bow
-// +X): a straight luff leaning back, a yard climbing aft to the peak, a
-// fan-shaped leech scalloped between the batten ends, and cloth bellying
+// +X): a tall luff leaning back, a yard climbing steeply aft to a pointed
+// peak just behind the mast, a leech that sweeps out below the peak and is
+// widest low down, scalloped between the batten ends, and cloth bellying
 // between battens. Uplit from the deck: vertex colours brightest at the foot,
 // each panel darker just under the batten above.
 function junkSail(w, h, panels) {
-  const tack = [0.27 * w, 0];
-  const throat = [0.2 * w, 0.62 * h];
-  const clew = [-0.62 * w, 0];
-  const bend = [-0.95 * w, 0.55 * h];
-  const peak = [-0.42 * w, h];
+  const tack = [0.26 * w, 0];
+  const throat = [0.15 * w, 0.75 * h];
+  const clew = [-0.7 * w, 0];
+  const bend = [-0.9 * w, 0.6 * h];
+  const peak = [-0.25 * w, h];
   const luff = (t) => [lerp(tack[0], throat[0], t), lerp(tack[1], throat[1], t)];
   const leech = (t) => {
     const [a, b, c] = [(1 - t) ** 2, 2 * (1 - t) * t, t * t];
@@ -280,8 +281,9 @@ function junkSail(w, h, panels) {
   geometry.setAttribute('color', new Float32BufferAttribute(colors, 3));
   geometry.setIndex(index);
 
-  // Battens (with the boom and yard) overhang both edges; a sheet runs from
-  // each batten end to one block under the boom.
+  // Battens and the boom overhang both edges; the yard stops at the peak so
+  // the tip stays sharp. A sheet runs from each batten end to one block
+  // under the boom.
   const battens = [];
   const sheets = [];
   const block = [-0.8 * w, -1.4];
@@ -289,7 +291,7 @@ function junkSail(w, h, panels) {
     const t = p / panels;
     const [lx, ly] = luff(t);
     const [rx, ry] = leech(t);
-    battens.push([lx + 0.04 * w, ly, rx - 0.06 * w, ry]);
+    battens.push([lx + 0.04 * w, ly, rx - (p < panels ? 0.06 * w : 0), ry]);
     if (p < panels) sheets.push([rx - 0.06 * w, ry, ...block]);
   }
   return { geometry, battens, sheets, block };
@@ -369,14 +371,16 @@ function createJunk() {
   const rudder = new Mesh(new BoxGeometry(1.3, 2.4, 0.2), wood);
   rudder.position.set(junkX(0) - 0.45, -0.45, 0);
 
-  // [mastX, mastZ, rake (forward +), mastTop, sailWidth, sailHeight, sailFoot, panels]
+  // [mastX, mastZ, rake (forward +), sailWidth, sailHeight, sailFoot, panels]
   // Big sails, as on the harbour junks (user request): the main is about
   // half the hull length tall. The foresail overlaps the main, so it hangs
-  // 0.9 m to one side and the cloths never meet.
+  // 0.9 m to one side and the cloths never meet. Each mast ends just above
+  // its sail's peak.
+  const MASTHEAD = 0.6;
   const rig = [
-    [10.6, 0.9, 0.14, 17.5, 8, 10, 5.4, 6],
-    [4, 0, 0, 23.5, 12, 15, 5.6, 7],
-    [-11.2, -0.8, -0.04, 14, 4.2, 5.6, 7, 5],
+    [10.6, 0.9, 0.14, 8, 10, 5.4, 6],
+    [4, 0, 0, 12, 15, 5.6, 7],
+    [-11.2, -0.8, -0.04, 4.2, 5.6, 7, 5],
   ];
   const masts = new InstancedMesh(new CylinderGeometry(0.12, 0.17, 1, 6).translate(0, 0.5, 0), lambert(0x2a1a12), rig.length);
   const sailGeometries = [];
@@ -394,13 +398,13 @@ function createJunk() {
   };
   const pennantTips = [];
 
-  rig.forEach(([mx, mz, rake, top, w, h, foot, panels], i) => {
+  rig.forEach(([mx, mz, rake, w, h, foot, panels], i) => {
     const deckY = deckAt(mx);
-    const length = (top - deckY) / Math.cos(rake);
+    const lift = foot - deckY;
+    const length = lift + h + MASTHEAD;
     const frame = new Matrix4().makeRotationZ(-rake).setPosition(mx, deckY, mz);
     masts.setMatrixAt(i, new Matrix4().multiplyMatrices(frame, new Matrix4().makeScale(1, length, 1)));
 
-    const lift = foot - deckY;
     const sail = junkSail(w, h, panels);
     sailGeometries.push(sail.geometry.translate(0, lift, 0).applyMatrix4(frame));
     for (const [x0, y0, x1, y1] of sail.battens) {
