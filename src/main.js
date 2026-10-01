@@ -226,6 +226,7 @@ function start(initGuard, header) {
   let last = 0;
   let time = 0;
   let lastRendered = 0;
+  const lastCamera = camera.position.clone();
   let ready = false;
 
   function frame(now) {
@@ -265,7 +266,8 @@ function start(initGuard, header) {
       rig.setParallax(parallaxOn ? offset.x : 0, parallaxOn ? offset.y : 0);
       if (!control.free) applyPose(state.pRendered, false, time);
       wordmark.sinkAt(state.pRendered, state.pTop, HERO.sinkEnd, HERO.fadeEnd);
-      water.update(dt);
+      water.update(dt, dt > 0 ? camera.position.distanceTo(lastCamera) / dt : 0);
+      lastCamera.copy(camera.position);
       petals.update(dt, camera, dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0);
       lastRendered = state.pRendered;
     }

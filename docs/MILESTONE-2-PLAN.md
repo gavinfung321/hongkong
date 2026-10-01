@@ -220,6 +220,19 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   targets (05's wheel misses are the existing documented deviation), and the
   closest approach is 2.26 m (railing in the 01 → 02 move); the debug
   `clearance()` takes a `parallax` option for this.
+- **Calm water while moving** (user request, 2026-10-01: "when I start
+  scrolling, the sideways and the water are flickering again"). Parallax was
+  not the cause: it moves the camera under 0.6 m/s, and the camera path is
+  smooth with or without it. Scroll transitions move the camera up to ~3 m
+  per frame, so the 3–15 m ripples jumped about half a wavelength each frame
+  and strobed (the wagon-wheel effect). The water now blends to the same
+  ripple pattern at 3× the size while the camera moves faster than 4 m/s
+  (fully by 24 m/s), and back within about a second after a hold is reached
+  (`CALM` in `src/scene/createWater.js`; `water.update()` receives the camera
+  speed from `main.js`). Holds and mouse parallax keep today's ripples.
+  Measured strobing (second difference between frames on the water) at
+  1.5 m per frame: 54 before, 17 now, 13 for perfectly flat water. A larger
+  tile everywhere fixed it too but turned 03's wave-height water glassy.
 
 ### 3.9 Moon (user request, 2026-10-01)
 
@@ -378,6 +391,8 @@ Stop for the user's review after each step, as in the grey-box.
 - `src/data/chapters.js`: `petals` density in chapters 05 and 06; desktop
   `parallax` shares in 01 and 04.
 - `src/scroll/cameraRig.js`: the parallax offset (`setParallax`, `PARALLAX`).
+- `src/scene/createWater.js`: ripples calm to a larger scale while the camera
+  moves fast (`CALM`); `src/main.js` passes it the camera speed.
 - `src/ui/debug.js`: wordmark position in the probe; `clearance()` takes a
   `parallax` option.
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font.
@@ -397,7 +412,9 @@ The milestone passes when:
    The side pager (desktop) marks the current chapter and its dashes land on
    the right hold.
 4. Reduced-motion mode shows no sinking, no parallax, no particles and no
-   cursor ring, and still tells the whole story.
+   cursor ring, and still tells the whole story. In continuous mode the water
+   does not blink or strobe while the mouse moves or during scroll
+   transitions.
 5. The poster-only fallback still works, with a usable nav.
 6. Frame 01 with the look-test layers is approved by the user against the
    storyboard and the Kage reference.
