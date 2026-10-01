@@ -30,7 +30,7 @@ specifications are in `CURSOR-GREYBOX-BRIEF.md` section 6.
 | Filename | Type | Chapter | Priority | Target size | Rights/source | Notes |
 |---|---|---:|---|---:|---|---|
 | `clock-tower.glb` | 3D | 01–02 | P0 | <700 KB | Original model from owned/licensed references | Silhouette, clock face, warm openings; no tiny masonry |
-| `star-ferry.glb` | 3D animated | 01–04 | P0 | <1 MB | Original model from owned/licensed references | Hull, two decks, canopy; wake remains procedural |
+| `star-ferry.glb` | 3D animated | 01–04 | P0 | <1 MB | Made by the user in Meshy.ai (user decision, 2026-10-01); rights depend on the Meshy plan, see "Meshy models" below | Hull, two decks, canopy; wake remains procedural. Replaces the code-built box proxy, which stays until then |
 | `junk-boat.glb` | 3D animated | 01, 04 | P0 | <1.5 MB | Original model from owned/licensed references | Hero asset; hull and red sails, minimal rig only if needed |
 | `ifc.glb` | 3D | 01, 03–06 | P0 | <500 KB | Original model from owned/licensed references | Recognisable crown and proportions; windows procedural/material-based |
 | `observation-wheel.glb` | 3D | 01, 03, 05 | P0 | <500 KB | Original model from owned/licensed references | Ring, spokes, gondolas, supports; co-star scale in 05; lighting material-based |
