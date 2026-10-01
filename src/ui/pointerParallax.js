@@ -1,7 +1,7 @@
 // Desktop mouse parallax: a damped pointer position, -1..1 on each axis
 // (+x right, +y up). The camera rig turns it into a small camera shift.
 
-const FOLLOW = 1.5; // per second; lower drifts more lazily (and the water shimmers less)
+const FOLLOW = 3; // per second; lower drifts more lazily
 
 export function createPointerParallax() {
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
