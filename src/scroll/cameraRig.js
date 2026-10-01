@@ -3,10 +3,11 @@ import { CatmullRomCurve3, MathUtils, Vector3 } from 'three';
 const AUTHORED_DESKTOP_ASPECT = 1.6;
 const MAX_FOV_WIDENING = 15;
 const LOOK_DISTANCE = 400;
-// Camera shift in metres at full mouse travel (pointerParallax.js). No
-// vertical shift: raising or lowering the eye changes the angle onto the water,
-// and the ripple glints sweep across the whole harbour like a flicker.
-export const PARALLAX = { x: 0.5, y: 0 };
+// Camera swing in metres at full mouse travel (pointerParallax.js). The camera
+// orbits a point LOOK_DISTANCE ahead, so the foreground slides one way and the
+// far skyline the other. No vertical shift: raising or lowering the eye changes
+// the angle onto the water, and the ripple glints sweep across the harbour.
+export const PARALLAX = { x: 1.6, y: 0 };
 
 export function smoothstep(edge0, edge1, x) {
   const t = MathUtils.clamp((x - edge0) / (edge1 - edge0), 0, 1);
@@ -102,8 +103,8 @@ export function createCameraRig(camera, chapters, { hold }) {
     parallax.y = y;
   }
 
-  // Slides camera and target together, so near objects move more than far
-  // ones. Full strength on holds, zero halfway through a transition.
+  // Moves the camera sideways; the target stays put. Full strength on holds,
+  // zero halfway through a transition.
   // Each hold's own share applies; the switch happens at zero strength.
   function parallaxOffset(segment, out) {
     const e = segment.eased;
@@ -149,7 +150,6 @@ export function createCameraRig(camera, chapters, { hold }) {
       target.add(dolly);
       parallaxOffset(segment, shift);
       camera.position.add(shift);
-      target.add(shift);
     }
 
     const fromFov = poses[segment.from].fov;

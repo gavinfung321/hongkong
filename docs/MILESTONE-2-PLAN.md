@@ -195,9 +195,23 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
 
 ### 3.8 Cursor parallax (desktop only; built 2026-10-01)
 
-- The camera shifts up to **±0.5 m** sideways only, following the mouse with
-  smooth damping. Near objects (railing, tower) slide more than the distant
-  skyline, which gives real depth.
+- The camera swings up to **±1.6 m** sideways only (±2.9 m in 05 and 06),
+  following the mouse with smooth damping. It orbits a point 400 m ahead, so
+  the foreground (railing, palms, tower, ferry) slides one way and the far
+  skyline and moon the other, which gives real depth.
+- **Stronger parallax** (user request, 2026-10-01: "make the PARALLAX effect
+  more obvious … I dont see much effect when I move my cursor around"). The
+  first version slid camera and target together by 0.5 m. Every subject is
+  50 m or more away, so that moved them under 1% of the screen width (the
+  Clock Tower 0.6%, the 03 ferry 3%). Now the camera orbits instead of
+  sliding (the target stays put), the swing is 3× larger, and the follow is
+  twice as fast. Measured travel between mouse full left and full right at
+  1.6 m: Clock Tower ~2%, 03 ferry ~9%, 04 junk ~5%; the near railing and
+  palms move much more. In 02 the IFC peeks out from behind the Clock Tower
+  at the far right of the mouse range.
+- At the mouse extremes a subject may drift up to **±6%** from its
+  composition target (was ±3%), the price of the stronger swing. The authored
+  centre pose still passes the ±3% probe.
 - **No vertical shift** (user request, 2026-10-01: "the harbor keeps blinking
   when my cursor is going around"). Raising or lowering the eye changes the
   viewing angle onto the water, so the moonlit ripple glints sweep across the
@@ -207,24 +221,25 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   water's own shimmer.
 - Full strength during holds, fading to zero during scroll transitions.
 - Off on touch devices and in reduced motion.
-- Must keep every frame inside the ±3% composition tolerance at the extremes,
-  and the camera clearance above 1.5 m (the current minimum is 1.99 m).
-- **As built:** the mouse position is damped (`FOLLOW` 1.5 per second in
-  `src/ui/pointerParallax.js`, lowered from 2.5 so the scene drifts lazily
-  rather than tracking every flick) and drifts back to centre when the pointer
-  leaves the window. The camera rig slides camera and target together
-  (`PARALLAX` in `cameraRig.js`), at full strength on holds and zero halfway
-  through each transition. It also runs in the hero, so 香港 shifts slightly
+- Must keep every frame inside ±6% of its composition targets at the
+  extremes, and the camera clearance above 1.5 m.
+- **As built:** the mouse position is damped (`FOLLOW` 3 per second in
+  `src/ui/pointerParallax.js`; it was 1.5 while the water still shimmered,
+  which felt sluggish) and drifts back to centre when the pointer leaves the
+  window. The camera rig moves the camera sideways and keeps the target
+  (`PARALLAX` 1.6 m in `cameraRig.js`), at full strength on holds and zero
+  halfway through each transition. It also runs in the hero, so 香港 shifts
   against the scene. Desktop breakpoint and mouse only; off in reduced motion.
-- **Per-chapter share:** the near subjects in two holds left their targets
-  at full strength, so their desktop pose has a `parallax` share in
-  `chapters.js`: 01 at 0.8 (Clock Tower; safe up to 0.86) and 04 at 0.8 (the
-  junk; safe up to 0.825). 02, 03, 05 and 06 take the full amount (02 needed
-  0.4 only while there was a vertical shift).
-- **Checked:** at all four mouse corners every desktop frame passes its
-  targets (05's wheel misses are the existing documented deviation), and the
-  closest approach is 2.26 m (railing in the 01 → 02 move); the debug
-  `clearance()` takes a `parallax` option for this.
+- **Per-chapter multiplier:** a desktop pose can scale the swing with
+  `parallax` in `chapters.js`. 05 and 06 use 1.8 (wide views with distant
+  subjects; safe up to 3 m). 01–04 take the plain 1.6 m (03's ferry would
+  leave its ±6% band at 2 m).
+- **Checked:** at both mouse extremes every desktop frame stays within ±6%
+  of its targets (05's wheel misses are the existing documented deviation;
+  02's IFC peek is accepted), and the closest approach is 2.26 m (railing in
+  the 01 → 02 move, where parallax is near zero); the debug `clearance()`
+  takes a `parallax` option for this. Moving the camera in 1 cm steps at
+  ±1.6 m on 01 and 02 shows no z-fighting.
 - **Calm water while moving** (user request, 2026-10-01: "when I start
   scrolling, the sideways and the water are flickering again"). Parallax was
   not the cause: it moves the camera under 0.6 m/s, and the camera path is
@@ -261,6 +276,13 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   20 m inside the Clock Tower promontory (x ≈ −69.5); it now follows the
   promontory's water edge at x = −50, z 2–30 (`WORLD.foreground.railings`).
   All frames still pass and the closest camera approach is unchanged (2.26 m).
+- **No-flicker baseline** (user request, 2026-10-01: "remember this setup
+  because there is no flickering anymore"). Keep all of these when changing
+  the scene: glassy water (`BLUR` 5); sideways-only parallax, no vertical
+  shift; seawall strip tops 5 cm below the deck (never coplanar surfaces);
+  railing B at x = −50; the railing visible while scrolling, with the
+  depth-twin fade only for 02 → 03. Any new flat piece laid on the deck or
+  water needs a few centimetres of gap, or it will z-fight under parallax.
 - **Clean railing fade** (kept for the 02 → 03 fade-out): depth-only twins
   of the posts, rails and wall are drawn just before the railing (render order 1 and 2, below the wordmark at
   10), so a half-faded railing is an even veil over the water instead of
@@ -423,8 +445,8 @@ Stop for the user's review after each step, as in the grey-box.
   `src/scene/createGlow.js`.
 - `src/data/world.js`: the `moon` block.
 - `src/data/chapters.js`: `petals` density in chapters 05 and 06; desktop
-  `parallax` shares in 01 and 04.
-- `src/scroll/cameraRig.js`: the parallax offset (`setParallax`, `PARALLAX`).
+  `parallax` multipliers in 05 and 06.
+- `src/scroll/cameraRig.js`: the parallax orbit (`setParallax`, `PARALLAX`).
 - `src/scene/createWater.js`: glassy water, ripples sampled blurred (`BLUR`).
 - `src/scene/createForeground.js`: depth-only twins for a clean railing
   fade, seawall strip top 5 cm below the deck.
@@ -439,6 +461,8 @@ The milestone passes when:
 
 1. All twelve frames still pass the composition probe (±3%) with the nav bar in
    place, and no copy overflows at 1440 × 900, 1156 × 766 and 390 × 844.
+   With the mouse at either edge, desktop frames stay within ±6% and the
+   parallax is plainly visible (user request, 2026-10-01).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
    feet, and sinks and fades out with the 01 copy from the first scroll.
    Mobile shows it horizontal and smaller.
