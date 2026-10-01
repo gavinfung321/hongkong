@@ -54,7 +54,7 @@ const lampUniforms = {
 export function addLampLight(material, strength = 1) {
   const previous = material.onBeforeCompile;
   // Keeps programs apart from same-type materials with other shader patches.
-  const key = `${previous.toString()}|lamps`;
+  const key = `${material.customProgramCacheKey()}|lamps`;
   material.customProgramCacheKey = () => key;
   material.onBeforeCompile = (shader, renderer) => {
     previous?.(shader, renderer);
@@ -103,6 +103,99 @@ export function addLampLight(material, strength = 1) {
           lampSum += lampPower[ i ] * fall * fall * facing;
         }
         totalEmissiveRadiance += diffuseColor.rgb * lampColor * lampSum * lampStrength;`,
+      );
+  };
+  return material;
+}
+
+// The Clock Tower's floodlight (a real light), relative to the tower.
+export const TOWER_FLOOD = [0, 1.5, 9];
+
+// Wet promenade paving (after the user's wet-paving design): on faces that
+// look up, granite slabs from `map` laid in world metres (`tile` m per
+// repeat), darker where wet, and warm reflections of every lantern, lamp and
+// the tower floodlight, stretched toward the camera like light on wet stone.
+// Slab joints fade to the slab average once they shrink below a few pixels,
+// so they don't shimmer at grazing angles. Needs addLampLight first.
+export function addWetPaving(material, { map, tile, y }) {
+  const previous = material.onBeforeCompile;
+  const key = `${material.customProgramCacheKey()}|paving`;
+  material.customProgramCacheKey = () => key;
+  const [tx, ty, tz] = WORLD.clockTower.position;
+  const flood = new Vector4(tx + TOWER_FLOOD[0], ty + TOWER_FLOOD[1], tz + TOWER_FLOOD[2], 3);
+  material.onBeforeCompile = (shader, renderer) => {
+    previous(shader, renderer);
+    Object.assign(shader.uniforms, {
+      paveMap: { value: map },
+      paveTile: { value: tile },
+      paveY: { value: y },
+      paveFlood: { value: flood },
+    });
+    shader.fragmentShader = shader.fragmentShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+        uniform sampler2D paveMap;
+        uniform float paveTile;
+        uniform float paveY;
+        uniform vec4 paveFlood;
+        float paveHash( vec2 p ) {
+          return fract( sin( dot( p, vec2( 127.1, 311.7 ) ) ) * 43758.5453 );
+        }
+        float paveNoise( vec2 p ) {
+          vec2 i = floor( p );
+          vec2 f = fract( p );
+          f = f * f * ( 3.0 - 2.0 * f );
+          return mix( mix( paveHash( i ), paveHash( i + vec2( 1.0, 0.0 ) ), f.x ),
+                      mix( paveHash( i + vec2( 0.0, 1.0 ) ), paveHash( i + vec2( 1.0, 1.0 ) ), f.x ), f.y );
+        }
+        // Reflection of a light at height h above the paving: a streak around
+        // the point where the mirrored light's ray from the camera meets the
+        // ground. Measured in view angles (depression and azimuth) so it keeps
+        // one size on screen: narrow across, long down toward the viewer, and
+        // its tail never reaches the deck under the camera.
+        float paveStreak( vec3 light, vec2 p ) {
+          float h = light.y - paveY;
+          float H = cameraPosition.y - paveY;
+          if ( h <= 0.0 || H <= 0.0 ) return 0.0;
+          vec2 c = cameraPosition.xz;
+          vec2 dir = light.xz - c;
+          float dist = length( dir ) * H / ( H + h );
+          if ( dist < 0.001 ) return 0.0;
+          dir = normalize( dir );
+          vec2 rel = p - c;
+          float a = dot( rel, dir );
+          if ( a <= 0.0 ) return 0.0;
+          float drop = ( H / a - H / dist ) / ( H / a > H / dist ? 0.045 : 0.015 );
+          float side = dot( rel, vec2( -dir.y, dir.x ) ) / a / 0.006;
+          return exp( -drop * drop - side * side );
+        }`,
+      )
+      .replace(
+        '#include <map_fragment>',
+        `#include <map_fragment>
+        bool paveTop = vLampNormal.y > 0.5;
+        float paveWet = 0.0;
+        if ( paveTop ) {
+          vec2 paveUv = vLampWorld.xz / paveTile;
+          vec3 slab = texture2D( paveMap, paveUv ).rgb;
+          vec3 average = textureLod( paveMap, paveUv, 12.0 ).rgb;
+          float metresPerPixel = length( fwidth( vLampWorld.xz ) );
+          slab = mix( slab, average, smoothstep( 0.02, 0.07, metresPerPixel ) );
+          paveWet = 0.35 + 0.65 * smoothstep( 0.4, 0.75, paveNoise( vLampWorld.xz / 3.5 ) );
+          diffuseColor.rgb = slab * mix( 0.8, 0.4, paveWet );
+        }`,
+      )
+      .replace(
+        '#include <emissivemap_fragment>',
+        `#include <emissivemap_fragment>
+        if ( paveTop ) {
+          float shine = 0.0;
+          for ( int i = 0; i < LAMP_COUNT; i ++ ) shine += lampPower[ i ] * paveStreak( lampPos[ i ].xyz, vLampWorld.xz );
+          shine += paveFlood.w * paveStreak( paveFlood.xyz, vLampWorld.xz );
+          shine = 1.5 * ( 1.0 - exp( -shine / 1.5 ) );
+          totalEmissiveRadiance += lampColor * shine * paveWet * 0.85;
+        }`,
       );
   };
   return material;

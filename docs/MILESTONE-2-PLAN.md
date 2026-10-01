@@ -748,8 +748,28 @@ all six.
      mouse corners pass, closest camera approach 1.91 m (was 1.67 m). With
      1 cm camera steps the railing changes on edges and its granite grain
      only (the near railing moves 2–4 px per step), no solid patches.
-   - **Stop 2: wet paving** and **stop 3: palms** (3D, two shapes, slow sway,
-     a row of 4–6 more behind the tower; user choices, 2026-10-02) follow.
+   - **Stop 2: wet paving (built 2026-10-02, user request).** After the
+     user's wet-paving design: the promenade and promontory tops (the
+     Kowloon blocks and the arrival deck) are now 0.8 m square granite slabs
+     with dark joints, laid in world metres, darker where wet (soft
+     patches, 3.5 m across), with a warm reflection of every lantern, tall
+     lamp and the Clock Tower floodlight. A reflection is a streak around
+     the point where the mirrored light meets the ground, measured in view
+     angles so it keeps one size on screen (narrow across, longer down toward
+     the viewer than up). An earlier version sized it in metres; the
+     tails of all the far lanterns then met under the camera and flooded the
+     hero's near deck orange. The joints fade to the slab colour once they
+     shrink below a few pixels, so they never shimmer at grazing angles. The
+     lantern pools on the paving are weaker than before (wet stone shows
+     the lights mostly as reflections). Code: `addWetPaving` in `lamps.js`,
+     `promenadePaving` in `surfaces.js`; the ground material in
+     `createKowloonEdge.js`. Checked: all 12 frames as before, all mouse
+     corners pass (closest approach 1.94 m), 1 cm camera steps change edges
+     only (hold 1 20,040 px, hold 2 9,813, as before), draw calls unchanged.
+     The shader loops over all 39 lamps and lanterns plus the floodlight per
+     deck pixel; to be watched in the iPhone 11 measurement.
+   - **Stop 3: palms** (3D, two shapes, slow sway, a row of 4–6 more behind
+     the tower; user choices, 2026-10-02) follows.
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -768,7 +788,7 @@ Measured with the `?fps` overlay on a production build, as in
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
 | Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
-| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). The stone railing adds a 64 × 64 granite tile and a 64 × 96 post panel (24 textures; the lantern glows are drawn in their shader). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
+| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). The stone railing adds a 64 × 64 granite tile and a 64 × 96 post panel (24 textures; the lantern glows are drawn in their shader). The wet paving adds a 240 × 240 slab tile (25 textures). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
 | Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b; the promenade lanterns and lamps are faked in the materials (`lamps.js`) | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
 
@@ -869,8 +889,15 @@ Stop for the user's review after each step, as in the grey-box.
   always show; user request, 2026-10-02).
 - `src/data/chapters.js`: the 香港 wordmark raised over the boats (`HERO`
   feet at 74% desktop, 73% mobile; user request, 2026-10-02).
+- `src/scene/lamps.js`: `addWetPaving` (slabs, wet patches and lamp
+  reflections on the promenade tops) and `TOWER_FLOOD`;
+  `src/scene/surfaces.js`: `promenadePaving` slab tile;
+  `src/scene/createKowloonEdge.js`: the wet-paving ground material, weaker
+  lantern pools on it; `src/scene/gating.js`: faded copies keep the program
+  cache key (user request, 2026-10-02).
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font; the
-  stone railing and lamps built in code from the user's designs.
+  stone railing and lamps built in code from the user's designs; the wet
+  paving.
 
 ## 8. Acceptance checks
 
@@ -884,7 +911,9 @@ The milestone passes when:
    height and the ferry stays whole; no palm crosses the tower (user
    request, 2026-10-01); no promenade lamp crosses the tower or the ferry,
    and a half-faded railing is an even veil with no rails showing through
-   its posts (2026-10-02).
+   its posts (2026-10-02). The promenade reads as wet stone slabs with
+   narrow lamp reflections, with no glare patch on the hero's near deck
+   and no shimmering joints (user request, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
    feet, raised over the boats (user request, 2026-10-02), and sinks and
    fades out with the 01 copy from the first scroll.
@@ -926,6 +955,6 @@ step.
 
 | Milestone | Content |
 |---|---|
-| 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk, Clock Tower, IFC and wheel are already rebuilt from reference photos, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals and tree, display fonts. Also the user's stone railing (built in code with lanterns and tall lamps, 2026-10-02), promenade palms, wet paving tiles and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
+| 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk, Clock Tower, IFC and wheel are already rebuilt from reference photos, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals and tree, display fonts. Also the user's stone railing (built in code with lanterns and tall lamps, 2026-10-02), promenade palms, wet paving tiles (built in code, 2026-10-02) and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
 | 4. Atmosphere, all chapters | Clouds lit from below and searchlight beams from the Central towers (user reminders, 2026-10-01), the look-test layers rolled out to 02–06, extra particles alongside the petals (sea spray, city bokeh, firework embers in 06), real fireworks, a sparkle trail added to the cursor ring (3.10) |
 | 5. Copy and launch | Final copy, poster images, a full performance pass on both iPhones, deployment |

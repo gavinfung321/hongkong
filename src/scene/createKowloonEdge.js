@@ -26,12 +26,21 @@ import {
 } from 'three';
 import { PALETTE, lambert } from './palette.js';
 import { addCityWindows } from './cityWindows.js';
-import { clockDial, clockTowerBelfry, clockTowerPilaster, clockTowerShaft, graniteAshlar } from './surfaces.js';
+import {
+  clockDial,
+  clockTowerBelfry,
+  clockTowerPilaster,
+  clockTowerShaft,
+  graniteAshlar,
+  promenadePaving,
+} from './surfaces.js';
+import { TOWER_FLOOD, addLampLight, addWetPaving } from './lamps.js';
 import { strut } from './strut.js';
 import { WORLD } from '../data/world.js';
 import { seededRandom } from './random.js';
 
 const unitBox = new BoxGeometry(1, 1, 1).translate(0, 0.5, 0);
+const PAVING_LAMP = 1.2;
 
 function block([x0, x1, z0, z1, top], material) {
   const depth = 6;
@@ -202,7 +211,7 @@ function createClockTower() {
 
   // Warm floodlight at the foot of the front face.
   const flood = new PointLight(0xffa860, 420, 60, 2);
-  flood.position.set(0, 1.5, 9);
+  flood.position.set(...TOWER_FLOOD);
 
   tower.add(
     plinth,
@@ -262,7 +271,12 @@ function createKowloonSkyline() {
 export function createKowloonEdge() {
   const group = new Group();
   group.name = 'kowloonEdge';
-  const ground = lambert(0x24222f);
+  // Seawall sides stay plain dark stone; the tops are wet paving.
+  const ground = addWetPaving(addLampLight(new MeshLambertMaterial({ color: 0x24222f }), PAVING_LAMP), {
+    map: promenadePaving(),
+    tile: 2.4,
+    y: 2.5,
+  });
 
   for (const b of WORLD.kowloon.blocks) group.add(block(b, ground));
   const decks = new Group();
