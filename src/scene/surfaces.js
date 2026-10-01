@@ -227,20 +227,134 @@ export function ferryDeckRepeat(maps, bays) {
   return out;
 }
 
-// Hull side, 10 m × 2.6 m (ExtrudeGeometry side UVs are in metres): green
-// paint over a dark waterline band, with faint streaks.
+// Hull side, 10 m along × 2.8 m from the sheer (top) down to the keel: bright
+// green paint, a pale line under the rubbing strip, a dark band at the
+// waterline (1.9 m below the sheer), faint drips and plate seams.
 export function ferryHull() {
-  const [c, ctx] = canvas(256, 128);
+  const W = 256;
+  const H = 128;
+  const PX = H / 2.8;
+  const [c, ctx] = canvas(W, H);
   const random = seededRandom(23);
-  ctx.fillStyle = '#2d5a40';
-  ctx.fillRect(0, 0, 256, 128);
-  ctx.fillStyle = '#1a1f1c';
-  ctx.fillRect(0, 88, 256, 40);
-  for (let i = 0; i < 40; i++) {
-    ctx.fillStyle = `rgba(15, 30, 20, ${0.1 + random() * 0.15})`;
-    ctx.fillRect(random() * 256, 0, 1 + random() * 2, 20 + random() * 60);
+  ctx.fillStyle = '#2f7a4c';
+  ctx.fillRect(0, 0, W, H);
+  for (let x = 0; x < W; x += 51) {
+    ctx.fillStyle = 'rgba(15, 40, 25, 0.12)';
+    ctx.fillRect(x, 0, 1, H);
   }
-  return texture(c, { repeat: [0.1, 1 / 2.6] });
+  for (let i = 0; i < 50; i++) {
+    ctx.fillStyle = `rgba(15, 40, 25, ${0.08 + random() * 0.12})`;
+    ctx.fillRect(random() * W, 0.5 * PX, 1 + random() * 2, 10 + random() * 40);
+  }
+  ctx.fillStyle = '#d9d3bf';
+  ctx.fillRect(0, Math.round(0.36 * PX), W, 3);
+  ctx.fillStyle = '#16231c';
+  ctx.fillRect(0, Math.round(1.65 * PX), W, H);
+  return texture(c);
+}
+
+// Upper deck wall, eight 2.4 m bays × 2.1 m: a white fascia, a row of
+// paired rectangular windows in pale frames, and plain white below where
+// the life rings hang. Panes glow warm, except the `bridge` bays: dark glass.
+// Returns colour and glow maps; set the repeat with `ferryDeckRepeat`.
+export function ferryUpper(seed, bridge = []) {
+  const BAY = 64;
+  const W = BAY * 8;
+  const H = 56;
+  const random = seededRandom(seed);
+  const [c, ctx] = canvas(W, H);
+  const [e, glow] = canvas(W, H);
+  const wall = '#e9e6dc';
+  ctx.fillStyle = wall;
+  ctx.fillRect(0, 0, W, H);
+  glow.fillStyle = '#000';
+  glow.fillRect(0, 0, W, H);
+  glow.globalAlpha = 0.5;
+  glow.fillStyle = wall;
+  glow.fillRect(0, 0, W, H);
+  glow.globalAlpha = 1;
+  for (let i = 0; i < 8; i++) {
+    for (const x of [i * BAY + 4, i * BAY + 33]) {
+      ctx.fillStyle = '#b9b4a8';
+      ctx.fillRect(x, 6, 27, 25);
+      glow.fillStyle = '#000';
+      glow.fillRect(x, 6, 27, 25);
+      if (!bridge.includes(i)) {
+        const brightness = 0.65 + random() * 0.35;
+        const hx = random() < 0.4 ? x + 5 + random() * 15 : null;
+        for (const g of [ctx, glow]) {
+          const gradient = g.createLinearGradient(0, 8, 0, 29);
+          gradient.addColorStop(0, `rgba(255, 232, 180, ${brightness})`);
+          gradient.addColorStop(1, `rgba(240, 165, 85, ${brightness})`);
+          g.fillStyle = gradient;
+          g.fillRect(x + 2, 8, 23, 21);
+          // Seat backs and passengers against the light.
+          g.fillStyle = 'rgba(40, 26, 18, 0.85)';
+          g.fillRect(x + 2, 25, 23, 4);
+          if (hx !== null) {
+            g.beginPath();
+            g.arc(hx, 22, 2.2, 0, Math.PI * 2);
+            g.fill();
+            g.fillRect(hx - 3, 24, 6, 2);
+          }
+        }
+      } else {
+        const gradient = ctx.createLinearGradient(0, 8, 0, 29);
+        gradient.addColorStop(0, '#3e4a52');
+        gradient.addColorStop(1, '#161d22');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x + 2, 8, 23, 21);
+        // Faint instrument lights on the console.
+        const ix = x + 6 + random() * 12;
+        for (const g of [ctx, glow]) {
+          g.fillStyle = '#c9a060';
+          g.fillRect(ix, 26, 2, 1);
+        }
+      }
+    }
+  }
+  return { map: texture(c), emissiveMap: texture(e) };
+}
+
+// The lit lower deck seen between its posts, eight 2.4 m bays × 2.6 m: a
+// warm cabin under strip lights, seat backs and a few passengers showing
+// above the waist-high bulwark (0.95 m above the floor, about row 36).
+export function ferryCabin() {
+  const BAY = 64;
+  const W = BAY * 8;
+  const H = 64;
+  const random = seededRandom(57);
+  const [c, ctx] = canvas(W, H);
+  const gradient = ctx.createLinearGradient(0, 0, 0, H);
+  gradient.addColorStop(0, '#fff1cf');
+  gradient.addColorStop(0.5, '#f0bd78');
+  gradient.addColorStop(1, '#9a6a3c');
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#fffbe8';
+  ctx.fillRect(0, 2, W, 2);
+  for (let i = 0; i < 8; i++) {
+    const x = i * BAY;
+    // Casing panels between the windows of the inner cabin.
+    ctx.fillStyle = 'rgba(120, 80, 45, 0.5)';
+    ctx.fillRect(x, 5, 4, 40);
+    // Bench backs, about 0.55 m a seat.
+    for (let s = 0; s < 4; s++) {
+      const sx = x + 6 + s * 14;
+      ctx.fillStyle = '#4a3020';
+      ctx.beginPath();
+      ctx.roundRect(sx, 31, 12, 10, 3);
+      ctx.fill();
+      if (random() < 0.3) {
+        ctx.fillStyle = '#2a1c14';
+        ctx.beginPath();
+        ctx.arc(sx + 6, 27, 2.6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillRect(sx + 2, 29, 8, 3);
+      }
+    }
+  }
+  return texture(c);
 }
 
 // White water churned along the hull at the waterline: opaque at the

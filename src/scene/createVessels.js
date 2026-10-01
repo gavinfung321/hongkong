@@ -2,6 +2,7 @@ import {
   BoxGeometry,
   BufferGeometry,
   CatmullRomCurve3,
+  Color,
   CylinderGeometry,
   DoubleSide,
   ExtrudeGeometry,
@@ -15,12 +16,25 @@ import {
   MeshBasicMaterial,
   MeshStandardMaterial,
   PointLight,
+  Quaternion,
   Shape,
+  ShapeGeometry,
+  SphereGeometry,
   TorusGeometry,
+  Vector2,
   Vector3,
 } from 'three';
 import { lambert } from './palette.js';
-import { ferryDeck, ferryDeckRepeat, ferryHull, junkCloth, junkHull, waterlineFoam } from './surfaces.js';
+import {
+  ferryCabin,
+  ferryDeck,
+  ferryDeckRepeat,
+  ferryHull,
+  ferryUpper,
+  junkCloth,
+  junkHull,
+  waterlineFoam,
+} from './surfaces.js';
 
 // Both vessels are built with their bow pointing along local +X.
 
@@ -40,16 +54,16 @@ function stadiumSlab(straight, radius, y0, y1, material) {
 }
 
 // A stadium-shaped wall as a box and two half cylinders, so textures wrap
-// evenly round the ends. sideFor(length in metres) dresses the walls; `cap`
-// the tops, bottoms and hidden faces.
-function stadiumWall(straight, radius, y0, y1, sideFor, cap) {
+// evenly round the ends. sideFor(length in metres) dresses the walls (endFor
+// the round ends, if different); `cap` the tops, bottoms and hidden faces.
+function stadiumWall(straight, radius, y0, y1, sideFor, cap, endFor = sideFor) {
   const group = new Group();
   const height = y1 - y0;
   const side = sideFor(straight * 2);
   const box = new Mesh(new BoxGeometry(straight * 2, height, radius * 2), [cap, cap, cap, cap, side, side]);
   box.position.y = y0 + height / 2;
   group.add(box);
-  const end = sideFor(Math.PI * radius);
+  const end = endFor(Math.PI * radius);
   for (const [x, start] of [[straight, 0], [-straight, Math.PI]]) {
     const half = new Mesh(new CylinderGeometry(radius, radius, height, 16, 1, false, start, Math.PI), [end, cap, cap]);
     half.position.set(x, y0 + height / 2, 0);
@@ -58,53 +72,365 @@ function stadiumWall(straight, radius, y0, y1, sideFor, cap) {
   return group;
 }
 
-// After the Star Ferry's look (original, simplified): a low green hull with a
-// dark fender, a green lower deck and a white upper deck with big lit
-// windows, a white band between them, a canopy roof, a wheelhouse at each end
-// (it runs both ways) and a white funnel.
+const smooth = (a, b, x) => {
+  const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+  return t * t * (3 - 2 * t);
+};
+const lerp = (a, b, t) => a + (b - a) * t;
+
+// A closed stadium outline as [x, z] points, running +X along the +Z side.
+function stadiumLoop(straight, radius, steps = 12) {
+  const loop = [];
+  for (let i = 0; i <= steps; i++) {
+    const a = Math.PI / 2 - (Math.PI * i) / steps;
+    loop.push([straight + radius * Math.cos(a), radius * Math.sin(a)]);
+  }
+  for (let i = 0; i <= steps; i++) {
+    const a = -Math.PI / 2 - (Math.PI * i) / steps;
+    loop.push([-straight + radius * Math.cos(a), radius * Math.sin(a)]);
+  }
+  return loop;
+}
+
+// Moves a closed outline `d` metres outward (negative: inward).
+function offsetLoop(loop, d) {
+  const n = loop.length;
+  return loop.map(([x, z], i) => {
+    const [px, pz] = loop[(i + n - 1) % n];
+    const [nx, nz] = loop[(i + 1) % n];
+    const length = Math.hypot(nx - px, nz - pz) || 1;
+    return [x - ((nz - pz) / length) * d, z + ((nx - px) / length) * d];
+  });
+}
+
+// An outline at height y (a number, or a function of x).
+const lift = (loop, y) => loop.map(([x, z]) => [x, typeof y === 'function' ? y(x) : y, z]);
+
+// Closed bands between pairs of 3D outlines with the same point count; each
+// faces outward when the first outline is the lower one. U runs along the
+// outline in units of `uScale` metres, V from the first outline (0) to the
+// second (1).
+function ribbons(pairs, uScale = 1) {
+  const positions = [];
+  const uvs = [];
+  const index = [];
+  for (const [lower, upper] of pairs) {
+    const base = positions.length / 3;
+    const n = lower.length;
+    let s = 0;
+    for (let i = 0; i <= n; i++) {
+      const a = lower[i % n];
+      if (i > 0) {
+        const p = lower[i - 1];
+        s += Math.hypot(a[0] - p[0], a[2] - p[2]);
+      }
+      positions.push(...a, ...upper[i % n]);
+      uvs.push(s / uScale, 0, s / uScale, 1);
+    }
+    for (let i = 0; i < n; i++) {
+      const a = base + i * 2;
+      index.push(a, a + 2, a + 1, a + 1, a + 2, a + 3);
+    }
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('uv', new Float32BufferAttribute(uvs, 2));
+  geometry.setIndex(index);
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
+// A unit cylinder stretched from a to b: matrix for an instanced strut.
+const UP = new Vector3(0, 1, 0);
+function strut(a, b, radius) {
+  const from = new Vector3(...a);
+  const direction = new Vector3(...b).sub(from);
+  const length = direction.length();
+  return new Matrix4().compose(from, new Quaternion().setFromUnitVectors(UP, direction.normalize()), new Vector3(radius, length, radius));
+}
+
+// ---- Star Ferry -------------------------------------------------------------
+
+// After the Star Ferry's look (original, simplified; details from the user's
+// reference photos, no names or emblems): a double-ended green hull with
+// flared sides and a sheer rising to both ends, a dark rubbing strip and tyre
+// fenders; an open lower deck of green posts over a waist-high bulwark, lit
+// inside; a green band, then a white upper deck ringed with life rings, with
+// bridge windows at both ends; a roof with liferaft canisters, a funnel and a
+// tripod mast at each end; navigation lights.
+
+const FERRY_HALF = 20; // half-length at the sheer
+const FERRY_BEAM = 4.75; // half-width at the sheer, midships
+const FERRY_SHEER = 1.9; // midships sheer above the waterline
+const FERRY_KEEL = -0.9;
+const FERRY_FULLNESS = 0.5;
+const FERRY_STATIONS = 48;
+
+const ferryD = (x) => Math.min(1, Math.abs(x) / FERRY_HALF);
+const ferryHalfWidth = (x) => {
+  const d = ferryD(x);
+  return d < 0.6 ? FERRY_BEAM : FERRY_BEAM * Math.sqrt(Math.max(0, 1 - ((d - 0.6) / 0.4) ** 2));
+};
+const ferrySheer = (x) => FERRY_SHEER + 0.6 * ferryD(x) ** 2.5;
+const ferryKeel = (x) => FERRY_KEEL + 0.6 * smooth(0.75, 1, ferryD(x));
+// Stations bunch toward the round ends.
+const ferryStation = (i) => -FERRY_HALF * Math.cos((Math.PI * i) / FERRY_STATIONS);
+
+// A section point from the sheer (a = 0) to the keel (π/2). The ends rake:
+// the hull is 5% shorter at the keel than at the sheer.
+function ferrySection(x, a, side) {
+  const s = ferrySheer(x);
+  const k = ferryKeel(x);
+  const t = Math.sin(a) ** FERRY_FULLNESS;
+  return [x * (1 - 0.05 * t), k + (s - k) * (1 - t), side * ferryHalfWidth(x) * Math.cos(a) ** FERRY_FULLNESS];
+}
+function ferrySectionAt(x, y) {
+  const t = Math.min(1, Math.max(0, (ferrySheer(x) - y) / (ferrySheer(x) - ferryKeel(x))));
+  return ferrySection(x, Math.asin(t ** (1 / FERRY_FULLNESS)), 1);
+}
+
+function ferryHullGeometry() {
+  const HALF = 8;
+  const ring = HALF * 2 + 1;
+  const positions = [];
+  const uvs = [];
+  const index = [];
+  for (let i = 0; i <= FERRY_STATIONS; i++) {
+    const x = ferryStation(i);
+    for (let j = 0; j < ring; j++) {
+      const c = (j - HALF) / HALF;
+      const p = ferrySection(x, (1 - Math.abs(c)) * (Math.PI / 2), Math.sign(c));
+      positions.push(...p);
+      // The waterline stays level while the paint lines follow the sheer.
+      const strake = p[1] > 0 ? (p[1] * FERRY_SHEER) / ferrySheer(x) : p[1];
+      uvs.push(p[0] / 10, (strake - FERRY_KEEL) / (FERRY_SHEER - FERRY_KEEL));
+    }
+  }
+  for (let i = 0; i < FERRY_STATIONS; i++) {
+    for (let j = 0; j < ring - 1; j++) {
+      const a = i * ring + j;
+      index.push(a, a + 1, a + ring, a + 1, a + ring + 1, a + ring);
+    }
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('uv', new Float32BufferAttribute(uvs, 2));
+  geometry.setIndex(index);
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
+// Closed outline round the hull: pointAt(x) gives the +Z point [x, z] at
+// station x; the other side mirrors it.
+function ferryOutline(pointAt) {
+  const loop = [];
+  for (let i = 0; i <= FERRY_STATIONS; i++) loop.push(pointAt(ferryStation(i)));
+  for (let i = FERRY_STATIONS - 1; i > 0; i--) {
+    const [x, z] = pointAt(ferryStation(i));
+    loop.push([x, -z]);
+  }
+  return loop;
+}
+
 function createFerry() {
   const ferry = new Group();
   ferry.name = 'ferry';
+  const m = new Matrix4();
 
-  const white = new MeshStandardMaterial({ color: 0xe6e1d4, roughness: 0.6 });
-  const green = new MeshStandardMaterial({ color: 0x2d5a40, roughness: 0.6 });
-  const dark = new MeshStandardMaterial({ color: 0x241c17, roughness: 0.9 });
+  // Deck lights and cabin spill keep the paint readable at night.
+  const paint = (color, extra = {}, glow = 0.22) =>
+    new MeshStandardMaterial({ color, emissive: new Color(color).multiplyScalar(glow), roughness: 0.6, ...extra });
+  const green = paint(0x2f7a4c);
+  const white = paint(0xe9e6dc, {}, 0.45);
+  const black = new MeshStandardMaterial({ color: 0x151515, roughness: 0.9 });
 
-  // 2.4 m window bays.
-  const windowsFor = (maps) => (length) =>
-    new MeshStandardMaterial({ ...ferryDeckRepeat(maps, Math.round(length / 2.4)), emissive: 0xffffff, roughness: 0.7 });
+  // Hull, a dark rubbing strip along the sheer, and the deck inside.
+  const hullMap = ferryHull();
+  const hull = new Mesh(
+    ferryHullGeometry(),
+    new MeshStandardMaterial({ map: hullMap, emissive: 0xffffff, emissiveMap: hullMap, emissiveIntensity: 0.22, roughness: 0.6, side: DoubleSide }),
+  );
+  const gunwale = ferryOutline((x) => [x, ferryHalfWidth(x)]);
+  const stripOut = offsetLoop(gunwale, 0.12);
+  const stripIn = offsetLoop(gunwale, -0.08);
+  const stripBottom = (x) => ferrySheer(x) - 0.28;
+  const strip = new Mesh(
+    ribbons([
+      [lift(stripOut, stripBottom), lift(stripOut, ferrySheer)],
+      [lift(stripOut, ferrySheer), lift(stripIn, ferrySheer)],
+      [lift(stripIn, stripBottom), lift(stripOut, stripBottom)],
+    ]),
+    paint(0x2e231c),
+  );
+  const floorShape = new Shape(offsetLoop(gunwale, -0.05).map(([x, z]) => new Vector2(x, -z)));
+  const floor = new Mesh(new ShapeGeometry(floorShape).rotateX(-Math.PI / 2).translate(0, 1.8, 0), paint(0x3a4038));
 
-  const hull = stadiumSlab(15, 4.6, -0.8, 1.8, new MeshStandardMaterial({ map: ferryHull(), roughness: 0.6 }));
-  const fender = stadiumSlab(15, 4.95, 1.8, 2.25, dark);
-  const lowerDeck = stadiumWall(12.7, 4.3, 2.25, 5.05, windowsFor(ferryDeck('#2d5a40', 51)), green);
-  const band = stadiumSlab(12.9, 4.55, 5.05, 5.5, white);
-  const upperDeck = stadiumWall(12.1, 4.1, 5.5, 7.9, windowsFor(ferryDeck('#e6e1d4', 53)), white);
-  const roof = stadiumSlab(12.5, 4.6, 7.9, 8.15, new MeshStandardMaterial({ color: 0xcfcabd, roughness: 0.7 }));
+  // Open lower deck: a waist-high bulwark with a rail, posts up to the band,
+  // and the lit cabin 1.1 m behind them; closed casing amidships.
+  const DECK = 12.8; // half-length of the deck's straight sides
+  const BULWARK_R = 4.6;
+  const bulwarkLoop = stadiumLoop(DECK, BULWARK_R);
+  const bulwark = new Mesh(ribbons([[lift(bulwarkLoop, 1.75), lift(bulwarkLoop, 2.95)]]), paint(0x2f7a4c, { side: DoubleSide }));
+  const railOut = stadiumLoop(DECK, BULWARK_R + 0.06);
+  const railIn = stadiumLoop(DECK, BULWARK_R - 0.2);
+  const rail = new Mesh(
+    ribbons([
+      [lift(railOut, 2.93), lift(railOut, 3.03)],
+      [lift(railOut, 3.03), lift(railIn, 3.03)],
+      [lift(railIn, 3.03), lift(railIn, 2.93)],
+      [lift(railIn, 2.93), lift(railOut, 2.93)],
+    ]),
+    paint(0x1f5a36),
+  );
+  const cabinLoop = stadiumLoop(DECK, 3.5);
+  const cabin = new Mesh(ribbons([[lift(cabinLoop, 1.8), lift(cabinLoop, 4.4)]], 19.2), new MeshBasicMaterial({ map: ferryCabin() }));
 
-  const glass = new MeshStandardMaterial({ color: 0x1b2328, emissive: 0x3a3020, roughness: 0.3 });
-  for (const x of [-10.9, 10.9]) {
-    const house = new Mesh(new BoxGeometry(2.4, 1.5, 3.4), white);
-    house.position.set(x, 8.9, 0);
-    const windows = new Mesh(new BoxGeometry(2.45, 0.55, 3.0), glass);
-    windows.position.set(x, 9.15, 0);
-    const mast = new Mesh(new CylinderGeometry(0.07, 0.07, 3, 6), dark);
-    mast.position.set(x, 10.9, 0);
-    ferry.add(house, windows, mast);
+  const POST_R = BULWARK_R - 0.08;
+  const postSpots = [];
+  for (let k = 0; k <= 10; k++) {
+    if (k === 5) continue;
+    for (const z of [POST_R, -POST_R]) postSpots.push([-DECK + k * 2.56, z]);
   }
-  const funnel = new Mesh(new CylinderGeometry(0.8, 0.95, 1.7, 16), white);
-  funnel.position.y = 9;
-  const funnelTop = new Mesh(new CylinderGeometry(0.82, 0.82, 0.35, 16), dark);
-  funnelTop.position.y = 9.95;
+  for (const s of [1, -1]) {
+    for (const deg of [-60, -30, 0, 30, 60]) {
+      const a = (deg * Math.PI) / 180;
+      postSpots.push([s * (DECK + POST_R * Math.cos(a)), POST_R * Math.sin(a)]);
+    }
+  }
+  const posts = new InstancedMesh(new BoxGeometry(0.16, 1.44, 0.16), green, postSpots.length);
+  postSpots.forEach(([x, z], i) => posts.setMatrixAt(i, m.makeTranslation(x, 3.65, z)));
+  const casing = new InstancedMesh(new BoxGeometry(5.12, 1.44, 0.16), green, 2);
+  casing.setMatrixAt(0, m.makeTranslation(0, 3.65, POST_R));
+  casing.setMatrixAt(1, m.makeTranslation(0, 3.65, -POST_R));
+
+  // Green band with a lit ceiling under it, the upper deck and the roof.
+  const ceiling = new MeshStandardMaterial({ color: 0xf2e6cc, emissive: 0xffd9a0, emissiveIntensity: 0.55, roughness: 0.8 });
+  const band = stadiumSlab(DECK, 4.78, 4.35, 4.8, [ceiling, green]);
+  // Each round end is six bays; the middle two are the bridge's dark glass.
+  const upperMaps = ferryUpper(53);
+  const endMaps = ferryUpper(59, [2, 3]);
+  const upperDeck = stadiumWall(
+    12.6,
+    4.5,
+    4.8,
+    6.9,
+    (length) => new MeshStandardMaterial({ ...ferryDeckRepeat(upperMaps, Math.round(length / 2.4)), emissive: 0xffffff, roughness: 0.7 }),
+    white,
+    () => new MeshStandardMaterial({ ...ferryDeckRepeat(endMaps, 6), emissive: 0xffffff, roughness: 0.7 }),
+  );
+  const roof = stadiumSlab(12.9, 4.75, 6.9, 7.12, paint(0xdedad0, {}, 0.4));
+
+  // Life rings all round the upper deck, below the windows.
+  const ringSpots = [];
+  for (let i = 0; i < 16; i++) {
+    const x = -12.75 + i * 1.7;
+    ringSpots.push([x, 4.6, 0], [x, -4.6, 0]);
+  }
+  for (const s of [1, -1]) {
+    for (const deg of [-73.5, -52.5, -31.5, -10.5, 10.5, 31.5, 52.5, 73.5]) {
+      const a = (deg * Math.PI) / 180;
+      const [dx, dz] = [s * Math.cos(a), Math.sin(a)];
+      ringSpots.push([s * 12.6 + 4.6 * dx, 4.6 * dz, Math.atan2(dx, dz)]);
+    }
+  }
+  const rings = new InstancedMesh(new TorusGeometry(0.3, 0.065, 6, 16), paint(0xffffff, {}, 0.75), ringSpots.length);
+  ringSpots.forEach(([x, z, turn], i) => rings.setMatrixAt(i, m.makeRotationY(turn).setPosition(x, 5.3, z)));
+
+  // Tyres hung below the rubbing strip, in pairs and a group of three.
+  const tyreXs = [-10.4, -9.6, -0.8, 0, 0.8, 9.6, 10.4];
+  const tyres = new InstancedMesh(new TorusGeometry(0.33, 0.12, 6, 12), black, tyreXs.length * 2);
+  tyreXs.forEach((x, i) => {
+    const y = ferrySheer(x) - 0.8;
+    const z = ferryHalfWidth(x) + 0.15;
+    tyres.setMatrixAt(i * 2, m.makeTranslation(x, y, z));
+    tyres.setMatrixAt(i * 2 + 1, m.makeTranslation(x, y, -z));
+  });
+
+  // Roof: a short white funnel with a black top, liferaft canisters along
+  // both sides, a tripod mast with a yard at each end.
+  const funnel = new Mesh(new CylinderGeometry(0.7, 0.8, 1.35, 16), white);
+  funnel.position.y = 7.745;
+  const funnelTop = new Mesh(new CylinderGeometry(0.73, 0.73, 0.36, 16), black);
+  funnelTop.position.y = 8.3;
+  const rafts = [];
+  for (const x of [-8.4, -6.6, -4.8, 4.8, 6.6, 8.4]) for (const z of [3.7, -3.7]) rafts.push([x, z]);
+  const raftBodies = new InstancedMesh(new CylinderGeometry(0.32, 0.32, 1.5, 12).rotateZ(Math.PI / 2), paint(0xf0eee8), rafts.length);
+  const raftBands = new InstancedMesh(new CylinderGeometry(0.36, 0.36, 0.2, 12).rotateZ(Math.PI / 2), paint(0xc8322a), rafts.length * 2);
+  rafts.forEach(([x, z], i) => {
+    raftBodies.setMatrixAt(i, m.makeTranslation(x, 7.5, z));
+    raftBands.setMatrixAt(i * 2, m.makeTranslation(x - 0.5, 7.5, z));
+    raftBands.setMatrixAt(i * 2 + 1, m.makeTranslation(x + 0.5, 7.5, z));
+  });
+
+  const MAST = 10.6;
+  const struts = [];
+  const linePoints = [];
+  for (const s of [1, -1]) {
+    const x0 = s * MAST;
+    struts.push([[x0, 7.05, 0], [x0, 13, 0], 0.09], [[x0, 11.6, -1.6], [x0, 11.6, 1.6], 0.05]);
+    for (const z of [0.9, -0.9]) struts.push([[x0 - s * 1.8, 7.05, z], [x0, 10.8, 0], 0.07]);
+    // Stays to the funnel and the roof end; shrouds from the yard.
+    linePoints.push(x0, 12.9, 0, 0, 8.45, 0, x0, 12.9, 0, s * 17.4, 7.12, 0);
+    for (const z of [1.6, -1.6]) linePoints.push(x0, 11.6, z, x0 - s * 1.2, 7.12, z * 2.7);
+  }
+  const masts = new InstancedMesh(new CylinderGeometry(1, 1, 1, 6).translate(0, 0.5, 0), white, struts.length);
+  struts.forEach(([a, b, r], i) => masts.setMatrixAt(i, strut(a, b, r)));
+  const lineGeometry = new BufferGeometry();
+  lineGeometry.setAttribute('position', new Float32BufferAttribute(linePoints, 3));
+  const rigging = new LineSegments(lineGeometry, new LineBasicMaterial({ color: 0x8c8a84 }));
+  rigging.userData.noProbe = true;
+
+  // Navigation lights: white at each masthead, green to starboard (+Z) and
+  // red to port at both ends, as it runs both ways.
+  const lamp = new SphereGeometry(0.15, 8, 6);
+  const lamps = [];
+  for (const s of [1, -1]) {
+    for (const [color, y, z] of [[0xfff4dc, 13.15, 0], [0x40ff80, 7.29, 4.4], [0xff3a2e, 7.29, -4.4]]) {
+      const light = new Mesh(lamp, new MeshBasicMaterial({ color, toneMapped: false }));
+      light.position.set(s * (z ? 12.4 : MAST), y, z);
+      lamps.push(light);
+    }
+  }
 
   // A skirt standing in the waterline, so the foam line can't z-fight the water.
+  const waterline = offsetLoop(
+    ferryOutline((x) => {
+      const [px, , pz] = ferrySectionAt(x, 0.5);
+      return [px, pz];
+    }),
+    0.06,
+  );
   const foam = new MeshBasicMaterial({ map: waterlineFoam(), transparent: true, depthWrite: false });
-  const wake = stadiumWall(15, 4.7, -0.15, 0.5, () => foam, new MeshBasicMaterial({ visible: false }));
+  const wake = new Mesh(ribbons([[lift(waterline, -0.15), lift(waterline, 0.5)]], 30), foam);
 
   // Cabin light spilling onto the water around the hull.
   const glow = new PointLight(0xffb36b, 160, 45, 2);
   glow.position.y = 3;
 
-  ferry.add(hull, fender, lowerDeck, band, upperDeck, roof, funnel, funnelTop, wake, glow);
+  ferry.add(
+    hull,
+    strip,
+    floor,
+    bulwark,
+    rail,
+    cabin,
+    posts,
+    casing,
+    band,
+    upperDeck,
+    roof,
+    rings,
+    tyres,
+    funnel,
+    funnelTop,
+    raftBodies,
+    raftBands,
+    masts,
+    rigging,
+    ...lamps,
+    wake,
+    glow,
+  );
   return ferry;
 }
 
@@ -120,12 +446,6 @@ const JUNK_LENGTH = 28;
 const JUNK_SHEER = 2.9; // midships deck edge above the waterline
 const JUNK_HULL_BOTTOM = -1.2; // lowest point of the hull texture
 const BULWARK = 0.5; // deck below the sheer
-
-const smooth = (a, b, x) => {
-  const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
-  return t * t * (3 - 2 * t);
-};
-const lerp = (a, b, t) => a + (b - a) * t;
 
 // Hull lines along u, from the transom (0) to the bow (1).
 const junkX = (u) => (u - 0.5) * JUNK_LENGTH;

@@ -157,7 +157,7 @@ export const chapters = [
       mobile: `${SB}/frame-03-across-the-water-mobile-rough.png`,
     },
     camera: {
-      desktop: { position: [76.5, 2.2, -323.3], target: [46.2, 42.3, -720.1], fov: 55.1 },
+      desktop: { position: [77.6, 2.2, -323], target: [40.2, 50.7, -718.3], fov: 56.9 },
       mobile: { position: [-31.2, 1.8, -218.1], target: [41.8, 112.7, -595.4], fov: 80.1, via: [[60, 3, -300]] },
     },
     copy: {
@@ -170,7 +170,7 @@ export const chapters = [
     },
     fogDensity: 0.00045,
     vessels: {
-      desktop: { ferry: [70.4, -358.6, 1.26], junk: [30, -310, 0.3] },
+      desktop: { ferry: [69.3, -359.1, 1.26], junk: [30, -310, 0.3] },
       mobile: { ferry: [-23.4, -270.9, 1], junk: [-60, -240, 0.3] },
     },
     probes: {
