@@ -185,11 +185,14 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   frame, with the ridge hiding its lower edge. Kage's red moon was the
   reference, but its artwork can't be reused, so ours is original.
 - Drawn in code (`src/scene/createMoon.js`), no image file, plus a faint
-  additive halo. The surface (more dark spots for realism and depth, user
-  request, 2026-10-01):
-  - six clusters of dark "seas" (maria), heavier on the upper left, in the
-    `MARIA` list;
-  - 38 craters with a shadowed upper-left wall and a bright lower-right rim;
+  additive halo. The surface (more dark spots for realism and depth, then
+  changed to fewer spots and larger seas like Kage's, user requests,
+  2026-10-01):
+  - three large dark "seas" (maria), each built from big overlapping blobs
+    so they merge into broad patches, in the `MARIA` list (x, y, spread,
+    blob count, darkness, blob size);
+  - only 6 small craters, with a shadowed upper-left wall and a bright
+    lower-right rim;
   - spots squashed toward the rim, as on a sphere;
   - fine grain, then sphere shading: lit from the upper left, darker rim.
 - A fixed object in the world (`WORLD.moon` in `world.js`: position, radius,
