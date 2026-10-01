@@ -10,6 +10,7 @@ const instance = new Matrix4();
 const box = new Box3();
 
 // Bounding-box corners of every mesh under root, stored in root-local space.
+// Parts marked `userData.noProbe` (thin rigging) are skipped.
 export function collectPoints(root) {
   root.updateWorldMatrix(true, true);
   inverse.copy(root.matrixWorld).invert();
@@ -22,7 +23,7 @@ export function collectPoints(root) {
     }
   };
   root.traverse((child) => {
-    if (!child.geometry) return;
+    if (!child.geometry || child.userData.noProbe) return;
     if (!child.geometry.boundingBox) child.geometry.computeBoundingBox();
     box.copy(child.geometry.boundingBox);
     if (child.isInstancedMesh) {

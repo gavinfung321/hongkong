@@ -8,6 +8,7 @@ import {
   Float32BufferAttribute,
   Group,
   InstancedMesh,
+  LineBasicMaterial,
   LineSegments,
   Matrix4,
   Mesh,
@@ -16,10 +17,11 @@ import {
   PointLight,
   Shape,
   ShapeGeometry,
+  TorusGeometry,
   Vector3,
 } from 'three';
 import { basic, lambert } from './palette.js';
-import { ferryDeck, ferryDeckRepeat, ferryHull, junkPlanks, junkSail, waterlineFoam } from './surfaces.js';
+import { ferryDeck, ferryDeckRepeat, ferryHull, junkCloth, junkHull, waterlineFoam } from './surfaces.js';
 
 // Both vessels are built with their bow pointing along local +X.
 
@@ -60,8 +62,7 @@ function stadiumWall(straight, radius, y0, y1, sideFor, cap) {
 // After the Star Ferry's look (original, simplified): a low green hull with a
 // dark fender, a green lower deck and a white upper deck with big lit
 // windows, a white band between them, a canopy roof, a wheelhouse at each end
-// (it runs both ways) and a white funnel. Placeholder until the user's Meshy
-// model (ASSET-LEDGER.md).
+// (it runs both ways) and a white funnel.
 function createFerry() {
   const ferry = new Group();
   ferry.name = 'ferry';
@@ -108,88 +109,345 @@ function createFerry() {
   return ferry;
 }
 
-function sailShape(width, height) {
-  const shape = new Shape();
-  shape.moveTo(0.25 * width, 0);
-  shape.lineTo(-0.75 * width, 0);
-  shape.quadraticCurveTo(-0.95 * width, 0.5 * height, -0.6 * width, height);
-  shape.lineTo(0.2 * width, 0.92 * height);
-  shape.lineTo(0.25 * width, 0);
-  return shape;
+// ---- Junk -------------------------------------------------------------------
+
+// After Victoria Harbour's red-sailed junks (original, simplified; measured
+// from a side-on photo, sails about 15% larger than life for drama): a
+// varnished hull narrowing to a raised bow, a high stern with a lit deckhouse
+// and square transom, a canopy over the waist, three battened sails uplit
+// from the deck, rope fans, pennants and tyre fenders.
+
+const JUNK_LENGTH = 28;
+const JUNK_SHEER = 2.9; // midships deck edge above the waterline
+const JUNK_HULL_BOTTOM = -1.2; // lowest point of the hull texture
+const BULWARK = 0.5; // deck below the sheer
+
+const smooth = (a, b, x) => {
+  const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+  return t * t * (3 - 2 * t);
+};
+const lerp = (a, b, t) => a + (b - a) * t;
+
+// Hull lines along u, from the transom (0) to the bow (1).
+const junkX = (u) => (u - 0.5) * JUNK_LENGTH;
+const junkU = (x) => x / JUNK_LENGTH + 0.5;
+const junkHalfWidth = (u) => 3.5 * (1 - 0.22 * (1 - smooth(0, 0.3, u))) * (1 - 0.88 * smooth(0.5, 1, u) ** 1.4);
+const junkSheer = (u) =>
+  u < 0.45 ? JUNK_SHEER + 2.7 * (1 - u / 0.45) ** 2 : JUNK_SHEER + 2.1 * ((u - 0.45) / 0.55) ** 2.2;
+const junkKeel = (u) => (u < 0.3 ? -1 + 1.4 * (1 - u / 0.3) ** 2 : u > 0.75 ? -1 + 2.4 * ((u - 0.75) / 0.25) ** 2 : -1);
+const deckAt = (x) => junkSheer(junkU(x)) - BULWARK;
+
+// A section is a superellipse quarter each side, full in the bilge.
+const FULLNESS = 2 / 3;
+function sectionPoint(u, a, side) {
+  const hw = junkHalfWidth(u);
+  const s = junkSheer(u);
+  const k = junkKeel(u);
+  return [side * hw * Math.cos(a) ** FULLNESS, k + (s - k) * (1 - Math.sin(a) ** FULLNESS)];
+}
+// Half-width of the hull `drop` metres under the sheer.
+function halfWidthBelowSheer(u, drop) {
+  const a = Math.asin(Math.min(1, (drop / (junkSheer(u) - junkKeel(u))) ** (1 / FULLNESS)));
+  return sectionPoint(u, a, 1)[0];
+}
+
+// Texture V: the waterline stays level while the strakes above it bend
+// with the sheer, so the rail cap runs along the deck edge.
+function hullV(u, y) {
+  const strake = y > 0 ? (y * JUNK_SHEER) / junkSheer(u) : y;
+  return (strake - JUNK_HULL_BOTTOM) / (JUNK_SHEER - JUNK_HULL_BOTTOM);
+}
+
+function junkHullGeometry() {
+  const STATIONS = 40;
+  const HALF = 8; // points from sheer to keel on each side
+  const ring = HALF * 2 + 1;
+  const positions = [];
+  const uvs = [];
+  const index = [];
+  for (let i = 0; i <= STATIONS; i++) {
+    const u = i / STATIONS;
+    const x = junkX(u);
+    for (let j = 0; j < ring; j++) {
+      const c = (j - HALF) / HALF;
+      const [z, y] = sectionPoint(u, (1 - Math.abs(c)) * (Math.PI / 2), Math.sign(c));
+      positions.push(x, y, z);
+      uvs.push(x / 8, hullV(u, y));
+    }
+  }
+  for (let i = 0; i < STATIONS; i++) {
+    for (let j = 0; j < ring - 1; j++) {
+      const a = i * ring + j;
+      index.push(a, a + 1, a + ring, a + 1, a + ring + 1, a + ring);
+    }
+  }
+  // Transom and bow: fans from the middle of each end section.
+  for (const i of [0, STATIONS]) {
+    const u = i / STATIONS;
+    const centre = positions.length / 3;
+    const y = (junkSheer(u) + junkKeel(u)) / 2;
+    positions.push(junkX(u), y, 0);
+    uvs.push(junkX(u) / 8, hullV(u, y));
+    for (let j = 0; j < ring - 1; j++) index.push(centre, i * ring + j, i * ring + j + 1);
+    index.push(centre, i * ring + ring - 1, i * ring);
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('uv', new Float32BufferAttribute(uvs, 2));
+  geometry.setIndex(index);
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
+// A strip following the hull lines from u0 to u1: `edge(u)` gives
+// [halfWidth, y] for each side.
+function hullStrip(u0, u1, edge, thickness = 0) {
+  const positions = [];
+  const index = [];
+  const steps = 32;
+  for (let i = 0; i <= steps; i++) {
+    const u = lerp(u0, u1, i / steps);
+    const [hw, y] = edge(u);
+    if (thickness) positions.push(junkX(u), y, hw, junkX(u), y + thickness, hw, junkX(u), y, -hw, junkX(u), y + thickness, -hw);
+    else positions.push(junkX(u), y, hw, junkX(u), y, -hw);
+  }
+  const per = thickness ? 4 : 2;
+  for (let i = 0; i < steps; i++) {
+    const a = i * per;
+    const b = a + per;
+    index.push(a, b, a + 1, a + 1, b, b + 1);
+    if (thickness) index.push(a + 2, a + 3, b + 2, a + 3, b + 3, b + 2);
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
+  geometry.setIndex(index);
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
+// A battened junk sail in mast coordinates (mast at x 0, foot at y 0, bow
+// +X): a straight luff leaning back, a yard climbing aft to the peak, a
+// fan-shaped leech scalloped between the batten ends, and cloth bellying
+// between battens. Uplit from the deck: vertex colours brightest at the foot,
+// each panel darker just under the batten above.
+function junkSail(w, h, panels) {
+  const tack = [0.27 * w, 0];
+  const throat = [0.2 * w, 0.62 * h];
+  const clew = [-0.62 * w, 0];
+  const bend = [-0.95 * w, 0.55 * h];
+  const peak = [-0.42 * w, h];
+  const luff = (t) => [lerp(tack[0], throat[0], t), lerp(tack[1], throat[1], t)];
+  const leech = (t) => {
+    const [a, b, c] = [(1 - t) ** 2, 2 * (1 - t) * t, t * t];
+    return [a * clew[0] + b * bend[0] + c * peak[0], a * clew[1] + b * bend[1] + c * peak[1]];
+  };
+
+  const SUB = 4;
+  const COLS = 8;
+  const rows = panels * SUB;
+  const positions = [];
+  const uvs = [];
+  const colors = [];
+  const index = [];
+  for (let r = 0; r <= rows; r++) {
+    const t = r / rows;
+    const pocket = (r % SUB) / SUB;
+    const [lx, ly] = luff(t);
+    const [rx, ry] = leech(t);
+    const scallop = 0.05 * w * Math.sin(Math.PI * pocket);
+    const light = (0.5 + 0.5 * (1 - t) ** 1.3) * (1 - 0.3 * pocket);
+    for (let c = 0; c <= COLS; c++) {
+      const s = c / COLS;
+      positions.push(
+        lerp(lx, rx + scallop, s),
+        lerp(ly, ry, s),
+        0.07 * w * Math.sin(Math.PI * s) * Math.sin(Math.PI * pocket),
+      );
+      uvs.push(s, t);
+      colors.push(light, light, light);
+    }
+  }
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const a = r * (COLS + 1) + c;
+      const b = a + COLS + 1;
+      index.push(a, b, a + 1, a + 1, b, b + 1);
+    }
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('uv', new Float32BufferAttribute(uvs, 2));
+  geometry.setAttribute('color', new Float32BufferAttribute(colors, 3));
+  geometry.setIndex(index);
+
+  // Battens (with the boom and yard) overhang both edges; a sheet runs from
+  // each batten end to one block under the boom.
+  const battens = [];
+  const sheets = [];
+  const block = [-0.8 * w, -1.4];
+  for (let p = 0; p <= panels; p++) {
+    const t = p / panels;
+    const [lx, ly] = luff(t);
+    const [rx, ry] = leech(t);
+    battens.push([lx + 0.04 * w, ly, rx - 0.06 * w, ry]);
+    if (p < panels) sheets.push([rx - 0.06 * w, ry, ...block]);
+  }
+  return { geometry, battens, sheets, block };
 }
 
 function createJunk() {
   const junk = new Group();
   junk.name = 'junk';
+  const wood = lambert(0x3a2416);
 
-  const profile = new Shape();
-  profile.moveTo(-14, 5.2);
-  profile.lineTo(-11.5, 5.2);
-  profile.lineTo(-10, 3);
-  profile.lineTo(8, 2.8);
-  profile.lineTo(14, 3.8);
-  profile.lineTo(12.5, 1.5);
-  profile.lineTo(9, -0.9);
-  profile.lineTo(-10, -0.9);
-  profile.lineTo(-13.2, 1.8);
-  profile.lineTo(-14, 5.2);
-  const hullGeometry = new ExtrudeGeometry(profile, { depth: 7, bevelEnabled: false });
-  hullGeometry.translate(0, 0, -3.5);
-  const hull = new Mesh(hullGeometry, new MeshStandardMaterial({ map: junkPlanks(), roughness: 0.8 }));
+  // Lit by its own deck lights at night: a faint glow of the varnish.
+  const hullMap = junkHull();
+  const hull = new Mesh(
+    junkHullGeometry(),
+    new MeshStandardMaterial({ map: hullMap, emissive: 0xffffff, emissiveMap: hullMap, emissiveIntensity: 0.18, roughness: 0.55, side: DoubleSide }),
+  );
+  const deck = new Mesh(
+    hullStrip(0, 1, (u) => [halfWidthBelowSheer(u, BULWARK), junkSheer(u) - BULWARK]),
+    new MeshStandardMaterial({ color: 0x7a5434, emissive: 0x1e120a, roughness: 0.9, side: DoubleSide }),
+  );
+  // Rail along both sides, 0.85 m above the deck edge.
+  const rail = new Mesh(
+    hullStrip(0.03, 0.97, (u) => [junkHalfWidth(u) - 0.05, junkSheer(u) + 0.85], 0.08),
+    new MeshStandardMaterial({ color: 0x3a2416, roughness: 0.8, side: DoubleSide }),
+  );
 
-  const cabin = new Mesh(new BoxGeometry(12, 1.4, 6.2), basic(0xc98a4f));
-  cabin.position.set(-2, 3.6, 0);
+  // Stern deckhouse with lit windows, roofed; a canopy over the waist on posts.
+  const cabinMaps = ferryDeck('#4a2c18', 61);
+  const cabinWall = (length) =>
+    new MeshStandardMaterial({ ...ferryDeckRepeat(cabinMaps, Math.max(1, Math.round(length / 2.4))), emissive: 0xffffff, roughness: 0.7 });
+  const roofMaterial = new MeshStandardMaterial({ color: 0xe6d8bb, emissive: 0x2a2418, roughness: 0.9 });
+  const [house0, house1] = [-12.4, -7.2];
+  const houseLength = house1 - house0;
+  const house = new Mesh(new BoxGeometry(houseLength, 3.4, 4.4), [
+    cabinWall(4.4),
+    cabinWall(4.4),
+    wood,
+    wood,
+    cabinWall(houseLength),
+    cabinWall(houseLength),
+  ]);
+  house.position.set((house0 + house1) / 2, 4.6, 0);
+  // Roofs overlap the boxes they sit on, so no faces are coplanar.
+  const houseRoof = new Mesh(new BoxGeometry(houseLength + 0.6, 0.2, 5), roofMaterial);
+  houseRoof.position.set(house.position.x, 6.35, 0);
+  const [canopy0, canopy1] = [house1 - 0.2, 1.6];
+  const canopyY = 4.8;
+  const canopy = new Mesh(new BoxGeometry(canopy1 - canopy0, 0.15, 6), roofMaterial);
+  canopy.position.set((canopy0 + canopy1) / 2, canopyY, 0);
 
-  // [mastX, mastHeight, sailWidth, sailHeight, sailBase, zOffset]
-  const rig = [
-    [9.5, 15, 6, 11, 4, 0.3],
-    [1, 22, 9, 16, 4.2, 0],
-    [-9, 13, 5, 9, 5.5, -0.3],
-  ];
-
-  const masts = new InstancedMesh(new CylinderGeometry(0.18, 0.18, 1, 6), lambert(0x241c1c), rig.length);
-  const sailMaterial = new MeshBasicMaterial({ map: junkSail(), side: DoubleSide });
-  const battenPoints = [];
+  const postMatrices = [];
   const m = new Matrix4();
-
-  rig.forEach(([mx, mh, w, h, base, z], i) => {
-    m.makeScale(1, mh, 1).setPosition(mx, 2.8 + mh / 2, 0);
-    masts.setMatrixAt(i, m);
-
-    const sail = new Mesh(normaliseUVs(new ShapeGeometry(sailShape(w, h), 6)), sailMaterial);
-    sail.position.set(mx, base, z);
-    junk.add(sail);
-
-    for (const f of [0.2, 0.4, 0.6, 0.8]) {
-      const y = base + f * h;
-      const front = mx + (0.25 - 0.05 * f) * w;
-      const back = mx + (-0.75 - 0.2 * Math.sin(f * Math.PI) + 0.15 * f) * w;
-      for (const side of [0.06, -0.06]) battenPoints.push(front, y, z + side, back, y, z + side);
+  for (let x = -5.6; x <= canopy1; x += 2.2) {
+    const bottom = deckAt(x) - 0.1;
+    for (const z of [2.9, -2.9]) postMatrices.push(new Matrix4().makeScale(0.12, canopyY - bottom, 0.12).setPosition(x, (canopyY + bottom) / 2, z));
+  }
+  for (let u = 0.06; u < 0.95; u += 0.05) {
+    const y0 = junkSheer(u);
+    for (const side of [1, -1]) {
+      postMatrices.push(new Matrix4().makeScale(0.08, 0.9, 0.08).setPosition(junkX(u), y0 + 0.45, side * (junkHalfWidth(u) - 0.05)));
     }
+  }
+  const posts = new InstancedMesh(new BoxGeometry(1, 1, 1), wood, postMatrices.length);
+  postMatrices.forEach((matrix, i) => posts.setMatrixAt(i, matrix));
+
+  // Tyres hung along both sides as fenders, as on the harbour junks.
+  const tyreXs = [-6, -3, 0, 3, 6];
+  const tyres = new InstancedMesh(new TorusGeometry(0.34, 0.12, 6, 12), lambert(0x151313), tyreXs.length * 2);
+  tyreXs.forEach((x, i) => {
+    const u = junkU(x);
+    const y = junkSheer(u) - 0.9;
+    const hw = halfWidthBelowSheer(u, 0.9);
+    for (const [k, side] of [[0, 1], [1, -1]]) tyres.setMatrixAt(i * 2 + k, m.makeTranslation(x, y, side * (hw + 0.1)));
   });
 
-  const battenGeometry = new BufferGeometry();
-  battenGeometry.setAttribute('position', new Float32BufferAttribute(battenPoints, 3));
-  const battens = new LineSegments(battenGeometry, basic(0x5a1f18));
+  // Mostly under water; only its head shows below the transom.
+  const rudder = new Mesh(new BoxGeometry(1.3, 2.4, 0.2), wood);
+  rudder.position.set(junkX(0) - 0.45, -0.45, 0);
 
-  // Deck lanterns: a warm pool on the water around the junk.
-  const lantern = new PointLight(0xffa860, 110, 35, 2);
-  lantern.position.set(-2, 5, 0);
+  // [mastX, mastZ, rake (forward +), mastTop, sailWidth, sailHeight, sailFoot, panels]
+  const rig = [
+    [10.6, 0, 0.14, 16, 5.4, 7.8, 6.4, 6],
+    [4, 0, 0, 20.5, 8.3, 10, 7, 6],
+    [-11.2, -0.8, -0.04, 13, 3.4, 4.9, 7.6, 5],
+  ];
+  const masts = new InstancedMesh(new CylinderGeometry(0.12, 0.17, 1, 6).translate(0, 0.5, 0), lambert(0x2a1a12), rig.length);
+  const sailGeometries = [];
+  const linePoints = [];
+  const lineColors = [];
+  const BAMBOO = [0.85, 0.69, 0.48];
+  const ROPE = [0.16, 0.1, 0.07];
+  const point = new Vector3();
+  const line = (a, b, color, frame) => {
+    for (const p of [a, b]) {
+      point.set(...p).applyMatrix4(frame);
+      linePoints.push(point.x, point.y, point.z);
+      lineColors.push(...color);
+    }
+  };
+  const pennantTips = [];
 
-  junk.add(hull, cabin, masts, battens, lantern);
+  rig.forEach(([mx, mz, rake, top, w, h, foot, panels], i) => {
+    const deckY = deckAt(mx);
+    const length = (top - deckY) / Math.cos(rake);
+    const frame = new Matrix4().makeRotationZ(-rake).setPosition(mx, deckY, mz);
+    masts.setMatrixAt(i, new Matrix4().multiplyMatrices(frame, new Matrix4().makeScale(1, length, 1)));
+
+    const lift = foot - deckY;
+    const sail = junkSail(w, h, panels);
+    sailGeometries.push(sail.geometry.translate(0, lift, 0).applyMatrix4(frame));
+    for (const [x0, y0, x1, y1] of sail.battens) {
+      for (const z of [0.05, -0.05]) line([x0, y0 + lift, z], [x1, y1 + lift, z], BAMBOO, frame);
+    }
+    for (const [x0, y0, x1, y1] of sail.sheets) line([x0, y0 + lift, 0], [x1, y1 + lift, 0], ROPE, frame);
+    const [bx, by] = sail.block;
+    line([bx, by + lift, 0], [bx, 0, 0], ROPE, frame);
+    // Shrouds from the masthead down to both rails.
+    const hw = junkHalfWidth(junkU(mx)) - 0.1;
+    for (const side of [1, -1]) line([0, length, 0], [-0.6, 0, side * hw - mz], ROPE, frame);
+    pennantTips.push(new Vector3(0, length, 0).applyMatrix4(frame));
+  });
+  // Forestay from the foremast head to the bow.
+  linePoints.push(...pennantTips[0].toArray(), junkX(1), junkSheer(1), 0);
+  lineColors.push(...ROPE, ...ROPE);
+
+  // One mesh per sail keeps each bounding box tight for the composition probe.
+  const sailMaterial = new MeshBasicMaterial({ map: junkCloth(), vertexColors: true, side: DoubleSide });
+  const sails = sailGeometries.map((geometry) => new Mesh(geometry, sailMaterial));
+  const lineGeometry = new BufferGeometry();
+  lineGeometry.setAttribute('position', new Float32BufferAttribute(linePoints, 3));
+  lineGeometry.setAttribute('color', new Float32BufferAttribute(lineColors, 3));
+  const rigging = new LineSegments(lineGeometry, new LineBasicMaterial({ vertexColors: true }));
+  // The rigging stays inside the sails and hull; its box would span the boat.
+  rigging.userData.noProbe = true;
+
+  // Plain pennants (no lettering) at the fore and mizzen mastheads.
+  const pennantShape = new Shape();
+  pennantShape.moveTo(0, 0);
+  pennantShape.lineTo(-1.8, -0.4);
+  pennantShape.lineTo(0, -0.85);
+  pennantShape.lineTo(0, 0);
+  const pennantGeometry = new ShapeGeometry(pennantShape);
+  const pennants = [
+    [pennantTips[0], 0xe8b84a],
+    [pennantTips[2], 0xd46a86],
+  ].map(([tip, color]) => {
+    const pennant = new Mesh(pennantGeometry, basic(color, { side: DoubleSide }));
+    pennant.position.copy(tip);
+    return pennant;
+  });
+
+  // Deck lights shining up into the sails; low and red, so the glassy water
+  // draws red streaks under the junk the way the rim light draws the moon path.
+  const sailLight = new PointLight(0xff6a3c, 180, 50, 2);
+  sailLight.position.set(4.5, 6, 0);
+
+  junk.add(hull, deck, rail, house, houseRoof, canopy, posts, tyres, rudder, masts, ...sails, rigging, ...pennants, sailLight);
   return junk;
-}
-
-// ShapeGeometry UVs are in shape units; maps the outline's bounds to 0..1.
-function normaliseUVs(geometry) {
-  geometry.computeBoundingBox();
-  const { min, max } = geometry.boundingBox;
-  const uv = geometry.attributes.uv;
-  const position = geometry.attributes.position;
-  for (let i = 0; i < uv.count; i++) {
-    uv.setXY(i, (position.getX(i) - min.x) / (max.x - min.x), (position.getY(i) - min.y) / (max.y - min.y));
-  }
-  return geometry;
 }
 
 const tangent = new Vector3();

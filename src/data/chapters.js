@@ -199,8 +199,8 @@ export const chapters = [
       mobile: `${SB}/frame-04-red-sails-mobile-rough.png`,
     },
     camera: {
-      desktop: { position: [155.7, 3, -426.1], target: [-34.2, 86.8, -768.1], fov: 79.9 },
-      mobile: { position: [152.4, 3, -378.2], target: [173.6, 97.2, -766.4], fov: 78 },
+      desktop: { position: [152.1, 3, -420.3], target: [-22.5, 64.7, -774.9], fov: 74.5 },
+      mobile: { position: [151.6, 3, -388.2], target: [177.6, 92.3, -777.2], fov: 79.6 },
     },
     copy: {
       desktop: { left: 5, top: 11, right: 34, bottom: 45 },
@@ -214,8 +214,8 @@ export const chapters = [
     },
     fogDensity: 0.00063,
     vessels: {
-      desktop: { ferry: [400, -700, 1.2], junk: [151, -451.1, 0.46] },
-      mobile: { ferry: [400, -700, 1.2], junk: [153.6, -431, 0.17] },
+      desktop: { ferry: [400, -700, 1.2], junk: [148.4, -444.9, 0.46] },
+      mobile: { ferry: [400, -700, 1.2], junk: [154.9, -431.8, 0.65] },
     },
     probes: {
       desktop: {
