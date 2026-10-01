@@ -1,0 +1,130 @@
+import {
+  CanvasTexture,
+  MathUtils,
+  Mesh,
+  MeshBasicMaterial,
+  PerspectiveCamera,
+  PlaneGeometry,
+  SRGBColorSpace,
+  Vector3,
+} from 'three';
+import { PALETTE } from './palette.js';
+import { aimCamera, smoothstep } from '../scroll/cameraRig.js';
+
+// System Traditional Chinese fonts: Windows, then iOS / macOS, then Android.
+const FONT = '"Microsoft JhengHei", "PingFang TC", "Heiti TC", "Noto Sans TC", sans-serif';
+const FONT_SIZE = 640;
+const GAP = 0.14; // extra space between characters, as a fraction of the font size
+const PAD = 16;
+const SUBMERGED = 0.04; // fraction of the height below the waterline at rest
+const STEPPED_FADE = 0.3; // seconds
+
+function drawText(text) {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const font = `700 ${FONT_SIZE}px ${FONT}`;
+  ctx.font = font;
+  const chars = [...text];
+  const metrics = chars.map((c) => ctx.measureText(c));
+  const ascent = Math.max(...metrics.map((m) => m.actualBoundingBoxAscent));
+  const descent = Math.max(...metrics.map((m) => m.actualBoundingBoxDescent));
+  const gap = GAP * FONT_SIZE;
+  const width = metrics.reduce((sum, m) => sum + m.width, 0) + gap * (chars.length - 1);
+
+  canvas.width = Math.ceil(width + PAD * 2);
+  canvas.height = Math.ceil(ascent + descent + PAD * 2);
+  ctx.font = font;
+  ctx.fillStyle = '#fff';
+  let x = PAD;
+  chars.forEach((c, i) => {
+    ctx.fillText(c, x, PAD + ascent);
+    x += metrics[i].width + gap;
+  });
+
+  const texture = new CanvasTexture(canvas);
+  texture.colorSpace = SRGBColorSpace;
+  return { texture, aspect: canvas.width / canvas.height, padBottom: (PAD + descent) / canvas.height };
+}
+
+const placementCamera = new PerspectiveCamera();
+const ndc = new Vector3();
+const forward = new Vector3();
+
+export function createWordmark(renderer, text) {
+  const { texture, aspect, padBottom } = drawText(text);
+  texture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
+
+  // alphaTest keeps the empty parts of the plane out of the depth buffer.
+  const material = new MeshBasicMaterial({
+    map: texture,
+    color: PALETTE.cream,
+    transparent: true,
+    alphaTest: 0.02,
+  });
+  const geometry = new PlaneGeometry(1, 1);
+  geometry.translate(0, 0.5, 0);
+  const mesh = new Mesh(geometry, material);
+  mesh.name = 'wordmark';
+  // Drawn after the railing, which then hides the characters' feet.
+  mesh.renderOrder = 1;
+
+  let restY = 0;
+  let height = 1;
+  let opacity = 1;
+
+  function apply(sink, value) {
+    opacity = value;
+    material.opacity = value;
+    mesh.visible = value > 0.001;
+    mesh.position.y = restY - sink * height * (1 - SUBMERGED + 0.02);
+  }
+
+  // Stands the wordmark on the water so it fills spec.width % of the screen,
+  // with its feet at (spec.x, spec.foot) % as seen from chapter 01's opening pose.
+  function place(pose, viewAspect, spec) {
+    const position = new Vector3().fromArray(pose.position);
+    // The hold dolly starts half a vector back (see holdDollyOffset).
+    if (pose.holdDolly) position.addScaledVector(new Vector3().fromArray(pose.holdDolly), -0.5);
+    placementCamera.fov = pose.fov;
+    placementCamera.aspect = viewAspect;
+    placementCamera.near = 0.5;
+    placementCamera.far = 5000;
+    aimCamera(placementCamera, position, new Vector3().fromArray(pose.target));
+    placementCamera.updateMatrixWorld();
+
+    ndc.set((spec.x / 100) * 2 - 1, 1 - (spec.foot / 100) * 2, 0.5).unproject(placementCamera);
+    const ray = ndc.sub(position).normalize();
+    if (ray.y >= -1e-3) return;
+    const foot = position.clone().addScaledVector(ray, -position.y / ray.y);
+
+    forward.fromArray(pose.target).sub(position).setY(0).normalize();
+    const depth = foot.clone().sub(position).dot(forward);
+    const viewWidth = 2 * depth * Math.tan(MathUtils.degToRad(pose.fov / 2)) * viewAspect;
+    const width = (spec.width / 100) * viewWidth;
+    height = width / aspect;
+    restY = -height * (padBottom + SUBMERGED);
+
+    mesh.scale.set(width, height, 1);
+    mesh.position.set(foot.x, restY, foot.z);
+    mesh.rotation.y = Math.atan2(-forward.x, -forward.z);
+  }
+
+  // Continuous mode: sinks into the water, fading in the second half.
+  function sinkAt(p, [from, to]) {
+    const u = MathUtils.clamp((p - from) / (to - from), 0, 1);
+    apply(smoothstep(0, 1, u), 1 - smoothstep(0.55, 1, u));
+  }
+
+  // Stepped mode: no sinking, just a short fade. Returns true when it changed,
+  // so the caller renders every step including the last.
+  function fadeTo(target, dt) {
+    const before = opacity;
+    const sunk = mesh.position.y !== restY;
+    const step = dt / STEPPED_FADE;
+    const next = target > opacity ? Math.min(target, opacity + step) : Math.max(target, opacity - step);
+    apply(0, dt > 0 ? next : target);
+    return opacity !== before || sunk;
+  }
+
+  return { mesh, place, sinkAt, fadeTo };
+}

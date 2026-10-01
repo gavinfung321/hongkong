@@ -51,8 +51,9 @@ at the top. The wordmark needs a moment of its own first.
 
 - Add a hero section of about **100 svh** before chapter 01. The camera holds
   the 01 pose during it (the rig already holds still before 01's keyframe).
-- During the hero, the chapter 01 copy is hidden; only the wordmark, logo, nav
-  and scroll hint show.
+- Chapter 01's copy shows from the moment the page loads, top-left beside the
+  Clock Tower, together with the wordmark, logo, nav and scroll hint (user
+  request, 2026-10-01). It stays until 01's hold ends, as before.
 - Scrolling through the hero sinks the wordmark. It is fully gone before the
   01 copy starts fading in (progress p = 0.25).
 - Deep links (`#chapter-01` … `#chapter-06`) and `?hold=` still land on each
@@ -105,6 +106,8 @@ How it is built:
     Afterglow (chapter 01 is reached through the logo).
   - The current chapter's link is underlined in warm amber (`--color-warm`).
     Coral stays reserved for the junk's sails.
+  - On hover or keyboard focus, each English label rolls up and its Chinese
+    label (from 3.6) rolls in from below (user request, 2026-10-01).
 - **Mobile:** logo plus a menu button. The menu opens a full-screen dark panel
   listing all six chapters, each with its Chinese label.
   - The button reports open/closed to screen readers, keyboard focus stays in
@@ -204,7 +207,7 @@ Measured with the `?fps` overlay on a production build, as in
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
 | Draw calls | ≤ 100 (was ≤ 80) | ≤ 100 |
-| New generated textures | ≤ 4 more, each ≤ 512 px | same |
+| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp) | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
 
 If the iPhone 11 misses its target, layers are switched off on mobile in this

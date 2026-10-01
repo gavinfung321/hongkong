@@ -1,4 +1,4 @@
-import { chapters, SCROLL } from './data/chapters.js';
+import { chapters, HERO, SCROLL } from './data/chapters.js';
 import { createScene } from './scene/createScene.js';
 import { createLighting } from './scene/createLighting.js';
 import { createWater } from './scene/createWater.js';
@@ -6,6 +6,7 @@ import { createKowloonEdge } from './scene/createKowloonEdge.js';
 import { createIsland } from './scene/createIsland.js';
 import { createVessels } from './scene/createVessels.js';
 import { createForeground } from './scene/createForeground.js';
+import { createWordmark } from './scene/createWordmark.js';
 import { createGating, makeFadeable } from './scene/gating.js';
 import { createCameraRig, fovForAspect } from './scroll/cameraRig.js';
 import { createScrollConductor } from './scroll/scrollConductor.js';
@@ -21,8 +22,6 @@ const VEIL_IN = 150;
 const VEIL_OUT = 200;
 const MOBILE_ASPECT = 0.8;
 const ADAPTIVE = { desktop: 45, mobile: 28, window: 2, step: 0.25, floor: 1 };
-// Progress at which chapter 01's copy starts to fade in; the hero is above it.
-const HERO_END = 0.5 - SCROLL.copyFull - SCROLL.copyFade;
 
 function start(initGuard, header) {
   const canvas = document.getElementById('world');
@@ -41,7 +40,8 @@ function start(initGuard, header) {
   const island = createIsland();
   const vessels = createVessels();
   const foreground = createForeground();
-  scene.add(kowloon.group, island.group, vessels.group, foreground.group);
+  const wordmark = createWordmark(renderer, HERO.wordmark.text);
+  scene.add(kowloon.group, island.group, vessels.group, foreground.group, wordmark.mesh);
 
   const gating = createGating(chapters, {
     ferry: makeFadeable(vessels.ferry),
@@ -100,6 +100,9 @@ function start(initGuard, header) {
     const pose = finale.camera[breakpoint];
     const fov = fovForAspect(pose.fov, width / height, breakpoint);
     foreground.placeBursts({ ...pose, fov }, width / height, finale.bursts[breakpoint]);
+    const opening = chapters[0].camera[breakpoint];
+    const openingFov = fovForAspect(opening.fov, width / height, breakpoint);
+    wordmark.place({ ...opening, fov: openingFov }, width / height, HERO.wordmark[breakpoint]);
     needsRender = true;
   }
 
@@ -215,11 +218,12 @@ function start(initGuard, header) {
     const state = conductor.update(dt);
     state.breakpoint = breakpoint;
     state.motion = stepped ? 'stepped' : 'continuous';
-    const hero = state.p < HERO_END;
-    copy.update(state.p, { stepped, index: state.index, hero });
+    const hero = state.p < 0;
+    copy.update(state.p, { stepped, index: state.index });
     header.update(state.index, hero);
 
     if (stepped) {
+      if (wordmark.fadeTo(hero ? 1 : 0, dt)) needsRender = true;
       if (state.index !== shownKeyframe) {
         if (shownKeyframe < 0) {
           shownKeyframe = state.index;
@@ -239,6 +243,7 @@ function start(initGuard, header) {
       if (state.jumped && !veilActive) runVeil(() => conductor.snap());
       time += dt;
       if (!control.free) applyPose(state.pRendered, false, time);
+      wordmark.sinkAt(state.pRendered, HERO.sink);
       water.update(dt);
     }
 

@@ -333,6 +333,39 @@ a:focus-visible {
   opacity: 1;
 }
 
+/* English rolls up and out; the Chinese label rolls in from below. */
+.swap {
+  display: grid;
+  overflow: hidden;
+}
+
+.swap__en,
+.swap__zh {
+  grid-area: 1 / 1;
+  transition: transform 280ms cubic-bezier(0.3, 0, 0.2, 1), opacity 280ms ease;
+}
+
+.swap__zh {
+  font-size: 0.875rem;
+  letter-spacing: 0.24em;
+  line-height: 1.15;
+  text-transform: none;
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.site-nav a:hover .swap__en,
+.site-nav a:focus-visible .swap__en {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.site-nav a:hover .swap__zh,
+.site-nav a:focus-visible .swap__zh {
+  transform: none;
+  opacity: 1;
+}
+
 .site-nav a[aria-current]::after {
   content: "";
   position: absolute;
@@ -485,6 +518,30 @@ a:focus-visible {
   bottom: 0;
   height: 1px;
   background: var(--color-warm);
+}
+
+.chapter-counter__hint {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.chapter-counter__hint::after {
+  content: "";
+  width: 40px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+[data-hero="true"] .chapter-counter__hint {
+  opacity: 0.8;
 }
 
 .chapter-counter__compact {
