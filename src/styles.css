@@ -643,6 +643,105 @@ html:not(.is-enhanced) .chapter-counter {
   }
 }
 
+/* Vertical Chinese text down the right edge */
+
+.vertical-text {
+  --font-zh: "Microsoft JhengHei", "PingFang TC", "Heiti TC", "Noto Sans TC", sans-serif;
+
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + var(--header-height) + 16px);
+  right: var(--page-inset);
+  bottom: max(24px, env(safe-area-inset-bottom));
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-zh);
+  text-shadow: 0 1px 3px rgb(0 0 0 / 0.8), 0 0 18px rgb(10 9 24 / 0.7);
+  pointer-events: none;
+  transition: top 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Follows the header up when it slides away. */
+.is-header-hidden .vertical-text {
+  top: calc(env(safe-area-inset-top) + 24px);
+}
+
+.vertical-text__title,
+.vertical-text__labels span {
+  writing-mode: vertical-rl;
+}
+
+.vertical-text__title {
+  color: var(--color-ivory);
+  font-size: 0.8125rem;
+  letter-spacing: 0.6em;
+  opacity: 0.55;
+}
+
+.vertical-text__labels {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-items: end;
+}
+
+/* A short hairline above the label. */
+.vertical-text__labels::before {
+  content: "";
+  grid-area: 1 / 1;
+  align-self: start;
+  width: 1px;
+  height: 40px;
+  margin-bottom: 14px;
+  background: rgb(243 233 210 / 0.3);
+}
+
+.vertical-text__labels span {
+  grid-row: 2;
+  grid-column: 1;
+  color: var(--color-cream);
+  font-size: 1rem;
+  letter-spacing: 0.35em;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 400ms ease,
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Like the copy: the old label rises out, the new one comes up from below. */
+.vertical-text__labels span.is-past {
+  transform: translateY(-24px);
+}
+
+.vertical-text__labels span.is-current {
+  opacity: 0.85;
+  transform: none;
+}
+
+/* The label tracks scroll progress, which only exists in the 3D story. */
+html:not(.is-enhanced) .vertical-text__labels {
+  display: none;
+}
+
+@media (max-aspect-ratio: 4/5), (max-width: 600px) {
+  .vertical-text__title {
+    font-size: 0.6875rem;
+    letter-spacing: 0.5em;
+  }
+
+  .vertical-text__labels span {
+    font-size: 0.8125rem;
+  }
+
+  .vertical-text__labels::before {
+    height: 28px;
+    margin-bottom: 10px;
+  }
+}
+
 /* The hero only takes up scroll length when the 3D story is running. */
 .hero {
   position: relative;

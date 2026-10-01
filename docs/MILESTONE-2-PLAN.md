@@ -139,12 +139,14 @@ How it is built:
   allowed in the shell), next to the name "HONG KONG" in small caps.
 - Tagline under the name: "Victoria Harbour, after dark".
 
-### 3.6 Vertical Chinese text
+### 3.6 Vertical Chinese text (built 2026-10-01)
 
 - **維港之夜**, written vertically down the right edge below the nav, on every
-  chapter.
-- A **per-chapter label** lower on the right, also vertical, which changes as
-  you scroll. Proposed (user to confirm the wording):
+  chapter. It moves up with the header when the header slides away.
+- A **per-chapter label** at the bottom right, also vertical, under a short
+  hairline. It changes with the current chapter: the old label rises out and
+  the new one comes up from below, like the copy. The hero shows 01's label.
+  Wording as proposed (confirmed by the user, 2026-10-01):
 
   | Chapter | Label |
   |---|---|
@@ -158,8 +160,12 @@ How it is built:
 - Real HTML text with `lang="zh-Hant"` and vertical writing mode. Decorative
   for screen readers, because the English chapter names already carry the
   meaning.
-- On mobile both are smaller. The per-chapter label moves to the menu if it
-  collides with a subject in any frame.
+- On mobile both are smaller. No frame has a subject under either one, so
+  the label stays on screen on mobile too (it is also in the menu).
+- Built in `index.html` (`.vertical-text`), styled in `styles.css`; the
+  current label is switched in `siteHeader.js` alongside the nav and counter.
+  Same system Chinese fonts as the wordmark. The label is hidden in the
+  poster-only fallback, where there is no scroll progress.
 
 ### 3.7 Copy regions move down
 
@@ -310,9 +316,10 @@ Stop for the user's review after each step, as in the grey-box.
 
 - `index.html`: hero section, header and nav, menu, counter, vertical text.
 - `src/styles.css`: shell styles, overlay and vignette, new copy positions.
-- `src/data/chapters.js`: copy regions, new `hero` block, Chinese labels.
+- `src/data/chapters.js`: copy regions, new `hero` block. (The Chinese labels
+  ended up in `index.html`, next to the menu's copies of them.)
 - `src/main.js`: wire up the new pieces.
-- New: `src/ui/siteHeader.js` (nav, menu, counter), `src/scene/createWordmark.js`,
+- New: `src/ui/siteHeader.js` (nav, menu, counter, vertical label), `src/scene/createWordmark.js`,
   `src/scene/createMoon.js`, `src/ui/cursorRing.js`,
   `src/ui/pointerParallax.js`, `src/scene/createPetals.js`,
   `src/scene/createGlow.js`.
@@ -332,6 +339,7 @@ The milestone passes when:
    Mobile shows it horizontal and smaller.
 3. Nav links, counter numbers, the menu and "Return to the harbour" all land
    on the right hold. The menu works with the keyboard and a screen reader.
+   The vertical label shows the current chapter and never covers a subject.
 4. Reduced-motion mode shows no sinking, no parallax, no particles and no
    cursor ring, and still tells the whole story.
 5. The poster-only fallback still works, with a usable nav.
