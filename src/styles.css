@@ -660,12 +660,6 @@ html:not(.is-enhanced) .chapter-counter {
   font-family: var(--font-zh);
   text-shadow: 0 1px 3px rgb(0 0 0 / 0.8), 0 0 18px rgb(10 9 24 / 0.7);
   pointer-events: none;
-  transition: top 450ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Follows the header up when it slides away. */
-.is-header-hidden .vertical-text {
-  top: calc(env(safe-area-inset-top) + 24px);
 }
 
 .vertical-text__title,
@@ -678,6 +672,15 @@ html:not(.is-enhanced) .chapter-counter {
   font-size: 0.8125rem;
   letter-spacing: 0.6em;
   opacity: 0.55;
+  transition:
+    transform 450ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 300ms ease;
+}
+
+/* Leaves and returns with the header. */
+.is-header-hidden .vertical-text__title {
+  opacity: 0;
+  transform: translateY(calc(-1 * var(--header-height)));
 }
 
 .vertical-text__labels {
