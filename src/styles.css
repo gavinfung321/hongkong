@@ -220,6 +220,161 @@ h1.chapter__title {
   }
 }
 
+/* Enhanced mode: fixed WebGL canvas behind scroll-driven copy */
+
+.world,
+.veil {
+  display: none;
+}
+
+.is-enhanced {
+  scroll-behavior: auto;
+}
+
+.is-enhanced .world,
+.is-enhanced .veil {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100lvh;
+  pointer-events: none;
+}
+
+.is-enhanced .world {
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.is-enhanced .veil {
+  z-index: 1;
+  background: var(--color-fog);
+  opacity: 0;
+  transition: opacity 150ms linear;
+}
+
+.is-enhanced .veil.is-active {
+  opacity: 1;
+}
+
+.is-ready .world {
+  opacity: 1;
+}
+
+.is-ready .poster {
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.is-stepped .world,
+.is-stepped .poster {
+  transition: none;
+}
+
+.is-enhanced .story,
+.is-enhanced .site-footer {
+  z-index: 2;
+}
+
+.is-enhanced .chapter {
+  display: block;
+  height: var(--chapter-length, 150svh);
+  min-height: 0;
+  padding: 0;
+}
+
+/* --copy-left/top/right/bottom are unitless % of the viewport (chapters.js). */
+.is-enhanced .chapter__copy {
+  position: fixed;
+  left: max(var(--page-inset), calc(var(--copy-left) * 1vw));
+  right: max(var(--page-inset), calc((100 - var(--copy-right)) * 1vw));
+  top: calc(var(--copy-top) * 1lvh);
+  width: auto;
+  max-width: none;
+  max-height: calc((var(--copy-bottom) - var(--copy-top)) * 1lvh);
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  opacity: var(--copy-opacity, 0);
+  transform: translateY(calc((1 - var(--copy-opacity, 0)) * 12px));
+  text-shadow: 0 1px 3px rgb(0 0 0 / 0.8), 0 0 18px rgb(10 9 24 / 0.7);
+}
+
+.is-enhanced .chapter__copy.is-hidden {
+  pointer-events: none;
+}
+
+.is-stepped .chapter__copy {
+  transform: none;
+  transition: opacity 150ms linear;
+}
+
+.is-enhanced .chapter__title {
+  font-size: 2.5rem;
+}
+
+.is-enhanced h1.chapter__title {
+  font-size: 3rem;
+}
+
+.is-enhanced .chapter__body {
+  max-width: var(--measure);
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+.is-enhanced .chapter__action {
+  margin-top: 0.75rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__title {
+  margin-top: 0.25rem;
+  font-size: 1.75rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced h1.chapter__title {
+  font-size: 2.25rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced {
+  --page-inset: 16px;
+  --measure: 30ch;
+}
+
+/* ?fps overlay (works in production builds) */
+
+.fps-overlay {
+  position: fixed;
+  right: 8px;
+  bottom: 8px;
+  z-index: 100;
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: rgb(0 0 0 / 0.7);
+  color: #9ff;
+  font: 11px/1.35 ui-monospace, Menlo, Consolas, monospace;
+}
+
+.fps-overlay pre {
+  margin: 0;
+  font: inherit;
+}
+
+.fps-overlay button {
+  min-width: 44px;
+  min-height: 32px;
+  border: 1px solid #9ff;
+  border-radius: 3px;
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+
 /* Reduced motion baseline */
 
 @media (prefers-reduced-motion: reduce) {
