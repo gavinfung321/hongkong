@@ -1,78 +1,225 @@
 import {
   BoxGeometry,
   CircleGeometry,
+  ConeGeometry,
+  CylinderGeometry,
   DoubleSide,
+  Float32BufferAttribute,
   Group,
   InstancedMesh,
   Matrix4,
   Mesh,
   MeshBasicMaterial,
+  MeshLambertMaterial,
   PerspectiveCamera,
+  PlaneGeometry,
   Quaternion,
   RingGeometry,
   Shape,
   ShapeGeometry,
+  SphereGeometry,
   Vector3,
 } from 'three';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { WORLD } from '../data/world.js';
 import { aimCamera } from '../scroll/cameraRig.js';
+import { RAILING_BAY, addLampLight, glowMaterial, railingLayout } from './lamps.js';
+import { promenadeGranite, railingPanel } from './surfaces.js';
 
 function fadeMaterial(color, extra = {}) {
   return new MeshBasicMaterial({ color, transparent: true, opacity: 1, ...extra });
 }
 
-function createRailing(segments, material) {
+// ---- Promenade railing --------------------------------------------------------
+// Built from the user's stone balustrade design (reference only): a granite
+// plinth, square posts with carved wave panels, a slim post mid-bay, a round
+// top rail and two thin rails, a lantern on every second big post.
+
+const STONE_LAMP = 2.5;
+const IRON = 0x2b2621;
+const GLASS = 0xffd08a;
+const GLOW = 0xffb060;
+
+function shadeGeometry(geometry, shade) {
+  const count = geometry.attributes.position.count;
+  geometry.setAttribute('color', new Float32BufferAttribute(new Array(count * 3).fill(shade), 3));
+  return geometry;
+}
+
+// A granite block from its extents; UVs repeat the granite once per metre.
+function stoneBox([x0, x1], [y0, y1], [z0, z1], shade = 1) {
+  const [w, h, d] = [x1 - x0, y1 - y0, z1 - z0];
+  const geometry = new BoxGeometry(w, h, d);
+  const uv = geometry.attributes.uv;
+  const faces = [[d, h], [d, h], [w, d], [w, d], [w, h], [w, h]];
+  for (let i = 0; i < uv.count; i++) {
+    const [su, sv] = faces[Math.floor(i / 4)];
+    uv.setXY(i, uv.getX(i) * su, uv.getY(i) * sv);
+  }
+  geometry.translate((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2);
+  return shadeGeometry(geometry, shade);
+}
+
+// A round rail along local x, open-ended (its ends sit inside the posts).
+function rail(radius, y, x0, x1, segments) {
+  const length = x1 - x0;
+  const geometry = new CylinderGeometry(radius, radius, length, segments, 1, true);
+  const uv = geometry.attributes.uv;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * Math.PI * 2 * radius, uv.getY(i) * length);
+  geometry.rotateZ(Math.PI / 2).translate((x0 + x1) / 2, y, 0);
+  return shadeGeometry(geometry, 1);
+}
+
+// One bay, local x from 0 to RAILING_BAY along the run, y = 0 at the deck,
+// z = 0 on the railing line. Neighbouring bays meet end to end (never
+// overlap: their faces would be coplanar).
+function bayGeometry() {
+  const L = RAILING_BAY;
+  const mid = L / 2;
+  return mergeGeometries([
+    stoneBox([0, L], [-0.1, 0.27], [-0.28, 0.28]),
+    // Seawall strip: top 5 cm below the deck, so the two never z-fight.
+    stoneBox([0, L], [-6.05, -0.05], [-0.7, 0.7], 0.45),
+    stoneBox([mid - 0.11, mid + 0.11], [0.26, 0.96], [-0.11, 0.11]),
+    stoneBox([mid - 0.135, mid + 0.135], [0.95, 1.01], [-0.135, 0.135]),
+    rail(0.065, 0.87, 0, L, 10),
+    rail(0.035, 0.58, 0, L, 6),
+    rail(0.035, 0.4, 0, L, 6),
+  ]);
+}
+
+function postStoneGeometry() {
+  return mergeGeometries([
+    stoneBox([-0.31, 0.31], [-0.12, 0.3], [-0.32, 0.32]),
+    stoneBox([-0.26, 0.26], [0.28, 0.35], [-0.26, 0.26]),
+    stoneBox([-0.27, 0.27], [0.99, 1.07], [-0.27, 0.27]),
+    stoneBox([-0.23, 0.23], [1.06, 1.12], [-0.23, 0.23]),
+  ]);
+}
+
+function lanternIronGeometry() {
+  const parts = [new BoxGeometry(0.32, 0.04, 0.32).translate(0, 1.13, 0)];
+  for (const [x, z] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) {
+    parts.push(new BoxGeometry(0.035, 0.27, 0.035).translate(x * 0.12, 1.275, z * 0.12));
+  }
+  parts.push(new ConeGeometry(0.25, 0.15, 4).rotateY(Math.PI / 4).translate(0, 1.475, 0));
+  parts.push(new BoxGeometry(0.05, 0.07, 0.05).translate(0, 1.565, 0));
+  return mergeGeometries(parts);
+}
+
+function createRailing(segments) {
   const group = new Group();
+  const stone = addLampLight(
+    new MeshLambertMaterial({ map: promenadeGranite(), vertexColors: true, transparent: true }),
+    STONE_LAMP,
+  );
+  const panel = addLampLight(new MeshLambertMaterial({ map: railingPanel(), transparent: true }), STONE_LAMP);
+  const iron = addLampLight(new MeshLambertMaterial({ color: IRON, transparent: true }), 2);
+  const glass = new MeshBasicMaterial({ color: GLASS, transparent: true });
+  const glow = glowMaterial(GLOW, 0.9);
+
+  const layouts = segments.map(railingLayout);
+  const bayCount = layouts.reduce((n, l) => n + l.bays, 0);
+  const postCount = layouts.reduce((n, l) => n + l.posts.length, 0);
+  const lanternCount = layouts.reduce((n, l) => n + l.posts.filter((p) => p.lantern).length, 0);
+
+  const bays = new InstancedMesh(bayGeometry(), stone, bayCount);
+  const posts = new InstancedMesh(postStoneGeometry(), stone, postCount);
+  const panels = new InstancedMesh(new BoxGeometry(0.44, 0.67, 0.44).translate(0, 0.665, 0), panel, postCount);
+  const lanterns = new InstancedMesh(lanternIronGeometry(), iron, lanternCount);
+  const lights = new InstancedMesh(new BoxGeometry(0.24, 0.27, 0.24).translate(0, 1.275, 0), glass, lanternCount);
+  const glows = new InstancedMesh(new PlaneGeometry(1, 1), glow, lanternCount);
+
   const m = new Matrix4();
   const q = new Quaternion();
   const up = new Vector3(0, 1, 0);
-
-  let postCount = 0;
-  const layout = segments.map(({ from, to, y }) => {
-    const a = new Vector3(from[0], y, from[1]);
-    const b = new Vector3(to[0], y, to[1]);
-    const length = a.distanceTo(b);
-    const posts = Math.max(2, Math.round(length / 2.6) + 1);
-    postCount += posts;
-    return { a, b, length, posts };
-  });
-
-  const posts = new InstancedMesh(new BoxGeometry(0.42, 1.15, 0.42), material, postCount);
-  const rails = new InstancedMesh(new BoxGeometry(1, 0.12, 0.12), material, segments.length * 2);
-  // A narrow seawall strip under each railing, so water reads right up to it.
-  const walls = new InstancedMesh(new BoxGeometry(1, 1, 1.4), material, segments.length);
-  let p = 0;
-  layout.forEach(({ a, b, length, posts: n }, i) => {
-    for (let k = 0; k < n; k++) {
-      const pos = a.clone().lerp(b, k / (n - 1));
-      pos.y += 0.575;
-      posts.setMatrixAt(p++, m.compose(pos, q, new Vector3(1, 1, 1)));
+  const one = new Vector3(1, 1, 1);
+  let [b, p, l] = [0, 0, 0];
+  for (const { posts: list, bays: n, bayLength, yaw } of layouts) {
+    q.setFromAxisAngle(up, yaw);
+    for (let k = 0; k < n; k++) bays.setMatrixAt(b++, m.compose(list[k].position, q, new Vector3(bayLength / RAILING_BAY, 1, 1)));
+    for (const post of list) {
+      m.compose(post.position, q, one);
+      posts.setMatrixAt(p, m);
+      panels.setMatrixAt(p++, m);
+      if (!post.lantern) continue;
+      lanterns.setMatrixAt(l, m);
+      lights.setMatrixAt(l, m);
+      glows.setMatrixAt(l++, m.compose(post.position.clone().setY(post.position.y + 1.28), q, new Vector3(1.3, 1.3, 1.3)));
     }
-    const yaw = Math.atan2(-(b.z - a.z), b.x - a.x);
-    const railQ = new Quaternion().setFromAxisAngle(up, yaw);
-    const mid = a.clone().add(b).multiplyScalar(0.5);
-    rails.setMatrixAt(i * 2, m.compose(mid.clone().setY(a.y + 1.1), railQ, new Vector3(length, 1, 1)));
-    rails.setMatrixAt(i * 2 + 1, m.compose(mid.clone().setY(a.y + 0.55), railQ, new Vector3(length, 1, 1)));
-    // Top 5 cm below the deck: level with it, the two surfaces z-fight and
-    // flicker at the slightest camera move (mouse parallax).
-    walls.setMatrixAt(i, m.compose(mid.clone().setY(a.y - 3.05), railQ, new Vector3(length + 0.4, 6, 1)));
-  });
+  }
+  glows.computeBoundingSphere();
+  glows.boundingSphere.radius += 2;
 
   // Depth-only twins drawn just before the railing (after the water, before
   // the wordmark at 10): while the railing fades, only its front surface
   // blends, so overlapping posts and rails don't pop as the camera moves.
-  const depthOnly = new MeshBasicMaterial({ colorWrite: false, transparent: true });
-  for (const mesh of [posts, rails, walls]) {
+  // Pushed back a hair so the railing itself always passes the depth test.
+  const depthOnly = new MeshBasicMaterial({
+    colorWrite: false,
+    transparent: true,
+    polygonOffset: true,
+    polygonOffsetFactor: 0,
+    polygonOffsetUnits: 2,
+  });
+  for (const mesh of [bays, posts, panels]) {
     const twin = new InstancedMesh(mesh.geometry, depthOnly, mesh.count);
     twin.instanceMatrix = mesh.instanceMatrix;
     twin.renderOrder = 1;
-    mesh.renderOrder = 2;
     group.add(twin);
   }
+  for (const mesh of [bays, posts, panels, lanterns, lights]) mesh.renderOrder = 2;
+  glows.renderOrder = 3;
+  glows.userData.noProbe = true;
 
-  group.add(posts, rails, walls);
+  group.add(bays, posts, panels, lanterns, lights, glows);
+  return { group, materials: [stone, panel, iron, glass], glows: [glow] };
+}
+
+// ---- Promenade lamps --------------------------------------------------------
+// Tall cast-iron lamps after the user's lamp design (reference only): an
+// octagonal pedestal, a fluted column with collars, a six-sided lantern.
+
+function lampIronGeometry() {
+  return mergeGeometries([
+    new CylinderGeometry(0.3, 0.3, 0.14, 8).translate(0, 0.05, 0),
+    new CylinderGeometry(0.21, 0.24, 0.76, 8).translate(0, 0.48, 0),
+    new CylinderGeometry(0.27, 0.27, 0.07, 8).translate(0, 0.87, 0),
+    new CylinderGeometry(0.13, 0.16, 0.26, 12).translate(0, 1.0, 0),
+    new CylinderGeometry(0.085, 0.11, 2.0, 12).translate(0, 2.1, 0),
+    new CylinderGeometry(0.13, 0.1, 0.2, 12).translate(0, 3.13, 0),
+    new CylinderGeometry(0.2, 0.2, 0.05, 6).translate(0, 3.245, 0),
+    new ConeGeometry(0.38, 0.3, 6).translate(0, 3.95, 0),
+    new SphereGeometry(0.06, 8, 6).translate(0, 4.15, 0),
+  ]);
+}
+
+function createLamps(positions) {
+  const group = new Group();
+  group.name = 'lamps';
+  const iron = addLampLight(new MeshLambertMaterial({ color: IRON }), 2);
+  const lamps = new InstancedMesh(lampIronGeometry(), iron, positions.length);
+  const lights = new InstancedMesh(
+    new CylinderGeometry(0.3, 0.21, 0.55, 6).translate(0, 3.535, 0),
+    new MeshBasicMaterial({ color: GLASS }),
+    positions.length,
+  );
+  const glows = new InstancedMesh(new PlaneGeometry(1, 1), glowMaterial(GLOW, 0.9), positions.length);
+  const m = new Matrix4();
+  positions.forEach(([x, y, z], i) => {
+    m.makeTranslation(x, y, z);
+    lamps.setMatrixAt(i, m);
+    lights.setMatrixAt(i, m);
+    glows.setMatrixAt(i, m.makeScale(2.6, 2.6, 2.6).setPosition(x, y + 3.55, z));
+  });
+  glows.computeBoundingSphere();
+  glows.boundingSphere.radius += 3;
+  glows.userData.noProbe = true;
+  group.add(lamps, lights, glows);
   return group;
 }
+
+// ---- Palms ------------------------------------------------------------------
 
 function palmShape(height) {
   const shape = new Shape();
@@ -109,6 +256,8 @@ function createPalms(palms, material) {
   return group;
 }
 
+// ---- Firework burst markers -------------------------------------------------
+
 const BURST_COLORS = { warm: 0xfff1d6, coral: 0xff7a8a, cyan: 0x7fe3f0 };
 
 function createBursts(count) {
@@ -137,18 +286,18 @@ const placementCamera = new PerspectiveCamera();
 const ndc = new Vector3();
 
 export function createForeground() {
-  const railingMaterial = fadeMaterial(0x14121e);
   const palmMaterial = fadeMaterial(0x110f1a, { side: DoubleSide });
 
-  const railing = createRailing(WORLD.foreground.railings, railingMaterial);
-  railing.name = 'railing';
+  const railing = createRailing(WORLD.foreground.railings);
+  railing.group.name = 'railing';
+  const lamps = createLamps(WORLD.foreground.lamps);
   const palms = createPalms(WORLD.foreground.palms, palmMaterial);
   palms.name = 'palms';
   const bursts = createBursts(4);
   bursts.group.name = 'bursts';
 
   const groups = {
-    railing: { object: railing, materials: [railingMaterial] },
+    railing: { object: railing.group, materials: railing.materials, glows: railing.glows },
     palms: { object: palms, materials: [palmMaterial] },
     bursts: { object: bursts.group, materials: bursts.items.map((b) => b.material) },
   };
@@ -181,10 +330,11 @@ export function createForeground() {
     const entry = groups[key];
     entry.object.visible = value > 0.001;
     for (const material of entry.materials) material.opacity = value;
+    for (const glow of entry.glows ?? []) glow.uniforms.opacity.value = value;
   }
 
   const group = new Group();
-  group.add(railing, palms, bursts.group);
+  group.add(railing.group, lamps, palms, bursts.group);
 
   return { group, placeBursts, setOpacity };
 }
