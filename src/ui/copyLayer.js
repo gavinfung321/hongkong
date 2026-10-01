@@ -15,16 +15,18 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
     });
   }
 
+  // Chapter 01's copy is already showing in the hero, from the moment the page loads.
   function opacityAt(p, i) {
+    if (i === 0 && p < 0.5) return 1;
     const distance = Math.abs(p - (i + 0.5));
     if (distance <= copyFull) return 1;
     return Math.max(0, 1 - (distance - copyFull) / copyFade);
   }
 
-  // In stepped mode only the active chapter's copy is shown, and none in the hero.
-  function update(p, { stepped = false, index = 0, hero = false } = {}) {
+  // In stepped mode only the active chapter's copy is shown.
+  function update(p, { stepped = false, index = 0 } = {}) {
     copies.forEach((copy, i) => {
-      const value = stepped ? (i === index && !hero ? 1 : 0) : Math.round(opacityAt(p, i) * 100) / 100;
+      const value = stepped ? (i === index ? 1 : 0) : Math.round(opacityAt(p, i) * 100) / 100;
       if (value === opacities[i]) return;
       opacities[i] = value;
       copy.style.setProperty('--copy-opacity', String(value));

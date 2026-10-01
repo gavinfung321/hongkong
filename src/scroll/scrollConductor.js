@@ -47,10 +47,11 @@ export function createScrollConductor(sections, config) {
   }
   window.addEventListener('scroll', onScroll, { passive: true });
 
+  // Negative above chapter 01 (the hero), measured in chapter-01 lengths.
   function progressAt(y) {
     const line = y + measuredHeight / 2;
     const count = sections.length;
-    if (line < tops[0]) return 0;
+    if (line < tops[0]) return (line - tops[0]) / heights[0];
     for (let i = 0; i < count; i++) {
       if (line < tops[i] + heights[i]) return i + MathUtils.clamp((line - tops[i]) / heights[i], 0, 1);
     }
@@ -84,7 +85,7 @@ export function createScrollConductor(sections, config) {
     const count = sections.length;
     const p = progressAt(scrollY);
     state.p = p;
-    state.index = Math.min(count - 1, Math.floor(p));
+    state.index = MathUtils.clamp(Math.floor(p), 0, count - 1);
     state.local = p - state.index;
     state.phase = Math.abs(p - (state.index + 0.5)) <= config.hold ? 'hold' : 'transition';
     state.jumped = false;

@@ -21,6 +21,19 @@ export const SCROLL = {
   jumpThreshold: 1,
 };
 
+// The 香港 wordmark in the hero, authored on screen at chapter 01's opening pose.
+// x / foot: % of the viewport where the characters stand on the water.
+// width: % of the viewport width. sink: progress range over which it sinks
+// (the hero is p < 0; chapter 01's hold starts at 0.3).
+export const HERO = {
+  wordmark: {
+    text: '香港',
+    desktop: { x: 50, foot: 88, width: 60 },
+    mobile: { x: 50, foot: 80, width: 85 },
+  },
+  sink: [-0.3, 0.2],
+};
+
 export const chapters = [
   {
     id: '01',
