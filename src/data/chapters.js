@@ -36,6 +36,8 @@ export const HERO = {
     mobile: { x: 50, foot: 80, width: 85 },
   },
   sinkEnd: 0.2,
+  // Fraction of the sink by which the wordmark and chapter 01's copy have faded.
+  fadeEnd: 0.6,
 };
 
 export const chapters = [
@@ -58,7 +60,7 @@ export const chapters = [
       mobile: { position: [-43.1, 9, 99], target: [7.6, 121.5, -281.4], fov: 77.7, holdDolly: [1.3, 0, -9.9] },
     },
     copy: {
-      desktop: { left: 5, top: 29, right: 36, bottom: 50 },
+      desktop: { left: 5, top: 8.5, right: 36, bottom: 34 },
       mobile: { left: 8, top: 9, right: 92, bottom: 39 },
     },
     visibility: {

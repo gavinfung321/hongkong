@@ -51,9 +51,12 @@ at the top. The wordmark needs a moment of its own first.
 
 - Add a hero section of about **100 svh** before chapter 01. The camera holds
   the 01 pose during it (the rig already holds still before 01's keyframe).
-- Chapter 01's copy shows from the moment the page loads, top-left beside the
-  Clock Tower, together with the wordmark, logo, nav and scroll hint (user
-  request, 2026-10-01). It stays until 01's hold ends, as before.
+- Chapter 01's copy shows from the moment the page loads, top-left at the top
+  of the Clock Tower, together with the wordmark, logo, nav and scroll hint
+  (user request, 2026-10-01). From the first scroll it rises and fades out in
+  step with the sinking wordmark, so 01's hold is scene only; links to 01 go
+  to the top of the page. Other chapters' copy also leaves upward and arrives
+  from below.
 - Scrolling through the hero sinks the wordmark. It is fully gone before the
   01 copy starts fading in (progress p = 0.25).
 - Deep links (`#chapter-01` … `#chapter-06`) and `?hold=` still land on each
