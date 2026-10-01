@@ -46,6 +46,35 @@ specifications are in `CURSOR-GREYBOX-BRIEF.md` section 6.
 | `pier-foreground.webp` | Alpha WebP | 03 | P2 | <250 KB | Original | Not in approved Frame 03; add only if the grey-box shows the chapter needs near depth |
 | `rope-foreground.webp` | Alpha WebP | 04 | P2 | <180 KB | Original | Optional; approved Frame 04 has no foreground layer, so add only if it improves depth without clutter |
 
+### Meshy models
+
+The user builds `star-ferry.glb` in Meshy.ai (user decision, 2026-10-01).
+Checked against Meshy's terms on 2026-10-01:
+
+- **Paid plan:** the user owns the model; no credit needed. The model must not
+  be published to the Meshy Community.
+- **Free plan:** licensed CC BY 4.0. Commercial use is allowed, but the site
+  must credit "Model created with Meshy – CC BY 4.0 License" (in the footer
+  or a credits page). Meshy 6 and 7 downloads need a paid plan.
+- Rights follow the plan active when the model was generated.
+- Any image uploaded to Meshy (image-to-3D) must be the user's own photo or
+  one with clear rights. Text-to-3D avoids this question.
+
+Record before import: plan, generation date, Meshy model version, the prompt
+or input image, and the export settings.
+
+Fit to the scene (the box proxy's numbers, so camera framings still hold):
+
+- Bow along +X, waterline at the origin, upright (+Y).
+- About 40 m long, 10 m wide, roof about 9 m above the water; scale can be
+  corrected in code, but the proportions (about 4 : 1 : 1) should match.
+- Double-ended, as the real boats are: both ends alike.
+- Low poly: about 10–20k triangles (Meshy's remesh / target polycount), one
+  1024 px texture set. Compressed after export to stay under 1 MB.
+- Lit windows are added in code as a glowing material, so the texture can
+  show them unlit.
+- Test it alone in the browser first (gate 3 below).
+
 ## Phase C — optional editorial and polish assets
 
 | Filename | Type | Chapter | Priority | Target size | Rights/source | Decision rule |
