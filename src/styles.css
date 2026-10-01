@@ -809,6 +809,48 @@ html:not(.is-enhanced) .chapter-counter {
   font: inherit;
 }
 
+/* Cursor ring (desktop mouse only; created by cursorRing.js) */
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+/* The inner circle carries the size changes, so they don't fight the follow transform. */
+.cursor-ring::before {
+  content: "";
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border: 1px solid rgb(243 233 210 / 0.55);
+  border-radius: 50%;
+  background: rgb(10 9 24 / 0.18);
+  transition:
+    transform 350ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 250ms ease,
+    background-color 250ms ease;
+}
+
+.cursor-ring.is-visible {
+  opacity: 1;
+}
+
+.cursor-ring.is-over-link::before {
+  transform: scale(1.5);
+  border-color: rgb(243 233 210 / 0.8);
+  background: rgb(10 9 24 / 0.08);
+}
+
+.cursor-ring.is-pressed::before {
+  transform: scale(0.8);
+}
+
 /* Reduced motion baseline */
 
 @media (prefers-reduced-motion: reduce) {

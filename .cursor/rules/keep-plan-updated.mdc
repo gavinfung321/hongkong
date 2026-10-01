@@ -1,0 +1,26 @@
+---
+description: Every change to the site must also be recorded in the milestone plan and asset ledger
+alwaysApply: true
+---
+
+# Keep the plan in step with the code
+
+The user asked (2026-10-01): "For everything we update, remember to also update the plan."
+
+After any change to the site's behaviour, look or content:
+
+- Update the current milestone plan in `docs/` (now `docs/MILESTONE-2-PLAN.md`):
+  the section describing that feature, the files list (section 7) and the
+  acceptance checks (section 8) if they are affected.
+- Mark user-requested changes with "(user request, YYYY-MM-DD)".
+- New or changed artwork, textures or fonts also go in `docs/ASSET-LEDGER.md`
+  with source and rights.
+- Commit the plan edits together with the code change.
+
+Do not edit the planning files in `~/.cursor/plans/*.plan.md`; the user keeps
+those unchanged.
+
+# Licence rule
+
+No Kage code, images, lettering or copy may be used; its licence grants no
+reuse. Recreate techniques only, with original or licensed assets.

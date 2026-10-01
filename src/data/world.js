@@ -53,4 +53,8 @@ export const WORLD = {
     { z: -1800, x: [-3200, 3800], base: 340, peaks: [[160, 220, 520], [-900, 70, 600], [1100, 110, 600], [2200, 90, 700]], color: 0x15122a, seed: 3 },
     { z: -2700, x: [-4000, 4600], base: 420, peaks: [[900, 230, 900], [-1600, 150, 900], [2900, 180, 900]], color: 0x241e3c, seed: 5 },
   ],
+
+  // Behind the far range, upper right of the opening frame; its lower edge dips
+  // behind the ridge. Faces the opening camera. Stylised: far larger than life.
+  moon: { position: [742, 1000, -3300], radius: 280, facing: [-13, 6, 104], seed: 11 },
 };
