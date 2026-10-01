@@ -94,16 +94,22 @@ How it is built:
 
 - Bottom-left: a small "Scroll to cross" label with a short line, and the
   numbers **01–06** beneath it.
-- The hint shows only in the hero and fades out as the wordmark sinks.
-- The counter stays for the whole page, highlighting the current chapter. Each
-  number is a link to that chapter.
-- On mobile the counter shrinks to the current number only ("03 / 06"), so it
+- The hint shows only in the hero and fades out as the wordmark sinks. Its line
+  loops: a bright stroke draws in over a faint track and leaves to the right
+  (user request, 2026-10-01).
+- The whole counter shows only in the hero and fades out once chapter 01 begins
+  (user request, 2026-10-01). Each number is a link to that chapter; on hover
+  it turns sail coral and rises (user request, an exception to coral being
+  reserved for the sails).
+- On mobile the counter shrinks to the current number only ("01 / 06"), so it
   never collides with copy.
 
 ### 3.4 Nav bar and mobile menu
 
 - **Desktop:** a thin bar across the top. Left: logo. Right: chapter links and
   a menu button.
+- **Both:** the bar slides away while scrolling down and returns on any scroll
+  up, or when it receives keyboard focus (user request, 2026-10-01).
   - Proposed links: Clock Tower · Star Ferry · Red Sails · City of Light ·
     Afterglow (chapter 01 is reached through the logo).
   - The current chapter's link is underlined in warm amber (`--color-warm`).

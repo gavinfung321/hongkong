@@ -254,6 +254,11 @@ a:focus-visible {
   padding: 0 var(--page-inset);
   padding-top: env(safe-area-inset-top);
   background: linear-gradient(to bottom, rgb(14 12 30 / 0.75), rgb(14 12 30 / 0));
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.is-header-hidden .site-header {
+  transform: translateY(-100%);
 }
 
 .brand {
@@ -487,6 +492,15 @@ a:focus-visible {
   z-index: 3;
   font-variant-numeric: tabular-nums;
   text-shadow: 0 1px 3px rgb(0 0 0 / 0.8);
+  transition:
+    opacity 400ms ease,
+    visibility 400ms;
+}
+
+/* Only an invitation to start: it leaves once the crossing begins. */
+[data-hero="false"] .chapter-counter {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .chapter-counter__list {

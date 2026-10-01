@@ -34,6 +34,20 @@ export function createSiteHeader() {
     if (event.key === 'Escape' && !menu.hidden) setOpen(false);
   });
 
+  // Slides away while scrolling down and comes back on any scroll up.
+  const header = background[0];
+  let lastY = window.scrollY;
+  function onScroll() {
+    // Clamped so iOS overscroll bounce at either end doesn't count as a direction change.
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const y = Math.min(Math.max(window.scrollY, 0), max);
+    if (Math.abs(y - lastY) < 6) return;
+    root.classList.toggle('is-header-hidden', y > lastY && y > header.offsetHeight);
+    lastY = y;
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  header.addEventListener('focusin', () => root.classList.remove('is-header-hidden'));
+
   // `hero` is true above chapter 01's copy, where no chapter is current yet.
   function update(index, inHero) {
     if (inHero !== hero) {
