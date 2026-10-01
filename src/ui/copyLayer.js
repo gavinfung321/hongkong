@@ -21,10 +21,10 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
     return Math.max(0, 1 - (distance - copyFull) / copyFade);
   }
 
-  // In stepped mode only the active chapter's copy is shown.
-  function update(p, { stepped = false, index = 0 } = {}) {
+  // In stepped mode only the active chapter's copy is shown, and none in the hero.
+  function update(p, { stepped = false, index = 0, hero = false } = {}) {
     copies.forEach((copy, i) => {
-      const value = stepped ? (i === index ? 1 : 0) : Math.round(opacityAt(p, i) * 100) / 100;
+      const value = stepped ? (i === index && !hero ? 1 : 0) : Math.round(opacityAt(p, i) * 100) / 100;
       if (value === opacities[i]) return;
       opacities[i] = value;
       copy.style.setProperty('--copy-opacity', String(value));

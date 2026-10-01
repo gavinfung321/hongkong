@@ -50,13 +50,72 @@
     <canvas id="world" class="world" aria-hidden="true"></canvas>
     <div class="veil" aria-hidden="true"></div>
 
+    <header class="site-header">
+      <a class="brand" href="#top">
+        <svg class="brand__mark" viewBox="0 0 24 28" aria-hidden="true" focusable="false">
+          <path class="brand__mast" d="M5 1 V27" />
+          <path class="brand__sail" d="M6 3 Q15 4 21 9 Q19.5 16 15.5 21 Q11.5 24.5 6 25 Z" />
+          <path class="brand__battens" d="M6 8.5 L20.4 11 M6 14 L19 16 M6 19.5 L16.4 20.8" />
+        </svg>
+        <span class="brand__text">
+          <span class="brand__name">Hong Kong</span>
+          <span class="brand__tagline">Victoria Harbour, after dark</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Chapters">
+        <ul class="site-nav__links">
+          <li><a href="#chapter-02" data-nav-index="1">Clock Tower</a></li>
+          <li><a href="#chapter-03" data-nav-index="2">Star Ferry</a></li>
+          <li><a href="#chapter-04" data-nav-index="3">Red Sails</a></li>
+          <li><a href="#chapter-05" data-nav-index="4">City of Light</a></li>
+          <li><a href="#chapter-06" data-nav-index="5">Afterglow</a></li>
+        </ul>
+      </nav>
+      <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-menu">
+        <span class="menu-button__bars" aria-hidden="true"></span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+    </header>
+
+    <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Chapters" hidden>
+      <button class="site-menu__close" type="button">
+        <span aria-hidden="true">✕</span>
+        <span class="visually-hidden">Close menu</span>
+      </button>
+      <ol class="site-menu__list">
+        <li><a href="#chapter-01" data-nav-index="0"><span class="site-menu__index">01</span><span class="site-menu__title">Harbour at Dusk</span><span class="site-menu__label" lang="zh-Hant">維港</span></a></li>
+        <li><a href="#chapter-02" data-nav-index="1"><span class="site-menu__index">02</span><span class="site-menu__title">The Kowloon Edge</span><span class="site-menu__label" lang="zh-Hant">鐘樓</span></a></li>
+        <li><a href="#chapter-03" data-nav-index="2"><span class="site-menu__index">03</span><span class="site-menu__title">Across the Water</span><span class="site-menu__label" lang="zh-Hant">天星小輪</span></a></li>
+        <li><a href="#chapter-04" data-nav-index="3"><span class="site-menu__index">04</span><span class="site-menu__title">Red Sails</span><span class="site-menu__label" lang="zh-Hant">帆船</span></a></li>
+        <li><a href="#chapter-05" data-nav-index="4"><span class="site-menu__index">05</span><span class="site-menu__title">City of Light</span><span class="site-menu__label" lang="zh-Hant">國金</span></a></li>
+        <li><a href="#chapter-06" data-nav-index="5"><span class="site-menu__index">06</span><span class="site-menu__title">Afterglow</span><span class="site-menu__label" lang="zh-Hant">煙花</span></a></li>
+      </ol>
+    </div>
+
+    <!-- Duplicates the menu's links, so it is hidden from screen readers and the tab order. -->
+    <div class="chapter-counter" aria-hidden="true">
+      <ol class="chapter-counter__list">
+        <li><a href="#chapter-01" data-nav-index="0" tabindex="-1">01</a></li>
+        <li><a href="#chapter-02" data-nav-index="1" tabindex="-1">02</a></li>
+        <li><a href="#chapter-03" data-nav-index="2" tabindex="-1">03</a></li>
+        <li><a href="#chapter-04" data-nav-index="3" tabindex="-1">04</a></li>
+        <li><a href="#chapter-05" data-nav-index="4" tabindex="-1">05</a></li>
+        <li><a href="#chapter-06" data-nav-index="5" tabindex="-1">06</a></li>
+      </ol>
+      <p class="chapter-counter__compact"><span class="chapter-counter__current">01</span> / 06</p>
+    </div>
+
     <main id="story" class="story">
+      <section class="hero" id="top" aria-labelledby="site-title">
+        <h1 class="visually-hidden" id="site-title" tabindex="-1">Victoria Harbour — A Night Crossing</h1>
+      </section>
+
       <!-- PLACEHOLDER COPY: working text for layout testing only. Final copy is written in a later milestone. -->
       <section class="chapter" id="chapter-01" data-chapter="01" aria-labelledby="chapter-01-title">
         <div class="chapter__copy">
           <p class="chapter__index">01</p>
           <p class="chapter__kicker">Arrival</p>
-          <h1 class="chapter__title" id="chapter-01-title">Harbour at Dusk</h1>
+          <h2 class="chapter__title" id="chapter-01-title">Harbour at Dusk</h2>
           <p class="chapter__body" data-copy="placeholder">
             Night falls over Victoria Harbour and the island begins to glow. Scroll to cross
             the water.
@@ -117,7 +176,7 @@
             The last fireworks fade above the city. The crossing ends quietly here.
           </p>
           <p class="chapter__action">
-            <a href="#chapter-01">Return to the harbour</a>
+            <a href="#top">Return to the harbour</a>
           </p>
         </div>
       </section>

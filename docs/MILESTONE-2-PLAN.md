@@ -1,8 +1,7 @@
 # Milestone 2 — Page Shell and Kage-style Look Test
 
-**Status:** Draft for review. Nothing in this document is built yet. Coding starts
-only after the user approves it, and the open decisions in section 9 are
-answered.
+**Status:** Approved 2026-10-01 (decisions in section 9). Built step by step,
+with a review stop after each step.
 
 This plan follows the approved grey-box (`CURSOR-GREYBOX-BRIEF.md`, review in
 `greybox-review/REVIEW.md`). It does not change the existing plan files or the
@@ -120,8 +119,8 @@ How it is built:
 ### 3.5 Logo
 
 - An original mark: a simple junk-sail outline (the one place coral is
-  allowed in the shell), next to the site name in small caps.
-- Tagline under the name: **open decision** (section 9).
+  allowed in the shell), next to the name "HONG KONG" in small caps.
+- Tagline under the name: "Victoria Harbour, after dark".
 
 ### 3.6 Vertical Chinese text
 
@@ -217,7 +216,7 @@ automatic resolution drop stays as the last safety net.
 Stop for the user's review after each step, as in the grey-box.
 
 1. **Shell structure.** Hero section, hidden `<h1>`, nav bar, mobile menu,
-   counter, logo with a placeholder tagline. Move the copy regions down and
+   counter, logo. "Return to the harbour" goes to the hero. Move the copy regions down and
    re-run the checks for all twelve frames.
 2. **Wordmark and hint.** 香港 in the scene, sinking with scroll. "Scroll to
    cross" hint. Reduced-motion fade. Desktop and mobile.
@@ -259,22 +258,19 @@ The milestone passes when:
    storyboard and the Kage reference.
 7. The performance budget in section 5 is met on the laptop and the iPhone 11.
 
-## 9. Open decisions (needed before or during coding)
+## 9. Decisions (resolved 2026-10-01)
 
-1. **Tagline under the logo.** "Pearl of the Orient" conflicts with the world
-   bible's tone rules (it reads as an old tourism slogan). Alternatives: "A
-   night crossing of Victoria Harbour", "Victoria Harbour, after dark", or
-   "香港 · Victoria Harbour". Needed for step 1; a placeholder is used until
-   then.
-2. **Chinese labels.** Please confirm or correct the six labels in 3.6. For
-   example, 帆船 means any sailing boat; 中式帆船 is more specific.
-3. **Railing artwork.** Who makes `promenade-railing.webp`: you (drawn or
-   painted), a commissioned artist, or an AI image tool with a commercial
-   licence recorded in the ledger? Needed for look-test layer 5. The other
-   layers don't wait for it.
-4. **"Return to the harbour" target.** Back to the hero, so the wordmark rises
-   again (recommended), or back to the 01 hold as now.
-5. **Nav labels.** The five proposed links in 3.4, or shorter ones.
+1. **Tagline under the logo:** "Victoria Harbour, after dark". ("Pearl of the
+   Orient" was dropped because it conflicts with the world bible's tone rules.)
+2. **Chinese labels:** the six labels in 3.6, as proposed.
+3. **Railing artwork:** made with an AI image tool. The tool, its commercial
+   licence terms and the prompt are recorded in `ASSET-LEDGER.md` before the
+   image is used.
+4. **"Return to the harbour" target:** the hero, so the wordmark rises again.
+5. **Nav labels:** the five proposed links in 3.4 (no change requested).
+
+**Status:** approved for coding, step by step, with a review stop after each
+step.
 
 ## 10. After this milestone
 
