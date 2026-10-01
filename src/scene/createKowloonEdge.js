@@ -108,11 +108,13 @@ export function createKowloonEdge() {
   const ground = lambert(0x24222f);
 
   for (const b of WORLD.kowloon.blocks) group.add(block(b, ground));
-  for (const d of WORLD.kowloon.decks) group.add(deck(d, ground));
-  group.add(createKowloonSkyline());
+  const decks = new Group();
+  decks.name = 'decks';
+  for (const d of WORLD.kowloon.decks) decks.add(deck(d, ground));
+  group.add(decks, createKowloonSkyline());
 
   const clockTower = createClockTower();
   group.add(clockTower);
 
-  return { group, clockTower };
+  return { group, decks, clockTower };
 }

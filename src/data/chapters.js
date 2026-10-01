@@ -45,8 +45,9 @@ export const chapters = [
       mobile: { left: 8, top: 6, right: 92, bottom: 36 },
     },
     visibility: {
-      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, railing: 1, palms: 0, bursts: 0 },
-      mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, railing: 0, palms: 0, bursts: 0 },
+      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 0, bursts: 0 },
+      // No deck: the mobile storyboard has open water right to the bottom edge.
+      mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, deck: 0, railing: 0, palms: 0, bursts: 0 },
     },
     fogDensity: 0.00045,
     vessels: {
@@ -98,8 +99,8 @@ export const chapters = [
       mobile: { left: 8, top: 4, right: 92, bottom: 18 },
     },
     visibility: {
-      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, railing: 1, palms: 1, bursts: 0 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, railing: 1, palms: 1, bursts: 0 },
+      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bursts: 0 },
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bursts: 0 },
     },
     fogDensity: 0.00045,
     vessels: {
@@ -139,8 +140,8 @@ export const chapters = [
       mobile: { left: 8, top: 6, right: 92, bottom: 34 },
     },
     visibility: {
-      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, railing: 0, palms: 0, bursts: 0 },
-      mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, railing: 0, palms: 0, bursts: 0 },
+      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bursts: 0 },
+      mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bursts: 0 },
     },
     fogDensity: 0.00045,
     vessels: {
@@ -183,8 +184,8 @@ export const chapters = [
     // The wheel is gated here: framing alone leaves it peeking past the junk's
     // stern, and it is small and distant while it fades.
     visibility: {
-      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 0, railing: 0, palms: 0, bursts: 0 },
-      mobile: { ferry: 1, junk: 1, ifc: 1, wheel: 0, railing: 0, palms: 0, bursts: 0 },
+      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bursts: 0 },
+      mobile: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bursts: 0 },
     },
     fogDensity: 0.00063,
     vessels: {
@@ -225,8 +226,8 @@ export const chapters = [
       mobile: { left: 6, top: 5, right: 62, bottom: 40 },
     },
     visibility: {
-      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, railing: 0, palms: 0, bursts: 0 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, railing: 0, palms: 0, bursts: 0 },
+      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bursts: 0 },
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bursts: 0 },
     },
     fogDensity: 0.00045,
     vessels: {
@@ -265,8 +266,8 @@ export const chapters = [
       mobile: { left: 6, top: 4, right: 60, bottom: 30 },
     },
     visibility: {
-      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, railing: 0, palms: 0, bursts: 1 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, railing: 0, palms: 0, bursts: 1 },
+      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bursts: 1 },
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bursts: 1 },
     },
     fogDensity: 0.00036,
     vessels: {
