@@ -123,7 +123,10 @@ function start(initGuard, header) {
       world.resize(width, height, pixelRatio);
       rebuild();
     }
-    if (conductor.measure(breakpointChanged)) conductor.readScroll();
+    if (conductor.measure(breakpointChanged)) {
+      conductor.readScroll();
+      rig.setStart(conductor.state.pTop);
+    }
     if (breakpointChanged) conductor.snap();
     needsRender = true;
   }
@@ -243,7 +246,7 @@ function start(initGuard, header) {
       if (state.jumped && !veilActive) runVeil(() => conductor.snap());
       time += dt;
       if (!control.free) applyPose(state.pRendered, false, time);
-      wordmark.sinkAt(state.pRendered, HERO.sink);
+      wordmark.sinkAt(state.pRendered, state.pTop, HERO.sinkEnd);
       water.update(dt);
     }
 

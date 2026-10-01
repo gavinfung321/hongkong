@@ -4,6 +4,9 @@
 // camera:      position / target in world metres, vertical fov in degrees.
 //              Optional via: [[x, y, z], ...] waypoints the camera passes on
 //              the way to the next chapter (to route around the tower).
+//              Chapter 01 only: holdDolly, the opening push. It starts half a
+//              vector back at the top of the page and passes the authored
+//              pose at the keyframe.
 // copy:        copy-safe region as % of the viewport (left / top / right / bottom).
 // visibility:  1 = shown, 0 = gated (faded out) at this chapter's hold pose.
 // vessels:     [x, z] world position of each vessel at this chapter's hold pose,
@@ -23,15 +26,16 @@ export const SCROLL = {
 
 // The 香港 wordmark in the hero, authored on screen at chapter 01's opening pose.
 // x / foot: % of the viewport where the characters stand on the water.
-// width: % of the viewport width. sink: progress range over which it sinks
-// (the hero is p < 0; chapter 01's hold starts at 0.3).
+// width: % of the viewport width. It is drawn in front of everything and moves
+// down out of frame from the first scroll until progress sinkEnd (the hero is
+// p < 0; chapter 01's hold starts at 0.3), while chapter 01's holdDolly pushes in.
 export const HERO = {
   wordmark: {
     text: '香港',
     desktop: { x: 50, foot: 88, width: 60 },
     mobile: { x: 50, foot: 80, width: 85 },
   },
-  sink: [-0.3, 0.2],
+  sinkEnd: 0.2,
 };
 
 export const chapters = [
@@ -48,10 +52,10 @@ export const chapters = [
         position: [-13, 5.9, 99.5],
         target: [-2.4, 30.5, -299.6],
         fov: 41.5,
-        holdDolly: [0, 0, -4],
+        holdDolly: [0, 0, -10],
         via: [[-50, 7, 58]],
       },
-      mobile: { position: [-43.1, 9, 99], target: [7.6, 121.5, -281.4], fov: 77.7 },
+      mobile: { position: [-43.1, 9, 99], target: [7.6, 121.5, -281.4], fov: 77.7, holdDolly: [1.3, 0, -9.9] },
     },
     copy: {
       desktop: { left: 22, top: 11, right: 52, bottom: 34 },

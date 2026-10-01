@@ -16,7 +16,7 @@ const FONT = '"Microsoft JhengHei", "PingFang TC", "Heiti TC", "Noto Sans TC", s
 const FONT_SIZE = 640;
 const GAP = 0.14; // extra space between characters, as a fraction of the font size
 const PAD = 16;
-const SUBMERGED = 0.04; // fraction of the height below the waterline at rest
+const DROP = 1.4; // heights it moves down while leaving, enough to clear the frame
 const STEPPED_FADE = 0.3; // seconds
 
 function drawText(text) {
@@ -54,19 +54,19 @@ export function createWordmark(renderer, text) {
   const { texture, aspect, padBottom } = drawText(text);
   texture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
 
-  // alphaTest keeps the empty parts of the plane out of the depth buffer.
+  // Drawn last and without depth testing, so it sits in front of the whole scene.
   const material = new MeshBasicMaterial({
     map: texture,
     color: PALETTE.cream,
     transparent: true,
-    alphaTest: 0.02,
+    depthTest: false,
+    depthWrite: false,
   });
   const geometry = new PlaneGeometry(1, 1);
   geometry.translate(0, 0.5, 0);
   const mesh = new Mesh(geometry, material);
   mesh.name = 'wordmark';
-  // Drawn after the railing, which then hides the characters' feet.
-  mesh.renderOrder = 1;
+  mesh.renderOrder = 10;
 
   let restY = 0;
   let height = 1;
@@ -76,7 +76,7 @@ export function createWordmark(renderer, text) {
     opacity = value;
     material.opacity = value;
     mesh.visible = value > 0.001;
-    mesh.position.y = restY - sink * height * (1 - SUBMERGED + 0.02);
+    mesh.position.y = restY - sink * height * DROP;
   }
 
   // Stands the wordmark on the water so it fills spec.width % of the screen,
@@ -102,17 +102,18 @@ export function createWordmark(renderer, text) {
     const viewWidth = 2 * depth * Math.tan(MathUtils.degToRad(pose.fov / 2)) * viewAspect;
     const width = (spec.width / 100) * viewWidth;
     height = width / aspect;
-    restY = -height * (padBottom + SUBMERGED);
+    restY = -height * padBottom;
 
     mesh.scale.set(width, height, 1);
     mesh.position.set(foot.x, restY, foot.z);
     mesh.rotation.y = Math.atan2(-forward.x, -forward.z);
   }
 
-  // Continuous mode: sinks into the water, fading in the second half.
-  function sinkAt(p, [from, to]) {
+  // Continuous mode: moves down from the first scroll (from = progress at the
+  // top of the page), fading in the second half.
+  function sinkAt(p, from, to) {
     const u = MathUtils.clamp((p - from) / (to - from), 0, 1);
-    apply(smoothstep(0, 1, u), 1 - smoothstep(0.55, 1, u));
+    apply(u * (2 - u), 1 - smoothstep(0.45, 1, u));
   }
 
   // Stepped mode: no sinking, just a short fade. Returns true when it changed,

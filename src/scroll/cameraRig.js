@@ -90,11 +90,19 @@ export function createCameraRig(camera, chapters, { hold }) {
     aspect = value;
   }
 
+  // Progress at the top of the page; the opening push starts there.
+  let start = 0.5 - hold;
+  function setStart(value) {
+    start = Math.min(value, 0.5 - hold);
+  }
+
+  // A steady push that starts on the first scroll and passes through zero at
+  // keyframe 01, so the authored pose is exact at p = 0.5.
   function holdDollyOffset(p, segment, out) {
     const vector = poses[0].holdDolly;
     out.set(0, 0, 0);
     if (!vector) return out;
-    const ramp = smoothstep(0.5 - hold, 0.5 + hold, p) - 0.5;
+    const ramp = (MathUtils.clamp((p - 0.5) / (0.5 - start), -1, 1)) * 0.5;
     const fade = segment.from === 0 ? 1 - segment.eased : 0;
     return out.fromArray(vector).multiplyScalar(ramp * fade);
   }
@@ -130,6 +138,7 @@ export function createCameraRig(camera, chapters, { hold }) {
   return {
     setBreakpoint,
     setAspect,
+    setStart,
     update,
     lookDirection,
     get breakpoint() {
