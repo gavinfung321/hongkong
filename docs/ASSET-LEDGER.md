@@ -40,6 +40,8 @@ specifications are in `CURSOR-GREYBOX-BRIEF.md` section 6.
 | `harbour-poster-desktop.webp` | Fallback/poster | All | P0 | <350 KB | Original | 16:10-safe master, no embedded text |
 | `harbour-poster-mobile.webp` | Fallback/poster | All | P0 | <250 KB | Original | Authored portrait composition, no embedded text |
 | `promenade-railing.webp` | Alpha WebP | 01–02 | P1 | <250 KB | Original | Transparent edge-tested cutout |
+| `bauhinia-petals.webp` | Alpha WebP sprite sheet | All but 06 | P1 | <120 KB | Original, made by the user | 4–6 single petals, a few edge-on; replaces the code-drawn petal in `createPetals.js`. References below |
+| `bauhinia-tree.webp` | Alpha WebP | Hero, 01–02 | P2 | <300 KB | Original, made by the user | Blossoming branch or tree cutout at the frame edge, where the petals come from; a foreground layer in Kage's manner |
 | `palm-branch.webp` | Alpha WebP | 02 | P2 | <200 KB | Original | Remove if it reads as generic tropical decoration |
 | `pier-foreground.webp` | Alpha WebP | 03 | P2 | <250 KB | Original | Not in approved Frame 03; add only if the grey-box shows the chapter needs near depth |
 | `rope-foreground.webp` | Alpha WebP | 04 | P2 | <180 KB | Original | Optional; approved Frame 04 has no foreground layer, so add only if it improves depth without clutter |
@@ -74,6 +76,19 @@ midground, background and atmosphere. Each one still has to pass gate 5 below
 | Searchlight beams | Procedural | 05–06 | Sky | A nod to the Symphony of Lights show |
 | Smoke wisps | Alpha WebP | 06 | Sky | Drift after the fireworks, for the afterglow |
 | Promenade crowd silhouettes | Alpha WebP | 06 | Foreground | People watching the fireworks; scale and warmth |
+
+## Reference material (not for production)
+
+Kept to guide original artwork. Sources and rights are unknown, so these files
+are never shipped, traced or used as textures.
+
+| File | Shows | Notes for the artwork |
+|---|---|---|
+| `docs/references/bauhinia/bauhinia-tree.png` | A Hong Kong orchid tree (Bauhinia blakeana) in full bloom | Dense pink-purple canopy over green leaves; the blossom reads as a soft mass, not single flowers |
+| `docs/references/bauhinia/bauhinia-flowers-rain.jpg` | Flowers with raindrops | Deep fuchsia-magenta; petals curl and twist; long pale curved stamens |
+| `docs/references/bauhinia/bauhinia-flower-closeup.jpg` | One open flower | Five narrow petals with wavy edges and pale veins radiating from the base; the top petal is darker with a crimson centre |
+
+Added 2026-10-01 by the user as a reminder for the petal and tree assets.
 
 ## Asset approval gates
 
