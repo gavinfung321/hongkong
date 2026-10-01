@@ -195,8 +195,8 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
 
 ### 3.8 Cursor parallax (desktop only; built 2026-10-01)
 
-- The camera swings up to **±1.6 m** sideways only (±2.9 m in 05 and 06),
-  following the mouse with smooth damping. It orbits a point 400 m ahead, so
+- The camera swings up to **±1.6 m** sideways and **±0.6 m** up and down
+  (×1.8 in 05 and 06), following the mouse with smooth damping. It orbits a point 400 m ahead, so
   the foreground (railing, palms, tower, ferry) slides one way and the far
   skyline and moon the other, which gives real depth.
 - **Stronger parallax** (user request, 2026-10-01: "make the PARALLAX effect
@@ -219,6 +219,23 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   mouse moving: up/down only 8.95, sideways only 6.95, still 4.85. With
   sideways only and the slower follow below it is 6.66, close to the still
   water's own shimmer.
+- **Vertical shift back at ±0.6 m** (user request, 2026-10-01: "there is no
+  PARALLAX when the cursor move up and down?", option 1 with tests). The
+  blinking came from sharp ripples, and the water is now glassy. Tests run
+  before turning it on for the user:
+  - Water blink with the real mouse on 01 (frame-to-frame change): still
+    0.29, sideways 2.56, up/down 3.87. The old sharp water scored 4.85 still
+    and 8.95 up/down.
+  - Strobe on open water in 01 (second difference, 5 cm per frame): still
+    0.22, sideways 0.49, up 1.09. The sharp water scored 54 on this test.
+  - Z-fighting, 1 cm vertical steps at ±0.6 m on 01, 02 and 03: no patches.
+    03's moon path speckles at its soft edge, the same as for sideways moves.
+  - Framing: every desktop frame stays within ±6% at all four mouse corners.
+    Clearance drops to 1.67 m with the mouse at the bottom (railing in the
+    01 → 02 move), above the 1.5 m rule. 03's camera is the lowest (2.2 m);
+    it dips to 1.6 m.
+  - Mouse up raises the eye: in 01 the view looks over the railing, mouse
+    down brings the railing up across the water.
 - Full strength during holds, fading to zero during scroll transitions.
 - Off on touch devices and in reduced motion.
 - Must keep every frame inside ±6% of its composition targets at the
@@ -226,20 +243,21 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
 - **As built:** the mouse position is damped (`FOLLOW` 3 per second in
   `src/ui/pointerParallax.js`; it was 1.5 while the water still shimmered,
   which felt sluggish) and drifts back to centre when the pointer leaves the
-  window. The camera rig moves the camera sideways and keeps the target
-  (`PARALLAX` 1.6 m in `cameraRig.js`), at full strength on holds and zero
+  window. The camera rig moves the camera and keeps the target
+  (`PARALLAX` x 1.6 m, y 0.6 m in `cameraRig.js`), at full strength on holds and zero
   halfway through each transition. It also runs in the hero, so 香港 shifts
   against the scene. Desktop breakpoint and mouse only; off in reduced motion.
 - **Per-chapter multiplier:** a desktop pose can scale the swing with
   `parallax` in `chapters.js`. 05 and 06 use 1.8 (wide views with distant
   subjects; safe up to 3 m). 01–04 take the plain 1.6 m (03's ferry would
   leave its ±6% band at 2 m).
-- **Checked:** at both mouse extremes every desktop frame stays within ±6%
-  of its targets (05's wheel misses are the existing documented deviation;
-  02's IFC peek is accepted), and the closest approach is 2.26 m (railing in
-  the 01 → 02 move, where parallax is near zero); the debug `clearance()`
-  takes a `parallax` option for this. Moving the camera in 1 cm steps at
-  ±1.6 m on 01 and 02 shows no z-fighting.
+- **Checked:** at all four mouse corners every desktop frame stays within
+  ±6% of its targets (05's wheel misses are the existing documented
+  deviation; 02's IFC peek is accepted), and the closest approach is 1.67 m
+  (railing in the 01 → 02 move, mouse at the bottom); the debug
+  `clearance()` takes a `parallax` option for this. Moving the camera in 1 cm
+  steps at ±1.6 m sideways and ±0.6 m vertically on 01–03 shows no
+  z-fighting.
 - **Calm water while moving** (user request, 2026-10-01: "when I start
   scrolling, the sideways and the water are flickering again"). Parallax was
   not the cause: it moves the camera under 0.6 m/s, and the camera path is
@@ -278,8 +296,8 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   All frames still pass and the closest camera approach is unchanged (2.26 m).
 - **No-flicker baseline** (user request, 2026-10-01: "remember this setup
   because there is no flickering anymore"). Keep all of these when changing
-  the scene: glassy water (`BLUR` 5); sideways-only parallax, no vertical
-  shift; seawall strip tops 5 cm below the deck (never coplanar surfaces);
+  the scene: glassy water (`BLUR` 5; it is what makes the vertical parallax
+  safe); vertical parallax no more than ±0.6 m; seawall strip tops 5 cm below the deck (never coplanar surfaces);
   railing B at x = −50; the railing visible while scrolling, with the
   depth-twin fade only for 02 → 03. Any new flat piece laid on the deck or
   water needs a few centimetres of gap, or it will z-fight under parallax.
