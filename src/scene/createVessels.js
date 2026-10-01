@@ -16,11 +16,10 @@ import {
   MeshStandardMaterial,
   PointLight,
   Shape,
-  ShapeGeometry,
   TorusGeometry,
   Vector3,
 } from 'three';
-import { basic, lambert } from './palette.js';
+import { lambert } from './palette.js';
 import { ferryDeck, ferryDeckRepeat, ferryHull, junkCloth, junkHull, waterlineFoam } from './surfaces.js';
 
 // Both vessels are built with their bow pointing along local +X.
@@ -115,7 +114,7 @@ function createFerry() {
 // measured from a side-on photo, sails sized after a closer one): a
 // varnished hull narrowing to a raised bow, a high stern with a lit deckhouse
 // and square transom, a canopy over the waist, three battened sails uplit
-// from the deck, rope fans, pennants and tyre fenders.
+// from the deck, rope fans and tyre fenders.
 
 const JUNK_LENGTH = 28;
 const JUNK_SHEER = 2.9; // midships deck edge above the waterline
@@ -396,7 +395,7 @@ function createJunk() {
       lineColors.push(...color);
     }
   };
-  const pennantTips = [];
+  const mastheads = [];
 
   rig.forEach(([mx, mz, rake, w, h, foot, panels], i) => {
     const deckY = deckAt(mx);
@@ -416,10 +415,10 @@ function createJunk() {
     // Shrouds from the masthead down to both rails.
     const hw = junkHalfWidth(junkU(mx)) - 0.1;
     for (const side of [1, -1]) line([0, length, 0], [-0.6, 0, side * hw - mz], ROPE, frame);
-    pennantTips.push(new Vector3(0, length, 0).applyMatrix4(frame));
+    mastheads.push(new Vector3(0, length, 0).applyMatrix4(frame));
   });
   // Forestay from the foremast head to the bow.
-  linePoints.push(...pennantTips[0].toArray(), junkX(1), junkSheer(1), 0);
+  linePoints.push(...mastheads[0].toArray(), junkX(1), junkSheer(1), 0);
   lineColors.push(...ROPE, ...ROPE);
 
   // One mesh per sail keeps each bounding box tight for the composition probe.
@@ -432,28 +431,12 @@ function createJunk() {
   // The rigging stays inside the sails and hull; its box would span the boat.
   rigging.userData.noProbe = true;
 
-  // Plain pennants (no lettering) at the fore and mizzen mastheads.
-  const pennantShape = new Shape();
-  pennantShape.moveTo(0, 0);
-  pennantShape.lineTo(-1.8, -0.4);
-  pennantShape.lineTo(0, -0.85);
-  pennantShape.lineTo(0, 0);
-  const pennantGeometry = new ShapeGeometry(pennantShape);
-  const pennants = [
-    [pennantTips[0], 0xe8b84a],
-    [pennantTips[2], 0xd46a86],
-  ].map(([tip, color]) => {
-    const pennant = new Mesh(pennantGeometry, basic(color, { side: DoubleSide }));
-    pennant.position.copy(tip);
-    return pennant;
-  });
-
   // Deck lights shining up into the sails; low and red, so the glassy water
   // draws red streaks under the junk the way the rim light draws the moon path.
   const sailLight = new PointLight(0xff6a3c, 180, 50, 2);
   sailLight.position.set(4.5, 6, 0);
 
-  junk.add(hull, deck, rail, house, houseRoof, canopy, posts, tyres, rudder, masts, ...sails, rigging, ...pennants, sailLight);
+  junk.add(hull, deck, rail, house, houseRoof, canopy, posts, tyres, rudder, masts, ...sails, rigging, sailLight);
   return junk;
 }
 
