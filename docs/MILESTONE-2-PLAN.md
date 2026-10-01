@@ -366,11 +366,51 @@ all six.
    the text: a fine diagonal-line or dot pattern at low opacity, plus a soft
    darkening at the edges. It sits under the text, so contrast doesn't drop.
    Costs almost nothing to render.
-2. **Lit windows.** Sparse warm window rectangles on the skyline buildings and
-   brighter ones on IFC, drawn from one small generated texture. The world
-   bible says the skyline must not compete, so the windows stay sparse and dim
-   except on IFC. Also try a brighter band of ground-level lights along the
-   Central waterfront, as in the storyboard (user reminder, 2026-10-01).
+2. **Lit windows (built 2026-10-01, with 2b).** A window grid on every
+   skyline building and IFC, drawn in the shader in world metres (3.6 m
+   storeys, 3.2 m bays; IFC 4 m × 2.6 m, mostly cool white), so it doesn't
+   stretch with each box (`src/scene/cityWindows.js`). Each building gets its
+   own share of lit windows (Central 30%, Kowloon 22%, IFC 45%), warm with a
+   quarter cool. Unlit windows are darker glass. Where a window shrinks to a
+   couple of pixels, the grid fades to its average glow, so distant towers
+   can't shimmer. Still to try: a brighter band of ground-level lights along
+   the Central waterfront, as in the storyboard (user reminder, 2026-10-01).
+2b. **Lighting and surfaces (user request, 2026-10-01: "why Kage's torii and
+   temple look so real … everything looks very plain"; "go ahead and try").**
+   Kage's models are as simple as ours; its realism comes from darkness,
+   warm-and-cold light, textured surfaces and photo-like foreground cutouts.
+   This step does the first three in code:
+   - **Darker night:** the sky fill light drops from 2.2 to 0.8
+     (`createLighting.js`), so local lights carry the frame. The cyan rim
+     light is unchanged (it makes the moon path on the water).
+   - **Warm local lights (3 point lights):** a floodlight at the foot of the
+     Clock Tower's harbour face (bright brick low, fading up the shaft), the
+     ferry's cabin light and the junk's deck lanterns (warm pools on the
+     water). They ride on their objects, so they hide when a vessel is gated
+     out.
+   - **Clock Tower:** red brick with granite bands at each storey, corner
+     quoins, arched windows (two lit) and a granite crown, plus lit clock
+     dials with hour marks and hands. The brick is ~2 px on screen, so the
+     mortar is faint and flat: sharp courses strobed while scrolling.
+   - **Star Ferry:** window panes with frames along both decks instead of
+     solid strips; a green hull with a white sheer line, a dark waterline and
+     faint streaks.
+   - **Junk:** sail cloth with five sagging panels between the battens, seams
+     and a warm glow toward the foot; plank strakes on the hull.
+   - All textures are drawn in code (`src/scene/surfaces.js`); no image
+     files, all original (ledger, Phase D).
+   - **Checked:** 1 cm camera steps show no flicker on the windows (an early
+     version made IFC's windows jump: the wall direction is now snapped to
+     x / z and measured from each building's centre). Strobe on the skyline
+     with mouse-sized moves is 0.6, like the calm water. At scroll speed
+     (1.5 m per frame) the skyline pops less than before (5.2% of pixels
+     against 8.3%); the tower scores higher than the plain box (15 against 4),
+     which is its brick and stone detail moving, for the user to judge while
+     scrolling.
+   - **Not yet:** soft shadows, glow (step 3), reflections of the lit city in
+     the water ("Skyline reflections", ledger Phase D), photo-like foreground
+     cutouts (user artwork). On mobile the skyline windows mostly blend into
+     their average glow; the iPhone check is in step 6.
 3. **Glow.** Two options, tested side by side:
    - **A (recommended first):** soft glow sprites behind each bright light
      (clock faces, IFC crown, ferry windows). Cheap, art-directable, works on
@@ -424,7 +464,8 @@ Measured with the `?fps` overlay on a production build, as in
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
 | Draw calls | ≤ 100 (was ≤ 80) | ≤ 100 |
-| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp) | same |
+| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 11 small code-drawn surface textures, about 5.5 MB of GPU memory in all; the Clock Tower shaft maps are 256 × 1088 px. To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
+| Point lights | 3 (Clock Tower flood, ferry, junk) since 2b | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
 
 If the iPhone 11 misses its target, layers are switched off on mobile in this
@@ -466,6 +507,15 @@ Stop for the user's review after each step, as in the grey-box.
   `parallax` multipliers in 05 and 06.
 - `src/scroll/cameraRig.js`: the parallax orbit (`setParallax`, `PARALLAX`).
 - `src/scene/createWater.js`: glassy water, ripples sampled blurred (`BLUR`).
+- New: `src/scene/surfaces.js` (code-drawn surface textures) and
+  `src/scene/cityWindows.js` (lit-window grid shader).
+- `src/scene/createLighting.js`: lower sky fill.
+- `src/scene/createKowloonEdge.js`: textured Clock Tower, dials, floodlight;
+  Kowloon windows.
+- `src/scene/createIsland.js`: Central and IFC windows.
+- `src/scene/createVessels.js`: ferry panes and hull, junk sails and planks,
+  vessel lights.
+- `src/scene/gating.js`: faded copies keep shader patches.
 - `src/scene/createForeground.js`: depth-only twins for a clean railing
   fade, seawall strip top 5 cm below the deck.
 - `src/data/world.js`: railing B on the promontory's harbour edge.
