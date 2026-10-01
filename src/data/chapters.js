@@ -39,8 +39,10 @@ export const SCROLL = {
 export const HERO = {
   wordmark: {
     text: '香港',
-    desktop: { x: 50, foot: 88, width: 60 },
-    mobile: { x: 50, foot: 80, width: 85 },
+    // Raised over the boats (user request, 2026-10-02); the feet must stay
+    // below the horizon (57.5% desktop, 70% mobile at the opening pose).
+    desktop: { x: 50, foot: 74, width: 60 },
+    mobile: { x: 50, foot: 73, width: 85 },
   },
   sinkEnd: 0.2,
   // Fraction of the sink by which the wordmark and chapter 01's copy have faded.

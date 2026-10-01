@@ -9,22 +9,30 @@ const LANTERN_EVERY = 2;
 const LANTERN_LIGHT_Y = 1.28;
 const LAMP_LIGHT_Y = 3.55;
 
-export function railingLayout({ from, to, y }) {
+// Bays start at every post; a post skipped at a corner belongs to the
+// neighbouring run (the bays themselves are kept).
+export function railingLayout({ from, to, y, skipFirst = false, skipLast = false, lanterns = true }) {
   const a = new Vector3(from[0], y, from[1]);
   const b = new Vector3(to[0], y, to[1]);
   const length = a.distanceTo(b);
   const bays = Math.max(1, Math.round(length / RAILING_BAY));
   const yaw = Math.atan2(-(b.z - a.z), b.x - a.x);
+  const starts = [];
   const posts = [];
-  for (let k = 0; k <= bays; k++) posts.push({ position: a.clone().lerp(b, k / bays), lantern: k % LANTERN_EVERY === 0 });
-  return { a, b, length, bays, bayLength: length / bays, yaw, posts };
+  for (let k = 0; k <= bays; k++) {
+    const position = a.clone().lerp(b, k / bays);
+    if (k < bays) starts.push(position);
+    if ((k === 0 && skipFirst) || (k === bays && skipLast)) continue;
+    posts.push({ position, lantern: lanterns && k % LANTERN_EVERY === 0 });
+  }
+  return { a, b, length, bays, bayLength: length / bays, yaw, starts, posts };
 }
 
 // Every warm light on the promenade: railing lanterns and the tall lamps.
 // They are not real lights (the scene keeps 3); materials that opt in with
 // addLampLight get a warm pool around each one.
 export const LAMPS = [];
-for (const segment of WORLD.foreground.railings) {
+for (const segment of [...WORLD.foreground.railings, ...WORLD.foreground.edgeRailings]) {
   for (const post of railingLayout(segment).posts) {
     if (post.lantern) LAMPS.push({ position: post.position.clone().setY(segment.y + LANTERN_LIGHT_Y), range: 3.2, power: 1 });
   }
