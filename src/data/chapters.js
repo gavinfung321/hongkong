@@ -32,13 +32,13 @@ export const chapters = [
     },
     camera: {
       desktop: {
-        position: [-14, 5.4, 99.5],
-        target: [-2.4, 30.1, -299.5],
-        fov: 41,
+        position: [-13, 5.9, 99.5],
+        target: [-2.4, 30.5, -299.6],
+        fov: 41.5,
         holdDolly: [0, 0, -4],
         via: [[-50, 7, 58]],
       },
-      mobile: { position: [-43.3, 7.5, 99], target: [7.4, 120.4, -281.4], fov: 77.8 },
+      mobile: { position: [-43.1, 9, 99], target: [7.6, 121.5, -281.4], fov: 77.7 },
     },
     copy: {
       desktop: { left: 22, top: 8, right: 52, bottom: 31 },
@@ -51,12 +51,12 @@ export const chapters = [
     },
     fogDensity: 0.00045,
     vessels: {
-      desktop: { ferry: [-29.6, -106.6, 0], junk: [25.2, -54.2, 0] },
-      mobile: { ferry: [-19.7, -89.9, 0], junk: [-18.6, -22.1, 0] },
+      desktop: { ferry: [-29.2, -103.6, 0], junk: [26.1, -53.1, 0] },
+      mobile: { ferry: [-19.7, -89.9, 0], junk: [-18.1, -23.2, 0] },
     },
     probes: {
       desktop: {
-        tower: { left: 8, right: 18, top: 7, bottom: 60 },
+        tower: { left: 9, right: 17, top: 3, bottom: 60 },
         ferry: { left: 33, right: 49, bottom: 64 },
         junk: { left: 61, right: 77, bottom: 64 },
         // IFC sits right of the PNG (70–74) so the junk's sails don't hide it.
@@ -83,15 +83,15 @@ export const chapters = [
     },
     camera: {
       desktop: {
-        position: [-81.2, 7.5, 38.7],
-        target: [185.3, 107.5, -242.3],
-        fov: 57.3,
+        position: [-83, 7.6, 39.5],
+        target: [194.4, 114.6, -228.1],
+        fov: 60.7,
         via: [[-28, 7, 22], [5, 5, -90]],
       },
       mobile: {
-        position: [-62.8, 4.1, 109.1],
-        target: [-52.2, 76.3, -284.1],
-        fov: 35,
+        position: [-59.6, 4.8, 108.2],
+        target: [-59.1, 82.8, -284.1],
+        fov: 36.6,
         via: [[-34, 8, 60], [-24, 6, -35]],
       },
     },
@@ -105,12 +105,13 @@ export const chapters = [
     },
     fogDensity: 0.00045,
     vessels: {
-      desktop: { ferry: [7.9, 5.9, -0.2], junk: [120, -80, 0] },
+      desktop: { ferry: [2.4, 15.1, -0.2], junk: [120, -80, 0] },
       mobile: { ferry: [20, -120, 0.8], junk: [120, -80, 0] },
     },
     probes: {
       desktop: {
-        tower: { left: 15, right: 35, top: 2, bottom: 85 },
+        // Narrower than the PNG (15–35): the tower is slimmer than the drawing's close-up.
+        tower: { left: 18, right: 32, top: 2, bottom: 85 },
         ferry: { left: 66, right: 89, top: 67, bottom: 83 },
         ifc: { offscreen: true, behind: 'tower' },
         wheel: { offscreen: true, behind: 'tower' },

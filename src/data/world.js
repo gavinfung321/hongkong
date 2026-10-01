@@ -7,10 +7,10 @@ export const WORLD = {
   kowloon: {
     // [xMin, xMax, zMin, zMax, top]
     blocks: [
-      [-260, -40, -60, 40, 2.5], // Clock Tower promontory
+      [-260, -50, -60, 40, 2.5], // Clock Tower promontory
       [-260, -60, 40, 400, 2.5], // Kowloon waterfront behind
       [-60, 80, 99, 400, 2.5], // promenade under the arrival viewpoint
-      // No land east of x −40: in frame 01 the ferry must sit on open water.
+      // Land stops 5 m past the tower: in frame 01 open water separates it from the ferry.
     ],
     // Polygon decks [[x, z], ...] at height `top`, for edges that are not axis-aligned.
     decks: [

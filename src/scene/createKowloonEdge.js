@@ -46,35 +46,42 @@ function createClockTower() {
   const dark = lambert(PALETTE.proxyDark);
   const light = lambert(0x8d879a);
 
-  const plinth = new Mesh(new BoxGeometry(12.5, 3, 12.5), dark);
+  // Slim shaft, then a light-stone crown that steps in: cornice, two tiers, dome, spire.
+  const plinth = new Mesh(new BoxGeometry(10, 3, 10), dark);
   plinth.position.y = 1.5;
-  const shaft = new Mesh(new BoxGeometry(10, 32, 10), stone);
-  shaft.position.y = 19;
-  const stage = new Mesh(new BoxGeometry(8, 5, 8), light);
-  stage.position.y = 37.5;
+  const shaft = new Mesh(new BoxGeometry(8, 34, 8), stone);
+  shaft.position.y = 20;
+  // Barely wider than the shaft: a deeper overhang shows its unlit underside as a black band.
+  const cornice = new Mesh(new BoxGeometry(8.3, 1.2, 8.3), light);
+  cornice.position.y = 37.6;
+  const lowerTier = new Mesh(new BoxGeometry(5.6, 5, 5.6), light);
+  lowerTier.position.y = 40.7;
+  const upperTier = new Mesh(new BoxGeometry(4.2, 3, 4.2), light);
+  upperTier.position.y = 44.7;
 
-  const pinnacles = new InstancedMesh(new BoxGeometry(1.1, 2.4, 1.1), light, 4);
+  const pinnacles = new InstancedMesh(new BoxGeometry(0.8, 2, 0.8), light, 4);
   const m = new Matrix4();
-  [[-4.3, -4.3], [4.3, -4.3], [-4.3, 4.3], [4.3, 4.3]].forEach(([x, z], i) => {
-    pinnacles.setMatrixAt(i, m.makeTranslation(x, 36.2, z));
+  [[-3.9, -3.9], [3.9, -3.9], [-3.9, 3.9], [3.9, 3.9]].forEach(([x, z], i) => {
+    pinnacles.setMatrixAt(i, m.makeTranslation(x, 39.2, z));
   });
 
-  const dome = new Mesh(new SphereGeometry(3.7, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2), light);
-  dome.position.y = 40;
-  const spire = new Mesh(new CylinderGeometry(0.14, 0.14, 7, 6), light);
-  spire.position.y = 46.5;
+  const dome = new Mesh(new SphereGeometry(2.1, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2), light);
+  dome.position.y = 46.2;
+  const spire = new Mesh(new CylinderGeometry(0.12, 0.12, 6, 6), light);
+  spire.position.y = 51;
 
   const faceMaterial = basic(PALETTE.warm);
-  const faceFront = new Mesh(new CircleGeometry(1.8, 24), faceMaterial);
-  faceFront.position.set(0, 27, 5.02);
-  const faceEast = new Mesh(new CircleGeometry(1.8, 24), faceMaterial);
-  faceEast.position.set(5.02, 27, 0);
+  const faceY = 33.5;
+  const faceFront = new Mesh(new CircleGeometry(1.6, 24), faceMaterial);
+  faceFront.position.set(0, faceY, 4.02);
+  const faceEast = new Mesh(new CircleGeometry(1.6, 24), faceMaterial);
+  faceEast.position.set(4.02, faceY, 0);
   faceEast.rotation.y = Math.PI / 2;
-  const faceWest = new Mesh(new CircleGeometry(1.8, 24), faceMaterial);
-  faceWest.position.set(-5.02, 27, 0);
+  const faceWest = new Mesh(new CircleGeometry(1.6, 24), faceMaterial);
+  faceWest.position.set(-4.02, faceY, 0);
   faceWest.rotation.y = -Math.PI / 2;
 
-  tower.add(plinth, shaft, stage, pinnacles, dome, spire, faceFront, faceEast, faceWest);
+  tower.add(plinth, shaft, cornice, lowerTier, upperTier, pinnacles, dome, spire, faceFront, faceEast, faceWest);
   const [x, y, z] = WORLD.clockTower.position;
   tower.position.set(x, y, z);
   tower.rotation.y = WORLD.clockTower.yaw;
