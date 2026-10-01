@@ -17,7 +17,7 @@ specifications are in `CURSOR-GREYBOX-BRIEF.md` section 6.
 | Water | Plane with a standard material and a runtime canvas normal map (no custom shader) | 01–05 | Establish horizon, motion, and reflections | Reads as water without post-processing |
 | Kowloon edge | Boxes and a flat promenade strip | 01–03 | Anchor origin of journey | Direction of departure is clear |
 | Clock Tower proxy | Stacked boxes | 01–02 | Test silhouette and copy clearance | Recognisable by proportion and placement |
-| Star Ferry proxy | Box hull and deck blocks | 01–04 (hidden on mobile 01–02) | Test crossing path and scale | Path never clips camera or foreground |
+| Star Ferry proxy | Rounded two-deck ferry built in code: green hull and lower deck, white upper deck, framed lit windows, fender, canopy, funnel, wheelhouses, foam line (reshaped, user request, 2026-10-01; was box blocks) | 01–04 (hidden on mobile 01–02) | Test crossing path and scale | Path never clips camera or foreground |
 | Junk proxy | Hull block and three fan sails | 01, 04 | Test the hero composition | Red sail remains fully readable on mobile |
 | IFC proxy | Tall tapered/stepped tower block | 01, 03–06 | Test island approach and vertical framing | Crown remains visible at target aspect ratios |
 | Observation Wheel proxy | Torus ring, spokes, hub, A-frame supports | 01, 03, 05 | Test the Central waterfront group and the chapter 05 co-star scale | Small readable circle in 01; about 46% of frame height on desktop 05 |
@@ -30,7 +30,7 @@ specifications are in `CURSOR-GREYBOX-BRIEF.md` section 6.
 | Filename | Type | Chapter | Priority | Target size | Rights/source | Notes |
 |---|---|---:|---|---:|---|---|
 | `clock-tower.glb` | 3D | 01–02 | P0 | <700 KB | Original model from owned/licensed references | Silhouette, clock face, warm openings; no tiny masonry |
-| `star-ferry.glb` | 3D animated | 01–04 | P0 | <1 MB | Made by the user in Meshy.ai (user decision, 2026-10-01); rights depend on the Meshy plan, see "Meshy models" below | Hull, two decks, canopy; wake remains procedural. Replaces the code-built box proxy, which stays until then |
+| `star-ferry.glb` | 3D animated | 01–04 | P0 | <1 MB | Made by the user in Meshy.ai (user decision, 2026-10-01); rights depend on the Meshy plan, see "Meshy models" below | Hull, two decks, canopy; wake remains procedural. Replaces the code-built ferry (reshaped 2026-10-01), which stays until then |
 | `junk-boat.glb` | 3D animated | 01, 04 | P0 | <1.5 MB | Original model from owned/licensed references | Hero asset; hull and red sails, minimal rig only if needed |
 | `ifc.glb` | 3D | 01, 03–06 | P0 | <500 KB | Original model from owned/licensed references | Recognisable crown and proportions; windows procedural/material-based |
 | `observation-wheel.glb` | 3D | 01, 03, 05 | P0 | <500 KB | Original model from owned/licensed references | Ring, spokes, gondolas, supports; co-star scale in 05; lighting material-based |
@@ -63,10 +63,11 @@ Checked against Meshy's terms on 2026-10-01:
 Record before import: plan, generation date, Meshy model version, the prompt
 or input image, and the export settings.
 
-Fit to the scene (the box proxy's numbers, so camera framings still hold):
+Fit to the scene (the code-built ferry's numbers, so camera framings still hold):
 
 - Bow along +X, waterline at the origin, upright (+Y).
-- About 40 m long, 10 m wide, roof about 9 m above the water; scale can be
+- About 40 m long, 10 m wide, roof about 8 m above the water (wheelhouses and
+  funnel to about 10 m); scale can be
   corrected in code, but the proportions (about 4 : 1 : 1) should match.
 - Double-ended, as the real boats are: both ends alike.
 - Low poly: about 10–20k triangles (Meshy's remesh / target polycount), one
@@ -97,7 +98,7 @@ midground, background and atmosphere. Each one still has to pass gate 5 below
 | `promenade-lamp.webp` | Alpha WebP | Hero, 01–02 | Foreground | Tsim Sha Tsui promenade lamp at the frame edge; a strong near silhouette |
 | Moon | **Built 2026-10-01** as an original procedural disc and halo (`createMoon.js`), no file | All (world object) | Background | Yellow focal light behind the Peak ridge; a painted `moon.webp` may replace the disc later |
 | Bauhinia petals | **Built 2026-10-01** as an original petal drawn in code (`createPetals.js`), no file | All but 06 | Near and far | The site's constant particle effect, in place of Kage-style leaves or rain |
-| Surface textures | **Built 2026-10-01** (user request), original, drawn in code (`surfaces.js`), no files: Clock Tower brick, granite bands, quoins and arched windows (colour, bump, glow); granite ashlar; clock dial; ferry window panes and hull; junk sail cloth and hull planks | 01–05 | Midground | Textured surfaces instead of flat colour; the GLB models may replace them later |
+| Surface textures | **Built 2026-10-01** (user request), original, drawn in code (`surfaces.js`), no files: Clock Tower brick, granite bands, quoins and arched windows (colour, bump, glow); granite ashlar; clock dial; ferry deck walls with framed windows (green and white, colour and glow), ferry hull and waterline foam (added with the ferry reshape, user request, 2026-10-01); junk sail cloth and hull planks | 01–05 | Midground | Textured surfaces instead of flat colour; the GLB models may replace them later |
 | Lit windows | **Built 2026-10-01** (user request), original, generated in the shader (`cityWindows.js`), no file | All | Background | Window grids on the skyline and IFC; fades to an average glow when windows get too small to show |
 | `mist-band.webp` | Alpha WebP, tiled | All | Between skyline layers | Drifting haze that separates near and far buildings |
 | Black kites | Small animated sprites | Hero, 01–03 | Sky | Hong Kong's signature bird gliding slowly; a living detail |

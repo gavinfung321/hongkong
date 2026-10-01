@@ -392,9 +392,25 @@ all six.
      quoins, arched windows (two lit) and a granite crown, plus lit clock
      dials with hour marks and hands. The brick is ~2 px on screen, so the
      mortar is faint and flat: sharp courses strobed while scrolling.
-   - **Star Ferry:** window panes with frames along both decks instead of
-     solid strips; a green hull with a white sheer line, a dark waterline and
-     faint streaks.
+   - **Star Ferry, reshaped (user request, 2026-10-01).** Compared with a
+     reference photo, the box proxy read as a generic barge. The user chose to
+     reshape it in code now and swap in the Meshy model later, reversing the
+     earlier "no interim reshape" decision. Built from rounded (stadium)
+     plan shapes, so both ends are round like the real double-ended boats:
+     - green hull with a dark waterline, under a dark rubbing strip (fender);
+     - lower deck painted green and upper deck white, each with big framed
+       warm windows (2.4 m bays, brightness varies per window); the walls
+       glow faintly, as deck lights would light them, so the paint still
+       reads at night;
+     - a white band between the decks and a canopy roof that overhangs the
+       upper deck;
+     - a wheelhouse and mast at each end, a short white funnel with a dark top
+       in the middle;
+     - a soft broken foam line at the waterline, standing in the water as a
+       thin skirt so it can't flicker against the water surface.
+     - 40 m long including the fender, roof about 8 m up, matching the old
+       proxy so the framings hold (the first version was 1 m shorter and its
+       end showed in 03 at the far-left mouse position).
    - **Junk:** sail cloth with five sagging panels between the battens, seams
      and a warm glow toward the foot; plank strakes on the hull.
    - All textures are drawn in code (`src/scene/surfaces.js`); no image
@@ -407,6 +423,12 @@ all six.
      against 8.3%); the tower scores higher than the plain box (15 against 4),
      which is its brick and stone detail moving, for the user to judge while
      scrolling.
+   - **Checked (ferry reshape):** framing at the four mouse corners is the
+     same as before the reshape (only the old IFC note in 02 remains). With
+     1 cm camera steps, 03 changes on edges only (window frames, foam tips,
+     petals); no surface flickers. 01 is unchanged (8,966 against 8,744
+     changing pixels); 03 is up from 16,154 to 18,881, from the extra window
+     edges.
    - **Not yet:** soft shadows, glow (step 3), reflections of the lit city in
      the water ("Skyline reflections", ledger Phase D), photo-like foreground
      cutouts (user artwork). On mobile the skyline windows mostly blend into
@@ -464,7 +486,7 @@ Measured with the `?fps` overlay on a production build, as in
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
 | Draw calls | ≤ 100 (was ≤ 80) | ≤ 100 |
-| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 11 small code-drawn surface textures, about 5.5 MB of GPU memory in all; the Clock Tower shaft maps are 256 × 1088 px. To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
+| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 15 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip), about 6.2 MB of GPU memory in all; the Clock Tower shaft maps are 256 × 1088 px. To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
 | Point lights | 3 (Clock Tower flood, ferry, junk) since 2b | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
 
@@ -513,9 +535,11 @@ Stop for the user's review after each step, as in the grey-box.
 - `src/scene/createKowloonEdge.js`: textured Clock Tower, dials, floodlight;
   Kowloon windows.
 - `src/scene/createIsland.js`: Central and IFC windows.
-- `src/scene/createVessels.js`: ferry panes and hull, junk sails and planks,
+- `src/scene/createVessels.js`: reshaped Star Ferry (rounded decks, windows,
+  fender, canopy, funnel, wheelhouses, foam skirt), junk sails and planks,
   vessel lights.
-- `src/scene/gating.js`: faded copies keep shader patches.
+- `src/scene/gating.js`: faded copies keep shader patches; meshes with one
+  material per face fade too.
 - `src/scene/createForeground.js`: depth-only twins for a clean railing
   fade, seawall strip top 5 cm below the deck.
 - `src/data/world.js`: railing B on the promontory's harbour edge.
@@ -568,6 +592,6 @@ step.
 
 | Milestone | Content |
 |---|---|
-| 3. Assets | GLB models from the ledger (junk, ferry, Clock Tower, IFC, wheel), remaining cutouts including the user's bauhinia petals and tree, display fonts. The Star Ferry is made by the user in Meshy.ai; until then the box proxy stays, with no interim reshape (user decision, 2026-10-01). Specs and licence notes are in `ASSET-LEDGER.md`, "Meshy models". Also the user's stone railing, promenade palms, wet paving tiles and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
+| 3. Assets | GLB models from the ledger (junk, ferry, Clock Tower, IFC, wheel), remaining cutouts including the user's bauhinia petals and tree, display fonts. The Star Ferry is made by the user in Meshy.ai; until then the code-built ferry stands in; it was reshaped to look like the real boat (user request, 2026-10-01, reversing the earlier "no interim reshape" decision; section 4, step 2b). Specs and licence notes are in `ASSET-LEDGER.md`, "Meshy models". Also the user's stone railing, promenade palms, wet paving tiles and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
 | 4. Atmosphere, all chapters | Clouds lit from below and searchlight beams from the Central towers (user reminders, 2026-10-01), the look-test layers rolled out to 02–06, extra particles alongside the petals (sea spray, city bokeh, firework embers in 06), real fireworks, a sparkle trail added to the cursor ring (3.10) |
 | 5. Copy and launch | Final copy, poster images, a full performance pass on both iPhones, deployment |
