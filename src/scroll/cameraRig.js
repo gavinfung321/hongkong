@@ -3,6 +3,8 @@ import { CatmullRomCurve3, MathUtils, Vector3 } from 'three';
 const AUTHORED_DESKTOP_ASPECT = 1.6;
 const MAX_FOV_WIDENING = 15;
 const LOOK_DISTANCE = 400;
+// Camera shift in metres at full mouse travel (pointerParallax.js).
+export const PARALLAX = { x: 0.5, y: 0.25 };
 
 export function smoothstep(edge0, edge1, x) {
   const t = MathUtils.clamp((x - edge0) / (edge1 - edge0), 0, 1);
@@ -53,6 +55,8 @@ export function createCameraRig(camera, chapters, { hold }) {
   const dolly = new Vector3();
   const target = new Vector3();
   const direction = new Vector3();
+  const shift = new Vector3();
+  const parallax = { x: 0, y: 0 };
 
   // Curve index of each keyframe; `via` waypoints sit between keyframes.
   let keyIndex = [];
@@ -90,6 +94,26 @@ export function createCameraRig(camera, chapters, { hold }) {
     aspect = value;
   }
 
+  // x, y in -1..1 (+x right, +y up).
+  function setParallax(x, y) {
+    parallax.x = x;
+    parallax.y = y;
+  }
+
+  // Slides camera and target together, so near objects move more than far
+  // ones. Full strength on holds, zero halfway through a transition.
+  // Each hold's own share applies; the switch happens at zero strength.
+  function parallaxOffset(segment, out) {
+    const e = segment.eased;
+    const share = poses[e < 0.5 ? segment.from : segment.to].parallax ?? 1;
+    const strength = (1 - 4 * e * (1 - e)) * share;
+    direction.set(target.x - camera.position.x, 0, target.z - camera.position.z).normalize();
+    return out
+      .set(-direction.z, 0, direction.x)
+      .multiplyScalar(parallax.x * PARALLAX.x * strength)
+      .setY(parallax.y * PARALLAX.y * strength);
+  }
+
   // Progress at the top of the page; the opening push starts there.
   let start = 0.5 - hold;
   function setStart(value) {
@@ -121,6 +145,9 @@ export function createCameraRig(camera, chapters, { hold }) {
       holdDollyOffset(p, segment, dolly);
       camera.position.add(dolly);
       target.add(dolly);
+      parallaxOffset(segment, shift);
+      camera.position.add(shift);
+      target.add(shift);
     }
 
     const fromFov = poses[segment.from].fov;
@@ -138,6 +165,7 @@ export function createCameraRig(camera, chapters, { hold }) {
   return {
     setBreakpoint,
     setAspect,
+    setParallax,
     setStart,
     update,
     lookDirection,

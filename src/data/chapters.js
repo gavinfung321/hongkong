@@ -7,6 +7,9 @@
 //              Chapter 01 only: holdDolly, the opening push. It starts half a
 //              vector back at the top of the page and passes the authored
 //              pose at the keyframe.
+//              Desktop only: parallax, the share of the mouse parallax this
+//              hold allows (omitted = 1). Lowered where a near subject would
+//              leave its ±3% composition target at the mouse extremes.
 // copy:        copy-safe region as % of the viewport (left / top / right / bottom).
 // visibility:  1 = shown, 0 = gated (faded out) at this chapter's hold pose.
 //              petals is a density (omitted = 1).
@@ -57,6 +60,7 @@ export const chapters = [
         fov: 41.5,
         holdDolly: [0, 0, -10],
         via: [[-50, 7, 58]],
+        parallax: 0.8,
       },
       mobile: { position: [-43.1, 9, 99], target: [7.6, 121.5, -281.4], fov: 77.7, holdDolly: [1.3, 0, -9.9] },
     },
@@ -107,6 +111,7 @@ export const chapters = [
         target: [194.4, 114.6, -228.1],
         fov: 60.7,
         via: [[-28, 7, 22], [5, 5, -90]],
+        parallax: 0.4,
       },
       mobile: {
         position: [-59.6, 4.8, 108.2],
@@ -196,7 +201,7 @@ export const chapters = [
       mobile: `${SB}/frame-04-red-sails-mobile-rough.png`,
     },
     camera: {
-      desktop: { position: [155.7, 3, -426.1], target: [-34.2, 86.8, -768.1], fov: 79.9 },
+      desktop: { position: [155.7, 3, -426.1], target: [-34.2, 86.8, -768.1], fov: 79.9, parallax: 0.5 },
       mobile: { position: [152.4, 3, -378.2], target: [173.6, 97.2, -766.4], fov: 78 },
     },
     copy: {
