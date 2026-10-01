@@ -34,7 +34,7 @@ export const WORLD = {
     // Railing segments sit on top of the promenade / seawall (y = deck height).
     railings: [
       { from: [-5.6, 97.4], to: [-48, 61.7], y: 2.5 }, // A: arrival promenade edge
-      { from: [-69.7, 2], to: [-69.2, 30], y: 2.5 }, // B: tower walkway (desktop 02)
+      { from: [-50, 2], to: [-50, 30], y: 2.5 }, // B: promontory's harbour edge (desktop 02)
       { from: [-74, 92.2], to: [-50, 92.3], y: 2.5 }, // C: waterfront (mobile 02)
     ],
     // Palm silhouette cards around the Clock Tower (frame 02). Yaw faces the cards
