@@ -17,6 +17,7 @@ const FONT_SIZE = 640;
 const GAP = 0.14; // extra space between characters, as a fraction of the font size
 const PAD = 16;
 const DROP = 1.4; // heights it moves down while leaving, enough to clear the frame
+const FADE_END = 0.6; // fraction of the sink by which it has fully faded
 const STEPPED_FADE = 0.3; // seconds
 
 function drawText(text) {
@@ -110,10 +111,10 @@ export function createWordmark(renderer, text) {
   }
 
   // Continuous mode: moves down from the first scroll (from = progress at the
-  // top of the page), fading in the second half.
+  // top of the page), fading out while it is still on screen.
   function sinkAt(p, from, to) {
     const u = MathUtils.clamp((p - from) / (to - from), 0, 1);
-    apply(u * (2 - u), 1 - smoothstep(0.45, 1, u));
+    apply(u * (2 - u), 1 - smoothstep(0, FADE_END, u));
   }
 
   // Stepped mode: no sinking, just a short fade. Returns true when it changed,
