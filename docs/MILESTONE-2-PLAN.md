@@ -396,6 +396,6 @@ step.
 
 | Milestone | Content |
 |---|---|
-| 3. Assets | GLB models from the ledger (junk, ferry, Clock Tower, IFC, wheel), remaining cutouts including the user's bauhinia petals and tree, display fonts. The Star Ferry is made by the user in Meshy.ai; until then the box proxy stays, with no interim reshape (user decision, 2026-10-01). Specs and licence notes are in `ASSET-LEDGER.md`, "Meshy models" |
-| 4. Atmosphere, all chapters | The look-test layers rolled out to 02–06, extra particles alongside the petals (sea spray, city bokeh, firework embers in 06), real fireworks, a sparkle trail added to the cursor ring (3.10) |
+| 3. Assets | GLB models from the ledger (junk, ferry, Clock Tower, IFC, wheel), remaining cutouts including the user's bauhinia petals and tree, display fonts. The Star Ferry is made by the user in Meshy.ai; until then the box proxy stays, with no interim reshape (user decision, 2026-10-01). Specs and licence notes are in `ASSET-LEDGER.md`, "Meshy models". Also the user's stone railing, promenade palms, wet paving tiles and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
+| 4. Atmosphere, all chapters | Clouds lit from below and searchlight beams from the Central towers (user reminders, 2026-10-01), the look-test layers rolled out to 02–06, extra particles alongside the petals (sea spray, city bokeh, firework embers in 06), real fireworks, a sparkle trail added to the cursor ring (3.10) |
 | 5. Copy and launch | Final copy, poster images, a full performance pass on both iPhones, deployment |
