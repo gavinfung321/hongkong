@@ -87,7 +87,8 @@ How it is built:
   on iPhone). No font file is needed for the test; a licensed display font can
   replace it in the assets milestone.
 - Colour: warm cream (`--color-cream`), slightly fogged so it sits in the
-  scene rather than on the glass.
+  scene rather than on the glass. The lower two thirds shade down into dusk
+  violet, as if lit from above (user request, 2026-10-01, after Kage).
 - Position and size are authored per breakpoint in `chapters.js` (a new `hero`
   block), like the camera poses.
 - The canvas is decorative (`aria-hidden`); the real heading is the hidden

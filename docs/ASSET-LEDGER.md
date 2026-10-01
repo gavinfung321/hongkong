@@ -54,6 +54,26 @@ specifications are in `CURSOR-GREYBOX-BRIEF.md` section 6.
 | `halftone.webp` | Overlay texture | All | P2 | <100 KB | Original | Must remain restrained and avoid reducing text contrast |
 | Local font files and licences | WOFF2 + text | All | P0 | TBD after font choice | Licensed for web embedding | Choose during typography study; never ship unverified font files |
 
+## Phase D — layer candidates (not approved)
+
+Ideas for more depth layers, after Kage's technique of stacking foreground,
+midground, background and atmosphere. Each one still has to pass gate 5 below
+(replace a placeholder or solve a documented visual problem) before it is made.
+
+| Working name | Type | Chapter | Layer | Purpose |
+|---|---|---:|---|---|
+| Railing over the wordmark's feet | Use of `promenade-railing.webp` | Hero | Foreground | Kage's main depth trick: scenery passing in front of the title. Needs the user to reverse the "nothing covers 香港" decision |
+| `promenade-lamp.webp` | Alpha WebP | Hero, 01–02 | Foreground | Tsim Sha Tsui promenade lamp at the frame edge; a strong near silhouette |
+| `moon.webp` or procedural disc | Card | Hero, 01 | Background | A focal light behind the Peak, like Kage's red moon; soft halo, low saturation |
+| `mist-band.webp` | Alpha WebP, tiled | All | Between skyline layers | Drifting haze that separates near and far buildings |
+| Black kites | Small animated sprites | Hero, 01–03 | Sky | Hong Kong's signature bird gliding slowly; a living detail |
+| Sampans and distant ferries | Low-poly or cards | 01, 03–04 | Midground | Busy-harbour feel; lit windows and wakes at a distance |
+| Skyline reflections | Procedural streaks on the water | 01, 05 | Water | Vertical light smears under lit buildings |
+| Neon sign cutouts | Alpha WebP set | 05 | Foreground edges | Hanging Chinese neon signs framing the City of Light |
+| Searchlight beams | Procedural | 05–06 | Sky | A nod to the Symphony of Lights show |
+| Smoke wisps | Alpha WebP | 06 | Sky | Drift after the fireworks, for the afterglow |
+| Promenade crowd silhouettes | Alpha WebP | 06 | Foreground | People watching the fireworks; scale and warmth |
+
 ## Asset approval gates
 
 1. Grey-box camera approval comes before final modelling.
