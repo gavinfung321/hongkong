@@ -2,7 +2,8 @@ import { CanvasTexture, Color, RepeatWrapping, SRGBColorSpace } from 'three';
 import { seededRandom } from './random.js';
 
 // Original surface textures drawn in code (no image files): Clock Tower brick
-// and granite, clock dials, ferry windows and hull, junk sail cloth and hull.
+// and granite, clock dials, ferry windows and hull, junk sail cloth and hull,
+// the Observation Wheel's hub glow.
 // Fine detail is kept to a few pixels per metre so mipmaps average it calmly.
 
 function canvas(width, height) {
@@ -436,6 +437,21 @@ export function waterlineFoam() {
     ctx.fillRect(x, 32 - h, 2 + random() * 10, h);
   }
   return texture(c, { repeat: [6, 1] });
+}
+
+// ---- Observation Wheel --------------------------------------------------------
+
+// Soft round halo for the wheel's lit hub, white fading to clear.
+export function hubGlow() {
+  const S = 64;
+  const [c, ctx] = canvas(S, S);
+  const glow = ctx.createRadialGradient(S / 2, S / 2, 0, S / 2, S / 2, S / 2);
+  glow.addColorStop(0, 'rgba(255, 250, 245, 0.9)');
+  glow.addColorStop(0.3, 'rgba(255, 220, 230, 0.35)');
+  glow.addColorStop(1, 'rgba(255, 120, 160, 0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, S, S);
+  return texture(c);
 }
 
 // ---- Junk -------------------------------------------------------------------

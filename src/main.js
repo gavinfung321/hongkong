@@ -266,6 +266,7 @@ function start(initGuard, header) {
       if (!control.free) applyPose(state.pRendered, false, time);
       wordmark.sinkAt(state.pRendered, state.pTop, HERO.sinkEnd, HERO.fadeEnd);
       water.update(dt);
+      island.update(time);
       petals.update(dt, camera, dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0);
       lastRendered = state.pRendered;
     }

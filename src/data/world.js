@@ -27,8 +27,12 @@ export const WORLD = {
     skyline: { x: [-1000, 1400], z: [-1150, -1520], count: 230, maxHeight: 320, peakX: 520, seed: 11 },
   },
 
-  ifc: { position: [500, 3, -1180] },
-  wheel: { position: [335, 3, -1105], radius: 30 },
+  // Two IFC on its mall podium [xMin, xMax, zMin, zMax, height].
+  ifc: { position: [500, 3, -1180], podium: [448, 552, -1200, -1130, 22] },
+  // True scale: 60 m to the top of the rim.
+  wheel: { position: [335, 3, -1105], radius: 27.5, hub: 32.5 },
+  // Central Ferry Piers: pavilion centres along x, jutting out from the island's edge.
+  piers: { x: [400, 456, 512, 568, 624], z: -1085, depth: 30 },
 
   foreground: {
     // Railing segments sit on top of the promenade / seawall (y = deck height).
