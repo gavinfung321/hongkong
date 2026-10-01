@@ -74,6 +74,12 @@ Agreed with the user:
 - **Placement:** standing on the water, drawn in front of the whole scene
   including the railing (user request, 2026-10-01, replacing "behind the
   railing").
+- **Height:** raised over the boats (user request, 2026-10-02: "move higher,
+  it's ok to cover the boats"). Its feet stand at 74% of the screen height on
+  desktop (was 88%) and 73% on mobile (was 80%), so it now spans roughly
+  38–73% on desktop. The feet have to stay below the horizon (57.5% desktop,
+  70% mobile at the opening pose), so on mobile this is about as high as it
+  can stand on the water.
 - **Exit:** from the first scroll it moves down out of the frame and fades,
   while the camera pushes in (chapter 01's `holdDolly`, which now starts at
   the top of the page instead of at the hold). Both start immediately, with no
@@ -720,6 +726,19 @@ all six.
      the paving and palms will share. Railing sizes and lantern spacing are
      the constants in `lamps.js` and `createForeground.js`; lamp positions
      are `WORLD.foreground.lamps`.
+   - **Railing on every edge near the Clock Tower** (user request,
+     2026-10-02: "I need all edges to be filled with railing"). Railing B now
+     runs the promontory's whole harbour edge (x = −50, z −60 to 40, was
+     z 2–30), and new runs follow its south tip (z = −60, out to x = −110)
+     and the three sides of the inlet between the promontory and the arrival
+     promenade. Runs meeting at a corner share one post. The promontory runs
+     (`edgeRailings`) always show, so mobile 01 now has them too; railing A,
+     C and the inlet's north side (`railings`) still fade with the chapters,
+     as mobile 01 wants open water at the bottom. The inlet's west run has
+     no lanterns: in mobile 02 it points straight at the tower and they sat
+     in front of its lit base. The seawall strip is now as deep as the
+     plinth (0.5 m), so strips crossing at a corner never show a shared top.
+     36 lanterns in all.
    - **Kept:** railing lines A, B (x = −50) and C, seawall strip tops 5 cm
      below the deck, the depth-twin fade for 02 → 03 (the twins are now
      nudged back by a constant depth offset so the railing always passes;
@@ -748,7 +767,7 @@ Measured with the `?fps` overlay on a production build, as in
 |---|---|---|
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
-| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
+| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
 | New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). The stone railing adds a 64 × 64 granite tile and a 64 × 96 post panel (24 textures; the lantern glows are drawn in their shader). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
 | Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b; the promenade lanterns and lamps are faked in the materials (`lamps.js`) | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
@@ -845,7 +864,11 @@ Stop for the user's review after each step, as in the grey-box.
   `addLampLight` (warm pools faked in a material) and the instanced glow
   material.
 - `src/scene/surfaces.js`: railing granite and post panel textures.
-- `src/data/world.js`: `foreground.lamps` positions.
+- `src/data/world.js`: `foreground.lamps` positions; railing runs on every
+  edge near the Clock Tower (`railings` that fade, `edgeRailings` that
+  always show; user request, 2026-10-02).
+- `src/data/chapters.js`: the 香港 wordmark raised over the boats (`HERO`
+  feet at 74% desktop, 73% mobile; user request, 2026-10-02).
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font; the
   stone railing and lamps built in code from the user's designs.
 
@@ -863,7 +886,8 @@ The milestone passes when:
    and a half-faded railing is an even veil with no rails showing through
    its posts (2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
-   feet, and sinks and fades out with the 01 copy from the first scroll.
+   feet, raised over the boats (user request, 2026-10-02), and sinks and
+   fades out with the 01 copy from the first scroll.
    Mobile shows it horizontal and smaller.
 3. Nav links, counter numbers, the menu and "Return to the harbour" all land
    on the right hold. The menu works with the keyboard and a screen reader.

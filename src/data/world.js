@@ -35,11 +35,24 @@ export const WORLD = {
   piers: { x: [400, 456, 512, 568, 624], z: -1085, depth: 30 },
 
   foreground: {
-    // Railing segments sit on top of the promenade / seawall (y = deck height).
+    // Railing runs sit on top of the promenade / seawall (y = deck height).
+    // Every water edge near the Clock Tower has one (user request,
+    // 2026-10-02). `railings` fade with the chapters (`railing` in each
+    // chapter's visibility; mobile 01 wants open water at the bottom);
+    // `edgeRailings` follow the promontory and always show. Runs meeting at a
+    // corner share one post: skipFirst / skipLast drop the duplicate.
     railings: [
       { from: [-5.6, 97.4], to: [-48, 61.7], y: 2.5 }, // A: arrival promenade edge
-      { from: [-50, 2], to: [-50, 30], y: 2.5 }, // B: promontory's harbour edge (desktop 02)
       { from: [-74, 92.2], to: [-50, 92.3], y: 2.5 }, // C: waterfront (mobile 02)
+      { from: [-60, 61.7], to: [-48, 61.7], y: 2.5, skipFirst: true, skipLast: true }, // D: inlet, north side
+    ],
+    edgeRailings: [
+      { from: [-50, 40], to: [-50, -60], y: 2.5 }, // B: promontory's harbour edge
+      { from: [-50, -60], to: [-110, -60], y: 2.5, skipFirst: true }, // promontory's south tip
+      { from: [-50, 40], to: [-60, 40], y: 2.5, skipFirst: true }, // inlet, south side
+      // Inlet, west side. No lanterns: in mobile 02 this run points straight
+      // at the tower, and they would sit in front of its lit base.
+      { from: [-60, 40], to: [-60, 61.7], y: 2.5, skipFirst: true, lanterns: false },
     ],
     // Tall cast-iron lamps on the Clock Tower promontory, seen in 02 only:
     // either side of the tower and short of the ferry on desktop, clear of the

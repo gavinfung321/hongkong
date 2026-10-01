@@ -78,8 +78,9 @@ function bayGeometry() {
   const mid = L / 2;
   return mergeGeometries([
     stoneBox([0, L], [-0.1, 0.27], [-0.28, 0.28]),
-    // Seawall strip: top 5 cm below the deck, so the two never z-fight.
-    stoneBox([0, L], [-6.05, -0.05], [-0.7, 0.7], 0.45),
+    // Seawall strip: top 5 cm below the deck, so the two never z-fight, and
+    // inside the plinth, so strips crossing at a corner never show a shared top.
+    stoneBox([0, L], [-6.05, -0.05], [-0.25, 0.25], 0.45),
     stoneBox([mid - 0.11, mid + 0.11], [0.26, 0.96], [-0.11, 0.11]),
     stoneBox([mid - 0.135, mid + 0.135], [0.95, 1.01], [-0.135, 0.135]),
     rail(0.065, 0.87, 0, L, 10),
@@ -107,15 +108,22 @@ function lanternIronGeometry() {
   return mergeGeometries(parts);
 }
 
-function createRailing(segments) {
+const textures = {};
+
+// `fade`: the run fades with the chapters, so its materials are transparent
+// and it gets depth-only twins for a clean half-faded veil.
+function createRailing(segments, { fade }) {
   const group = new Group();
+  textures.granite ??= promenadeGranite();
+  textures.panel ??= railingPanel();
+  const transparent = fade;
   const stone = addLampLight(
-    new MeshLambertMaterial({ map: promenadeGranite(), vertexColors: true, transparent: true }),
+    new MeshLambertMaterial({ map: textures.granite, vertexColors: true, transparent }),
     STONE_LAMP,
   );
-  const panel = addLampLight(new MeshLambertMaterial({ map: railingPanel(), transparent: true }), STONE_LAMP);
-  const iron = addLampLight(new MeshLambertMaterial({ color: IRON, transparent: true }), 2);
-  const glass = new MeshBasicMaterial({ color: GLASS, transparent: true });
+  const panel = addLampLight(new MeshLambertMaterial({ map: textures.panel, transparent }), STONE_LAMP);
+  const iron = addLampLight(new MeshLambertMaterial({ color: IRON, transparent }), 2);
+  const glass = new MeshBasicMaterial({ color: GLASS, transparent });
   const glow = glowMaterial(GLOW, 0.9);
 
   const layouts = segments.map(railingLayout);
@@ -135,9 +143,9 @@ function createRailing(segments) {
   const up = new Vector3(0, 1, 0);
   const one = new Vector3(1, 1, 1);
   let [b, p, l] = [0, 0, 0];
-  for (const { posts: list, bays: n, bayLength, yaw } of layouts) {
+  for (const { posts: list, starts, bayLength, yaw } of layouts) {
     q.setFromAxisAngle(up, yaw);
-    for (let k = 0; k < n; k++) bays.setMatrixAt(b++, m.compose(list[k].position, q, new Vector3(bayLength / RAILING_BAY, 1, 1)));
+    for (const start of starts) bays.setMatrixAt(b++, m.compose(start, q, new Vector3(bayLength / RAILING_BAY, 1, 1)));
     for (const post of list) {
       m.compose(post.position, q, one);
       posts.setMatrixAt(p, m);
@@ -155,18 +163,20 @@ function createRailing(segments) {
   // the wordmark at 10): while the railing fades, only its front surface
   // blends, so overlapping posts and rails don't pop as the camera moves.
   // Pushed back a hair so the railing itself always passes the depth test.
-  const depthOnly = new MeshBasicMaterial({
-    colorWrite: false,
-    transparent: true,
-    polygonOffset: true,
-    polygonOffsetFactor: 0,
-    polygonOffsetUnits: 2,
-  });
-  for (const mesh of [bays, posts, panels]) {
-    const twin = new InstancedMesh(mesh.geometry, depthOnly, mesh.count);
-    twin.instanceMatrix = mesh.instanceMatrix;
-    twin.renderOrder = 1;
-    group.add(twin);
+  if (fade) {
+    const depthOnly = new MeshBasicMaterial({
+      colorWrite: false,
+      transparent: true,
+      polygonOffset: true,
+      polygonOffsetFactor: 0,
+      polygonOffsetUnits: 2,
+    });
+    for (const mesh of [bays, posts, panels]) {
+      const twin = new InstancedMesh(mesh.geometry, depthOnly, mesh.count);
+      twin.instanceMatrix = mesh.instanceMatrix;
+      twin.renderOrder = 1;
+      group.add(twin);
+    }
   }
   for (const mesh of [bays, posts, panels, lanterns, lights]) mesh.renderOrder = 2;
   glows.renderOrder = 3;
@@ -288,8 +298,10 @@ const ndc = new Vector3();
 export function createForeground() {
   const palmMaterial = fadeMaterial(0x110f1a, { side: DoubleSide });
 
-  const railing = createRailing(WORLD.foreground.railings);
+  const railing = createRailing(WORLD.foreground.railings, { fade: true });
   railing.group.name = 'railing';
+  const edgeRailing = createRailing(WORLD.foreground.edgeRailings, { fade: false });
+  edgeRailing.group.name = 'edgeRailing';
   const lamps = createLamps(WORLD.foreground.lamps);
   const palms = createPalms(WORLD.foreground.palms, palmMaterial);
   palms.name = 'palms';
@@ -334,7 +346,7 @@ export function createForeground() {
   }
 
   const group = new Group();
-  group.add(railing.group, lamps, palms, bursts.group);
+  group.add(railing.group, edgeRailing.group, lamps, palms, bursts.group);
 
   return { group, placeBursts, setOpacity };
 }
