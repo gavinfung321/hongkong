@@ -750,15 +750,12 @@ html:not(.is-enhanced) .side-pager {
   font-size: 1.75rem;
   letter-spacing: 0.3em;
   opacity: 0.92;
-  transition:
-    transform 450ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 300ms ease;
 }
 
-/* Leaves and returns with the header. */
-.is-header-hidden .vertical-text__title {
-  opacity: 0;
-  transform: translateY(calc(-1 * var(--header-height)));
+/* Leaves and returns with chapter 01's copy (copyLayer.js sets the values). */
+.is-enhanced .vertical-text__title {
+  opacity: calc(var(--intro-copy-opacity, 1) * 0.92);
+  transform: translateY(calc(var(--intro-copy-shift, 0) * 1px));
 }
 
 .vertical-text__labels {

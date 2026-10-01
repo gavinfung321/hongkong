@@ -7,6 +7,7 @@ const RISE = 48; // px travelled while fading: in from below, out through the to
 export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
   const copies = sections.map((section) => section.querySelector('.chapter__copy'));
   const opacities = copies.map(() => -1);
+  const root = document.documentElement;
 
   function setBreakpoint(breakpoint) {
     copies.forEach((copy, i) => {
@@ -34,8 +35,14 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       if (value === opacities[i]) return;
       opacities[i] = value;
       const leaving = i === 0 || p > i + 0.5;
+      const shift = String((leaving ? -1 : 1) * (1 - value) * RISE);
       copy.style.setProperty('--copy-opacity', String(value));
-      copy.style.setProperty('--copy-shift', String((leaving ? -1 : 1) * (1 - value) * RISE));
+      copy.style.setProperty('--copy-shift', shift);
+      // The vertical 東方明珠 title moves with chapter 01's copy.
+      if (i === 0) {
+        root.style.setProperty('--intro-copy-opacity', String(value));
+        root.style.setProperty('--intro-copy-shift', shift);
+      }
       copy.classList.toggle('is-hidden', value === 0);
     });
   }
