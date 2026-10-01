@@ -58,7 +58,7 @@ export const chapters = [
       mobile: { position: [-43.1, 9, 99], target: [7.6, 121.5, -281.4], fov: 77.7, holdDolly: [1.3, 0, -9.9] },
     },
     copy: {
-      desktop: { left: 22, top: 11, right: 52, bottom: 34 },
+      desktop: { left: 5, top: 29, right: 36, bottom: 50 },
       mobile: { left: 8, top: 9, right: 92, bottom: 39 },
     },
     visibility: {
