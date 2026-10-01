@@ -4,10 +4,17 @@ A cinematic, scroll-controlled Three.js journey through Victoria Harbour.
 
 ## Current stage
 
-Grey-box milestone approved (2026-10-01). Pre-production decisions and all six
-desktop and mobile storyboard frames are approved. The implementation brief is
-`docs/CURSOR-GREYBOX-BRIEF.md`. Build only what that brief describes, starting
-with step 1 of its build order.
+Grey-box milestone built (steps 1–11 of `docs/CURSOR-GREYBOX-BRIEF.md`) and
+awaiting review. See `docs/greybox-review/REVIEW.md` for screenshots,
+deviations, and debug tools, and `docs/greybox-review/PERFORMANCE.md` for
+performance numbers and the iPhone test.
+
+```
+npm install
+npm run dev        # http://localhost:5173/  (add ?debug for tuning tools)
+npm run build      # production build in dist/
+npm run preview    # serve dist/ at http://localhost:4173/  (add ?fps)
+```
 
 ## Planned chapters
 
