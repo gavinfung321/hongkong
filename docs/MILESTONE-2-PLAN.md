@@ -29,9 +29,11 @@ depth comes from layers around the simple 3D:
 | Kage technique | Harbour version in this milestone |
 |---|---|
 | Painted 2D cutouts at the frame edges (grass, pine, wall) that move faster than the scene | The promenade railing as a painted cutout (frame 01) |
-| A giant wordmark inside the scene, with grass covering its feet | 香港 standing on the water behind the railing, sinking as you scroll |
+| A giant wordmark inside the scene, with grass covering its feet | 香港 standing on the water in front of the scene, shaded toward its feet, sinking as you scroll |
 | Particles at several depths (red leaves, embers) | Warm specks of light drifting near the promenade (frame 01) |
+| A big moon as the focal light | An original yellow moon behind the Peak ridge, drawn in code (3.9) |
 | Soft glow on the moon, lanterns and windows | Glow on lit windows, the Clock Tower faces and IFC's crown |
+| A ring that trails the mouse pointer | An original cursor ring, desktop only (3.10) |
 | Fine diagonal-line texture over the page | The restrained halftone from the world bible |
 | Mostly dark frames with a vignette | Our navy and aubergine palette, plus a vignette |
 | Layers shift with the mouse | Cursor parallax on desktop |
@@ -177,6 +179,32 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
 - Must keep every frame inside the ±3% composition tolerance at the extremes,
   and the camera clearance above 1.5 m (the current minimum is 1.99 m).
 
+### 3.9 Moon (user request, 2026-10-01)
+
+- A big yellow moon behind the far mountain range, upper right of the opening
+  frame, with the ridge hiding its lower edge. Kage's red moon was the
+  reference, but its artwork can't be reused, so ours is original.
+- Drawn in code (`src/scene/createMoon.js`): a warm disc lit from the upper
+  left with soft darker patches, plus a faint additive halo. No image file.
+- A fixed object in the world (`WORLD.moon` in `world.js`: position, radius,
+  seed), so it stays put as the camera travels: it peeks between towers in 05
+  and sits low behind IFC in 06.
+- Far larger than life on purpose (about 9° across) and unaffected by fog.
+- Tweak later: colours in `drawDisc`, halo strength in `drawHalo`, and size or
+  place in `WORLD.moon`. A painted moon can replace the disc in the assets
+  milestone.
+
+### 3.10 Cursor ring (user request, 2026-10-01)
+
+- A thin cream ring (40 px) with a faint dark fill trails the mouse pointer
+  with a soft lag, after Kage. The normal pointer stays visible.
+- Grows 1.5× and brightens over links and buttons; shrinks slightly while
+  pressed. Fades out when the pointer leaves the window.
+- Mouse only: not created on touch devices or in reduced motion. It ignores
+  clicks (`pointer-events: none`) and stops animating once it catches up.
+- Built in `src/ui/cursorRing.js` with styles in `styles.css`; the follow
+  speed is `FOLLOW` in the script.
+
 ## 4. Look test (frame 01 only)
 
 Each layer below is added one at a time and screenshotted before and after.
@@ -251,8 +279,10 @@ Stop for the user's review after each step, as in the grey-box.
 - `src/data/chapters.js`: copy regions, new `hero` block, Chinese labels.
 - `src/main.js`: wire up the new pieces.
 - New: `src/ui/siteHeader.js` (nav, menu, counter), `src/scene/createWordmark.js`,
+  `src/scene/createMoon.js`, `src/ui/cursorRing.js`,
   `src/ui/pointerParallax.js`, `src/scene/createParticles.js`,
   `src/scene/createGlow.js`.
+- `src/data/world.js`: the `moon` block.
 - `src/ui/debug.js`: wordmark position in the probe.
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font.
 
@@ -262,12 +292,13 @@ The milestone passes when:
 
 1. All twelve frames still pass the composition probe (±3%) with the nav bar in
    place, and no copy overflows at 1440 × 900, 1156 × 766 and 390 × 844.
-2. The wordmark reads in front, its feet hidden by the railing, and is fully
-   gone before the 01 copy appears. Mobile shows it horizontal and smaller.
+2. The wordmark reads in front of the whole scene, shading into dusk toward its
+   feet, and sinks and fades out with the 01 copy from the first scroll.
+   Mobile shows it horizontal and smaller.
 3. Nav links, counter numbers, the menu and "Return to the harbour" all land
    on the right hold. The menu works with the keyboard and a screen reader.
-4. Reduced-motion mode shows no sinking, no parallax and no particles, and
-   still tells the whole story.
+4. Reduced-motion mode shows no sinking, no parallax, no particles and no
+   cursor ring, and still tells the whole story.
 5. The poster-only fallback still works, with a usable nav.
 6. Frame 01 with the look-test layers is approved by the user against the
    storyboard and the Kage reference.
@@ -292,5 +323,5 @@ step.
 | Milestone | Content |
 |---|---|
 | 3. Assets | GLB models from the ledger (junk, ferry, Clock Tower, IFC, wheel), remaining cutouts, display fonts |
-| 4. Atmosphere, all chapters | The look-test layers rolled out to 02–06, per-chapter particles (sea spray, city bokeh, firework embers), real fireworks, desktop sparkle cursor |
+| 4. Atmosphere, all chapters | The look-test layers rolled out to 02–06, per-chapter particles (sea spray, city bokeh, firework embers), real fireworks, a sparkle trail added to the cursor ring (3.10) |
 | 5. Copy and launch | Final copy, poster images, a full performance pass on both iPhones, deployment |

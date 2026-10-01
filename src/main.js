@@ -7,11 +7,13 @@ import { createIsland } from './scene/createIsland.js';
 import { createVessels } from './scene/createVessels.js';
 import { createForeground } from './scene/createForeground.js';
 import { createWordmark } from './scene/createWordmark.js';
+import { createMoon } from './scene/createMoon.js';
 import { createGating, makeFadeable } from './scene/gating.js';
 import { createCameraRig, fovForAspect } from './scroll/cameraRig.js';
 import { createScrollConductor } from './scroll/scrollConductor.js';
 import { createCopyLayer } from './ui/copyLayer.js';
 import { createSiteHeader } from './ui/siteHeader.js';
+import { createCursorRing } from './ui/cursorRing.js';
 import { enterFallback, supportsWebGL2, watchContext } from './ui/fallback.js';
 
 const params = new URLSearchParams(window.location.search);
@@ -41,7 +43,8 @@ function start(initGuard, header) {
   const vessels = createVessels();
   const foreground = createForeground();
   const wordmark = createWordmark(renderer, HERO.wordmark.text);
-  scene.add(kowloon.group, island.group, vessels.group, foreground.group, wordmark.mesh);
+  const moon = createMoon();
+  scene.add(moon.group, kowloon.group, island.group, vessels.group, foreground.group, wordmark.mesh);
 
   const gating = createGating(chapters, {
     ferry: makeFadeable(vessels.ferry),
@@ -355,6 +358,7 @@ function start(initGuard, header) {
 function boot() {
   // The header works in the poster-only fallback too, where links scroll natively.
   const header = createSiteHeader();
+  createCursorRing();
   if (params.has('fallback')) return enterFallback('requested');
   if (!supportsWebGL2()) return enterFallback('no-webgl2');
 
