@@ -394,7 +394,7 @@ export function createDebug(ctx) {
     const m = new Matrix4();
     ctx.scene.updateMatrixWorld(true);
     ctx.scene.traverse((o) => {
-      if (!o.isMesh || moving.has(o) || !o.visible || o.name === 'wordmark') return;
+      if (!o.isMesh || moving.has(o) || !o.visible || o.name === 'wordmark' || o.name === 'petals') return;
       if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
       const names = [];
       for (let p = o; p && p !== ctx.scene; p = p.parent) if (p.name) names.push(p.name);
