@@ -177,36 +177,87 @@ export function clockDial() {
 
 // ---- Star Ferry -------------------------------------------------------------
 
-// One window bay: a warm pane with a dark frame and a mullion.
-export function ferryWindows(bays) {
-  const [c, ctx] = canvas(64, 32);
-  ctx.fillStyle = '#2a211c';
-  ctx.fillRect(0, 0, 64, 32);
-  const pane = ctx.createLinearGradient(0, 4, 0, 28);
-  pane.addColorStop(0, '#ffe2a8');
-  pane.addColorStop(1, '#f2a65a');
-  ctx.fillStyle = pane;
-  ctx.fillRect(5, 5, 25, 22);
-  ctx.fillRect(34, 5, 25, 22);
-  return texture(c, { repeat: [bays, 1] });
+// A deck wall, eight window bays wide (2.4 m × 2.8 m each): big panes with
+// rounded corners and thick frames, each bay lit a little differently.
+// Returns colour and glow maps; set the repeat with `ferryDeckRepeat`.
+export function ferryDeck(wall, seed) {
+  const BAY = 64;
+  const W = BAY * 8;
+  const H = 64;
+  const random = seededRandom(seed);
+  const [c, ctx] = canvas(W, H);
+  const [e, glow] = canvas(W, H);
+  ctx.fillStyle = wall;
+  ctx.fillRect(0, 0, W, H);
+  // Deck lights and cabin spill keep the paint readable at night.
+  glow.fillStyle = '#000';
+  glow.fillRect(0, 0, W, H);
+  glow.globalAlpha = 0.22;
+  glow.fillStyle = wall;
+  glow.fillRect(0, 0, W, H);
+  glow.globalAlpha = 1;
+  const pane = (g, x, brightness) => {
+    const gradient = g.createLinearGradient(0, 10, 0, 50);
+    gradient.addColorStop(0, `rgba(255, 228, 170, ${brightness})`);
+    gradient.addColorStop(1, `rgba(240, 160, 80, ${brightness})`);
+    g.fillStyle = gradient;
+    g.beginPath();
+    g.roundRect(x + 11, 11, BAY - 22, 37, 7);
+    g.fill();
+  };
+  for (let i = 0; i < 8; i++) {
+    const x = i * BAY;
+    ctx.fillStyle = '#2a2420';
+    ctx.beginPath();
+    ctx.roundRect(x + 8, 8, BAY - 16, 43, 9);
+    ctx.fill();
+    const brightness = 0.7 + random() * 0.3;
+    pane(ctx, x, brightness);
+    pane(glow, x, brightness);
+  }
+  return { map: texture(c), emissiveMap: texture(e) };
 }
 
-// Hull side, 10 m × 4 m (ExtrudeGeometry side UVs are in metres): green paint,
-// a white sheer line, a darker band at the waterline and faint streaks.
+export function ferryDeckRepeat(maps, bays) {
+  const out = {};
+  for (const [key, t] of Object.entries(maps)) {
+    out[key] = t.clone();
+    out[key].repeat.set(bays / 8, 1);
+  }
+  return out;
+}
+
+// Hull side, 10 m × 2.6 m (ExtrudeGeometry side UVs are in metres): green
+// paint over a dark waterline band, with faint streaks.
 export function ferryHull() {
   const [c, ctx] = canvas(256, 128);
   const random = seededRandom(23);
-  ctx.fillStyle = '#2c4a3c';
+  ctx.fillStyle = '#2d5a40';
   ctx.fillRect(0, 0, 256, 128);
-  ctx.fillStyle = '#1b2723';
-  ctx.fillRect(0, 96, 256, 32);
-  ctx.fillStyle = '#d9d4c4';
-  ctx.fillRect(0, 22, 256, 5);
+  ctx.fillStyle = '#1a1f1c';
+  ctx.fillRect(0, 88, 256, 40);
   for (let i = 0; i < 40; i++) {
-    ctx.fillStyle = `rgba(20, 24, 20, ${0.08 + random() * 0.12})`;
-    ctx.fillRect(random() * 256, 27, 1 + random() * 2, 20 + random() * 60);
+    ctx.fillStyle = `rgba(15, 30, 20, ${0.1 + random() * 0.15})`;
+    ctx.fillRect(random() * 256, 0, 1 + random() * 2, 20 + random() * 60);
   }
-  return texture(c, { repeat: [0.1, 0.25] });
+  return texture(c, { repeat: [0.1, 1 / 2.6] });
+}
+
+// White water churned along the hull at the waterline: opaque at the
+// water, thinning upward, broken into streaks.
+export function waterlineFoam() {
+  const [c, ctx] = canvas(256, 32);
+  const random = seededRandom(41);
+  for (let i = 0; i < 160; i++) {
+    const x = random() * 256;
+    const h = 3 + random() * 14;
+    const streak = ctx.createLinearGradient(0, 32 - h, 0, 32);
+    streak.addColorStop(0, 'rgba(200, 215, 225, 0)');
+    streak.addColorStop(1, `rgba(200, 215, 225, ${0.15 + random() * 0.3})`);
+    ctx.fillStyle = streak;
+    ctx.fillRect(x, 32 - h, 2 + random() * 10, h);
+  }
+  return texture(c, { repeat: [6, 1] });
 }
 
 // ---- Junk -------------------------------------------------------------------

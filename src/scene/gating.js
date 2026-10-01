@@ -4,9 +4,7 @@ import { MathUtils } from 'three';
 // setter that fades it and hides it completely at 0.
 export function makeFadeable(object) {
   const materials = new Map();
-  object.traverse((child) => {
-    if (!child.material) return;
-    const source = child.material;
+  const fadeable = (source) => {
     if (!materials.has(source)) {
       const copy = source.clone();
       // clone() drops shader patches such as the city windows.
@@ -14,7 +12,11 @@ export function makeFadeable(object) {
       copy.transparent = true;
       materials.set(source, copy);
     }
-    child.material = materials.get(source);
+    return materials.get(source);
+  };
+  object.traverse((child) => {
+    if (!child.material) return;
+    child.material = Array.isArray(child.material) ? child.material.map(fadeable) : fadeable(child.material);
   });
   const list = [...materials.values()];
   let current = -1;
