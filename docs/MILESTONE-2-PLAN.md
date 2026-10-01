@@ -464,8 +464,9 @@ all six.
        sail is brightest at the foot and each panel darker under the batten
        above.
      - **Rig:** foremast raked forward, rope fans from the batten ends,
-       shrouds and a forestay as thin lines, plain gold and rose pennants (no
-       lettering). String lights are left out for now.
+       shrouds and a forestay as thin lines. No pennants: the small gold and
+       rose masthead flags were removed (user request, 2026-10-01). String
+       lights are left out for now.
      - **Reflections:** the junk's light is now red and sits among the sails
        (was a warm deck lantern), so the glassy water draws a red streak under
        the junk beside the moon path. No new flat pieces on the water; still
@@ -619,8 +620,8 @@ Stop for the user's review after each step, as in the grey-box.
 - `src/scene/createIsland.js`: Central and IFC windows.
 - `src/scene/createVessels.js`: reshaped Star Ferry (rounded decks, windows,
   fender, canopy, funnel, wheelhouses, foam skirt); rebuilt junk (lofted
-  hull, deckhouse, canopy, rails, tyres, rudder, battened sails, rigging,
-  pennants); vessel lights.
+  hull, deckhouse, canopy, rails, tyres, rudder, battened sails, rigging;
+  masthead pennants removed, user request, 2026-10-01); vessel lights.
 - `src/data/chapters.js`: re-solved chapter 04 camera and junk positions
   for the junk's real proportions.
 - `src/ui/composition.js`: the probe skips parts marked `noProbe` (rigging).
