@@ -430,23 +430,25 @@ all six.
        the user asked for sails "much bigger like the attached photos" (a
        close daytime photo, where the sails dwarf the hull). Measured there,
        the main sail is about half the hull length tall and nearly as wide.
-       Built on the 28 m hull: main 12 × 15 m (mast top 23.5 m), fore
+       Built on the 28 m hull: main 12 × 15 m (mast top 21.2 m since the pointed tops), fore
        8 × 10 m, mizzen 4.2 × 5.6 m, about 1.45 times the first build. (The
        side-on photo had given a main sail of only ~0.25 × 0.30 of the hull
        length.) The foresail overlaps the main, as in the photo, so it hangs
        0.9 m to one side and the two cloths never meet or flicker. The
        mizzen overhangs the stern, as on the real boats.
-     - **Pointed sail tops (planned, not built; user request, 2026-10-01).**
-       The tops read as a slanted roof, not a point: the front edge stops at
-       62% of the sail height (photo ~75%), the highest point sits ~5 m
-       behind the mast at the back corner, the back edge runs nearly straight
-       down from it, and the masts rise ~3 m above the sails. Decision (user):
-       the tip goes as in the photo, just behind the mast and just under the
-       mast top. Plan: raise the front edge to ~75%, move the tip to about a
-       quarter of the sail width behind the mast, push the back edge's
-       outward curve lower, end the top pole at the tip, shorten the masts to
-       just above the tips, keep the sail area; then re-solve 04 and re-run
-       the overlap and flicker checks.
+     - **Pointed sail tops (built; user request, 2026-10-01).** The tops read
+       as a slanted roof, not a point: the front edge stopped at 62% of the
+       sail height (photo ~75%), the highest point sat ~5 m behind the mast at
+       the back corner, the back edge ran nearly straight down from it, and
+       the masts rose ~3 m above the sails. Decision (user): the tip goes as
+       in the photo, just behind the mast and just under the mast top. Built:
+       front edge to 75%, tip a quarter of the sail width behind the mast,
+       back edge widest low down and sweeping in to the tip, the top pole
+       ends at the tip, each mast ends 0.6 m above its tip (main mast top
+       21.2 m, was 23.5 m); sail sizes unchanged. 04 re-solved again
+       (desktop field of view 74.7°, mobile 79.9°, eye 3 m); 01 and 04
+       within ±3%, mouse corners and clearance as before, flicker test shows
+       edges only (21,121 changing pixels in 04).
      - **Hull:** shaped from 40 cross-sections: narrower bow rising to a
        point, raised stern with a wide square transom, sheer sweeping up at
        both ends; varnished planks bent to follow the sheer, a salmon
@@ -470,9 +472,9 @@ all six.
        3 point lights.
      - **Framing:** the first, smaller rig left 04 with the junk's top at 19%
        against a 10% target, and the big sails then put it at 3%, so the 04
-       camera was re-solved each time. Now: desktop eye still 3 m, field of
-       view 76.6° (was 79.9°), camera and junk both shifted about 6 m; mobile
-       eye 3 m, field of view 80°, camera 9 m closer, junk turned 27° more
+       camera was re-solved each time (again for the pointed tops). Now:
+       desktop eye still 3 m, field of view 74.7° (was 79.9°), camera and junk both shifted about 6 m; mobile
+       eye 3 m, field of view 79.9°, camera 9 m closer, junk turned 27° more
        toward the camera (a three-quarter view, which reads better in
        portrait). A solve at 2.5 m eye height brought the camera within 1.2 m
        of the water, under the 1.5 m clearance rule, so it was rejected. The
