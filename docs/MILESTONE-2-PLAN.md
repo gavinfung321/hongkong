@@ -114,6 +114,10 @@ How it is built:
 - Chapter 01's body no longer ends with "Scroll to cross the water."; the
   hint already says it, and the hint now reads "Let's cross the harbour"
   instead of "Scroll to cross" (user requests, 2026-10-01).
+- Chapter 01's kicker is "Victoria Harbour" (was "Arrival"), naming the
+  place like the other chapters, and its body reads "Night settles on the
+  water, and the island begins to glow." so the name isn't repeated (user
+  requests, 2026-10-01). Still placeholder copy until the copy milestone.
 
 ### 3.4 Nav bar and mobile menu
 
@@ -142,7 +146,8 @@ How it is built:
 
 - An original mark: a simple junk-sail outline (the one place coral is
   allowed in the shell), next to the name "HONG KONG" in small caps.
-- Tagline under the name: "Victoria Harbour, after dark".
+- Tagline under the name: "Pearl of the Orient" (user request, 2026-10-01;
+  it was "Victoria Harbour, after dark"). It pairs with the vertical 東方明珠.
 
 ### 3.6 Vertical Chinese text (built 2026-10-01)
 
@@ -373,8 +378,10 @@ The milestone passes when:
 
 ## 9. Decisions (resolved 2026-10-01)
 
-1. **Tagline under the logo:** "Victoria Harbour, after dark". ("Pearl of the
-   Orient" was dropped because it conflicts with the world bible's tone rules.)
+1. **Tagline under the logo:** first "Victoria Harbour, after dark", because
+   "Pearl of the Orient" seemed to conflict with the world bible's tone
+   rules. Later changed to "Pearl of the Orient" at the user's request
+   (2026-10-01), matching the vertical 東方明珠.
 2. **Chinese labels:** the six labels in 3.6, as proposed.
 3. **Railing artwork:** made with an AI image tool. The tool, its commercial
    licence terms and the prompt are recorded in `ASSET-LEDGER.md` before the
