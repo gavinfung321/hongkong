@@ -1,10 +1,24 @@
-import { CanvasTexture, Mesh, MeshStandardMaterial, PlaneGeometry, RepeatWrapping, Vector2 } from 'three';
+import {
+  CanvasTexture,
+  MathUtils,
+  Mesh,
+  MeshStandardMaterial,
+  PlaneGeometry,
+  RepeatWrapping,
+  ShaderChunk,
+  Vector2,
+} from 'three';
 import { PALETTE } from './palette.js';
 import { WORLD } from '../data/world.js';
 
 const TEXTURE_SIZE = 512;
 // Metres per normal-map tile. Small tiles read as a brick grid from the high 05 camera.
 const TILE = 120;
+// While the camera moves fast (scroll transitions, up to ~3 m per frame) the
+// ripples jump about half a wavelength each frame and strobe. The water then
+// blends to the same pattern at CALM.scale times the size, which moves
+// coherently. Speeds in m/s; parallax and the hold dolly stay below `from`.
+const CALM = { scale: 3, from: 4, to: 24, rise: 8, fall: 2 };
 
 // [cycles per tile x, cycles per tile y, amplitude, phase]. Integer frequencies
 // keep the height field tileable; wavelengths run from ~15 m down to ~3 m.
@@ -75,15 +89,35 @@ export function createWater(renderer) {
     normalScale: new Vector2(0.55, 0.55),
   });
 
+  const calm = { value: 0 };
+  material.onBeforeCompile = (shader) => {
+    shader.uniforms.calm = calm;
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <normalmap_pars_fragment>', '#include <normalmap_pars_fragment>\nuniform float calm;')
+      .replace(
+        '#include <normal_fragment_maps>',
+        ShaderChunk.normal_fragment_maps.replace(
+          'vec3 mapN = texture2D( normalMap, vNormalMapUv ).xyz * 2.0 - 1.0;',
+          `vec3 mapN = mix(
+            texture2D( normalMap, vNormalMapUv ).xyz,
+            texture2D( normalMap, vNormalMapUv / ${CALM.scale.toFixed(1)} ).xyz,
+            calm ) * 2.0 - 1.0;`,
+        ),
+      );
+  };
+
   const mesh = new Mesh(new PlaneGeometry(WORLD.water.size, WORLD.water.size), material);
   mesh.rotation.x = -Math.PI / 2;
   mesh.position.set(WORLD.water.center[0], 0, WORLD.water.center[1]);
   mesh.name = 'water';
 
-  function update(dt) {
+  // cameraSpeed in m/s.
+  function update(dt, cameraSpeed = 0) {
     normalMap.offset.x += dt * 0.0067;
     normalMap.offset.y += dt * 0.004;
+    const goal = MathUtils.smoothstep(cameraSpeed, CALM.from, CALM.to);
+    calm.value = MathUtils.damp(calm.value, goal, goal > calm.value ? CALM.rise : CALM.fall, dt);
   }
 
-  return { mesh, update };
+  return { mesh, update, calm };
 }
