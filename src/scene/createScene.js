@@ -13,6 +13,7 @@ import {
 import { PALETTE } from './palette.js';
 
 const SKY_RADIUS = 4000;
+const GLOW = 0.3;
 
 function createSky() {
   const geometry = new SphereGeometry(SKY_RADIUS, 32, 24);
@@ -26,9 +27,10 @@ function createSky() {
 
   for (let i = 0; i < position.count; i++) {
     const t = position.getY(i) / SKY_RADIUS;
+    // The glow band reaches ~17° so the mountain ridges silhouette against it.
     if (t <= 0) c.copy(below);
-    else if (t < 0.12) c.copy(horizon).lerp(mid, t / 0.12);
-    else c.copy(mid).lerp(top, Math.min(1, (t - 0.12) / 0.5));
+    else if (t < GLOW) c.copy(horizon).lerp(mid, t / GLOW);
+    else c.copy(mid).lerp(top, Math.min(1, (t - GLOW) / 0.5));
     c.toArray(colors, i * 3);
   }
 

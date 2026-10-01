@@ -47,8 +47,10 @@ export const WORLD = {
     ],
   },
 
+  // Peaks are [x, extra height, width]. The near ridge stays above the Central
+  // skyline across the whole 05/06 frames; Victoria Peak (~560 m) sits left of IFC.
   mountains: [
-    { z: -2000, x: [-3200, 3800], base: 150, peaks: [[450, 260, 550], [-700, 130, 600], [1800, 170, 700]], color: 0x221d3a, seed: 3 },
-    { z: -2700, x: [-4000, 4600], base: 230, peaks: [[1000, 280, 800], [-1500, 180, 900], [2800, 200, 900]], color: 0x2a2446, seed: 5 },
+    { z: -1800, x: [-3200, 3800], base: 340, peaks: [[160, 220, 520], [-900, 70, 600], [1100, 110, 600], [2200, 90, 700]], color: 0x15122a, seed: 3 },
+    { z: -2700, x: [-4000, 4600], base: 420, peaks: [[900, 230, 900], [-1600, 150, 900], [2900, 180, 900]], color: 0x241e3c, seed: 5 },
   ],
 };
