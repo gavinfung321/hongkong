@@ -45,6 +45,7 @@ function start(initGuard) {
     junk: makeFadeable(vessels.junk),
     ifc: makeFadeable(island.ifc),
     wheel: makeFadeable(island.wheel),
+    deck: makeFadeable(kowloon.decks),
     railing: (value) => foreground.setOpacity('railing', value),
     palms: (value) => foreground.setOpacity('palms', value),
     bursts: (value) => foreground.setOpacity('bursts', value),
