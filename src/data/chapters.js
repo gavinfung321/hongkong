@@ -10,6 +10,9 @@
 //              Desktop only: parallax, a multiplier on the mouse parallax
 //              swing for this hold (omitted = 1). At the mouse extremes a
 //              subject may drift up to ±6% from its composition target.
+//              Desktop only: keepHeight: true keeps the vertical fov on windows
+//              narrower than 1.6 (the sides are trimmed instead of the fov
+//              widening), so a tall subject keeps its size.
 // copy:        copy-safe region as % of the viewport (left / top / right / bottom).
 // visibility:  1 = shown, 0 = gated (faded out) at this chapter's hold pose.
 //              petals is a density (omitted = 1).
@@ -106,9 +109,10 @@ export const chapters = [
     },
     camera: {
       desktop: {
-        position: [-83, 7.6, 39.5],
-        target: [194.4, 114.6, -228.1],
-        fov: 60.7,
+        position: [-81.6, 6.5, 33],
+        target: [196.2, 137.9, -223],
+        fov: 61.4,
+        keepHeight: true,
         via: [[-28, 7, 22], [5, 5, -90]],
       },
       mobile: {
@@ -128,17 +132,18 @@ export const chapters = [
     },
     fogDensity: 0.00045,
     vessels: {
-      desktop: { ferry: [2.4, 15.1, -0.2], junk: [120, -80, 0] },
+      desktop: { ferry: [-1.4, 5.3, -0.2], junk: [120, -80, 0] },
       mobile: { ferry: [20, -120, 0.8], junk: [120, -80, 0] },
     },
     probes: {
       desktop: {
-        // Narrower than the PNG (15–35): the tower is slimmer than the drawing's close-up.
-        tower: { left: 18, right: 32, top: 2, bottom: 85 },
-        ferry: { left: 66, right: 89, top: 67, bottom: 83 },
+        // keepHeight: on narrow windows the sides are trimmed, so the ferry
+        // sits inside 60–84 (it stays whole down to a 1.1 aspect).
+        tower: { left: 16, right: 34, top: 3, bottom: 88 },
+        ferry: { left: 60, right: 84, top: 71, bottom: 87 },
         ifc: { offscreen: true, behind: 'tower' },
         wheel: { offscreen: true, behind: 'tower' },
-        horizon: 75,
+        horizon: 80,
       },
       mobile: {
         tower: { left: 33, right: 64, top: 20, bottom: 82 },

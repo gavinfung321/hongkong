@@ -31,6 +31,12 @@ export function fovForAspect(fov, aspect, breakpoint) {
   return Math.min(widened, fov + MAX_FOV_WIDENING);
 }
 
+// Poses with `keepHeight` keep their vertical framing on narrow screens and
+// lose the sides instead.
+export function poseFov(pose, aspect, breakpoint) {
+  return pose.keepHeight ? pose.fov : fovForAspect(pose.fov, aspect, breakpoint);
+}
+
 const levelTarget = new Vector3();
 
 // Shift lens: the camera stays level (so verticals stay vertical) and the
@@ -152,10 +158,9 @@ export function createCameraRig(camera, chapters, { hold }) {
       camera.position.add(shift);
     }
 
-    const fromFov = poses[segment.from].fov;
-    const toFov = poses[segment.to].fov;
-    const fov = MathUtils.lerp(fromFov, toFov, segment.eased);
-    camera.fov = fovForAspect(fov, aspect, breakpoint);
+    const fromFov = poseFov(poses[segment.from], aspect, breakpoint);
+    const toFov = poseFov(poses[segment.to], aspect, breakpoint);
+    camera.fov = MathUtils.lerp(fromFov, toFov, segment.eased);
     aimCamera(camera, camera.position, target);
     return segment;
   }

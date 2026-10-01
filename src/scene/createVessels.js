@@ -16,7 +16,6 @@ import {
   MeshBasicMaterial,
   MeshStandardMaterial,
   PointLight,
-  Quaternion,
   Shape,
   ShapeGeometry,
   SphereGeometry,
@@ -25,6 +24,7 @@ import {
   Vector3,
 } from 'three';
 import { lambert } from './palette.js';
+import { strut } from './strut.js';
 import {
   ferryCabin,
   ferryDeck,
@@ -138,15 +138,6 @@ function ribbons(pairs, uScale = 1) {
   geometry.setIndex(index);
   geometry.computeVertexNormals();
   return geometry;
-}
-
-// A unit cylinder stretched from a to b: matrix for an instanced strut.
-const UP = new Vector3(0, 1, 0);
-function strut(a, b, radius) {
-  const from = new Vector3(...a);
-  const direction = new Vector3(...b).sub(from);
-  const length = direction.length();
-  return new Matrix4().compose(from, new Quaternion().setFromUnitVectors(UP, direction.normalize()), new Vector3(radius, length, radius));
 }
 
 // ---- Star Ferry -------------------------------------------------------------

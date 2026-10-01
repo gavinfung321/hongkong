@@ -29,87 +29,138 @@ function shade(hex, amount) {
 
 // ---- Clock Tower ------------------------------------------------------------
 
-// One shaft face, 8 m × 34 m at 32 px per metre: red brick, granite bands and
-// corner quoins, narrow arched windows. Returns colour, bump and glow maps.
-export function clockTowerShaft() {
-  const PX = 32;
-  const W = 8 * PX;
-  const H = 1088;
-  const random = seededRandom(7);
-  const [c, ctx] = canvas(W, H);
-  const [b, bump] = canvas(W, H);
-  const [e, glow] = canvas(W, H);
-  const y = (metres) => H - metres * PX;
+const TOWER_PX = 256 / 9; // shaft texture pixels per metre
+const TOWER_BRICK = 0x8a3a2a;
+const TOWER_GRANITE = 0xb8a68a;
 
-  const brick = 0x8a3a2a;
-  ctx.fillStyle = shade(brick, -0.025);
-  ctx.fillRect(0, 0, W, H);
-  bump.fillStyle = '#808080';
-  bump.fillRect(0, 0, W, H);
-  glow.fillStyle = '#000';
-  glow.fillRect(0, 0, W, H);
+// Floodlit from the foot: the glow map is the colour map tinted golden,
+// brightest at the bottom and still warm at the top.
+function floodGlow(c, bottom = 'rgb(255, 205, 140)', top = 'rgb(200, 140, 90)') {
+  const [e, glow] = canvas(c.width, c.height);
+  glow.drawImage(c, 0, 0);
+  glow.globalCompositeOperation = 'multiply';
+  const gradient = glow.createLinearGradient(0, c.height, 0, 0);
+  gradient.addColorStop(0, bottom);
+  gradient.addColorStop(1, top);
+  glow.fillStyle = gradient;
+  glow.fillRect(0, 0, c.width, c.height);
+  glow.globalCompositeOperation = 'source-over';
+  return [e, glow];
+}
 
-  // Bricks: 8 × 3 px courses, offset every other row, each with its own tone.
-  // Bricks are ~2 px on screen, so mortar stays faint and flat (no bump):
-  // sharp courses strobe while the camera moves.
-  for (let row = 0; row * 3 < H; row++) {
+// Bricks: 8 × 3 px courses, offset every other row, each with its own tone.
+// Bricks are ~2 px on screen, so mortar stays faint and flat: sharp courses
+// strobe while the camera moves.
+function brickwork(ctx, w, h, random) {
+  ctx.fillStyle = shade(TOWER_BRICK, -0.025);
+  ctx.fillRect(0, 0, w, h);
+  for (let row = 0; row * 3 < h; row++) {
     const offset = row % 2 ? 4 : 0;
-    for (let col = -1; col * 8 < W; col++) {
-      ctx.fillStyle = shade(brick, (random() - 0.5) * 0.06);
+    for (let col = -1; col * 8 < w; col++) {
+      ctx.fillStyle = shade(TOWER_BRICK, (random() - 0.5) * 0.06);
       ctx.fillRect(col * 8 + offset, row * 3, 7, 2);
     }
   }
+}
+
+// The brick panel of one shaft face, 9 m × 29.8 m (granite pilasters cover
+// the outer 1.75 m each side): a base course, three stone-framed sash
+// windows (the middle one lit), three narrow windows under the cornice and a
+// granite frieze. Shared by all four faces. Returns colour and glow maps.
+export function clockTowerShaft() {
+  const PX = TOWER_PX;
+  const W = 256;
+  const H = 848;
+  const random = seededRandom(7);
+  const [c, ctx] = canvas(W, H);
+  const y = (metres) => H - metres * PX;
+  const cx = W / 2;
+  brickwork(ctx, W, H, random);
 
   const granite = (x, top, w, h) => {
-    ctx.fillStyle = shade(0xa8977e, (random() - 0.5) * 0.05);
+    ctx.fillStyle = shade(TOWER_GRANITE, (random() - 0.5) * 0.05);
     ctx.fillRect(x, top, w, h);
-    bump.fillStyle = '#c0c0c0';
-    bump.fillRect(x, top, w, h);
   };
-  // A band at each storey (every 6.8 m) and a deeper base course.
-  for (let m = 6.8; m < 34; m += 6.8) granite(0, y(m + 0.35), W, 0.35 * PX);
-  granite(0, y(1.2), W, 1.2 * PX);
-  // Quoins: alternating long and short blocks up both edges, with brick
-  // courses between them so the corners don't read as solid stripes.
-  for (let m = 1.2, i = 0; m < 34; m += 1.2, i++) {
-    const w = (i % 2 ? 0.35 : 0.7) * PX;
-    granite(0, y(m + 0.6), w, 0.6 * PX);
-    granite(W - w, y(m + 0.6), w, 0.6 * PX);
+  granite(0, y(0.5), W, 0.5 * PX);
+  granite(0, y(29.8), W, 0.5 * PX);
+
+  // [sill height, width, height, lit]
+  const windows = [];
+  for (const [sill, lit] of [[4.8, false], [10.3, true], [15.8, false]]) windows.push([cx, sill, 1.3, 2.3, lit]);
+  for (const dx of [-0.85, 0, 0.85]) windows.push([cx + dx * PX, 27.3, 0.55, 1.6, false]);
+  const lights = [];
+  for (const [x, sill, w, h, lit] of windows) {
+    const [left, top, ww, hh] = [x - (w / 2) * PX, y(sill + h), w * PX, h * PX];
+    granite(left - 5, top - 5, ww + 10, hh + 10);
+    granite(left - 8, y(sill) + 3, ww + 16, 6);
+    ctx.fillStyle = lit ? '#e8a660' : '#1c1a22';
+    ctx.fillRect(left, top, ww, hh);
+    // Sash bars.
+    ctx.fillStyle = lit ? 'rgba(90, 50, 25, 0.8)' : 'rgba(150, 140, 125, 0.5)';
+    ctx.fillRect(left, top + hh / 2 - 1, ww, 2);
+    ctx.fillRect(x - 1, top, 2, hh);
+    if (lit) lights.push([left, top, ww, hh]);
   }
 
-  // Narrow arched windows; two lit warm, the rest dark glass.
-  const windows = [[6, true], [11.5, false], [17, true], [22.5, false]];
-  for (const [base, lit] of windows) {
-    const wx = W / 2 - 0.5 * PX;
-    const ww = 1 * PX;
-    const top = y(base + 2.6);
-    const path = (g) => {
-      g.beginPath();
-      g.moveTo(wx, y(base));
-      g.lineTo(wx, top + ww / 2);
-      g.arc(wx + ww / 2, top + ww / 2, ww / 2, Math.PI, 0);
-      g.lineTo(wx + ww, y(base));
-      g.closePath();
-    };
-    granite(wx - 4, top - 4, ww + 8, y(base) - top + 8);
-    path(ctx);
-    ctx.fillStyle = lit ? '#e9a35c' : '#1a1820';
-    ctx.fill();
-    path(bump);
-    bump.fillStyle = '#202020';
-    bump.fill();
-    if (lit) {
-      path(glow);
-      glow.fillStyle = '#c8873f';
-      glow.fill();
-    }
+  const [e, glow] = floodGlow(c);
+  for (const [left, top, ww, hh] of lights) {
+    glow.fillStyle = '#d08a40';
+    glow.fillRect(left, top, ww, hh);
   }
+  return { map: texture(c), emissiveMap: texture(e) };
+}
 
-  return {
-    map: texture(c),
-    bumpMap: texture(b, { srgb: false }),
-    emissiveMap: texture(e),
+// One corner pilaster face, 1.9 m × 29.8 m: rusticated granite courses
+// 0.6 m tall with an offset vertical joint. Returns colour and glow maps.
+export function clockTowerPilaster() {
+  const PX = TOWER_PX;
+  const W = 54;
+  const H = 848;
+  const random = seededRandom(13);
+  const [c, ctx] = canvas(W, H);
+  ctx.fillStyle = shade(TOWER_GRANITE, -0.18);
+  ctx.fillRect(0, 0, W, H);
+  const course = 0.6 * PX;
+  for (let i = 0; i * course < H; i++) {
+    const top = H - (i + 1) * course;
+    const joint = i % 2 ? W * 0.35 : W * 0.65;
+    ctx.fillStyle = shade(TOWER_GRANITE, (random() - 0.5) * 0.07);
+    ctx.fillRect(0, top + 1, joint - 1, course - 2);
+    ctx.fillStyle = shade(TOWER_GRANITE, (random() - 0.5) * 0.07);
+    ctx.fillRect(joint + 1, top + 1, W - joint - 1, course - 2);
+  }
+  const [e] = floodGlow(c);
+  return { map: texture(c), emissiveMap: texture(e) };
+}
+
+// A crown stage face: brick with an arched opening in a stone frame and a
+// faint warm light inside. Returns colour and glow maps.
+export function clockTowerBelfry() {
+  const W = 128;
+  const H = 96;
+  const random = seededRandom(17);
+  const [c, ctx] = canvas(W, H);
+  brickwork(ctx, W, H, random);
+  const arch = (g, inset) => {
+    const [x0, x1, y0, y1] = [W / 2 - 18 + inset, W / 2 + 18 - inset, 22 + inset, H - 8];
+    g.beginPath();
+    g.moveTo(x0, y1);
+    g.lineTo(x0, y0 + (x1 - x0) / 2);
+    g.arc((x0 + x1) / 2, y0 + (x1 - x0) / 2, (x1 - x0) / 2, Math.PI, 0);
+    g.lineTo(x1, y1);
+    g.closePath();
   };
+  ctx.fillStyle = shade(TOWER_GRANITE, 0.02);
+  arch(ctx, -5);
+  ctx.fill();
+  ctx.fillStyle = '#3a2418';
+  arch(ctx, 0);
+  ctx.fill();
+  const [e, glow] = floodGlow(c, 'rgb(240, 190, 130)', 'rgb(220, 165, 110)');
+  glow.fillStyle = 'rgba(200, 120, 50, 0.6)';
+  arch(glow, 0);
+  glow.fill();
+  return { map: texture(c), emissiveMap: texture(e) };
 }
 
 // Light granite ashlar for the crown, one 4 m tile: 1 m × 0.5 m blocks.
@@ -135,33 +186,46 @@ export function graniteAshlar() {
   return { map: texture(c), bumpMap: texture(b, { srgb: false }) };
 }
 
-// A lit clock dial: warm glass, a dark ring, hour marks and hands.
+// A lit clock dial: white glass, a dark rim, a minute track, Roman numerals
+// and hands.
 export function clockDial() {
   const S = 256;
   const [c, ctx] = canvas(S, S);
   const r = S / 2;
   const glass = ctx.createRadialGradient(r, r, 0, r, r, r);
-  glass.addColorStop(0, '#fff3d6');
-  glass.addColorStop(0.75, '#ffd28c');
-  glass.addColorStop(1, '#e79a4c');
+  glass.addColorStop(0, '#fffdf6');
+  glass.addColorStop(0.8, '#f4eedf');
+  glass.addColorStop(1, '#ded3bb');
   ctx.fillStyle = glass;
   ctx.beginPath();
   ctx.arc(r, r, r, 0, Math.PI * 2);
   ctx.fill();
-  ctx.strokeStyle = '#3b2a22';
-  ctx.lineWidth = 12;
+  ctx.strokeStyle = '#1e1a17';
+  ctx.lineWidth = 8;
   ctx.beginPath();
-  ctx.arc(r, r, r - 8, 0, Math.PI * 2);
+  ctx.arc(r, r, r - 5, 0, Math.PI * 2);
   ctx.stroke();
-  ctx.lineCap = 'round';
-  for (let i = 0; i < 12; i++) {
-    const a = (i / 12) * Math.PI * 2;
-    ctx.lineWidth = i % 3 ? 5 : 9;
+  ctx.lineWidth = 2;
+  for (const radius of [r - 16, r - 26]) {
     ctx.beginPath();
-    ctx.moveTo(r + Math.sin(a) * (r - 26), r - Math.cos(a) * (r - 26));
-    ctx.lineTo(r + Math.sin(a) * (r - 48), r - Math.cos(a) * (r - 48));
+    ctx.arc(r, r, radius, 0, Math.PI * 2);
     ctx.stroke();
   }
+  ctx.fillStyle = '#1e1a17';
+  ctx.font = 'bold 26px Georgia, "Times New Roman", serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const numerals = ['XII', 'I', 'II', 'III', 'IIII', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI'];
+  numerals.forEach((numeral, i) => {
+    const a = (i / 12) * Math.PI * 2;
+    ctx.save();
+    ctx.translate(r + Math.sin(a) * (r - 46), r - Math.cos(a) * (r - 46));
+    ctx.rotate(a);
+    ctx.fillText(numeral, 0, 0);
+    ctx.restore();
+  });
+  ctx.strokeStyle = '#1e1a17';
+  ctx.lineCap = 'round';
   const hand = (turn, length, width) => {
     const a = turn * Math.PI * 2;
     ctx.lineWidth = width;
