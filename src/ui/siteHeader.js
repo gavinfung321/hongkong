@@ -5,6 +5,7 @@ export function createSiteHeader() {
   const root = document.documentElement;
   const links = [...document.querySelectorAll('[data-nav-index]')];
   const compact = document.querySelector('.chapter-counter__current');
+  const labels = [...document.querySelectorAll('[data-label-index]')];
   const button = document.querySelector('.menu-button');
   const menu = document.getElementById('site-menu');
   const closeButton = menu.querySelector('.site-menu__close');
@@ -62,6 +63,12 @@ export function createSiteHeader() {
       else link.removeAttribute('aria-current');
     }
     compact.textContent = String(Math.max(0, current) + 1).padStart(2, '0');
+    // The hero shows chapter 01's copy, so it shows 01's label too.
+    for (const label of labels) {
+      const i = Number(label.dataset.labelIndex);
+      label.classList.toggle('is-current', i === Math.max(0, current));
+      label.classList.toggle('is-past', i < current);
+    }
   }
 
   return { update, close: () => setOpen(false) };
