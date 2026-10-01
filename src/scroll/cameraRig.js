@@ -3,8 +3,10 @@ import { CatmullRomCurve3, MathUtils, Vector3 } from 'three';
 const AUTHORED_DESKTOP_ASPECT = 1.6;
 const MAX_FOV_WIDENING = 15;
 const LOOK_DISTANCE = 400;
-// Camera shift in metres at full mouse travel (pointerParallax.js).
-export const PARALLAX = { x: 0.5, y: 0.25 };
+// Camera shift in metres at full mouse travel (pointerParallax.js). No
+// vertical shift: raising or lowering the eye changes the angle onto the water,
+// and the ripple glints sweep across the whole harbour like a flicker.
+export const PARALLAX = { x: 0.5, y: 0 };
 
 export function smoothstep(edge0, edge1, x) {
   const t = MathUtils.clamp((x - edge0) / (edge1 - edge0), 0, 1);
