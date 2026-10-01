@@ -8,6 +8,7 @@
   --color-coral: #e4573d;
   --color-cream: #f3e9d2;
   --color-cyan: #6fd3e0;
+  --color-ivory: #fbf8f2; /* titles: thin strokes need more brightness than cream */
   --color-muted: #9b97ab; /* labels */
   --color-soft: #bdb8c8; /* body text */
 
@@ -177,7 +178,7 @@ a:focus-visible {
 }
 
 .chapter__index {
-  color: var(--color-muted);
+  color: var(--color-coral);
   font-size: 0.8125rem;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.16em;
@@ -193,6 +194,7 @@ a:focus-visible {
 
 .chapter__title {
   margin-top: 0.5rem;
+  color: var(--color-ivory);
   font-size: clamp(2rem, 4.5vw, 3.5rem);
   font-weight: 300;
   line-height: 1.05;
@@ -728,7 +730,7 @@ html:not(.is-enhanced) .chapter-counter {
   border-radius: 0;
   background: none;
   opacity: var(--copy-opacity, 0);
-  transform: translateY(calc((1 - var(--copy-opacity, 0)) * 12px));
+  transform: translateY(calc(var(--copy-shift, 0) * 1px));
   text-shadow: 0 1px 3px rgb(0 0 0 / 0.8), 0 0 18px rgb(10 9 24 / 0.7);
 }
 
@@ -747,7 +749,7 @@ html:not(.is-enhanced) .chapter-counter {
 }
 
 .is-enhanced #chapter-01 .chapter__title {
-  font-size: clamp(2.25rem, 3.4vw, 3rem);
+  font-size: clamp(2rem, 3vw, 2.625rem);
 }
 
 .is-enhanced .chapter__body {

@@ -183,7 +183,9 @@ function start(initGuard, header) {
     } else {
       const index = sections.findIndex((s) => `#${s.id}` === href);
       if (index < 0) return;
-      scrollToChapter(index);
+      // Chapter 01's copy only shows in the hero (see copyLayer).
+      if (index === 0) window.scrollTo({ top: 0, behavior: 'auto' });
+      else scrollToChapter(index);
       title = sections[index].querySelector('.chapter__title');
       title.setAttribute('tabindex', '-1');
     }
@@ -222,7 +224,8 @@ function start(initGuard, header) {
     state.breakpoint = breakpoint;
     state.motion = stepped ? 'stepped' : 'continuous';
     const hero = state.p < 0;
-    copy.update(state.p, { stepped, index: state.index });
+    const heroFadeTo = state.pTop + (HERO.sinkEnd - state.pTop) * HERO.fadeEnd;
+    copy.update(state.p, { stepped, index: state.index, hero: { from: state.pTop, to: heroFadeTo } });
     header.update(state.index, hero);
 
     if (stepped) {
@@ -246,7 +249,7 @@ function start(initGuard, header) {
       if (state.jumped && !veilActive) runVeil(() => conductor.snap());
       time += dt;
       if (!control.free) applyPose(state.pRendered, false, time);
-      wordmark.sinkAt(state.pRendered, state.pTop, HERO.sinkEnd);
+      wordmark.sinkAt(state.pRendered, state.pTop, HERO.sinkEnd, HERO.fadeEnd);
       water.update(dt);
     }
 
