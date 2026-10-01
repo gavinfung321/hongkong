@@ -436,6 +436,17 @@ all six.
        length.) The foresail overlaps the main, as in the photo, so it hangs
        0.9 m to one side and the two cloths never meet or flicker. The
        mizzen overhangs the stern, as on the real boats.
+     - **Pointed sail tops (planned, not built; user request, 2026-10-01).**
+       The tops read as a slanted roof, not a point: the front edge stops at
+       62% of the sail height (photo ~75%), the highest point sits ~5 m
+       behind the mast at the back corner, the back edge runs nearly straight
+       down from it, and the masts rise ~3 m above the sails. Decision (user):
+       the tip goes as in the photo, just behind the mast and just under the
+       mast top. Plan: raise the front edge to ~75%, move the tip to about a
+       quarter of the sail width behind the mast, push the back edge's
+       outward curve lower, end the top pole at the tip, shorten the masts to
+       just above the tips, keep the sail area; then re-solve 04 and re-run
+       the overlap and flicker checks.
      - **Hull:** shaped from 40 cross-sections: narrower bow rising to a
        point, raised stern with a wide square transom, sheer sweeping up at
        both ends; varnished planks bent to follow the sheer, a salmon
