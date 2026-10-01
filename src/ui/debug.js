@@ -198,6 +198,7 @@ export function createDebug(ctx) {
     else if (key === ']') overlayOpacity = Math.min(1, overlayOpacity + 0.1);
     else if (key === 'r') region.hidden = !region.hidden;
     else if (key === 'p') probeLayer.hidden = !probeLayer.hidden;
+    else if (key === 'h') panel.hidden = !panel.hidden;
     else if (key === 'c') logPose();
     else if (key === 'f') toggleFree();
     else if (key >= '1' && key <= '6') jumpTo(Number(key) - 1);

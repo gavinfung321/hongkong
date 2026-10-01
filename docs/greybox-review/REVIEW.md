@@ -16,6 +16,7 @@ one with its storyboard PNG in `docs/storyboards/`.
     (landmark boxes and pass/fail against the section 7 targets).
   - **1–6** jump to a hold, **F** toggles a free orbit camera, and **C** logs
     the current pose.
+  - **H** hides or shows the diagnostics panel (top-right).
 
 ## Deviations from the storyboards (please confirm)
 
