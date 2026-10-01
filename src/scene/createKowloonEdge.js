@@ -3,13 +3,16 @@ import {
   CircleGeometry,
   Color,
   CylinderGeometry,
+  ExtrudeGeometry,
   Group,
   InstancedMesh,
   Matrix4,
   Mesh,
   MeshLambertMaterial,
   Quaternion,
+  Shape,
   SphereGeometry,
+  Vector2,
   Vector3,
 } from 'three';
 import { PALETTE, basic, lambert } from './palette.js';
@@ -23,6 +26,16 @@ function block([x0, x1, z0, z1, top], material) {
   const mesh = new Mesh(unitBox, material);
   mesh.position.set((x0 + x1) / 2, top - depth, (z0 + z1) / 2);
   mesh.scale.set(x1 - x0, depth, z1 - z0);
+  return mesh;
+}
+
+function deck({ points, top }, material) {
+  const depth = 6;
+  // Shape y = −z so that rotating the extrusion upright maps it back onto world z.
+  const shape = new Shape(points.map(([x, z]) => new Vector2(x, -z)));
+  const geometry = new ExtrudeGeometry(shape, { depth, bevelEnabled: false }).rotateX(-Math.PI / 2);
+  const mesh = new Mesh(geometry, material);
+  mesh.position.y = top - depth;
   return mesh;
 }
 
@@ -95,6 +108,7 @@ export function createKowloonEdge() {
   const ground = lambert(0x24222f);
 
   for (const b of WORLD.kowloon.blocks) group.add(block(b, ground));
+  for (const d of WORLD.kowloon.decks) group.add(deck(d, ground));
   group.add(createKowloonSkyline());
 
   const clockTower = createClockTower();

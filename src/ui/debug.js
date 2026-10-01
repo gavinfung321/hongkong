@@ -235,6 +235,15 @@ export function createDebug(ctx) {
     for (const [x0, x1, z0, z1, t] of WORLD.kowloon.blocks) {
       if (x >= x0 && x <= x1 && z >= z0 && z <= z1) top = Math.max(top, t);
     }
+    for (const { points, top: t } of WORLD.kowloon.decks) {
+      let inside = false;
+      for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+        const [xi, zi] = points[i];
+        const [xj, zj] = points[j];
+        if (zi > z !== zj > z && x < ((xj - xi) * (z - zi)) / (zj - zi) + xi) inside = !inside;
+      }
+      if (inside) top = Math.max(top, t);
+    }
     const [a, b, c, d, t] = WORLD.island.slab;
     if (x >= a && x <= b && z >= c && z <= d) top = Math.max(top, t);
     return top;

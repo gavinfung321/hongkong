@@ -13,6 +13,11 @@ export const WORLD = {
       [-40, -10, -75, -40, 2], // Star Ferry pier
       [-40, -8, -25, 40, 2.5], // quay east of the Clock Tower
     ],
+    // Polygon decks [[x, z], ...] at height `top`, for edges that are not axis-aligned.
+    decks: [
+      // Arrival promenade out to the diagonal railing A, so no water shows inside it.
+      { points: [[-5.6, 99], [-5.6, 97.4], [-48, 61.7], [-60, 61.7], [-60, 99]], top: 2.5 },
+    ],
     skyline: { x: [-480, -80], z: [80, 460], count: 40, height: [14, 60], seed: 7 },
   },
 
