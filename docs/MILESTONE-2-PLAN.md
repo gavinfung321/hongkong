@@ -252,6 +252,20 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   next (`holdOnly` and `HOLD_FADE` in `src/scene/gating.js`). Measured: no
   railing above 15 m/s; the fastest the camera moves while it is more than
   5% visible is 5 m/s (the settle on arrival). Stepped mode is unchanged.
+- **Real cause of the railing flicker: z-fighting** (user report, 2026-10-01:
+  "still flickering … there was no issue before the parallax"). The seawall
+  strip under each railing had its top at the deck height (2.5 m), level with
+  the promenade, so the two surfaces fought and flipped at the slightest
+  camera move. Before parallax the camera stood still on holds, so the
+  pattern stayed frozen; parallax keeps it moving. Moving the camera 1 cm
+  flipped solid bands along both railing bases. The strip's top is now 5 cm
+  below the deck (`createForeground.js`), and the bands are gone. Parallax
+  stays.
+- **Railing B moved to the harbour edge** (user request, 2026-10-01: "the
+  railing should be at the edge of the harbour, not in the inside"). It ran
+  20 m inside the Clock Tower promontory (x ≈ −69.5); it now follows the
+  promontory's water edge at x = −50, z 2–30 (`WORLD.foreground.railings`).
+  All frames still pass and the closest camera approach is unchanged (2.26 m).
 - **Clean railing fade:** depth-only twins of the posts, rails and wall are
   drawn just before the railing (render order 1 and 2, below the wordmark at
   10), so a half-faded railing is an even veil over the water instead of
@@ -420,7 +434,8 @@ Stop for the user's review after each step, as in the grey-box.
 - `src/scene/createWater.js`: glassy water, ripples sampled blurred (`BLUR`).
 - `src/scene/gating.js` and `src/main.js`: the railing shows on holds only
   (`holdOnly`); `src/scene/createForeground.js`: depth-only twins for a clean
-  railing fade.
+  railing fade, seawall strip top 5 cm below the deck.
+- `src/data/world.js`: railing B on the promontory's harbour edge.
 - `src/ui/debug.js`: wordmark position in the probe; `clearance()` takes a
   `parallax` option.
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font.

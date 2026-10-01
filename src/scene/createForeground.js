@@ -53,7 +53,9 @@ function createRailing(segments, material) {
     const mid = a.clone().add(b).multiplyScalar(0.5);
     rails.setMatrixAt(i * 2, m.compose(mid.clone().setY(a.y + 1.1), railQ, new Vector3(length, 1, 1)));
     rails.setMatrixAt(i * 2 + 1, m.compose(mid.clone().setY(a.y + 0.55), railQ, new Vector3(length, 1, 1)));
-    walls.setMatrixAt(i, m.compose(mid.clone().setY(a.y - 3), railQ, new Vector3(length + 0.4, 6, 1)));
+    // Top 5 cm below the deck: level with it, the two surfaces z-fight and
+    // flicker at the slightest camera move (mouse parallax).
+    walls.setMatrixAt(i, m.compose(mid.clone().setY(a.y - 3.05), railQ, new Vector3(length + 0.4, 6, 1)));
   });
 
   // Depth-only twins drawn just before the railing (after the water, before
