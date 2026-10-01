@@ -393,7 +393,7 @@ export function createDebug(ctx) {
     const m = new Matrix4();
     ctx.scene.updateMatrixWorld(true);
     ctx.scene.traverse((o) => {
-      if (!o.isMesh || moving.has(o) || !o.visible) return;
+      if (!o.isMesh || moving.has(o) || !o.visible || o.name === 'wordmark') return;
       if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
       const names = [];
       for (let p = o; p && p !== ctx.scene; p = p.parent) if (p.name) names.push(p.name);
@@ -411,6 +411,8 @@ export function createDebug(ctx) {
     });
     const camera = ctx.camera.clone();
     const rig = createCameraRig(camera, chapters, { hold: SCROLL.hold });
+    const pTop = ctx.conductor.state.pTop;
+    rig.setStart(pTop);
     const out = {};
     for (const bp of ['desktop', 'mobile']) {
       rig.setBreakpoint(bp);
@@ -421,9 +423,10 @@ export function createDebug(ctx) {
         g.to = p;
         g.min = Math.min(g.min, Math.round(d * 100) / 100);
       };
-      for (let p = 0.5; p <= chapters.length - 0.5; p += step) {
+      // From the top of the page, including the opening push.
+      for (let p = pTop; p <= chapters.length - 0.5; p += step) {
         const q = Math.round(p * 1000) / 1000;
-        rig.update(p, { stepped: true });
+        rig.update(p);
         const pos = camera.position;
         const above = pos.y - groundAt(pos.x, pos.z);
         if (above < eye) hit('ground', q, above);

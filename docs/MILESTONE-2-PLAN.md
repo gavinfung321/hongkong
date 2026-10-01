@@ -66,11 +66,13 @@ at the top. The wordmark needs a moment of its own first.
 
 Agreed with the user:
 
-- **Placement:** in front, standing on the water just behind the harbour
-  railing, so the railing covers its feet (Kage's grass trick).
-- **Exit:** it sinks into the water and fades as you scroll. Because it is a
-  real object in the 3D scene, the water surface hides the part below the
-  waterline, so it genuinely sinks.
+- **Placement:** standing on the water, drawn in front of the whole scene
+  including the railing (user request, 2026-10-01, replacing "behind the
+  railing").
+- **Exit:** from the first scroll it moves down out of the frame and fades,
+  while the camera pushes in (chapter 01's `holdDolly`, which now starts at
+  the top of the page instead of at the hold). Both start immediately, with no
+  dead zone.
 - **Mobile:** stays horizontal (not stacked) and smaller, about 85% of the
   screen width.
 - **Reduced motion:** no sinking; it simply fades out when you leave the hero.

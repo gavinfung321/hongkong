@@ -17,6 +17,7 @@ export function createScrollConductor(sections, config) {
   const state = {
     p: 0,
     pRendered: 0,
+    pTop: 0, // progress at the top of the page (negative: the hero)
     index: 0,
     local: 0,
     phase: 'hold',
@@ -39,6 +40,7 @@ export function createScrollConductor(sections, config) {
     const scrollTop = window.scrollY;
     tops = sections.map((s) => s.getBoundingClientRect().top + scrollTop);
     heights = sections.map((s) => s.offsetHeight);
+    state.pTop = progressAt(0);
     return true;
   }
 
