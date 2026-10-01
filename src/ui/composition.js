@@ -1,6 +1,7 @@
 // Development-only composition maths: landmark screen rectangles, target
 // scoring, and a small Nelder–Mead pose solver. Imported by debug.js only.
 import { Box3, Matrix4, PerspectiveCamera, Plane, Ray, Vector2, Vector3 } from 'three';
+import { aimCamera } from '../scroll/cameraRig.js';
 
 const v = new Vector3();
 const m = new Matrix4();
@@ -176,14 +177,11 @@ export function paramsToPose([px, py, pz, yawDeg, pitchDeg, fov], distance = 400
 }
 
 export function poseCamera(camera, pose, aspect) {
-  camera.position.fromArray(pose.position);
-  camera.up.set(0, 1, 0);
-  camera.lookAt(v.fromArray(pose.target));
   camera.fov = pose.fov;
   camera.aspect = aspect;
   camera.near = 0.5;
   camera.far = 5000;
-  camera.updateProjectionMatrix();
+  aimCamera(camera, new Vector3().fromArray(pose.position), v.fromArray(pose.target));
   camera.updateMatrixWorld();
   return camera;
 }

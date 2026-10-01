@@ -157,6 +157,7 @@ export function createDebug(ctx) {
     control.free = !control.free;
     root.classList.toggle('is-free-camera', control.free);
     if (control.free) {
+      camera.clearViewOffset();
       orbit = new OrbitControls(camera, renderer.domElement);
       orbit.target.copy(camera.position).add(camera.getWorldDirection(new Vector3()).multiplyScalar(100));
       orbit.update();
@@ -167,7 +168,10 @@ export function createDebug(ctx) {
   }
 
   function currentPose() {
-    const target = camera.position.clone().add(camera.getWorldDirection(new Vector3()).multiplyScalar(400));
+    const direction = camera.getWorldDirection(new Vector3());
+    // A level camera with a lens shift looks along the shifted frame centre.
+    if (camera.view?.enabled) direction.y = -camera.view.offsetY * 2 * Math.tan((camera.fov * Math.PI) / 360);
+    const target = camera.position.clone().add(direction.normalize().multiplyScalar(400));
     const round = (n) => Math.round(n * 10) / 10;
     return {
       position: camera.position.toArray().map(round),
