@@ -102,9 +102,26 @@ midground, background and atmosphere. Each one still has to pass gate 5 below
 | Sampans and distant ferries | Low-poly or cards | 01, 03–04 | Midground | Busy-harbour feel; lit windows and wakes at a distance |
 | Skyline reflections | Procedural streaks on the water | 01, 05 | Water | Vertical light smears under lit buildings |
 | Neon sign cutouts | Alpha WebP set | 05 | Foreground edges | Hanging Chinese neon signs framing the City of Light |
-| Searchlight beams | Procedural | 05–06 | Sky | A nod to the Symphony of Lights show |
+| Searchlight beams | Procedural | 01, 05–06 | Sky | A nod to the Symphony of Lights show; the frame 01 storyboard shows beams rising from the Central towers (user reminder below) |
 | Smoke wisps | Alpha WebP | 06 | Sky | Drift after the fireworks, for the afterglow |
 | Promenade crowd silhouettes | Alpha WebP | 06 | Foreground | People watching the fireworks; scale and warmth |
+
+## User reminders (2026-10-01)
+
+Things the user plans to add, so the harbour looks closer to the frame 01
+storyboard (`docs/storyboards/frame-01-harbour-at-dusk-rough.jpg`). Assets
+the user makes are original; anything made with an AI tool records the tool,
+plan and prompt here before import (as for Meshy above).
+
+| Reminder | Look in the storyboard | Becomes | Made by | When |
+|---|---|---|---|---|
+| Stone railing | Dark stone balustrade along the promenade, square posts topped with warm lanterns | `promenade-railing.webp` (Phase B, P1), or a low-poly model if it must turn corners in 3D; the lantern glow is added in code | User | Milestone 3 (assets) |
+| Trees | Rows of palms along the Tsim Sha Tsui promenade, framing the Clock Tower | Palm cutouts replacing the flat palm cards (`palm-branch.webp` widened to a set), plus the bauhinia tree already listed | User | Milestone 3 |
+| Wet tiles | Promenade paving shining with reflected lamp light | A tileable wet-paving texture on the promenade deck, with glossy reflections | User | Milestone 3; the shine is tuned in Milestone 4 |
+| Clouds | Heavy clouds lit coral from below by the city | A cloud layer in the sky (painted cards or a procedural layer), kept clear of the moon | User artwork or code | Milestone 4 (atmosphere) |
+| Light beams | Searchlights rising from the Central towers | "Searchlight beams" in Phase D, now including 01 | Code | Milestone 4 |
+| More realistic buildings | Recognisable towers (Bank of China, Central Plaza) with lit window grids | `skyline.glb` (Phase B, P0), with a few landmark towers modelled more closely | User (Meshy or similar) | Milestone 3 |
+| More light at ground level in Central | A bright band of street and podium lights along the Central waterfront, with long reflections | A waterfront light strip plus the "Skyline reflections" layer in Phase D | Code | Milestone 2 look test (lit windows) or Milestone 4 |
 
 ## Reference material (not for production)
 
