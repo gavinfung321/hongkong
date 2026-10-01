@@ -50,6 +50,11 @@ one with its storyboard PNG in `docs/storyboards/`.
     The land now stops 5 m past the tower.
 11. **Brief wording.** The brief swaps the fore and mizzen sail labels in 7.4.
    The geometry follows the PNG.
+12. **Backdrop behind Central.** The near mountain ridge is raised so it
+    stays above the skyline in 05 and runs across the bottom of 06, with
+    Victoria Peak (~560 m) left of IFC. The sky's dusk glow now reaches about
+    17° up, so the ridges read as dark silhouettes against it, as in the
+    storyboards. The ridge also shows behind the skyline in 01–04.
 
 Everything else is within ±3% of its section 7 target.
 
@@ -88,9 +93,10 @@ sits at the centre of the frame.
 
 ## Known grey-box artifacts
 
-- From mid-harbour (05), the placeholder water shows a faint repeating
-  pattern. The final water will replace it. Fixing it now would need a custom
-  shader, which is out of scope.
+- From mid-harbour (05), the placeholder water reads as choppy rather than
+  calm. The repeating brick grid is gone: the ripple texture now repeats every
+  120 m at an angle to the cameras. City-light reflections come with the final
+  water.
 - The burst markers in 06 are flat rings at the brief's sizes, which are large.
   They are placement markers, not fireworks.
 
