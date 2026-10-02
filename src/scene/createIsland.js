@@ -18,13 +18,13 @@ import {
   MeshLambertMaterial,
   Quaternion,
   Shape,
-  ShapeGeometry,
   TorusGeometry,
   Vector2,
   Vector3,
 } from 'three';
 import { PALETTE, basic, lambert } from './palette.js';
 import { addCityWindows } from './cityWindows.js';
+import { createMountains } from './createMountains.js';
 import { WORLD } from '../data/world.js';
 import { seededRandom } from './random.js';
 import { strut } from './strut.js';
@@ -71,26 +71,6 @@ function createSkyline() {
     mesh.setColorAt(i, color);
   }
   mesh.name = 'skyline';
-  return mesh;
-}
-
-function createMountain({ z, x, base, peaks, color, seed }) {
-  const random = seededRandom(seed);
-  const phase = [random() * 6, random() * 6, random() * 6];
-  const shape = new Shape();
-  shape.moveTo(x[0], 0);
-  for (let px = x[0]; px <= x[1]; px += 60) {
-    let h = base + 40 * Math.sin(px / 310 + phase[0]) + 25 * Math.sin(px / 140 + phase[1]) + 12 * Math.sin(px / 55 + phase[2]);
-    for (const [cx, height, width] of peaks) {
-      const d = (px - cx) / width;
-      h += height * Math.exp(-d * d);
-    }
-    shape.lineTo(px, h);
-  }
-  shape.lineTo(x[1], 0);
-  shape.lineTo(x[0], 0);
-  const mesh = new Mesh(new ShapeGeometry(shape), basic(color));
-  mesh.position.z = z;
   return mesh;
 }
 
@@ -356,15 +336,17 @@ export function createIsland() {
   const group = new Group();
   group.name = 'island';
   group.add(createSlab(), createSkyline());
-  for (const mountain of WORLD.mountains) group.add(createMountain(mountain));
+  const mountains = createMountains();
+  group.add(mountains.group);
 
   const ifc = createIFC();
   const { wheel, turn } = createWheel();
   group.add(ifc, createPodium(), createPiers(), wheel);
 
-  // Continuous mode only; in reduced motion the wheel holds still.
+  // Continuous mode only; in reduced motion the wheel and mist hold still.
   function update(time) {
     turn((time / WHEEL_TURN) * Math.PI * 2);
+    mountains.update(time);
   }
 
   return { group, ifc, wheel, update };

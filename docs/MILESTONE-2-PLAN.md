@@ -1037,6 +1037,36 @@ all six.
        6.2% of pixels (6.7% before); the Clock Tower is unchanged. On
        mobile the distant skyline still reads as flat slabs; the depth haze
        (not chosen for now) or the mist band in part 2 could fix that.
+     - **Part 2: mountains (built 2026-10-02).** The two flat one-colour
+       cut-outs are rebuilt in `src/scene/createMountains.js`:
+       - **Shape:** each range is an upright strip under a ridge line sampled
+         every 10 / 20 / 30 m (near / far / third), with jagged detail from
+         four octaves of ridged noise (±15 m) on top of the old swells. The
+         near ridge follows the Peak seen from Kowloon: the High West knob,
+         the summit (~560 m) left of IFC with a shoulder that still hides the
+         moon's lower edge in 01, the dip of Victoria Gap, then Mount
+         Cameron's mass (`WORLD.mountains.ranges`).
+       - **Shading:** darker at the foot (×0.6) to lighter at the ridge
+         (×1.9), so the slopes have volume through the fog. A thin moonlit
+         edge (5 m, never under 2 px) lights the ridges within about 13° of
+         the moon, drawn after the fog so it shows at any distance.
+       - **Third range:** at 3.7 km, behind the moon (the moon draws over
+         it), almost fog-coloured; it peeks over the others where they dip.
+       - **Mist band:** a 340 m band of city-lit haze between the skyline
+         and the near range (z −1650), fading upward, in soft patches that
+         drift slowly in continuous mode and hold still in reduced motion.
+       - **Slope lights:** 80 clusters of 12 soft warm and cool dots on the
+         near range's lower slopes behind Central (Mid-Levels homes), up to
+         65% of the ridge height and dim (well below the skyline windows).
+         Fixed 1.8 px dots, so they don't twinkle as the camera moves.
+       - **Order:** the moon now draws first of the see-through layers, then
+         the slope lights, then the mist, so nothing nearer is painted over.
+       - **Checks:** the composition probe shows only the four older misses;
+         1 cm camera steps as before (holds 1–5: 19,099 / 16,700 / 14,782 /
+         13,032 / 6,607 px); the 01 skyline strobe at scroll speed 6.2%, as
+         in part 1; three more draw calls in every hold (desktop 01 173).
+         In 05 the shoulder hides more of the moon behind the towers (a
+         sliver shows left of IFC).
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -1054,7 +1084,7 @@ Measured with the `?fps` overlay on a production build, as in
 |---|---|---|
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
-| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. With the 3D palms: desktop 02 137. With the bauhinia tree: desktop 01 170 (desktop only). The water reflections add none. Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
+| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. With the 3D palms: desktop 02 137. With the bauhinia tree: desktop 01 170 (desktop only). The water reflections add none. The mountain rebuild adds 3 everywhere (third range, mist, slope lights): desktop 01 173, 02 140, 05 48; mobile 01 117. Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
 | New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). The stone railing adds a 64 × 64 granite tile and a 64 × 96 post panel (24 textures; the lantern glows are drawn in their shader). The wet paving adds a 240 × 240 slab tile (25 textures). The palms add a 256 × 256 frond and bark atlas (26 textures). The bauhinia tree adds a 512 × 512 leaf and flower atlas (27 textures; its falling petals reuse the petal texture). The water reflections add a 256 × 1 skyline strip (28 textures, 1 KB). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
 | Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b; the promenade lanterns and lamps are faked in the materials (`lamps.js`) | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
@@ -1201,7 +1231,12 @@ Stop for the user's review after each step, as in the grey-box.
   (user choices, 2026-10-02; reworked twice the same day, user requests).
 - Central buildings and mountains (step 5, stop 6; user choices,
   2026-10-02): `src/scene/cityWindows.js` gains a `maxLit` cap;
-  `src/scene/createIsland.js` dims the skyline windows (part 1).
+  `src/scene/createIsland.js` dims the skyline windows (part 1). New
+  `src/scene/createMountains.js` (three shaded ranges with jagged ridges
+  and a moonlit edge, the mist band, the slope lights), replacing the
+  mountain code in `createIsland.js`; `src/data/world.js` (the Peak outline,
+  the third range, mist and lights); `src/scene/createMoon.js` (draw order)
+  (part 2).
 - Publishing (user choice, 2026-10-02): `vite.config.js` builds with the
   base `/hongkong/` on GitHub; new `.github/workflows/deploy.yml` builds and
   publishes to GitHub Pages on every push to `main`; `.gitignore` keeps the
@@ -1236,7 +1271,11 @@ The milestone passes when:
    no glare or hot blobs under the boats, nothing strobing while the camera
    moves (user choices and requests, 2026-10-02). IFC is the brightest
    tower in 01 and 05; no Central building is lit as much (user request,
-   2026-10-02).
+   2026-10-02). The mountains have rough ridges with the Peak's outline,
+   lighter upper slopes, a thin moonlit edge near the moon, a faint third
+   range, mist at their foot and quiet slope lights; the ridge still hides
+   the moon's lower edge in 01, and nothing on them twinkles while the
+   camera moves (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
    feet, raised over the boats (user request, 2026-10-02), and sinks and
    fades out with the 01 copy from the first scroll.

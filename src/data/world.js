@@ -90,12 +90,34 @@ export const WORLD = {
     ],
   },
 
-  // Peaks are [x, extra height, width]. The near ridge stays above the Central
-  // skyline across the whole 05/06 frames; Victoria Peak (~560 m) sits left of IFC.
-  mountains: [
-    { z: -1800, x: [-3200, 3800], base: 340, peaks: [[160, 220, 520], [-900, 70, 600], [1100, 110, 600], [2200, 90, 700]], color: 0x15122a, seed: 3 },
-    { z: -2700, x: [-4000, 4600], base: 420, peaks: [[900, 230, 900], [-1600, 150, 900], [2900, 180, 900]], color: 0x241e3c, seed: 5 },
-  ],
+  // Peaks are [x, extra height, width]; a negative height cuts a saddle.
+  // `step` is the ridge's sample spacing in metres, `rough` scales its jagged
+  // detail. The near ridge stays above the Central skyline across the whole
+  // 05/06 frames. Its outline follows the Peak seen from Kowloon (user choice,
+  // 2026-10-02): the High West knob, the summit (~560 m) left of IFC with a
+  // shoulder that hides the moon's lower edge in 01, the dip of Victoria Gap,
+  // then Mount Cameron's mass. The third range sits behind
+  // the moon, so the moon draws over it.
+  mountains: {
+    ranges: [
+      {
+        z: -1800,
+        x: [-3200, 3800],
+        base: 340,
+        peaks: [[200, 215, 420], [-170, 140, 170], [-900, 70, 600], [500, 70, 150], [760, -40, 100], [1000, 140, 300], [1350, 50, 280], [2200, 90, 700]],
+        color: 0x15122a,
+        seed: 3,
+        step: 10,
+        rough: 1,
+      },
+      { z: -2700, x: [-4000, 4600], base: 420, peaks: [[900, 230, 900], [-1600, 150, 900], [2900, 180, 900]], color: 0x241e3c, seed: 5, step: 20, rough: 0.8 },
+      { z: -3700, x: [-4500, 5500], base: 780, peaks: [[-500, 260, 900], [1900, 300, 1000], [3700, 200, 800]], color: 0x2c2648, seed: 9, step: 30, rough: 0.6 },
+    ],
+    // Haze lit by the city, between the skyline and the near range.
+    mist: { z: -1650, x: [-3200, 3800], height: 340 },
+    // Homes and roads on the near range's lower slopes (Mid-Levels).
+    lights: { x: [-700, 1400], clusters: 80, perCluster: 12, seed: 21 },
+  },
 
   // Behind the far range, upper right of the opening frame; its lower edge dips
   // behind the ridge. Faces the opening camera. Stylised: far larger than life.
