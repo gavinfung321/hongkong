@@ -28,7 +28,13 @@ the 73k triangles: nine palms of 0.7–1.2k triangles, each drawn four
 times (a depth pass and a colour pass, each split into back and front
 faces). Now each palm draws twice and phones skip two palms left of the
 frame: phone 02 52k triangles, 98 calls (user choice, 2026-10-02).
-To be re-measured on the iPhone.
+Re-measured (user, 2026-10-02): phone 02 31–36 fps, 1% low 28, worst
+second 31, so triangles were not the limit; the cost is per pixel.
+
+**Measurement switches** (live, like `?fps`, user choice 2026-10-02):
+`?dpr=1.25` caps the pixel ratio, `?aa=0` turns off edge smoothing,
+`?bloom=0` turns off the glow, and `?off=water,clouds,mist,palms,petals`
+hides any of those layers. The `?fps` box lists the switches in use.
 
 If the iPhone 11 misses its target, layers are switched off on mobile in this
 order: bloom (built in part 3e, step 5; it already switches itself off

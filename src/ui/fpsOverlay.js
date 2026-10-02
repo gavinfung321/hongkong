@@ -2,6 +2,11 @@
 
 // Ring buffer of the last 600 frame times: 10 s at 60 fps.
 const WINDOW_FRAMES = 600;
+// The measurement switches in the address, shown so each screenshot says what was off.
+const switches = [...new URLSearchParams(window.location.search)]
+  .filter(([key]) => ['bloom', 'dpr', 'aa', 'off'].includes(key))
+  .map(([key, value]) => `${key}=${value}`)
+  .join('  ');
 
 export function createFpsOverlay(renderer) {
   const panel = document.createElement('div');
@@ -64,6 +69,7 @@ export function createFpsOverlay(renderer) {
       `fps ${average.toFixed(0)}  1% low ${onePercentLow().toFixed(0)}`,
       `worst 1s ${Number.isFinite(worstAverage) ? worstAverage.toFixed(0) : '–'}`,
       `dpr ${pixelRatio.toFixed(2)}  calls ${calls}  tris ${(triangles / 1000).toFixed(1)}k`,
+      ...(switches ? [switches] : []),
     ].join('\n');
   }
 

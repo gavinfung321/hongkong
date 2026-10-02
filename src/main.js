@@ -39,6 +39,11 @@ const MOBILE_WINDOW_SOFT = 1.5;
 const MOBILE_FACADE_BIAS = 0.5;
 // ?bloom=0 turns the glow off, ?bloom=2 doubles it: for side-by-side checks.
 const BLOOM_SCALE = params.has('bloom') ? Math.max(0, Number(params.get('bloom')) || 0) : 1;
+// Phone measurement switches, live like ?fps: ?dpr=1.25 caps the pixel ratio,
+// ?aa=0 turns off edge smoothing, ?off=water,clouds,mist,palms,petals hides layers.
+const DPR_CAP = Number(params.get('dpr')) || 0;
+const OFF_LAYERS = { water: ['water'], clouds: ['cloud'], mist: ['mist', 'sea-mist'], palms: ['palms'], petals: ['petals'] };
+const OFF = (params.get('off') ?? '').split(',').flatMap((key) => OFF_LAYERS[key.trim()] ?? []);
 
 function start(initGuard, header) {
   const canvas = document.getElementById('world');
@@ -48,7 +53,7 @@ function start(initGuard, header) {
 
   // Phones too: without it IFC's 1–2 px piers, slots, bands and fins crawl
   // while scrolling (user report, 2026-10-02).
-  const world = createScene(canvas, { antialias: true });
+  const world = createScene(canvas, { antialias: params.get('aa') !== '0' });
   const { renderer, scene, camera } = world;
 
   scene.add(createLighting());
@@ -147,7 +152,7 @@ function start(initGuard, header) {
   let pixelRatio = 1;
 
   function targetPixelRatio() {
-    const limit = breakpoint === 'mobile' ? 1.5 : 2;
+    const limit = DPR_CAP || (breakpoint === 'mobile' ? 1.5 : 2);
     return Math.max(ADAPTIVE.floor, Math.min(window.devicePixelRatio || 1, limit, adaptiveCap));
   }
 
@@ -287,6 +292,8 @@ function start(initGuard, header) {
     scene.fog.density = gating.fogDensity(segment);
   }
 
+  const switchedOff = OFF.flatMap((name) => scene.getObjectsByProperty('name', name));
+
   // One unseen frame with every object drawn, hidden or off screen, so every
   // shader is built behind the loading screen rather than mid-scroll.
   function warmUp() {
@@ -360,6 +367,7 @@ function start(initGuard, header) {
     }
 
     needsRender = false;
+    for (const object of switchedOff) object.visible = false;
     if (!ready) warmUp();
     water.reflect(camera, breakpoint);
     world.render();

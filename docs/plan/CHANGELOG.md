@@ -6,6 +6,12 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-02
 
+- **Phone measurement switches** (user choice): the lighter palms left
+  phone 02 at 31–36 fps, so the cost is per pixel, not triangles. New
+  address-bar switches let the user test on the iPhone what costs most:
+  `?dpr=`, `?aa=0` and `?off=water,clouds,mist,palms,petals` (with the
+  existing `?bloom=0`); the `?fps` box shows which are on. Files:
+  `src/main.js`, `src/ui/fpsOverlay.js`.
 - **Lighter palms** (user choice): each palm drew four times (back and
   front passes of both its depth twin and its colour); now it draws twice,
   and two palms left of the phone frame are desktop-only. Phone 02 drops
