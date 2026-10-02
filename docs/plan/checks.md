@@ -14,8 +14,19 @@ Measured with the `?fps` overlay on a production build, as in
 | 1% low fps | ≥ 40 | ≥ 24 |
 | Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. With the 3D palms: desktop 02 137. With the bauhinia tree: desktop 01 170 (desktop only). The water reflections add none. The mountain rebuild adds 3 everywhere (third range, mist, slope lights): desktop 01 173, 02 140, 05 48; mobile 01 117. The landmarks and varied tops add 12 (four skyline-top sets, six landmark meshes, one mast mesh, one set of warning lights): desktop 01 185, 02 149, 03 100, 05 60; mobile 01 129. The far-tower window dots add 1: desktop 01 186, 02 150, 05 61; mobile 01 130. The firework show in 06 takes one call per live burst, one for its rockets and sparks and one per visible smoke wisp: at its busiest desktop 06 56, mobile 06 51 (desktop 05 70, mobile 05 61; 2026-10-02). Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
 | New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). The stone railing adds a 64 × 64 granite tile and a 64 × 96 post panel (24 textures; the lantern glows are drawn in their shader). The wet paving adds a 240 × 240 slab tile (25 textures). The palms add a 256 × 256 frond and bark atlas (26 textures). The bauhinia tree adds a 512 × 512 leaf and flower atlas (27 textures; its falling petals reuse the petal texture). The water reflections add a 256 × 1 skyline strip (28 textures, 1 KB). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
-| Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b; the promenade lanterns and lamps are faked in the materials (`lamps.js`) | same |
+| Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b; the promenade lanterns and lamps are faked in the materials (`lamps.js`). All three stay in the scene in every chapter (a hidden boat's light is at zero), so the count never changes mid-scroll (2026-10-02) | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
+| Shaders built mid-scroll | 0: all 73 are built in one unseen frame before the loading screen lifts (2026-10-02; was 32 on the way from 01 to 02 on phones) | same |
+
+**First iPhone 11 reading (user, 2026-10-02, live site, before the
+shader fix):** 01 hold 47 fps, 1% low 41, worst second 33, 148 calls,
+42k triangles; 02 hold 34 fps, 1% low 28, worst second 32, 103 calls,
+73k triangles; pixel ratio at its phone cap of 1.5 (no automatic drop).
+Both pass; 02 is close to the line, and the move from 01 to 02 stuttered
+(32 shaders built mid-scroll, now fixed). In 02 the palms are 35k of
+the 73k triangles: nine palms of 0.7–1.2k triangles, each drawn four
+times (a depth pass and a colour pass, each split into back and front
+faces).
 
 If the iPhone 11 misses its target, layers are switched off on mobile in this
 order: bloom (built in part 3e, step 5; it already switches itself off

@@ -2,8 +2,9 @@
 
 **Status:** approved 2026-10-01 and built step by step, with a review stop
 after each step. Live at <https://gavinfung321.github.io/hongkong/>; every
-push to `main` redeploys. Still open: the colour pass and the iPhone
-measurement (see "Open" below).
+push to `main` redeploys. Still open: the colour pass and the rest of the
+iPhone measurement (first iPhone 11 reading of 01 and 02 in `checks.md`,
+2026-10-02; see "Open" below).
 
 This plan follows the approved grey-box (`CURSOR-GREYBOX-BRIEF.md`, review in
 `greybox-review/REVIEW.md`). It does not change the existing plan files or the

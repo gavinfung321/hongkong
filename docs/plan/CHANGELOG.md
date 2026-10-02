@@ -6,6 +6,13 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-02
 
+- **No more shader stutter between chapters** (user request, after the
+  first iPhone 11 reading): the move from 01 to 02 stuttered because 32
+  shaders were built mid-scroll. Every shader is now built in one unseen
+  frame before the loading screen lifts, and the ferry and junk lights stay
+  in the scene at zero while their boat is hidden (a change in the number
+  of lights had forced new versions of every lit shader). No visible
+  change. Files: `src/main.js`, `src/scene/gating.js`.
 - **Fireworks smoke lighter, second phone wisp** (user request and
   choices): every wisp is a third weaker (at most 10.5% opacity instead
   of 16%), and phones gain a lavender wisp under the left cyan burst that
