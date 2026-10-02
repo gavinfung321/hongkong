@@ -6,6 +6,13 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Junk spray as a bow wave** (user request and choice): in desktop 04
+  the junk's 15 m spray card along the hull read as a wave crashing into
+  its side, too violent for a junk that "slides alongside". Now a small
+  bow wave at the stem (5.5 m, the low right-hand part of the art, its
+  cut edge feathered, fainter). Phones barely change; the ferry's spray
+  is unchanged. Spray cards can now use part of the artwork (`crop`).
+  Files: `src/scene/spray.js`, `src/data/atmosphere.js`.
 - **Film grade** (user choice; colour pass, README "Open" 6): the whole
   frame is graded in the glow's last pass: contrast round the night's
   mid-tones, indigo shadows, warm highlights, a little more colour where

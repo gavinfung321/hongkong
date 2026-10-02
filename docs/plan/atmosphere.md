@@ -208,8 +208,13 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
     boat so it rides the bob, turned about the vertical to face the
     camera and set out on the hull's side toward it; its foam edge sits
     on the waterline. Ferry: 24 m wide, centred 9 m forward of
-    midships, so it wraps the bow and the front of the hull. Junk:
-    15 m, fainter, below the tyre line. Dimmed to a blue-grey for the
+    midships, so it wraps the bow and the front of the hull. Junk: only
+    a small bow wave where the stem cuts the water, 5.5 m wide, cut
+    from the low right-hand part of the art (its cut edge feathered),
+    fainter; the hull, tyres and waterline stay clear (user choice,
+    2026-10-03: a 15 m card along the hull read as a wave crashing
+    into its side in desktop 04). On phones it is a speck at the stem.
+    Dimmed to a blue-grey for the
     night (under the glow threshold) and fogged like the boats, so it
     is only a hint in the wide 01 view.
   - **Seen at an angle**, a flat card sank behind the hull's near side,
@@ -217,7 +222,7 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
     pulled toward the camera (ferry 14 m, junk 10 m): it clears its own
     hull but stays behind anything nearer, such as the railing and
     palms in 02 or the other boat.
-  - **Strength:** calm at a hold (ferry 62%, junk 50%), up to 90% / 75%
+  - **Strength:** calm at a hold (ferry 62%, junk 45%), up to 90% / 65%
     while the boat moves (full at 8 m/s), easing between the two. A
     slow swell in size of under 6%, built from two waves of unrelated
     periods (4.3 s and 2.9 s), so no loop shows. Reduced motion: still,
