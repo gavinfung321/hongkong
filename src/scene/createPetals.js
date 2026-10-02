@@ -28,11 +28,19 @@ const LAYERS = {
   far: { box: [50, 26, 44], ahead: 30, size: [0.2, 0.34], max: { desktop: 70, mobile: 32 } },
 };
 // Deep magenta to pale orchid, slightly muted so the junk's coral sails lead.
-const COLOURS = [0x9c3a7a, 0xb45591, 0xc97cad, 0xdaa6c6];
-const WIND = new Vector3(0.35, 0, 0.1); // metres per second
-const FALL = [0.25, 0.5]; // metres per second
+export const COLOURS = [0x9c3a7a, 0xb45591, 0xc97cad, 0xdaa6c6];
+// Toward screen left, away from the bauhinia on the hero's right edge.
+export const WIND = new Vector3(-0.35, 0, 0.1); // metres per second
+export const FALL = [0.25, 0.5]; // metres per second
 const GUST = { gain: 3, max: 2.5, rise: 3, decay: 1.2 }; // scroll speed → extra drift
 const FADE_WIDTH = 0.15; // share of the density range over which each petal shrinks away
+
+let petal;
+// Shared with the bauhinia's falling petals.
+export function petalTexture() {
+  petal ??= drawPetal();
+  return petal;
+}
 
 function drawPetal() {
   const canvas = document.createElement('canvas');
@@ -115,7 +123,7 @@ function wrap(value, middle, half) {
 }
 
 export function createPetals() {
-  const texture = drawPetal();
+  const texture = petalTexture();
   const random = seededRandom(23);
   const layers = [
     createLayer('near', LAYERS.near, texture, random, true),
@@ -169,7 +177,7 @@ export function createPetals() {
         }
         const [freq, phase, amp] = petal.sway;
         const sway = Math.cos(time * freq + phase) * amp * freq;
-        p.x += (WIND.x + sway + gust) * dt;
+        p.x += (WIND.x + sway - gust) * dt;
         p.y += (gust * 0.4 - petal.fall) * dt;
         p.z += (WIND.z + gust * 0.3) * dt;
         p.set(wrap(p.x, centre.x, hx), wrap(p.y, centre.y, hy), wrap(p.z, centre.z, hz));
