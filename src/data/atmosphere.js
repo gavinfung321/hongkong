@@ -80,11 +80,13 @@ export const CLOUDS = {
       { chapter: 5, layer: 'front', band: 'tall', u: [0, 0.45], x: 15, y: 33, width: 28, opacity: 0.5 },
     ],
     mobile: [
-      // The phone's sky is tall: stacked bands down to the skyline.
-      { chapter: 0, layer: 'back', band: 'tall', u: [0.2, 0.75], x: 50, y: 14, width: 160, opacity: 0.5 },
-      { chapter: 0, layer: 'back', band: 'low', x: 40, y: 30, width: 200, opacity: 0.45 },
-      { chapter: 0, layer: 'front', band: 'thin', u: [0.3, 1], x: 60, y: 22, width: 130, opacity: 0.55 },
-      { chapter: 0, layer: 'front', band: 'tall', u: [0.1, 0.65], x: 45, y: 40, width: 150, opacity: 0.6 },
+      // The phone's sky is tall. 01: one dim deck from the top down to the
+      // moon, a small lit bank off-centre left and the bright bank just
+      // above the moon; full-width strips at even steps read as stripes
+      // (user choice, 2026-10-03).
+      { chapter: 0, layer: 'back', band: 'tall', u: [0.15, 0.5], x: 50, y: 22, width: 190, opacity: 0.5 },
+      { chapter: 0, layer: 'front', band: 'low', u: [0, 0.45], x: 22, y: 25, width: 70, opacity: 0.5 },
+      { chapter: 0, layer: 'front', band: 'tall', u: [0.1, 0.65], x: 45, y: 42, width: 150, opacity: 0.6 },
       { chapter: 1, layer: 'back', band: 'tall', x: 50, y: 8, width: 200, opacity: 0.5 },
       { chapter: 1, layer: 'back', band: 'tall', u: [0.2, 0.8], x: 50, y: 34, width: 170, opacity: 0.45 },
       { chapter: 1, layer: 'back', band: 'low', u: [1, 0], x: 50, y: 46, width: 180, opacity: 0.45 },

@@ -4,6 +4,15 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Newest first.
 One entry per change: what changed, why, and the files. Older history also
 lives in the dated notes inside each area file, and in `git log`.
 
+## 2026-10-03
+
+- **Phone 01 clouds as one deck** (user choice): three full-width strips
+  at even steps read as stripes. Now one dim deck from the top to the moon,
+  a small lit bank off-centre left and the bright bank just above the moon
+  (four cards → three; mobile 01 148 draw calls). The user is not
+  re-measuring phone fps for now (iPhone 16 expected). Files:
+  `src/data/atmosphere.js`.
+
 ## 2026-10-02
 
 - **Cloud ceiling** (user request; choices: storyboard ceiling, wind,
