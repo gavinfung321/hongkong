@@ -51,7 +51,7 @@ work, all done and deployed: clouds and mist (finished: the user said "we
 done with mist"), lamps re-spaced, hero chapter numbers removed on desktop,
 stronger 04 cloud, the plan split into `docs/plan/`.
 
-## Next task: fireworks, step 2 of 3 (user choice, 2026-10-02)
+## Next task: fireworks, step 3 of 3 (user choice, 2026-10-02)
 
 Follow `ATMOSPHERE-EFFECTS-BRIEF.md` §6.7, one step at a time, with a
 review after each:
@@ -60,25 +60,25 @@ review after each:
    replaced the ring markers with cards of `firework-burst.webp`: eight
    on desktop, six on phones, 35% bigger than the markers (user request);
    see `atmosphere.md`, "Fireworks in 06".
-2. Animation (user choice, 2026-10-02: keep the cards, add particles):
-   a deterministic 7–9 s loop, quick reveal (0.2–0.3 s), slow fade
-   (1.2–2 s), starting near 70% size; three to five live at once, never
-   all; no harsh flashes; reduced motion holds a composed still. Add our
-   own three.js particles (one draw call): rockets rising from behind the
-   skyline and sparks falling under each burst. The user's React
-   "fireworks-show" component is a technique reference only (no React
-   here, its trails paint black, unknown licence).
-3. Smoke (2–3 violet-coral wisps on desktop, 1 on phones) and sparse
-   falling embers, outside the copy.
+2. **The show (done 2026-10-02):** an 8 s loop with rockets, ignition,
+   opening, cooling, fading and falling spark streaks; reduced motion
+   holds a composed moment; see `atmosphere.md`. The user's React
+   "fireworks-show" component was a technique reference only.
+3. Smoke (2–3 violet-coral wisps on desktop, 1 on phones) behind the
+   bursts, outside the copy. The falling sparks already cover the brief's
+   embers.
 
 Where things are:
 
-- Bursts: `createFireworks` in `src/scene/createFireworks.js` (`place`,
-  `setLevel`, `load`), placed in front of the 06 pose from `bursts` in
-  chapter 06 of `src/data/chapters.js` (place, size, colour, strength,
-  rotate, mirror, squash); artwork, colours and halo in
-  `src/data/atmosphere.js`. The `bursts` visibility level is 1 only in 06.
-  Steps 2 and 3 belong in the same module (it has no `update` yet).
+- Show: `createFireworks` in `src/scene/createFireworks.js` (`place`,
+  `setLevel`, `load`, `update`, `setStill`, and `hold(t)` for tests),
+  placed in front of the 06 pose from `bursts` in chapter 06 of
+  `src/data/chapters.js` (place, size, colour, strength, rotate, mirror,
+  squash, `at`); artwork, colours, halo and all timing in `FIREWORKS` in
+  `src/data/atmosphere.js`. Everything is a pure function of the show
+  time (`pose(t)`). The `bursts` visibility level is 1 only in 06. Smoke
+  belongs in the same module. With `?debug`,
+  `window.__vh.fireworks.hold(t)` freezes the show at any moment.
 - Artwork: `public/atmosphere/firework-burst.webp` is in use. Smoke and
   embers are still in `docs/references/production-candidates/`
   (`firework-smoke.webp` 391 KB, over the 300 KB aim; `firework-embers.webp`).

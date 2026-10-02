@@ -317,29 +317,32 @@ export const chapters = [
     // Firework bursts (createFireworks.js): x / y, the burst's centre in % of
     // the viewport; size, its spark spread in % of the viewport width;
     // strength, its opacity at full `bursts` level. rotate (degrees), mirror
-    // and squash (height share) vary the one shared artwork so no two match.
+    // and squash (height share) vary the one shared artwork so no two match;
+    // at: when it bursts in the 8 s loop (FIREWORKS in atmosphere.js), its
+    // rocket rising just before. Two quick pairs, never all at once; two to
+    // four bursts live at any moment (user choice, 2026-10-02).
     // Eight on desktop, six on phones, about 35% bigger than the first four
     // (user request, 2026-10-02), all kept right of and below the copy and
     // above IFC's crown. Phones: two dominant bursts, three supporting, one
     // fading remnant (user choice, 2026-10-02: the remnant at about 35%).
     bursts: {
       desktop: [
-        { x: 84, y: 25, size: 30, color: 'warm', strength: 1, rotate: 0 },
-        { x: 62, y: 28, size: 22, color: 'coral', strength: 0.9, rotate: 140, mirror: true },
-        { x: 74, y: 47, size: 15, color: 'cyan', strength: 0.85, rotate: 250, squash: 0.9 },
-        { x: 92, y: 54, size: 13.5, color: 'coral', strength: 0.75, rotate: 60, mirror: true, squash: 0.92 },
-        { x: 47, y: 16, size: 16, color: 'cyan', strength: 0.8, rotate: 200, squash: 0.94 },
-        { x: 55, y: 50, size: 14, color: 'warm', strength: 0.75, rotate: 110, mirror: true },
-        { x: 99, y: 9, size: 18, color: 'coral', strength: 0.8, rotate: 315, squash: 0.9 },
-        { x: 45, y: 40, size: 12, color: 'coral', strength: 0.65, rotate: 30, mirror: true, squash: 0.95 },
+        { x: 84, y: 25, size: 30, color: 'warm', strength: 1, rotate: 0, at: 0 },
+        { x: 62, y: 28, size: 22, color: 'coral', strength: 0.9, rotate: 140, mirror: true, at: 1 },
+        { x: 74, y: 47, size: 15, color: 'cyan', strength: 0.85, rotate: 250, squash: 0.9, at: 1.25 },
+        { x: 92, y: 54, size: 13.5, color: 'coral', strength: 0.75, rotate: 60, mirror: true, squash: 0.92, at: 2.5 },
+        { x: 47, y: 16, size: 16, color: 'cyan', strength: 0.8, rotate: 200, squash: 0.94, at: 3.6 },
+        { x: 55, y: 50, size: 14, color: 'warm', strength: 0.75, rotate: 110, mirror: true, at: 4.8 },
+        { x: 99, y: 9, size: 18, color: 'coral', strength: 0.8, rotate: 315, squash: 0.9, at: 5.05 },
+        { x: 45, y: 40, size: 12, color: 'coral', strength: 0.65, rotate: 30, mirror: true, squash: 0.95, at: 6.4 },
       ],
       mobile: [
-        { x: 84, y: 26, size: 46, color: 'warm', strength: 1, rotate: 20 },
-        { x: 54, y: 42, size: 35, color: 'coral', strength: 1, rotate: 150, mirror: true },
-        { x: 74, y: 52, size: 24, color: 'cyan', strength: 0.7, rotate: 260, squash: 0.9 },
-        { x: 90, y: 57, size: 24, color: 'coral', strength: 0.35, rotate: 75, mirror: true, squash: 0.92 },
-        { x: 22, y: 46, size: 28, color: 'cyan', strength: 0.75, rotate: 200, squash: 0.94 },
-        { x: 36, y: 58, size: 22, color: 'warm', strength: 0.6, rotate: 110, mirror: true },
+        { x: 84, y: 26, size: 46, color: 'warm', strength: 1, rotate: 20, at: 0 },
+        { x: 54, y: 42, size: 35, color: 'coral', strength: 1, rotate: 150, mirror: true, at: 1.4 },
+        { x: 74, y: 52, size: 24, color: 'cyan', strength: 0.7, rotate: 260, squash: 0.9, at: 2.8 },
+        { x: 90, y: 57, size: 24, color: 'coral', strength: 0.35, rotate: 75, mirror: true, squash: 0.92, at: 6 },
+        { x: 22, y: 46, size: 28, color: 'cyan', strength: 0.75, rotate: 200, squash: 0.94, at: 3.05 },
+        { x: 36, y: 58, size: 22, color: 'warm', strength: 0.6, rotate: 110, mirror: true, at: 4.6 },
       ],
     },
     probes: {

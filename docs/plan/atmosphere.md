@@ -152,19 +152,42 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
     big warm burst upper right leads, the others at 65–90%. Phones:
     warm and coral dominant, two cyan and a small warm supporting
     (60–75%), the lower-right coral a fading remnant at 35% (user
-    choice, 2026-10-02). Still in every motion mode for now; they
-    appear with the `bursts` level, 06 only.
+    choice, 2026-10-02). They appear with the `bursts` level, 06
+    only.
   - **Checks:** the copy, IFC's crown and the moon stay clear on
     desktop and phone. Sky pixels brighter than luma 120, rings → now:
     desktop 14,380 → 39,640, phone 11,910 → 24,810; IFC's crown
     unchanged. Draw calls: one per burst: desktop 06 56, phone 06 51.
-  - **Next (user choice, 2026-10-02):** step 2 keeps these cards and
-    animates them (a deterministic 7–9 s loop: a rocket rising from
-    behind the skyline, a flash, the card opening from about 70% size,
-    a slow fade; never all at once; reduced motion holds a composed
-    still), with our own three.js particles for the rockets and
-    falling sparks. The React "fireworks-show" component the user
-    shared is a reference for that technique only: it needs React,
-    TypeScript and Tailwind, paints black over the frame for its
-    trails, fires at random over the copy and its licence is unknown.
-    Step 3: smoke.
+  - **Step 2, the show (done; user choices, 2026-10-02):** the cards
+    are animated in a fixed 8 s loop (`FIREWORKS` in
+    `src/data/atmosphere.js`; each burst's `at` in `chapters.js`),
+    with two quick pairs and two to four bursts live at a time, never
+    all at once. Each burst: a rocket climbs from below the frame,
+    behind the skyline, slowing as it rises (0.7–1 s, longer for higher
+    bursts), its trail a dense streak that shortens as it slows; the
+    card ignites at 70% size with a soft flare of its centre glow,
+    opens to full size over a second while its white-hot streaks cool
+    (the gold toward amber), then fades over 2 s while sinking a
+    little; sparks shed from its tips (40 per burst on desktop, 25 on
+    phones) slow outward, fall in drooping arcs and fade over 1.5–3 s,
+    each a short streak. Rockets and sparks are one set of points in
+    the cards' plane (one draw call), in each burst's spark colour.
+    The show clock runs only while 06's fireworks show and restarts at
+    a composed moment (1.5 s into the loop: the lead burst open, a pair
+    igniting) each time 06 comes into view. Everything is worked out
+    from the show time alone, so reduced motion holds one composed
+    moment (1.6 s, no rocket mid-climb): desktop the gold, coral and
+    cyan bursts with sparks falling, phones the two dominant bursts.
+    At most two ignitions a second, in different parts of the sky, with
+    no white flash. The React "fireworks-show" component the user
+    shared was a technique reference only (it needs React, TypeScript
+    and Tailwind, paints black over the frame for its trails, fires at
+    random over the copy, and its licence is unknown).
+  - **Checks (step 2):** contact sheets of one loop every 0.5 s,
+    desktop and phone; the copy, IFC's crown and the moon stay clear
+    throughout. Draw calls at the busiest moment: desktop 06 53, phone
+    06 49 (only live bursts draw). Working out one frame of the show
+    takes 0.09 ms on desktop. Composition probe: only the four older
+    misses.
+  - **Next:** step 3, two or three violet-coral smoke wisps on desktop
+    and one on phones, behind the bursts.

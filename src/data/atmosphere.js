@@ -116,9 +116,42 @@ export const BURST_SHEET = {
 
 // Burst colours (user choice, 2026-10-02): warm keeps the artwork's own
 // gold; the others are recoloured by brightness, the hottest spark centres
-// staying near white. `halo`: the small glow at each burst's centre, its
-// radius as a share of the reach and its strength.
+// staying near white. `sparks` colours the falling sparks and rockets the
+// same way. `halo`: the small glow at each burst's centre, its radius as a
+// share of the reach and its strength.
+//
+// The show (user choices, 2026-10-02): a fixed `loop` in seconds; each
+// burst fires at its own `at` (chapters.js). Entering 06 starts the loop at
+// `entry`, and reduced motion holds the moment `still`: composed moments
+// with the lead burst open, a pair igniting and no rocket mid-climb (a
+// frozen rocket reads as a stray streak). Times in seconds; distances in
+// shares of a burst's reach.
 export const FIREWORKS = {
   colors: { warm: null, coral: 0xff7a8a, cyan: 0x7fe3f0 },
+  sparkColors: { warm: 0xffc870, coral: 0xff7a8a, cyan: 0x7fe3f0 },
   halo: { radius: 0.22, strength: 0.7 },
+  loop: 8,
+  entry: 1.5,
+  still: 1.6,
+  // Rise time, longer for higher bursts; the trail: points, and its length
+  // as a share of the climb at full speed (it shortens as the rocket slows).
+  rocket: { duration: [0.7, 1], trail: 24, length: 0.12 },
+  // Opens from `startScale` over `reveal` (fade in) and `open` (to full
+  // size), then fades over `fade` while sinking `sink` and cooling.
+  card: { startScale: 0.7, reveal: 0.25, open: 1, fade: 2, sink: 0.06, flare: 1.5 },
+  // Falling sparks shed from each burst's tips: per burst, by screen.
+  sparks: {
+    count: { desktop: 40, mobile: 25 },
+    start: [0.55, 0.95], // radius where they appear
+    delay: [0.25, 0.7], // after ignition
+    life: [1.5, 3],
+    speed: [0.15, 0.35], // outward, slowing
+    drag: 1.2,
+    gravity: 0.35,
+    tail: 10, // points per spark, so each falls as a short streak
+    tailSpacing: 0.018, // seconds between them
+  },
+  // Point sizes as shares of the frame height; sparks' brightness.
+  size: { spark: 0.0045, rocket: 0.0045 },
+  sparkGain: 1.6,
 };

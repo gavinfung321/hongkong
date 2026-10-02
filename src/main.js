@@ -128,6 +128,7 @@ function start(initGuard, header) {
     root.classList.toggle('is-stepped', stepped);
     root.dataset.motion = stepped ? 'stepped' : 'continuous';
     petals.setEnabled(!stepped);
+    fireworks.setStill(stepped);
     shownKeyframe = -1;
     conductor.snap();
     needsRender = true;
@@ -335,6 +336,7 @@ function start(initGuard, header) {
       island.update(time);
       foreground.update(time);
       atmosphere.update(time);
+      fireworks.update(time);
       const speed = dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0;
       petals.update(dt, camera, speed);
       lastRendered = state.pRendered;
@@ -420,6 +422,7 @@ function start(initGuard, header) {
         control,
         vessels,
         foreground,
+        fireworks,
         landmarks: {
           tower: kowloon.clockTower,
           ferry: vessels.ferry,
