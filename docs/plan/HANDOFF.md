@@ -51,33 +51,39 @@ work, all done and deployed: clouds and mist (finished: the user said "we
 done with mist"), lamps re-spaced, hero chapter numbers removed on desktop,
 stronger 04 cloud, the plan split into `docs/plan/`.
 
-## Next task: fireworks, step 1 of 3 (user choice, 2026-10-02)
+## Next task: fireworks, step 2 of 3 (user choice, 2026-10-02)
 
 Follow `ATMOSPHERE-EFFECTS-BRIEF.md` §6.7, one step at a time, with a
 review after each:
 
-1. **Still bursts (do this first):** replace the four ring markers with
-   `firework-burst.webp` at their existing screen positions and sizes.
-   Desktop: warm, coral, cyan, coral. Phones: two dominant bursts, one
-   supporting, one fading remnant, keeping the copy's space. One shared
-   alpha texture, rotated, mirrored, scaled and tinted so no two look the
-   same; a small core halo; IFC's crown stays the anchor at the bottom.
-2. Animation: a deterministic 7–9 s loop, quick reveal (0.2–0.3 s), slow
-   fade (1.2–2 s), starting near 70% size; never all at once; no harsh
-   flashes; reduced motion holds a composed still.
+1. **Still bursts (done 2026-10-02):** `src/scene/createFireworks.js`
+   replaced the ring markers with cards of `firework-burst.webp`: eight
+   on desktop, six on phones, 35% bigger than the markers (user request);
+   see `atmosphere.md`, "Fireworks in 06".
+2. Animation (user choice, 2026-10-02: keep the cards, add particles):
+   a deterministic 7–9 s loop, quick reveal (0.2–0.3 s), slow fade
+   (1.2–2 s), starting near 70% size; three to five live at once, never
+   all; no harsh flashes; reduced motion holds a composed still. Add our
+   own three.js particles (one draw call): rockets rising from behind the
+   skyline and sparks falling under each burst. The user's React
+   "fireworks-show" component is a technique reference only (no React
+   here, its trails paint black, unknown licence).
 3. Smoke (2–3 violet-coral wisps on desktop, 1 on phones) and sparse
    falling embers, outside the copy.
 
 Where things are:
 
-- Markers: `createBursts` / `placeBursts` in `src/scene/createForeground.js`
-  (colours in `BURST_COLORS`), placed in front of the 06 pose by
-  `src/main.js` from `bursts` in chapter 06 of `src/data/chapters.js`.
-  The `bursts` visibility level is 1 only in 06.
-- Artwork: `docs/references/production-candidates/firework-burst.webp`,
-  `firework-smoke.webp`, `firework-embers.webp`. Copy the one in use to
-  `public/` (as was done for `public/atmosphere/coral-clouds.webp`) and mark
-  it "In use" in `docs/ASSET-LEDGER.md`.
+- Bursts: `createFireworks` in `src/scene/createFireworks.js` (`place`,
+  `setLevel`, `load`), placed in front of the 06 pose from `bursts` in
+  chapter 06 of `src/data/chapters.js` (place, size, colour, strength,
+  rotate, mirror, squash); artwork, colours and halo in
+  `src/data/atmosphere.js`. The `bursts` visibility level is 1 only in 06.
+  Steps 2 and 3 belong in the same module (it has no `update` yet).
+- Artwork: `public/atmosphere/firework-burst.webp` is in use. Smoke and
+  embers are still in `docs/references/production-candidates/`
+  (`firework-smoke.webp` 391 KB, over the 300 KB aim; `firework-embers.webp`).
+  Copy the one in use to `public/atmosphere/` and mark it "In use" in
+  `docs/ASSET-LEDGER.md`.
 - A similar card technique: `src/scene/createAtmosphere.js` (feathered
   ShaderMaterial cards cut from a sprite sheet, placed from screen
   positions at a chapter pose).

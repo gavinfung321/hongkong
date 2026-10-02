@@ -101,3 +101,24 @@ export const SEA_MIST = {
     { x: 278, z: -500, width: 102, band: 'broad', u: [0.5, 0.95], opacity: 0.22 },
   ],
 };
+
+// Firework bursts over 06 (ATMOSPHERE-EFFECTS-BRIEF.md 6.7). One shared
+// gold-and-white burst (docs/ASSET-LEDGER.md); `core` is its glowing centre
+// and `reach` the radius holding 98% of its sparks, both in image pixels.
+// Each burst's screen place, size, role and variation are `bursts` in
+// chapter 06 of chapters.js.
+export const BURST_SHEET = {
+  url: 'atmosphere/firework-burst.webp',
+  size: [768, 692],
+  core: [394, 384],
+  reach: 345,
+};
+
+// Burst colours (user choice, 2026-10-02): warm keeps the artwork's own
+// gold; the others are recoloured by brightness, the hottest spark centres
+// staying near white. `halo`: the small glow at each burst's centre, its
+// radius as a share of the reach and its strength.
+export const FIREWORKS = {
+  colors: { warm: null, coral: 0xff7a8a, cyan: 0x7fe3f0 },
+  halo: { radius: 0.22, strength: 0.7 },
+};

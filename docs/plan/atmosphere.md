@@ -1,6 +1,6 @@
-# Sky, clouds and mist
+# Sky, clouds, mist and fireworks
 
-Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, item 5, stop 6, part 3g.
+Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, item 5, stop 6, part 3g; the fireworks in 06.
 
 
 - **Part 3g: sky and clouds (user request, 2026-10-02).** Pulled
@@ -119,3 +119,52 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
   - **The end of the skyline in 02:** stays dark between the last
     towers and the ferry, so the ferry's hull and lit windows stand
     out against the sky (user choice, 2026-10-02).
+
+- **Fireworks in 06 (user choice, 2026-10-02).** Pulled forward from
+  Milestone 4, following `ATMOSPHERE-EFFECTS-BRIEF.md` §6.7 in three
+  steps with a review after each: still bursts, then animation, then
+  smoke and embers.
+  - **Step 1, still bursts (done):** new `src/scene/createFireworks.js`
+    replaces the four ring markers (removed from
+    `createForeground.js`). The staged `firework-burst.webp` (gold and
+    white sparks) ships unchanged as
+    `public/atmosphere/firework-burst.webp`, fetched once the first
+    frame is up. Each burst is one flat card of that artwork facing
+    the 06 camera, 1.6 km out (past IFC, so IFC and the skyline stand
+    in front), placed by screen position and size (`bursts` in
+    chapter 06 of `src/data/chapters.js`): the card is shifted so the
+    artwork's glowing core sits on the configured point, and `size`
+    is the sparks' spread. The four markers' places came first; the
+    user found four too few and too weak (user request, 2026-10-02),
+    so there are now eight on desktop and six on phones, about 35%
+    bigger, filling the sky right of and below the copy and above
+    IFC's crown (13.5–30% of the width on desktop, 22–46% on phones;
+    one cropped by the top-right corner on desktop). The still shows
+    them all at once; the animation will stagger them, so only three
+    to five are live at any moment. Each burst is spun,
+    some mirrored and squashed, so no two match. The sparks add light
+    to the sky (no card edges, overlaps brighten) with a small halo
+    at each centre (the lamp-glow formula, `FIREWORKS.halo` in
+    `src/data/atmosphere.js`); the bloom adds the rest. Colours (user
+    choice, 2026-10-02): warm keeps the artwork's own gold; coral and
+    cyan are recoloured by brightness, the hottest spark centres
+    staying near white. Desktop: two warm, four coral, two cyan; the
+    big warm burst upper right leads, the others at 65–90%. Phones:
+    warm and coral dominant, two cyan and a small warm supporting
+    (60–75%), the lower-right coral a fading remnant at 35% (user
+    choice, 2026-10-02). Still in every motion mode for now; they
+    appear with the `bursts` level, 06 only.
+  - **Checks:** the copy, IFC's crown and the moon stay clear on
+    desktop and phone. Sky pixels brighter than luma 120, rings → now:
+    desktop 14,380 → 39,640, phone 11,910 → 24,810; IFC's crown
+    unchanged. Draw calls: one per burst: desktop 06 56, phone 06 51.
+  - **Next (user choice, 2026-10-02):** step 2 keeps these cards and
+    animates them (a deterministic 7–9 s loop: a rocket rising from
+    behind the skyline, a flash, the card opening from about 70% size,
+    a slow fade; never all at once; reduced motion holds a composed
+    still), with our own three.js particles for the rockets and
+    falling sparks. The React "fireworks-show" component the user
+    shared is a reference for that technique only: it needs React,
+    TypeScript and Tailwind, paints black over the frame for its
+    trails, fires at random over the copy and its licence is unknown.
+    Step 3: smoke.
