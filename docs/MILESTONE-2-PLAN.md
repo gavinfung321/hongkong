@@ -1318,6 +1318,15 @@ all six.
          at fast scroll fell from 11.8% excess to 7.3%; a plain unpainted
          podium measures 8%, so what is left is its outline and the lit
          pier pavilions in front, not the skin.
+       - **Central Ferry Pier halls (user request, 2026-10-02):** the user
+         still saw shimmer at the base: each hall's colonnade was 12
+         modelled posts 0.8 m wide, thinner than a pixel on phones, so they
+         crawled against the lit hall. The colonnade is now painted on the
+         hall (`pierHall` in `facades.js`): warm lit bays between pale
+         columns under a fascia, on every side, mip-mapped like the towers;
+         the posts are gone (one draw call fewer). **Checks:** consecutive
+         phone frames at 05 → 06 show hard one-pixel post stripes before
+         and soft, steady columns after; same warmth on desktop.
        - **Fewer background lights:** every skyline tower is now 3–6% lit
          (was 5–12%), still spread evenly with 10% almost dark; 06 dims the
          skyline to 60% like 05 (`city: 0.6` in `src/data/chapters.js`).
@@ -1523,7 +1532,8 @@ Stop for the user's review after each step, as in the grey-box.
   colours and levels, `braceWall` (Bank of China skin), neon line mask,
   UVs for angled walls; `src/scene/landmarks.js` paints all four
   landmarks with them (part 3e, step 2); `createIsland.js` IFC Mall
-  podium painted the same way (part 3e).
+  podium painted the same way, and the ferry pier halls' colonnade painted
+  with `pierHall` in place of modelled posts (part 3e).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
   copy and footer hidden while loading and during the fade),
@@ -1581,8 +1591,9 @@ The milestone passes when:
    scrolling on a phone, nor change look mid-scroll on any screen: no grey
    slab, lit windows stay lit (user requests, 2026-10-02); IFC reads as a
    lit glass office tower, floors as bands behind thin mullions rather than
-   scattered dots, its mall podium too (no twinkling base on phones, user
-   request, 2026-10-02), and the four landmarks have their own glass skins
+   scattered dots, its mall podium too, and the ferry pier halls in front
+   hold still (no twinkling base on phones, user requests, 2026-10-02),
+   and the four landmarks have their own glass skins
    (Bank of China glowing braces over dark facets, Cheung Kong silver,
    Central Plaza bronze, The Center neon floor lines) that hold still
    while scrolling (user choice, 2026-10-02), and no brace line, mast or warning light shimmers

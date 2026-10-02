@@ -28,7 +28,7 @@ import { createMountains } from './createMountains.js';
 import { createCityDots } from './cityDots.js';
 import { createBeacons, createLandmarks, mastMesh } from './landmarks.js';
 import { prism } from './prism.js';
-import { curtainWall, facadeMaterial, facadeUVs } from './facades.js';
+import { curtainWall, facadeMaterial, facadeUVs, pierHall } from './facades.js';
 import { WORLD } from '../data/world.js';
 import { seededRandom } from './random.js';
 import { strut } from './strut.js';
@@ -292,7 +292,11 @@ function createPodium() {
 }
 
 // Central Ferry Piers: a row of pavilions out over the water, each a warm lit
-// hall behind a colonnade under a pitched green roof.
+// hall behind a colonnade under a pitched green roof. The colonnade is
+// painted on the hall (user request, 2026-10-02; modelled posts shimmered on
+// phones).
+const PIER_HALL = [36, 8, 18]; // width, height, depth in metres
+
 function createPiers() {
   const { x: xs, z, depth } = WORLD.piers;
   const top = WORLD.island.slab[4];
@@ -302,29 +306,26 @@ function createPiers() {
   const instanced = (geometry, material, n) => new InstancedMesh(geometry, material, n);
 
   const decks = instanced(unitBox, lambert(0x24222e), count);
-  const halls = instanced(unitBox, new MeshLambertMaterial({ color: 0x4a3e32, emissive: 0x7a5a34 }), count);
+  const [hallW, hallH, hallD] = PIER_HALL;
+  // Every face starts the tile a whole hall width on, so columns line up round the corners.
+  const hallGeometry = facadeUVs(new BoxGeometry(hallW, hallH, hallD).translate(0, hallH / 2, 0), hallW);
+  const halls = instanced(hallGeometry, facadeMaterial(pierHall({ width: hallW, height: hallH, spacing: 3, seed: 529 }), 1), count);
   const roofs = instanced(unitBox, new MeshLambertMaterial({ color: 0x3e5a4a, emissive: 0x0f1a14 }), count);
   const ridge = new Shape([new Vector2(-11, 0), new Vector2(11, 0), new Vector2(0, 4)]);
   const ridgeGeometry = new ExtrudeGeometry(ridge, { depth: 38, bevelEnabled: false }).translate(0, 0, -19).rotateY(Math.PI / 2);
   const ridges = instanced(ridgeGeometry, roofs.material, count);
-  const postsPer = 12;
-  const posts = instanced(unitBox, new MeshLambertMaterial({ color: 0xb8b0a0, emissive: 0x3a342a }), count * postsPer);
 
   xs.forEach((x, i) => {
     // The deck starts 1 m under the water so its sides cut the surface cleanly.
     decks.setMatrixAt(i, m.compose(new Vector3(x, -1, z - 1), q, new Vector3(44, top + 1, depth + 2)));
-    halls.setMatrixAt(i, m.compose(new Vector3(x, top, z - 1), q, new Vector3(36, 8, 18)));
-    roofs.setMatrixAt(i, m.compose(new Vector3(x, top + 8, z - 1), q, new Vector3(40, 1, 22)));
-    ridges.setMatrixAt(i, m.compose(new Vector3(x, top + 9, z - 1), q, new Vector3(1, 1, 1)));
-    for (let j = 0; j < postsPer; j++) {
-      const px = x - 16.5 + (j * 33) / (postsPer - 1);
-      posts.setMatrixAt(i * postsPer + j, m.compose(new Vector3(px, top, z + 8.9), q, new Vector3(0.8, 8, 0.8)));
-    }
+    halls.setMatrixAt(i, m.compose(new Vector3(x, top, z - 1), q, new Vector3(1, 1, 1)));
+    roofs.setMatrixAt(i, m.compose(new Vector3(x, top + hallH, z - 1), q, new Vector3(40, 1, 22)));
+    ridges.setMatrixAt(i, m.compose(new Vector3(x, top + hallH + 1, z - 1), q, new Vector3(1, 1, 1)));
   });
 
   const group = new Group();
   group.name = 'piers';
-  group.add(decks, halls, roofs, ridges, posts);
+  group.add(decks, halls, roofs, ridges);
   return group;
 }
 

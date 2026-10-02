@@ -210,6 +210,59 @@ export function braceWall({ modules, seed, roof = [0.5, 0.2] }) {
   return { map: texture(colour, repeat), emissiveMap: texture(glow, repeat) };
 }
 
+// Central Ferry Pier hall: a warm lit hall seen between pale columns, under a
+// fascia, `width` × `height` metres per tile, for metre UVs. The columns are
+// painted rather than modelled: sub-pixel posts against the glow shimmered on
+// phones (user report, 2026-10-02). Columns sit `spacing` apart, centred
+// half a spacing in.
+export function pierHall({ width, height, spacing, seed }) {
+  const random = seededRandom(seed);
+  const P = 16; // texels per metre
+  const [w, h] = [width * P, height * P];
+  const [colour, base] = canvas(w, h);
+  const [glow, light] = canvas(w, h);
+  const y = (m) => h - m * P; // metres up from the foot to canvas rows
+  const [plinth, fascia] = [0.6, 6.8];
+
+  base.fillStyle = '#3a3028';
+  base.fillRect(0, 0, w, h);
+  light.fillStyle = '#000';
+  light.fillRect(0, 0, w, h);
+
+  base.fillStyle = '#4a3e32';
+  base.fillRect(0, y(fascia), w, (fascia - plinth) * P);
+  for (let x = 0; x < width; x += spacing) {
+    // Brightest under the ceiling, soft at the top and bottom edges.
+    const k = 0.5 + random() * 0.12;
+    const warm = [255, 186 + random() * 14, 110];
+    const g = light.createLinearGradient(0, y(fascia), 0, y(plinth));
+    g.addColorStop(0, rgb(warm, k * 0.5));
+    g.addColorStop(0.15, rgb(warm, k));
+    g.addColorStop(0.6, rgb(warm, k * 0.85));
+    g.addColorStop(1, rgb(warm, k * 0.45));
+    light.fillStyle = g;
+    light.fillRect(x * P, y(fascia), spacing * P, (fascia - plinth) * P);
+  }
+
+  base.fillStyle = '#8a8070';
+  base.fillRect(0, 0, w, y(fascia));
+  light.fillStyle = 'rgb(34, 30, 24)';
+  light.fillRect(0, 0, w, y(fascia));
+  base.fillStyle = '#2a2622';
+  base.fillRect(0, y(plinth), w, plinth * P);
+
+  const column = 0.8 * P;
+  for (let x = spacing / 2; x < width; x += spacing) {
+    base.fillStyle = '#b8b0a0';
+    base.fillRect(x * P - column / 2, y(fascia), column, (fascia - plinth) * P);
+    light.fillStyle = 'rgb(58, 52, 42)';
+    light.fillRect(x * P - column / 2, y(fascia), column, (fascia - plinth) * P);
+  }
+
+  const repeat = [1 / width, 1 / height];
+  return { map: texture(colour, repeat), emissiveMap: texture(glow, repeat) };
+}
+
 // Shared mipmap bias for every facade: phones take half a level blurrier, so
 // detail sliding past mid-scroll strobes less (user report, 2026-10-02).
 export const facadeBias = { value: 0 };
