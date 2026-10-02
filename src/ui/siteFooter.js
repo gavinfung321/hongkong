@@ -1,6 +1,6 @@
 // Tracks how far the footer has risen: --footer-in goes 0 → 1 over its first
 // half screen (or its full height, if shorter). The chapter copy, vertical
-// label and side pager fade with it, and past halfway the header comes back.
+// label and side pager fade with it; past halfway they stop taking clicks.
 
 export function createSiteFooter() {
   const root = document.documentElement;

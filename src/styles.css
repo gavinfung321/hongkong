@@ -211,10 +211,6 @@ a:focus-visible {
   font-size: 1.0625rem;
 }
 
-.chapter__action {
-  margin-top: 1.5rem;
-}
-
 /* A thin rounded button with a dim outline. */
 .pill-link {
   display: inline-flex;
@@ -266,6 +262,10 @@ a:focus-visible {
   color: var(--color-soft);
   font-size: 0.8125rem;
   font-weight: 300;
+}
+
+.site-footer__return {
+  margin-bottom: 48px;
 }
 
 .site-footer__statement {
@@ -394,6 +394,10 @@ a:focus-visible {
 
   .site-footer {
     padding-top: 72px;
+  }
+
+  .site-footer__return {
+    margin-bottom: 36px;
   }
 
   .site-footer__statement {
@@ -1083,8 +1087,7 @@ html:not(.is-enhanced) .vertical-text__labels {
   background: linear-gradient(to bottom, rgb(14 12 30 / 0), rgb(14 12 30 / 0.82) 160px, rgb(14 12 30 / 0.94));
 }
 
-/* The chapter layer leaves as the footer rises (--footer-in, siteFooter.js),
-   and the header comes back over it. */
+/* The chapter layer leaves as the footer rises (--footer-in, siteFooter.js). */
 .is-enhanced .vertical-text,
 .is-enhanced .side-pager {
   opacity: calc(1 - var(--footer-in, 0));
@@ -1093,10 +1096,6 @@ html:not(.is-enhanced) .vertical-text__labels {
 .is-at-footer .chapter__copy,
 .is-at-footer .side-pager {
   pointer-events: none;
-}
-
-.is-at-footer .site-header {
-  transform: none;
 }
 
 .is-enhanced .chapter {
@@ -1148,10 +1147,6 @@ html:not(.is-enhanced) .vertical-text__labels {
   line-height: 1.6;
 }
 
-.is-enhanced .chapter__action {
-  margin-top: 1.25rem;
-}
-
 [data-breakpoint="mobile"].is-enhanced .chapter__title {
   margin-top: 0.25rem;
   font-size: 1.75rem;
@@ -1159,10 +1154,6 @@ html:not(.is-enhanced) .vertical-text__labels {
 
 [data-breakpoint="mobile"].is-enhanced #chapter-01 .chapter__title {
   font-size: 2.25rem;
-}
-
-[data-breakpoint="mobile"].is-enhanced .chapter__action {
-  margin-top: 0.875rem;
 }
 
 [data-breakpoint="mobile"].is-enhanced {

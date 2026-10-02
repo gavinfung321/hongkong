@@ -38,7 +38,7 @@ depth comes from layers around the simple 3D:
 | Mostly dark frames with a vignette | Our navy and aubergine palette, plus a vignette |
 | Layers shift with the mouse | Cursor parallax on desktop |
 | Nav bar, chapter counter, vertical 影の道, chapter label | Nav bar, counter, vertical 維港之夜, per-chapter Chinese label |
-| Thin outlined pill button | "Return to the harbour" as a thin pill with our own ↑ arrow (3.12) |
+| Thin outlined pill button | "Return to the harbour" as a thin pill with our own ↑ arrow, at the top of the footer (3.12) |
 | Footer: statement, three link columns, bottom bar, scene dimmed behind | Our footer with original copy: statement, Chapters / Landmarks / Colophon, 維港夜色 bar (3.13) |
 
 **Licence rule:** Kage's licence grants no reuse. We copy *techniques* only,
@@ -378,15 +378,22 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
 
 ### 3.12 "Return to the harbour" button (user request, 2026-10-02)
 
-- Chapter 06's link is now a rounded button, after the button style in the
+- **Moved to the footer** (user request, 2026-10-02): it sits at the top
+  left of the footer, above the statement, the first thing seen as the
+  footer rises (as in the user's Kage screenshot). Chapter 06 now ends on its
+  fireworks and two lines with no button, like the other chapters, and the
+  footer's "Back to the start" link was dropped as a duplicate. Someone who
+  stops at 06 scrolls about half a screen further to reach it; the logo and
+  menu also go to the top.
+- It is a rounded button, after the button style in the
   user's Kage screenshot (technique only): a 1 px pill outline in dim cream
   (22%), a thin (light-weight) uppercase label with wide letter spacing, no
   text shadow, and our own ↑ arrow, since it goes back up to the hero (not
   Kage's ↗). On hover the outline brightens, a faint fill appears and the
   arrow lifts.
-- Mobile uses smaller type and tighter spacing so it stays on one line
-  within the 06 copy, clear of the firework rings.
-- Built as `.pill-link` in `index.html` and `styles.css`; system fonts'
+- Mobile uses smaller type and tighter spacing so it stays on one line.
+- Built as `.pill-link` (`.site-footer__return`) in `index.html` and
+  `styles.css`; system fonts'
   light weights (Segoe UI on Windows, SF on iPhone), no font file.
 
 ### 3.13 Footer (user request, 2026-10-02)
@@ -394,10 +401,15 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
 - **The chapter layer leaves as the footer rises.** Chapter 06's copy, the
   vertical 煙花 label and the side pager fade out over the footer's first
   half screen (they used to stay on, and the label collided with the footer
-  text on mobile). Past halfway the header slides back in, as on Kage, so
-  the nav is there at the end (user choice).
+  text on mobile). The nav bar is not forced back at the footer (user
+  request, 2026-10-02, reversing an earlier choice to show it as Kage
+  does): the footer already has its own chapter links, logo mark and return
+  button, and a bar over the dimmed fireworks would clutter the ending and
+  still underline "Afterglow". It behaves as everywhere else: hidden while
+  scrolling down, back on any scroll up or keyboard focus.
 - **A richer footer**, after the layout of the user's Kage screenshot, with
   original copy (no Kage text, lettering or code):
+  - the "Return to the harbour" button (3.12);
   - a statement in large light type beside our red-sail mark: "One night on
     Victoria Harbour, crossed in six chapters: from the old Clock Tower in
     Tsim Sha Tsui to the last fireworks over Central. Every boat, tower and
@@ -406,7 +418,7 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
     choice): **Chapters** (links to all six), **Landmarks** (facts, not
     links: Clock Tower 1915, Star Ferry since 1888, Two IFC 2003,
     Observation Wheel 2014) and **Colophon** (built live in Three.js and
-    WebGL; every model and texture made in code; back to the start);
+    WebGL; every model and texture made in code);
   - a bottom bar: "© 2026 Victoria Harbour — A Night Crossing", 維港夜色
     ("Victoria Harbour at night") in the centre, "WebGL · Three.js · Hong
     Kong" on the right.
@@ -964,10 +976,12 @@ Stop for the user's review after each step, as in the grey-box.
   cache key (user request, 2026-10-02).
 - `src/data/chapters.js` and `src/scene/createWordmark.js`: mobile 香港
   floats in the sky (`depth` placement, feet at 42%, width 78%);
-  `index.html`: hint "Scroll to cross", the 06 pill button, the new footer;
+  `index.html`: hint "Scroll to cross", the new footer with the pill
+  "Return to the harbour" button at its top (moved out of 06);
   `src/styles.css`: pill button, footer, the chapter layer fading as the
-  footer rises; new `src/ui/siteFooter.js` (`--footer-in`, `is-at-footer`),
-  started from `src/main.js` (user requests, 2026-10-02).
+  footer rises (the nav bar is not forced back); new `src/ui/siteFooter.js`
+  (`--footer-in`, `is-at-footer`), started from `src/main.js` (user
+  requests, 2026-10-02).
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font; the
   stone railing and lamps built in code from the user's designs; the wet
   paving.
@@ -998,11 +1012,11 @@ The milestone passes when:
    on the right hold. The menu works with the keyboard and a screen reader.
    The vertical label shows the current chapter and never covers a subject.
    The side pager (desktop) marks the current chapter and its dashes land on
-   the right hold. "Return to the harbour" is a thin rounded button on one
-   line, clear of the 06 firework rings on mobile. When the footer arrives,
-   the 06 copy, vertical label and side pager are gone and the header is
-   back; the footer's chapter links land on their holds (user requests,
-   2026-10-02).
+  the right hold. "Return to the harbour" is a thin rounded button on one
+  line at the top of the footer, not in 06. When the footer arrives, the 06
+  copy, vertical label and side pager are gone and the nav bar is not
+  forced back; the footer's chapter links land on their holds (user
+  requests, 2026-10-02).
 4. Reduced-motion mode shows no sinking, no parallax, no particles and no
    cursor ring, and the Observation Wheel holds still (it turns slowly in
    continuous mode; user request, 2026-10-02), and still tells the whole story. In continuous mode the water
@@ -1026,6 +1040,8 @@ The milestone passes when:
    are built in code from the user's AI-made designs, which stay references
    only and are not shipped.
 4. **"Return to the harbour" target:** the hero, so the wordmark rises again.
+   Since 2026-10-02 the button sits at the top of the footer instead of in
+   chapter 06 (user request).
 5. **Nav labels:** the five proposed links in 3.4 (no change requested).
 
 **Status:** approved for coding, step by step, with a review stop after each
