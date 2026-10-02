@@ -1187,6 +1187,19 @@ all six.
          the BOC braces); strobe at scroll speed 6.3% for the 01 skyline and
          unchanged for the Clock Tower. Twelve more draw calls (desktop 01
          185, 05 60; mobile 01 129).
+     - **Part 3b: fewer lit windows on the other towers (user request,
+       2026-10-02: "still too many window lights … stealing too much
+       attention from the main buildings").** Measured on the screenshots,
+       the other towers still had about as many bright pixels as IFC and the
+       four landmarks together in 05 (20,700 against 25,400 above luma 60),
+       because every tower had some lit windows and the whole skyline
+       sparkled evenly. Now 40% of the skyline towers are left almost dark
+       (a tenth of their windows; new `dark` option in `cityWindows.js`)
+       and the rest have fewer lit: 13% on average, at most 20% per tower
+       (was 20%, at most 30%). IFC and the landmarks are untouched. Their
+       light: 05 from 20,700 to 10,600 bright pixels (main buildings 22,800),
+       01 from 2,160 to 820 (main buildings 8,900). 1 cm camera steps hold 1
+       19,099 px, hold 5 6,972; strobe unchanged.
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -1364,7 +1377,8 @@ Stop for the user's review after each step, as in the grey-box.
   `src/scene/prism.js` (the shared extrusion helper, moved out of
   `createIsland.js`); `createIsland.js` varied skyline tops and landmark
   clearance, `setCityLevel` also dims the landmarks; `src/data/world.js`
-  `landmarks` (part 3).
+  `landmarks` (part 3). `cityWindows.js` `dark` option and fewer lit
+  skyline windows in `createIsland.js` (part 3b).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
   copy and footer hidden while loading and during the fade),
@@ -1413,7 +1427,8 @@ The milestone passes when:
    camera moves (user choices, 2026-10-02). Bank of China Tower, Cheung
    Kong Center, Central Plaza and The Center are recognisable, the skyline
    has varied tops, none of them covers the moon, IFC or copy, IFC stays
-   the brightest tower, and no brace line, mast or warning light shimmers
+   the brightest tower, the other towers together give off well under the
+   main buildings' light, many of them dark (user request, 2026-10-02), and no brace line, mast or warning light shimmers
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its

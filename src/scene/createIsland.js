@@ -51,9 +51,12 @@ function createSkyline() {
   // Dimmer than IFC and capped well below its 50%, so IFC leads (user choice,
   // 2026-10-02; was lit 0.3, up to ~50%, strength 0.9). Close-up windows
   // peak lower, so 04–06 don't sparkle like IFC (user choice, 2026-10-02).
+  // Fewer lit windows again, and 40% of the towers almost dark, so IFC and
+  // the landmarks lead (user request, 2026-10-02; was lit 0.2, up to 30%).
   const material = addCityWindows(new MeshLambertMaterial({ color: 0xffffff }), {
-    lit: 0.2,
-    maxLit: 0.3,
+    lit: 0.13,
+    maxLit: 0.2,
+    dark: 0.4,
     strength: SKYLINE_STRENGTH,
     close: 0.7,
   });

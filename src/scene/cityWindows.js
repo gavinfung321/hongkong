@@ -15,6 +15,7 @@ export function addCityWindows(material, options = {}) {
   const {
     lit = 0.3, // share of windows lit
     maxLit = 1, // no building lit above this share
+    dark = 0, // share of buildings left almost unlit
     floor = 3.6, // metres per storey
     bay = 3.2, // metres per window bay
     warm = 0xffc07a,
@@ -27,6 +28,7 @@ export function addCityWindows(material, options = {}) {
   } = options;
   const uniforms = {
     uCityLit: { value: [lit, maxLit] },
+    uCityDark: { value: dark },
     uCityCell: { value: [bay, floor] },
     uCityWarm: { value: new Color(warm) },
     uCityCool: { value: new Color(cool) },
@@ -62,6 +64,7 @@ export function addCityWindows(material, options = {}) {
         '#include <common>',
         `#include <common>
         uniform vec2 uCityLit;
+        uniform float uCityDark;
         uniform vec2 uCityCell;
         uniform vec3 uCityWarm;
         uniform vec3 uCityCool;
@@ -97,6 +100,7 @@ export function addCityWindows(material, options = {}) {
               ( smoothstep( 0.28 - w.y, 0.28 + w.y, f.y ) - smoothstep( 0.78 - w.y, 0.78 + w.y, f.y ) );
             vec2 seed = floor( vCitySeed );
             float density = min( uCityLit.x * ( 0.35 + 1.3 * cityHash( seed * 0.013 ) ), uCityLit.y );
+            density *= mix( 1.0, 0.1, step( cityHash( seed * 0.071 + 3.1 ), uCityDark ) );
             float on = step( cityHash( cell + seed * 0.137 ), density );
             vec3 tint = mix( uCityWarm, uCityCool, step( 1.0 - uCityCoolShare, cityHash( cell.yx + seed ) ) );
             float closeGain = mix( uCityClose, 1.0, smoothstep( 0.08, 0.25, w.x ) );
