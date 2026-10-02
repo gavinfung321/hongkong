@@ -10,6 +10,7 @@ import { WORLD } from '../data/world.js';
 // to h1, `width` half wide, with a colour × power. tail: how far the glow
 // runs on toward the viewer, as a share of the mirror image's length; taper:
 // how much it dims along its length (0 even, 1 down to nothing).
+// kind 'hull': a dark mirror image from the waterline up to h1 instead.
 
 const WARM = new Color(0xffc07a); // city windows (cityWindows.js)
 const COOL = new Color(0xc4d6ff);
@@ -46,6 +47,14 @@ export function reflectionSources({ tower, ferry, junk }) {
   list.push(source(0, 0, 1.4, 6.6, 0, 0xffd29a, 0.32, { key: 'ferry', follow: ferry, extent: [14, 4], tail: 0.45 }));
   list.push(source(0, 0, 5.6, 19.5, 0, 0xff5a36, 0.9, { key: 'junk', follow: junk, extent: [8, 0.5], taper: 0.3 }));
   list.push(source(0, 0, 2.9, 5, 0, 0xffc890, 0.3, { key: 'junk', follow: junk, extent: [3, 2] }));
+
+  // The hulls' own mirror images (user choice, 2026-10-02): dark, dimly
+  // coloured, hiding the city and moon glints behind them, so each boat
+  // sits in the water rather than on a glittering floor. Their own lights
+  // still reflect through. Height: the hull up to the bulwark; above it
+  // the lit cabins reflect as their own glints.
+  list.push(source(0, 0, 0, 3, 0, 0x2a5a40, 0.1, { key: 'ferry', follow: ferry, extent: [19, 4.6], kind: 'hull', rank: 2 }));
+  list.push(source(0, 0, 0, 3.6, 0, 0x8a5030, 0.08, { key: 'junk', follow: junk, extent: [12, 3.2], kind: 'hull', rank: 2 }));
   return list;
 }
 

@@ -33,8 +33,8 @@ import {
   ferryUpper,
   junkCloth,
   junkHull,
-  waterlineFoam,
 } from './surfaces.js';
+import { createWake } from './wakes.js';
 
 // Both vessels are built with their bow pointing along local +X.
 
@@ -383,16 +383,13 @@ function createFerry() {
     }
   }
 
-  // A skirt standing in the waterline, so the foam line can't z-fight the water.
-  const waterline = offsetLoop(
-    ferryOutline((x) => {
-      const [px, , pz] = ferrySectionAt(x, 0.5);
-      return [px, pz];
-    }),
-    0.06,
-  );
-  const foam = new MeshBasicMaterial({ map: waterlineFoam(), transparent: true, depthWrite: false });
-  const wake = new Mesh(ribbons([[lift(waterline, -0.15), lift(waterline, 0.5)]], 30), foam);
+  const wake = createWake({
+    halfWidthAt: (x) => (Math.abs(x) < FERRY_HALF ? ferrySectionAt(x, 0)[2] : 0),
+    span: [-FERRY_HALF, FERRY_HALF],
+    trail: 45,
+    speed: 3,
+    seed: 61,
+  });
 
   // Cabin light spilling onto the water around the hull.
   const glow = new PointLight(0xffb36b, 160, 45, 2);
@@ -419,9 +416,10 @@ function createFerry() {
     masts,
     rigging,
     ...lamps,
-    wake,
+    wake.mesh,
     glow,
   );
+  ferry.userData.wake = wake;
   return ferry;
 }
 
@@ -747,7 +745,21 @@ function createJunk() {
   const sailLight = new PointLight(0xff6a3c, 180, 50, 2);
   sailLight.position.set(4.5, 6, 0);
 
-  junk.add(hull, deck, rail, house, houseRoof, canopy, posts, tyres, rudder, masts, ...sails, rigging, sailLight);
+  // The junk sails slower than the ferry: a shorter, fainter wake.
+  const wake = createWake({
+    halfWidthAt: (x) => {
+      const u = junkU(x);
+      return u <= 0 || u >= 1 || junkKeel(u) >= 0 ? 0 : halfWidthBelowSheer(u, junkSheer(u));
+    },
+    span: [-JUNK_LENGTH / 2, JUNK_LENGTH / 2],
+    trail: 32,
+    speed: 1.8,
+    strength: 0.9,
+    seed: 67,
+  });
+
+  junk.add(hull, deck, rail, house, houseRoof, canopy, posts, tyres, rudder, masts, ...sails, rigging, sailLight, wake.mesh);
+  junk.userData.wake = wake;
   return junk;
 }
 
@@ -809,6 +821,7 @@ export function createVessels() {
         object.rotation.x = 0;
         object.rotation.z = 0;
       }
+      object.userData.wake.update(object, time, animate);
     }
   }
 

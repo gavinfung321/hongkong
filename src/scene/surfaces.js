@@ -423,23 +423,6 @@ export function ferryCabin() {
   return texture(c);
 }
 
-// White water churned along the hull at the waterline: opaque at the
-// water, thinning upward, broken into streaks.
-export function waterlineFoam() {
-  const [c, ctx] = canvas(256, 32);
-  const random = seededRandom(41);
-  for (let i = 0; i < 160; i++) {
-    const x = random() * 256;
-    const h = 3 + random() * 14;
-    const streak = ctx.createLinearGradient(0, 32 - h, 0, 32);
-    streak.addColorStop(0, 'rgba(200, 215, 225, 0)');
-    streak.addColorStop(1, `rgba(200, 215, 225, ${0.15 + random() * 0.3})`);
-    ctx.fillStyle = streak;
-    ctx.fillRect(x, 32 - h, 2 + random() * 10, h);
-  }
-  return texture(c, { repeat: [6, 1] });
-}
-
 // ---- Observation Wheel --------------------------------------------------------
 
 // Soft round halo for the wheel's lit hub, white fading to clear.
@@ -811,6 +794,13 @@ export function junkHull() {
   ctx.fillRect(0, cap, W, 2);
   ctx.fillStyle = '#d98b5c';
   ctx.fillRect(0, stripeTop, W, H - stripeTop);
+  // Wet and in the hull's shadow toward the waterline (row 90), so the
+  // boat's lowest line isn't its brightest.
+  const wet = ctx.createLinearGradient(0, stripeTop + 2, 0, 91);
+  wet.addColorStop(0, 'rgba(40, 18, 8, 0)');
+  wet.addColorStop(1, 'rgba(40, 18, 8, 0.6)');
+  ctx.fillStyle = wet;
+  ctx.fillRect(0, stripeTop + 2, W, H - stripeTop - 2);
   ctx.fillStyle = '#3a2214';
   ctx.fillRect(0, stripeTop, W, 2);
   return texture(c);
