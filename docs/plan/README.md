@@ -84,7 +84,9 @@ The milestone has two halves:
 Nothing open in the look test. The colour pass (was item 6) is done: a
 film grade over the finished frame, kept because 01 clearly improved (user
 choice, 2026-10-03; see "Film grade" in [`scene-city.md`](scene-city.md)).
-Next is build step 6, measure and review.
+Build step 6 (measure and review) is done on my side; see
+[`../milestone-2-review/REVIEW.md`](../milestone-2-review/REVIEW.md) for
+the three decisions left to the user.
 
 **Not in the look test:** 3D models (GLBs; later dropped altogether, all 3D
 is built in code, user decision 2026-10-01), real fireworks, the sparkle cursor,
@@ -106,7 +108,12 @@ Stop for the user's review after each step, as in the grey-box.
    before-and-after screenshots.
 6. **Measure and review.** Laptop numbers by me; iPhone 11 and 13 numbers by
    the user. Refresh all twelve review screenshots, write
-   `docs/milestone-2-review/REVIEW.md`, commit.
+   `docs/milestone-2-review/REVIEW.md`, commit. **Done 2026-10-03** except
+   the user's parts: the review, 14 screenshots (hero included) and laptop
+   numbers are in [`../milestone-2-review/`](../milestone-2-review/REVIEW.md).
+   Waiting for the user: sign-off of 01 (check 6), phone re-measure
+   (check 7, deferred by user choice), and the draw-call and texture
+   budgets (raise, or merge meshes).
 
 ## Decisions (resolved 2026-10-01)
 
