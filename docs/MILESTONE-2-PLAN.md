@@ -1466,8 +1466,16 @@ all six.
          sky and before the moon, so the moon, ridge and towers always
          cover it. Desktop: 01 a tall band between the Clock Tower and the
          moon (20%), a thin band high to the right (14%); 06 a low band
-         under the fireworks (15%). Phones: 01 a band above the moon, 06 a
-         band between IFC's crown and the fireworks (both 12%). Each card
+         under the fireworks (15%). The user found the sky empty on the
+         right of 02 and the left of 04 and 05 (user choice, 2026-10-02:
+         one cloud for each, not stronger clouds overall), so each now has
+         its own card: 02 a low band over the right-hand ridge, below the
+         copy and above the ferry; 04 a thin band above the low mountains
+         on the left; 05 a thin band between the copy and Bank of China's
+         mast (after the chapter fade about 14%, 10% and 8%). Phones: 01 a
+         band above the moon, 06 a band between IFC's crown and the
+         fireworks (both 12%); 02–05 on phones already show the 01 band
+         and need no cards of their own. Each card
          sways 1.2% of its width over 110–150 s (not in reduced motion).
          The clouds fade per chapter (`clouds` in `src/data/chapters.js`):
          full in 01 and 06, 80% in 02–03, 50% in 04 (the darkest frame),
@@ -1476,7 +1484,8 @@ all six.
          Clock Tower crown at any hold, desktop or phone. Bright pixels in
          the skyline band within 1% of before in every frame (IFC still
          leads). Composition probe: only the four older misses. Two to
-         three more draw calls per frame.
+         three more draw calls per frame, and about one more where the 02,
+         04 and 05 cards are in view.
        - **Stage 2, harbour mist (next):** the staged `harbour-mist.webp`
          low over the water and the mountains' foot, after review.
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
@@ -1770,7 +1779,9 @@ The milestone passes when:
    drops first if they can't; user choice, 2026-10-02); faint coral cloud
    bands hang in the sky of 01 and 06 (fainter elsewhere, faintest in 04
    and 05), behind the moon, ridge and towers and clear of 香港 and the
-   copy on desktop and phones (user request, 2026-10-02), and no brace line, mast or warning light shimmers
+   copy on desktop and phones (user request, 2026-10-02), and no desktop
+   hold has an empty side of sky: 02 has a band on the right, 04 and 05
+   on the left (user choice, 2026-10-02), and no brace line, mast or warning light shimmers
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
