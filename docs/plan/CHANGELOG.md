@@ -6,6 +6,11 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-02
 
+- **Lighter palms** (user choice): each palm drew four times (back and
+  front passes of both its depth twin and its colour); now it draws twice,
+  and two palms left of the phone frame are desktop-only. Phone 02 drops
+  from 73k to 52k triangles with no visible change. Files:
+  `src/scene/palms.js`, `src/data/world.js`.
 - **No more shader stutter between chapters** (user request, after the
   first iPhone 11 reading): the move from 01 to 02 stuttered because 32
   shaders were built mid-scroll. Every shader is now built in one unseen

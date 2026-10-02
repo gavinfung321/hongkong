@@ -152,6 +152,18 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
      while visible in the moves in and out of 02; all 12 frames as before;
      draw calls unchanged; with 1 cm camera steps hold 2 changes 16,802 px
      (more near leaflets moving), 8 px with the camera still.
+   - **Lighter palms (user choice, 2026-10-02),** after the first iPhone 11
+     reading put phone 02 at 34 fps. Each palm was drawn four times: three.js
+     splits two-sided transparent surfaces into a back pass and a front
+     pass, for the depth twin and the palm alike. The depth twin already
+     keeps the nearest frond in front, so both materials now draw in one
+     pass (`forceSinglePass`): really 4 draw calls now (it was 8). Two
+     palms that stand left of the phone frame throughout 02 (the coconut
+     at x −82.4 and the row's last palm at x −88) are desktop-only now, so
+     phones show seven palms. Phone 02: palms 34.6k → 13.5k triangles, the
+     whole frame 73k → 52k. Checked with still frames: desktop 02 and
+     phone 01 identical to the pixel, phone 02 within 12 of 255 levels
+     anywhere; composition probe as before.
    - **Stop 4: bauhinia tree (built 2026-10-02, user choice), before the
      water reflections.** One Hong Kong orchid tree built in code (no flat
      cutout: the user's AI images stay references, and a card would look

@@ -230,6 +230,10 @@ export function createPalms(palms) {
     time,
     true,
   );
+  // The depth twin already keeps the nearest frond in front, so the usual
+  // back-then-front split of two-sided transparent surfaces would only draw
+  // every palm twice more.
+  material.forceSinglePass = true;
   // Drawn just before the palms: while they fade, only their front surface
   // blends, so fronds behind fronds don't show through.
   const depthOnly = addPalmShader(
@@ -245,6 +249,7 @@ export function createPalms(palms) {
     time,
     false,
   );
+  depthOnly.forceSinglePass = true;
 
   const q = new Quaternion();
   const up = new Vector3(0, 1, 0);
