@@ -77,11 +77,20 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
       No lit front bank sits behind the copy; the dim back layer
       reaches behind some copy and keeps it legible. IFC still leads
       in 05 (checked by eye). Draw calls per hold: desktop 01 207, 02 165, 03 120, 04
-      93, 05 79, 06 65; phones 01 149, 02 101, 03 116, 04 88, 05 71,
+      93, 05 79, 06 65; phones 01 148, 02 101, 03 116, 04 88, 05 71,
       06 59 (3–7 cloud cards each, about 2–4 more than before). Mid-move
       shots (01→02, 04→05, phone 02→03) crossfade gently. JS 208.3 KB
-      gzip. On phones the bigger cloud area costs some pixel fill; to
-      re-check on the iPhone 11.
+      gzip. On phones the bigger cloud area costs some pixel fill; the
+      user is not re-measuring for now: most visitors are expected on
+      an iPhone 16 (user choice, 2026-10-03).
+    - **Phone 01 as one deck (user choice, 2026-10-03):** its first
+      four cards were full-width strips at about 15%, 30% and 45% down
+      the frame with even dark gaps, so the sky read as stripes. Now
+      three cards: one dim deck (a short section of the tall band, so
+      it is deep) from the top down to the moon, a small lit bank
+      off-centre left below the copy, and the bright bank just above
+      the moon and ridge, lit from the city like the storyboard. 香港
+      now sits over the dim deck instead of a coral strip.
   - **Stage 2, harbour mist (done; user request, 2026-10-02):** the
     staged `harbour-mist.webp` (four soft blue-grey bands) now ships
     as `public/atmosphere/harbour-mist.webp`. Four separate drifts
