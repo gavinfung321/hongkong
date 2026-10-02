@@ -1046,6 +1046,17 @@ all six.
          the summit (~560 m) left of IFC with a shoulder that still hides the
          moon's lower edge in 01, the dip of Victoria Gap, then Mount
          Cameron's mass (`WORLD.mountains.ranges`).
+       - **Sloping ends (user request, 2026-10-02: "too vertical … like a
+         cliff").** Each range used to stop at full height in a straight
+         drop, seen at the near range's east end in desktop 02 (and the
+         move from 01) and the near and second ranges' west ends in desktop
+         04; the new lighter ridges made the cut stand out. Now every ridge
+         eases down to the water over its last 1.2 / 1.5 / 1.8 km (near /
+         second / third), like a headland, its jagged detail shrinking with
+         it, and the mist fades out along the same slope. Widening the
+         ranges instead would only move the cut to the camera's 5 km limit.
+         01, 05 and 06 are unchanged; 1 cm camera steps in 02 and 04 as
+         before (16,695 / 13,007 px).
        - **Shading:** darker at the foot (×0.6) to lighter at the ridge
          (×1.9), so the slopes have volume through the fog. A thin moonlit
          edge (5 m, never under 2 px) lights the ridges within about 13° of
@@ -1273,7 +1284,9 @@ The milestone passes when:
    tower in 01 and 05; no Central building is lit as much (user request,
    2026-10-02). The mountains have rough ridges with the Peak's outline,
    lighter upper slopes, a thin moonlit edge near the moon, a faint third
-   range, mist at their foot and quiet slope lights; the ridge still hides
+   range, mist at their foot and quiet slope lights; their ends slope down
+   to the water, with no cliff-like cut in any frame or move (user request,
+   2026-10-02); the ridge still hides
    the moon's lower edge in 01, and nothing on them twinkles while the
    camera moves (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
