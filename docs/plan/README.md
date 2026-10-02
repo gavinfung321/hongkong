@@ -72,8 +72,8 @@ The milestone has two halves:
   slope lights, painted landmark facades, wakes.
 - **Atmosphere:** coral clouds per chapter (04's stronger on the left);
   separate shore mist drifts (none in desktop 01); open-water wisps in the
-  hero and 01; still firework bursts in 06, eight on desktop and six on
-  phones (animation, rockets, sparks and smoke to follow).
+  hero and 01; a firework show in 06 (eight bursts on desktop, six on
+  phones, in an 8 s loop with rockets and falling sparks; smoke to follow).
 
 ## Open
 

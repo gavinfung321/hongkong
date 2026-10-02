@@ -6,6 +6,13 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-02
 
+- **Fireworks step 2, the show** (user choices): the 06 bursts play in a
+  fixed 8 s loop: a rocket climbs from behind the skyline, the burst
+  ignites at 70% size with a soft flare, opens, cools and fades, and
+  sparks fall from its tips in drooping streaks. Two to four live at a
+  time; entering 06 starts at a composed moment; reduced motion holds one.
+  Files: `src/scene/createFireworks.js`, `src/data/atmosphere.js`,
+  `src/data/chapters.js`, `src/main.js`.
 - **Fireworks step 1, still bursts** (user choice): the four ring markers
   in 06 are now firework bursts from the shared `firework-burst.webp`,
   spun, mirrored and tinted so no two match (warm keeps the art's gold).
