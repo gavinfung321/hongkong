@@ -133,8 +133,9 @@ export const chapters = [
       mobile: { left: 8, top: 9, right: 92, bottom: 23 },
     },
     visibility: {
-      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bursts: 0, clouds: 0.8, mist: 0.5, seaMist: 0.7 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bursts: 0, clouds: 0.8, mist: 0.5, seaMist: 0.7 },
+      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bursts: 0, clouds: 0.8, mist: 0.5, seaMist: 0 },
+      // Fainter shore mist: the phone looks straight at the tower's foot.
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bursts: 0, clouds: 0.8, mist: 0.2, seaMist: 0 },
     },
     fogDensity: 0.00045,
     vessels: {
