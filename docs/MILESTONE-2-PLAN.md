@@ -1514,24 +1514,31 @@ all six.
          them off the water with 05 eased.
        - **Open-water patches (user choice, 2026-10-02):** the user
          expected the mist spread across the sea, not only along the far
-         shore. Four low patches (`SEA_MIST`, 14–20 m tall, 260–380 m
-         wide) lie out on the harbour 380–750 m from the 01 camera, facing
-         it: behind the Clock Tower, behind the junk, behind the ferry
-         farther out, and toward the Central piers; a milder version of
-         the drifts' warm tint. From the promenade's
-         height they read as layered banks across the whole width of the
-         water, behind the boats, in the hero and 01. Their own level
-         (`seaMist`: 01 1, 02 0.7, 0 from 03 on) uses the default gate,
-         so they are gone early in the move to 03, before the camera
-         passes near them; in 03–05 the camera is low among the boats,
-         where mist would veil them. In 02 they barely show (that view
-         skims along the water). A strip along the Kowloon shore was
-         considered and left out: it would sit right under the 01 camera
-         and behind the Clock Tower in 02.
+         shore. Four low wisps (`SEA_MIST`, 71–102 m wide, 9–16 m tall)
+         lie out on the harbour 420–650 m from the 01 camera, facing it:
+         left of the Clock Tower, between the tower and the ferry (the
+         fullest bank), between the ferry and the junk farther out, and
+         right of IFC toward the Central piers; a slightly milder version
+         of the drifts' warm tint. Each uses a section of a mist band, so
+         a short wisp keeps a natural shape, its cut ends fading over a
+         quarter of its width. From the promenade's height they read as
+         separate drifts over about half the waterline, with dark water
+         between them, behind the boats, in the hero and 01. Their own
+         level (`seaMist`: 01 only) uses the default gate, so they are
+         gone early in the move to 02; in 03–05 the camera is low among
+         the boats, where mist would veil them. A strip along the Kowloon
+         shore was considered and left out: it would sit right under the
+         01 camera and behind the Clock Tower in 02.
+         *Broken up (user choice, 2026-10-02):* the first four patches
+         were 260–380 m wide (30–45% of the frame each) and tiled the
+         whole 01 waterline into one grey strip; in 02 on phones they and
+         the shore drifts made a band right behind the Clock Tower's
+         foot. Now 02 has no open-water mist, and the phone's 02 shore
+         mist is at 0.2 (desktop 0.5), so the tower's foot is clean.
        - **Checks:** composition probe: only the four older misses. Draw
          calls added by the clouds and mist together, measured by hiding
-         them: desktop 01 14, 02 12, 03 10, 04 8, 05 9, 06 9; phones 9,
-         7, 4, 4, 4, 4. Only desktop 01 is over the brief's aim of 12;
+         them: desktop 01 14, 02 7, 03 10, 04 9, 05 9, 06 9; phones 8,
+         4, 5, 5, 4, 4. Only desktop 01 is over the brief's aim of 12;
          phones stay well under. The skyline band's other
          towers gain a few bright pixels where the mist lifts the dark
          waterfront (luma over 60, before the mist → now: 05 8,770 →

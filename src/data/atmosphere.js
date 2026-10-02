@@ -75,25 +75,27 @@ export const MIST = {
   ],
 };
 
-// Open-water mist patches (user choice, 2026-10-02): low banks out on the
-// harbour, 380–750 m from the 01 camera, so in the wide views (hero, 01, 02)
-// the mist spreads across the sea, not only along the far shore. Each faces
-// the 01 camera (`face`, world [x, z]) and sits behind the Clock Tower, ferry
-// and junk there; none lies in line with the Clock Tower from either 02
-// camera. Their own level (`seaMist` in chapters.js) is gone early in the
-// move to 03, before the camera comes near them.
+// Open-water mist (user choice, 2026-10-02): separate low wisps out on the
+// harbour, 420–650 m from the 01 camera, so in the hero and 01 the mist
+// spreads across the sea with dark water between the wisps (about half the
+// waterline), not one strip. Each faces the 01 camera (`face`, world [x, z])
+// and sits behind the Clock Tower, ferry and junk there. `u` takes a section
+// of the band (share of its length) so a short wisp keeps a natural shape;
+// its cut ends fade over `feather`. Their own level (`seaMist` in
+// chapters.js) is 01 only, gone early in the move to 02.
 export const SEA_MIST = {
   face: [-13, 99.5],
-  // Milder than the shore drifts: farther from the city's light.
-  tint: { low: [1.15, 0.9, 0.75], high: [0.92, 0.82, 0.92] },
+  feather: 0.25,
+  // A little milder than the shore drifts: farther from the city's light.
+  tint: { low: [1.3, 0.82, 0.6], high: [0.9, 0.74, 0.88] },
   cards: [
-    // Behind the Clock Tower, left.
-    { x: -150, z: -280, width: 260, band: 'low', opacity: 0.22 },
-    // Behind the junk.
-    { x: 60, z: -420, width: 320, band: 'flat', opacity: 0.2 },
-    // Behind the ferry, farther out.
-    { x: -60, z: -650, width: 380, band: 'low', opacity: 0.2 },
-    // Right, toward the Central piers.
-    { x: 330, z: -560, width: 300, band: 'flat', opacity: 0.18 },
+    // Left of the Clock Tower.
+    { x: -290, z: -420, width: 76, band: 'broad', u: [0.08, 0.5], opacity: 0.24 },
+    // Between the Clock Tower and the ferry: the fullest bank.
+    { x: -138, z: -350, width: 71, band: 'billow', u: [0.55, 0.95], opacity: 0.22 },
+    // Between the ferry and the junk, farther out.
+    { x: 34, z: -550, width: 79, band: 'low', u: [0.3, 0.75], opacity: 0.24 },
+    // Right of IFC, toward the Central piers.
+    { x: 278, z: -500, width: 102, band: 'broad', u: [0.5, 0.95], opacity: 0.22 },
   ],
 };
