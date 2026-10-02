@@ -105,10 +105,9 @@ export const CLOUDS = {
       { chapter: 4, layer: 'back', band: 'tall', x: 40, y: 32, width: 180, opacity: 0.4 },
       { chapter: 4, layer: 'front', band: 'thin', u: [0, 0.7], x: 25, y: 30, width: 90, opacity: 0.4 },
       { chapter: 4, layer: 'front', band: 'low', u: [0.4, 1], x: 90, y: 19, width: 60, opacity: 0.4 },
-      // 06: a dim roof behind the bursts, lit banks below them.
-      { chapter: 5, layer: 'back', band: 'tall', x: 50, y: 30, width: 200, opacity: 0.3 },
-      { chapter: 5, layer: 'back', band: 'thin', x: 40, y: 66, width: 160, opacity: 0.4 },
-      { chapter: 5, layer: 'front', band: 'low', x: 45, y: 57, width: 170, opacity: 0.45 },
+      // 06: one lit bank between the bursts and IFC's crown; the bursts keep
+      // dark sky (user request, 2026-10-03: less cloud on phones).
+      { chapter: 5, layer: 'front', band: 'low', x: 45, y: 60, width: 170, opacity: 0.4 },
     ],
   },
 };

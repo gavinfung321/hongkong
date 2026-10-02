@@ -91,6 +91,10 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
       off-centre left below the copy, and the bright bank just above
       the moon and ridge, lit from the city like the storyboard. 香港
       now sits over the dim deck instead of a coral strip.
+    - **Less cloud in phone 06 (user request, 2026-10-03):** the dim
+      roof behind the bursts and the band behind IFC's crown are gone;
+      one lit bank (40%) stays between the bursts and the crown, so the
+      fireworks open on dark sky. Desktop 06 unchanged.
   - **Stage 2, harbour mist (done; user request, 2026-10-02):** the
     staged `harbour-mist.webp` (four soft blue-grey bands) now ships
     as `public/atmosphere/harbour-mist.webp`. Four separate drifts

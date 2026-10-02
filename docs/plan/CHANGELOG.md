@@ -6,6 +6,9 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Less cloud in phone 06** (user request): three cloud cards → one lit
+  bank between the bursts and IFC's crown, so the fireworks open on dark
+  sky (mobile 06 58 draw calls). Files: `src/data/atmosphere.js`.
 - **Phone 01 clouds as one deck** (user choice): three full-width strips
   at even steps read as stripes. Now one dim deck from the top to the moon,
   a small lit bank off-centre left and the bright bank just above the moon
