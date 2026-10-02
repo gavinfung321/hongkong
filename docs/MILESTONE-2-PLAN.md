@@ -1488,7 +1488,7 @@ all six.
        - **Stage 2, harbour mist (done; user request, 2026-10-02):** the
          staged `harbour-mist.webp` (four soft blue-grey bands) now ships
          as `public/atmosphere/harbour-mist.webp`. Four separate drifts
-         (upright cards, 340–480 m wide, 20–32 m tall, the art at its own
+         (upright cards, 180–480 m wide, 18–32 m tall, the art at its own
          shape) stand on the island's waterfront just behind the ferry
          piers, facing Kowloon (`MIST` in `src/data/atmosphere.js`), with
          gaps between them; the widest gap keeps the wheel and IFC clear.
@@ -1498,7 +1498,7 @@ all six.
          A tint colours the grey art like haze lit by the city: warm
          amber-rose at the foot, dusky lavender at the top. Strength per
          chapter (`mist` in `src/data/chapters.js`, changing across the
-         whole move): 01 0.6, 02 0.5 (02 looks past the island's end, so
+         whole move): 01 0 on desktop and 0.6 on phones, 02 0.5 (02 looks past the island's end, so
          it barely shows), 03 0.8 (behind the ferry), 04 1 (strongest, a
          wisp at the shore behind the junk), 05 0.4 (softening the foot of
          the podiums), 06 0.15 (fading as the camera tilts into the clear
@@ -1512,6 +1512,16 @@ all six.
          270 m away) veiled the water and its glints. The user chose all
          three fixes: warm tint, separate unstretched drifts, and moving
          them off the water with 05 eased.
+         *Unjoined on desktop (user choice, 2026-10-02):* from 01, 1.2 km
+         away, the 30–70 m gaps between the drifts vanished and their soft
+         ends overlapped, so they ran as one thin strip along the far
+         waterline at the same height as the open-water wisps, filling
+         the dark gaps between them; from 05 (about 270 m away) the drift
+         in front of the camera covered the left third of the frame and
+         ran off its edge. Now desktop 01 has no shore mist (only the four
+         wisps, separate), and that drift is a 180 m section of its band
+         (was the whole band, 340 m wide), so in 05 it ends inside the
+         frame at both sides (about 3–26% of the frame's width).
        - **Open-water patches (user choice, 2026-10-02):** the user
          expected the mist spread across the sea, not only along the far
          shore. Four low wisps (`SEA_MIST`, 71–102 m wide, 9–16 m tall)
@@ -1537,9 +1547,9 @@ all six.
          mist is at 0.2 (desktop 0.5), so the tower's foot is clean.
        - **Checks:** composition probe: only the four older misses. Draw
          calls added by the clouds and mist together, measured by hiding
-         them: desktop 01 14, 02 7, 03 10, 04 9, 05 9, 06 9; phones 8,
-         4, 5, 5, 4, 4. Only desktop 01 is over the brief's aim of 12;
-         phones stay well under. The skyline band's other
+         them: desktop 01 10, 02 7, 03 10, 04 9, 05 9, 06 8; phones 8,
+         4, 5, 5, 4, 4, all within the brief's aim of 12 (desktop 01 was
+         14 before its shore mist came out). The skyline band's other
          towers gain a few bright pixels where the mist lifts the dark
          waterfront (luma over 60, before the mist → now: 05 8,770 →
          8,940; 03 2,210 → 2,350; the first belt had 9,000 and 2,650);
@@ -1841,9 +1851,13 @@ The milestone passes when:
    copy on desktop and phones (user request, 2026-10-02), and no desktop
    hold has an empty side of sky: 02 has a band on the right, 04 and 05
    on the left (user choice, 2026-10-02); a soft low mist lies along the
-   island's waterline, strongest behind the junk in 04, faint in 01,
-   gone in 06, and in the hero and 01 low banks spread across the open
-   water behind the boats (user choice, 2026-10-02); the shore mist is
+   island's waterline, strongest behind the junk in 04, absent from
+   desktop 01 and faint in phone 01, gone in 06, and in the hero and 01
+   separate low wisps spread across the open water behind the boats,
+   with dark water between them, never one unbroken strip and never
+   joined by shore mist behind them; in 05 no drift runs off the
+   frame's edge as a strip (user choice, 2026-10-02); in 02 no mist band runs behind the Clock Tower's
+   foot on phones (user choices, 2026-10-02); the shore mist is
    warm-tinted separate drifts, not a grey film, and leaves the water in
    front of the 05 piers dark (user choice, 2026-10-02), never over the Clock Tower, the boats, the sails, IFC's
    crown or the copy (user request, 2026-10-02), and no brace line, mast or warning light shimmers
