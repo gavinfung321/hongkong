@@ -460,8 +460,8 @@ all six.
      (`createLighting.js`), so local lights carry the frame. The cyan rim
      light is unchanged (it made the moon path on the water). Since the
      water reflections (step 5, stop 5; user choice, 2026-10-02) the water
-     ignores the rim light: its cyan glare is replaced by the moon's gold
-     path.
+     ignores the rim light and the boats' point lights: no cyan glare and
+     no hot blobs under the boats; a few drawn reflections take their place.
    - **Warm local lights (3 point lights):** a floodlight at the foot of the
      Clock Tower's harbour face (bright brick low, fading up the shaft), the
      ferry's cabin light and the junk's deck lanterns (warm pools on the
@@ -696,7 +696,9 @@ all six.
        lights are left out for now.
      - **Reflections:** the junk's light is now red and sits among the sails
        (was a warm deck lantern), so the glassy water draws a red streak under
-       the junk beside the moon path. No new flat pieces on the water; still
+       the junk beside the moon path. (Since 2026-10-02 the water ignores the
+       point lights; the sails' red reflection is drawn by the water shader,
+       step 5, stop 5.) No new flat pieces on the water; still
        3 point lights.
      - **Framing:** the first, smaller rig left 04 with the junk's top at 19%
        against a 10% target, and the big sails then put it at 3%, so the 04
@@ -928,53 +930,64 @@ all six.
        flickers. Hold 1 is unchanged (20,140 px against 20,040).
      - **Code:** `bauhinia.js`; the atlas is `bauhiniaAtlas` in `surfaces.js`;
        placement is `WORLD.foreground.bauhinia`.
-   - **Stop 5: water reflections (built 2026-10-02, user choice).** The
-     harbour now mirrors the lit city as long, broken streaks of light,
-     like the user's photo of the junks at night. The user chose streaks
-     drawn by the water shader (not a mirror render, which would cost a
-     second scene draw and shimmer on phones), colours that match the scene,
-     and these sources:
-     - **Skyline and IFC:** one column per 45 m of skyline, warm to cool
-       like the windows above. Wide columns split into 11 m window stripes,
-       about half of them lit; stripes blend into their average once they
-       shrink below about 2 px, so they never shimmer. The IFC has a cool
-       striped body and a pale crown.
-     - **Moon:** a gold path from the horizon to the moon's mirror image.
-       It replaces the cyan glare the rim light put on the water.
-     - **Boats:** warm ferry windows, the junk's red sails and its
-       deckhouse lights. They follow the boats as they move and turn.
-     - **Clock Tower and promenade lamps:** a warm tower streak and a small
-       one under each lantern and tall lamp.
-     - **Observation Wheel:** a magenta column under the rim.
+   - **Stop 5: water reflections (built 2026-10-02, user choice; revised
+     the same day, user request).** A few lights leave soft, broken
+     reflections on the harbour. The user chose streaks drawn by the water
+     shader (not a mirror render, which would cost a second scene draw and
+     shimmer on phones) in the scene's colours.
+     - **First version (replaced):** every skyline column, the IFC, moon,
+       wheel, Clock Tower, promenade lamps and boats, with skyline and IFC
+       columns cut into 11 m window stripes. The user found 01 full of thin
+       vertical rectangles (a barcode across the water) and the boats'
+       reflections too big, and asked to keep only the important ones
+       ("Just remove all the reflection that look like thin vertical
+       reflection in 01").
+     - **Now reflected (user choice):**
+       - **IFC:** one soft column the width of the tower body, cool white,
+         as long as half the tower's mirror image, dimming along its
+         length; no stripes.
+       - **Ferry:** its lit window decks only (about two thirds of the
+         hull), warm.
+       - **Junk:** its sails (two thirds of their spread) in red, plus a
+         small warm streak from the deckhouse.
+       - **Clock Tower:** the floodlit lower half of the tower, warm,
+         fading along its length, so mobile 01 no longer shows a long thin
+         bar.
+     - **Not reflected (user choice):** the skyline, the moon, the
+       Observation Wheel and the promenade lamps.
+     - **True size:** a streak is as long as its light's mirror image plus
+       a short tail toward the viewer (0.35 of the image for the boats and
+       tower, 0.15 for IFC), as on calm water; the first version's fixed
+       long tail ran the junk's streak to the bottom of 01.
+     - **No glare:** the water ignores the rim light and the boats' point
+       lights. The point lights made hot orange and red blobs under the
+       ferry in 03 and the junk in 04 (hidden earlier by the cyan glare);
+       the streaks now draw the boats' reflections.
      - **How a streak is drawn:** each light is an upright strip (ground
        position, lit height, width, colour). Its reflection covers the view
-       angles of the strip's mirror image, fades quickly toward the horizon
-       and slowly toward the viewer, and is broken into dashes by a noise
-       measured in view angles (it moves with the camera, so it cannot
-       strobe) and by the blurred ripples. Brightness follows the water's
-       Fresnel sheen and is soft-clipped, so streaks stay below the tower
-       and copy.
-     - **Limits:** up to 48 sources per frame on desktop, 28 on mobile.
-       Each frame the sources behind the camera or off screen are dropped,
-       then the brightest are kept; lamps go first (they are mostly hidden
-       by the promenade edge). Sources of a faded subject (ferry, junk, IFC,
-       wheel, railing) fade with it.
-     - **Flicker fix:** the water plane is now cut into 64 × 64 squares.
+       angles of the strip's mirror image and is broken into horizontal
+       ripple bands by a noise measured in view angles (about 60 px wide,
+       wider than a streak, so bands cross it whole; it moves with the
+       camera, so it cannot strobe) and by the blurred ripples. Brightness
+       follows the water's Fresnel sheen and is soft-clipped, so streaks
+       stay below the subjects and copy.
+     - **Limits:** at most 8 sources per frame (5 in the scene). Sources
+       behind the camera or off screen are skipped; a faded subject (ferry,
+       junk, IFC) fades its reflection too.
+     - **Flicker fix (kept):** the water plane is cut into 64 × 64 squares.
        As two 8 km triangles, the world positions across it were too
-       imprecise and the stripes shivered at 1 cm camera steps.
-     - **Checks:** all 12 frames as before (only the four older misses);
-       draw calls unchanged; no new textures; water adds about 8,000
-       triangles. With 1 cm camera steps the holds change 19,132 / 16,718 /
-       14,764 / 12,928 / 6,785 px (holds 1–5), at or below the earlier
-       numbers; with the camera still, hold 1 changes 37 px (hold 3's 1,574
-       px is the turning wheel). Strobe on the water (sideways / forward
-       moves): hold 1 3.8 / 11.6 (was 5.2 / 14.7), hold 3 1.4 / 11.8 (1.4 /
-       10.5), hold 4 0.9 / 8.2 (1.2 / 8.3), hold 5 0.9 / 16.6 (0.8 / 15.9).
-       The loop over up to 48 sources per water pixel is to be watched in
-       the iPhone 11 measurement.
+       imprecise and the streaks shivered at 1 cm camera steps.
+     - **Checks:** draw calls unchanged, no new textures, water adds about
+       8,000 triangles. With 1 cm camera steps the holds change 19,037 /
+       16,861 / 14,633 / 12,950 / 6,669 px (holds 1–5), as before. Strobe on
+       the water (sideways / forward moves): hold 1 3.5 / 8.6, hold 3 0.9 /
+       6.1, hold 4 0.5 / 6.3, hold 5 0.8 / 15.5, all at or below the first
+       version (3.8 / 11.6, 1.4 / 11.8, 0.9 / 8.2, 0.9 / 16.6). The water
+       now loops over at most 8 sources per pixel (was 48), much lighter
+       for the iPhone 11.
      - **Code:** `waterReflections.js` (the source list), `createWater.js`
-       (the streak shader, culling and fades), `main.js` (sources, fades,
-       per-frame `water.reflect`).
+       (the streak shader, per-source length and taper, culling and fades),
+       `main.js` (sources, fades, per-frame `water.reflect`).
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -1128,13 +1141,13 @@ Stop for the user's review after each step, as in the grey-box.
   toward screen left, shared petal texture, colours and wind (user choice,
   2026-10-02).
 - New: `src/scene/waterReflections.js` (the lights the water reflects:
-  skyline columns, IFC, wheel, moon, Clock Tower, lamps, boats);
-  `src/scene/createWater.js`: reflection streak shader with stripes and
-  dashes, the rim light's glare removed, the plane cut into 64 × 64
+  IFC, Clock Tower, ferry, junk); `src/scene/createWater.js`: reflection
+  streak shader with per-source length and taper and ripple bands, the rim
+  light's and point lights' glare removed, the plane cut into 64 × 64
   squares, `setSources`, `setFade` and `reflect` (per-frame culling);
-  `src/main.js`: the sources, fades tied to the ferry, junk, IFC, wheel and
-  railing gating, `water.reflect` before each render (user choice,
-  2026-10-02).
+  `src/main.js`: the sources, fades tied to the ferry, junk and IFC gating,
+  `water.reflect` before each render (user choice, 2026-10-02; skyline,
+  moon, wheel and lamp reflections removed the same day, user request).
 - Publishing (user choice, 2026-10-02): `vite.config.js` builds with the
   base `/hongkong/` on GitHub; new `.github/workflows/deploy.yml` builds and
   publishes to GitHub Pages on every push to `main`; `.gitignore` keeps the
@@ -1162,11 +1175,12 @@ The milestone passes when:
    its posts (2026-10-02). The promenade reads as dark wet stone slabs with
    narrow, broken lamp reflections, quieter than the tower and copy, with
    no glare patch on the hero's near deck and no shimmering joints or
-   flecks (user request, 2026-10-02). The harbour mirrors the skyline, IFC,
-   moon (a gold path, no cyan glare), ferry, junk sails, Clock Tower, lamps
-   and wheel as broken streaks in the scene's colours, quieter than the
-   subjects, with no stripes shimmering or strobing while the camera moves
-   (user choice, 2026-10-02).
+   flecks (user request, 2026-10-02). Only IFC (one soft column), the
+   ferry's windows, the junk's sails and deckhouse and the Clock Tower's
+   floodlit base are reflected, as soft streaks broken by ripple bands, no
+   longer than calm water allows; no thin vertical bars, no glare or hot
+   blobs under the boats, nothing strobing while the camera moves (user
+   choice and request, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
    feet, raised over the boats (user request, 2026-10-02), and sinks and
    fades out with the 01 copy from the first scroll.

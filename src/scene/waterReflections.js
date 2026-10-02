@@ -1,89 +1,43 @@
-import { Box3, Color, MathUtils, Vector3 } from 'three';
-import { railingLayout } from './lamps.js';
-import { seededRandom } from './random.js';
+import { Box3, Color, Vector3 } from 'three';
 import { WORLD } from '../data/world.js';
 
-// The lights the harbour reflects (user choice, 2026-10-02): the Central
-// skyline and IFC, the moon, the ferry's windows and the junk's sails, the
-// Clock Tower and the promenade lamps, the Observation Wheel. Each source is
-// an upright strip of light: ground position x / z, lit from height h0 to h1,
-// half as wide as `width`, with a colour × power. The water draws its
-// reflection (createWater.js). Colours match the scene's own lights.
-
-const WARM = new Color(0xffc07a); // city windows (cityWindows.js)
-const COOL = new Color(0xc4d6ff);
-const SKYLINE_BIN = 45; // metres of skyline per reflection column
-const LANTERN_Y = 1.28; // above the railing (lamps.js)
-const LAMP_Y = 3.55;
+// The lights the harbour reflects (user choice, 2026-10-02): IFC, the Clock
+// Tower, the ferry's windows and the junk's sails. The skyline, moon, wheel
+// and promenade lamps are not reflected (user choice, same day: their many
+// thin streaks read as a barcode). Each source is an upright strip of light:
+// ground position x / z, lit from height h0 to h1, `width` half wide, with a
+// colour × power. The water draws its reflection (createWater.js).
+// tail: how far the streak runs on toward the viewer, as a share of the
+// mirror image's length; taper: how much it dims along its length (0 even,
+// 1 down to nothing). Colours match the scene's own lights.
 
 const box = new Box3();
 const size = new Vector3();
 const centre = new Vector3();
 
-// rank: when more sources are in view than the water draws, the lowest go.
 function source(x, z, h0, h1, width, colour, power, extra = {}) {
-  return { x, z, h0, h1, width, colour: new Color(colour), power, rank: power, ...extra };
+  return { x, z, h0, h1, width, colour: new Color(colour), power, tail: 0.35, taper: 0, rank: power, ...extra };
 }
 
-// Neighbouring skyline towers merge into columns, one per SKYLINE_BIN metres:
-// the front tower's distance, the tallest lit height, a warm / cool mix.
-function skylineColumns(skyline) {
-  const random = seededRandom(31);
-  const bins = new Map();
-  const m = skyline.instanceMatrix.array;
-  for (let i = 0; i < skyline.count; i++) {
-    const [x, y, z] = [m[i * 16 + 12], m[i * 16 + 13], m[i * 16 + 14]];
-    const [w, h] = [m[i * 16], m[i * 16 + 5]];
-    const key = Math.floor(x / SKYLINE_BIN);
-    const bin = bins.get(key) ?? { x0: Infinity, x1: -Infinity, z: -Infinity, top: 0, area: 0, base: y };
-    bin.x0 = Math.min(bin.x0, x - w / 2);
-    bin.x1 = Math.max(bin.x1, x + w / 2);
-    bin.z = Math.max(bin.z, z);
-    bin.top = Math.max(bin.top, y + h);
-    bin.area += w * h;
-    bins.set(key, bin);
-  }
-  return [...bins.values()].map(({ x0, x1, z, top, area, base }) => {
-    const colour = WARM.clone().lerp(COOL, 0.1 + random() * 0.4);
-    const power = 0.15 * MathUtils.clamp(area / 9000, 0.4, 1.6) * (0.6 + random() * 0.8);
-    return source((x0 + x1) / 2, z, base + 6, top * 0.95, Math.min((x1 - x0) / 2, SKYLINE_BIN) * 0.7, colour, power, { striped: true });
-  });
-}
+// tower: the Clock Tower group; ferry, junk: the boats, followed every frame.
+// IFC comes from WORLD.
+export function reflectionSources({ tower, ferry, junk }) {
+  const list = [];
 
-// skyline: its InstancedMesh; tower: the Clock Tower group; ferry, junk: the
-// boats, followed every frame. The IFC, wheel and moon come from WORLD.
-export function reflectionSources({ skyline, tower, ferry, junk }) {
-  const list = skylineColumns(skyline);
-
+  // One soft column, the body's width, half the tower's mirrored height.
   const [ix, iy, iz] = WORLD.ifc.position;
-  list.push(source(ix, iz, iy + 4, iy + 364, 22, WARM.clone().lerp(COOL, 0.75), 0.3, { key: 'ifc', striped: true }));
-  list.push(source(ix, iz, iy + 364, iy + 412, 17, 0xe6ecf6, 0.55, { key: 'ifc' }));
-
-  const { position: [wx, wy, wz], radius, hub } = WORLD.wheel;
-  list.push(source(wx, wz, wy + hub - radius, wy + hub + radius, radius * 0.6, 0xff3b64, 0.5, { key: 'wheel' }));
-
-  // The moon's path runs from the horizon to its mirror image.
-  const { position: [mx, my, mz], radius: moonRadius } = WORLD.moon;
-  list.push(source(mx, mz, my * 0.08, my, moonRadius * 0.55, 0xf6c46a, 1.4));
+  list.push(source(ix, iz, iy + 4, iy + 210, 20, 0xd2dcf0, 0.32, { key: 'ifc', tail: 0.15, taper: 0.75 }));
 
   tower.updateMatrixWorld(true);
   box.setFromObject(tower).getSize(size);
   box.getCenter(centre);
-  list.push(source(centre.x, centre.z, box.min.y + 2, box.max.y - size.y * 0.15, size.x * 0.35, 0xffa860, 0.7));
+  // The floodlit lower half only (the floodlight fades up the shaft).
+  list.push(source(centre.x, centre.z, box.min.y + 2, box.min.y + size.y * 0.5, size.x * 0.3, 0xffa860, 0.55, { taper: 0.6 }));
 
-  // Small and mostly hidden by the promenade's own edge: dropped first.
-  const lamp = (x, y, z, key) => source(x, z, y, y + 0.35, 0.2, 0xffb46a, 0.5, { key, rank: 0.01 });
-  for (const segment of WORLD.foreground.railings) {
-    for (const post of railingLayout(segment).posts) if (post.lantern) list.push(lamp(post.position.x, segment.y + LANTERN_Y, post.position.z, 'railing'));
-  }
-  for (const segment of WORLD.foreground.edgeRailings) {
-    for (const post of railingLayout(segment).posts) if (post.lantern) list.push(lamp(post.position.x, segment.y + LANTERN_Y, post.position.z));
-  }
-  for (const [x, y, z] of WORLD.foreground.lamps) list.push(lamp(x, y + LAMP_Y, z));
-
-  // Moving: heights and half extents (along the hull, across it) in the boat's frame.
-  list.push(source(0, 0, 1.4, 6.6, 0, 0xffd29a, 0.4, { key: 'ferry', follow: ferry, extent: [15, 4.5] }));
-  list.push(source(0, 0, 5.6, 19.5, 0, 0xff5a36, 0.9, { key: 'junk', follow: junk, extent: [9, 0.5] }));
-  list.push(source(0, 0, 2.9, 5, 0, 0xffc890, 0.3, { key: 'junk', follow: junk, extent: [3, 2] }));
+  // Moving: heights and half extents (along the hull, across it) in the boat's
+  // frame, covering only the lit window decks and the sails.
+  list.push(source(0, 0, 1.4, 6.6, 0, 0xffd29a, 0.3, { key: 'ferry', follow: ferry, extent: [11, 3.5] }));
+  list.push(source(0, 0, 5.6, 19.5, 0, 0xff5a36, 0.75, { key: 'junk', follow: junk, extent: [6, 0.5], taper: 0.3 }));
+  list.push(source(0, 0, 2.9, 5, 0, 0xffc890, 0.25, { key: 'junk', follow: junk, extent: [2.5, 1.5] }));
   return list;
 }
