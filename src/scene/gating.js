@@ -21,11 +21,17 @@ export function makeFadeable(object) {
     child.material = Array.isArray(child.material) ? child.material.map(fadeable) : fadeable(child.material);
   });
   const list = [...materials.values()];
+  // Its lights (direct children) stay in the scene at zero while it is hidden:
+  // a change in the scene's light count rebuilds every lit shader mid-scroll.
+  const lights = object.children.filter((child) => child.isLight).map((light) => [light, light.intensity]);
+  const parts = lights.length ? object.children.filter((child) => !child.isLight) : [object];
   let current = -1;
   return function setOpacity(value) {
     if (value === current) return;
     current = value;
-    object.visible = value > 0.001;
+    const shown = value > 0.001;
+    for (const part of parts) part.visible = shown;
+    for (const [light, intensity] of lights) light.intensity = shown ? intensity : 0;
     for (const material of list) material.opacity = value;
   };
 }

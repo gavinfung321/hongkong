@@ -287,6 +287,23 @@ function start(initGuard, header) {
     scene.fog.density = gating.fogDensity(segment);
   }
 
+  // One unseen frame with every object drawn, hidden or off screen, so every
+  // shader is built behind the loading screen rather than mid-scroll.
+  function warmUp() {
+    const restore = [];
+    scene.traverse((object) => {
+      restore.push([object, object.visible, object.frustumCulled]);
+      object.visible = true;
+      object.frustumCulled = false;
+    });
+    water.reflect(camera, breakpoint);
+    world.render();
+    for (const [object, visible, culled] of restore) {
+      object.visible = visible;
+      object.frustumCulled = culled;
+    }
+  }
+
   const control = { free: false };
   let debug = null;
   let fpsOverlay = null;
@@ -343,6 +360,7 @@ function start(initGuard, header) {
     }
 
     needsRender = false;
+    if (!ready) warmUp();
     water.reflect(camera, breakpoint);
     world.render();
     if (!stepped && ready) adaptResolution(dt);
