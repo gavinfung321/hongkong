@@ -768,6 +768,18 @@ all six.
      only (hold 1 20,040 px, hold 2 9,813, as before), draw calls unchanged.
      The shader loops over all 39 lamps and lanterns plus the floodlight per
      deck pixel; to be watched in the iPhone 11 measurement.
+   - **Wet paving, middle-ground look (user choice, 2026-10-02).** Compared
+     with the user's rough, bright reference, the user chose to keep the
+     dark, clean ground and borrow the reference's best parts: each
+     reflection breaks into flecks (two noise layers, as on uneven wet
+     stone), a faint narrow gold glow around each one, a cool dusk-sky sheen
+     on wet stone at grazing angles, a tone and gloss per slab, and a bevel
+     inside the joints that catches the lamps. Fine detail shows on the near
+     deck only and fades out before it would shimmer; the far paving stays
+     smooth. A photo-real rough floor was not used: at 02's distances its
+     roughness is below a pixel, it would clash with the illustrated scene
+     and pull the eye from the tower and copy. Checked: 1 cm camera steps
+     as before (hold 1 20,036 px, hold 2 10,040, hero 27,759).
    - **Stop 3: palms** (3D, two shapes, slow sway, a row of 4–6 more behind
      the tower; user choices, 2026-10-02) follows.
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
@@ -911,9 +923,10 @@ The milestone passes when:
    height and the ferry stays whole; no palm crosses the tower (user
    request, 2026-10-01); no promenade lamp crosses the tower or the ferry,
    and a half-faded railing is an even veil with no rails showing through
-   its posts (2026-10-02). The promenade reads as wet stone slabs with
-   narrow lamp reflections, with no glare patch on the hero's near deck
-   and no shimmering joints (user request, 2026-10-02).
+   its posts (2026-10-02). The promenade reads as dark wet stone slabs with
+   narrow, broken lamp reflections, quieter than the tower and copy, with
+   no glare patch on the hero's near deck and no shimmering joints or
+   flecks (user request, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
    feet, raised over the boats (user request, 2026-10-02), and sinks and
    fades out with the 01 copy from the first scroll.
