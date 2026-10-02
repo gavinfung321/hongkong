@@ -1450,6 +1450,35 @@ all six.
          trail behind the sterns. At wave height the flat wake reads thin;
          a bow spray (the staged `harbour-spray.webp`) stays a later
          option.
+     - **Part 3g: sky and clouds (user request, 2026-10-02).** Pulled
+       forward from Milestone 4, following `ATMOSPHERE-EFFECTS-BRIEF.md`
+       §6.1 (stage 3), one stage at a time with a review after each.
+       - **Stage 1, coral cloud cards (done):** new
+         `src/scene/createAtmosphere.js` and `src/data/atmosphere.js`. The
+         staged `coral-clouds.webp` (three cloud bands on one sheet: tall,
+         thin and low) now ships as `public/atmosphere/coral-clouds.webp`.
+         Each card shows one band, its edges feathered so the bands never
+         bleed into each other or end in a hard line. A card is placed by
+         where it should sit on screen at its chapter's hold (x, y and
+         width as a share of the frame), then fixed in the world 3 km out
+         and standing upright, so other chapters see it from their own
+         angle the way they see the mountains; no fog, drawn after the
+         sky and before the moon, so the moon, ridge and towers always
+         cover it. Desktop: 01 a tall band between the Clock Tower and the
+         moon (20%), a thin band high to the right (14%); 06 a low band
+         under the fireworks (15%). Phones: 01 a band above the moon, 06 a
+         band between IFC's crown and the fireworks (both 12%). Each card
+         sways 1.2% of its width over 110–150 s (not in reduced motion).
+         The clouds fade per chapter (`clouds` in `src/data/chapters.js`):
+         full in 01 and 06, 80% in 02–03, 50% in 04 (the darkest frame),
+         40% in 05. Below the glow threshold, so they never bloom.
+       - **Checks:** none crosses 香港, the copy, the moon, IFC or the
+         Clock Tower crown at any hold, desktop or phone. Bright pixels in
+         the skyline band within 1% of before in every frame (IFC still
+         leads). Composition probe: only the four older misses. Two to
+         three more draw calls per frame.
+       - **Stage 2, harbour mist (next):** the staged `harbour-mist.webp`
+         low over the water and the mountains' foot, after review.
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -1660,7 +1689,11 @@ Stop for the user's review after each step, as in the grey-box.
   `createScene.js` adds it and draws the overlay layer after it;
   `createWordmark.js` and `createPetals.js` (near petals) on the overlay
   layer; `src/main.js` sets the glow per breakpoint, `?bloom=` and the
-  phone frame-rate fallback (part 3e, step 5).
+  phone frame-rate fallback (part 3e, step 5). New
+  `src/scene/createAtmosphere.js` and `src/data/atmosphere.js` (coral
+  cloud cards), `public/atmosphere/coral-clouds.webp`; `src/main.js` adds,
+  places and fades them; `src/data/chapters.js` gains a `clouds` level per
+  chapter (part 3g).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
   copy and footer hidden while loading and during the fade),
@@ -1734,7 +1767,10 @@ The milestone passes when:
    brightest lights (moon, Clock Tower foot, lamps, wheel, boat lights)
    have a soft glow, weaker on phones, that adds no shimmer, while 香港,
    the near petals and the copy stay crisp and phones hold 30 fps (the glow
-   drops first if they can't; user choice, 2026-10-02), and no brace line, mast or warning light shimmers
+   drops first if they can't; user choice, 2026-10-02); faint coral cloud
+   bands hang in the sky of 01 and 06 (fainter elsewhere, faintest in 04
+   and 05), behind the moon, ridge and towers and clear of 香港 and the
+   copy on desktop and phones (user request, 2026-10-02), and no brace line, mast or warning light shimmers
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
@@ -1791,7 +1827,7 @@ step.
 | Milestone | Content |
 |---|---|
 | 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk, Clock Tower, IFC and wheel are already rebuilt from reference photos, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals, display fonts (the bauhinia tree is built in code, 2026-10-02). Also the user's stone railing (built in code with lanterns and tall lamps, 2026-10-02), promenade palms, wet paving tiles (built in code, 2026-10-02) and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
-| 4. Atmosphere, all chapters | Follow `ATMOSPHERE-EFFECTS-BRIEF.md`: clouds and local mist, ferry spray, restrained searchlights, global print texture, chapter colour progression, and illustrated fireworks with smoke and embers. Local glows remain the baseline; a soft bloom is built (Milestone 2, part 3e, step 5; user choice, 2026-10-02). |
+| 4. Atmosphere, all chapters | Follow `ATMOSPHERE-EFFECTS-BRIEF.md`: clouds and local mist, ferry spray, restrained searchlights, global print texture, chapter colour progression, and illustrated fireworks with smoke and embers. Local glows remain the baseline; a soft bloom is built (Milestone 2, part 3e, step 5; user choice, 2026-10-02). Coral clouds are built (Milestone 2, part 3g; user request, 2026-10-02). |
 | 5. Copy and launch | Final copy, poster images (a real snapshot of the hero frame replaces the drawn fallback poster, for loading and fallback; user choice, 2026-10-02), an entrance screen with real build progress, after Kage's technique (3.12; user request, 2026-10-02), a full performance pass on both iPhones, deployment |
 
 **Published early (user choice, 2026-10-02).** The work in progress is live at

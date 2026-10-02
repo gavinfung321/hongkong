@@ -138,7 +138,7 @@ generation under the user's direction, then converted and optimized locally to
 alpha WebP. PNG source masters and first-generation WebPs remain under their
 respective `docs/references/*/generated/` folders. The smaller review copies are
 in `docs/references/production-candidates/`. They are staging files, not runtime
-assets, and have not been moved into `public/`.
+assets, until a row below says it was moved into `public/`.
 
 Their approved, conditional and reference-only roles are defined in
 `ASSET-INTEGRATION-BLUEPRINT.md`; dimensions, sizes and alpha checks are recorded
@@ -148,7 +148,7 @@ in `ASSET-QA-REPORT.md`.
 |---|---|---:|---|---|
 | `bauhinia-petal.webp` | Alpha WebP | 01–05 | Direct-use candidate | Original AI-assisted artwork based on the user's Bauhinia reference photos; optimized locally |
 | `harbour-spray.webp` | Alpha WebP | 03–04 | Direct-use candidate | Original AI-assisted artwork; optimized locally |
-| `coral-clouds.webp` | Alpha WebP | 01, 06 | Direct-use candidate | Original AI-assisted artwork; optimized locally |
+| `coral-clouds.webp` | Alpha WebP | 01, 06 (fainter in 02–05) | **In use since 2026-10-02** as `public/atmosphere/coral-clouds.webp` (1600 × 534, 251 KB, unchanged copy): sky cloud cards, Milestone 2 part 3g (user request) | Original AI-assisted artwork (OpenAI image generation, user's direction); optimized locally; ours to ship |
 | `harbour-mist.webp` | Alpha WebP | 01–05 | Direct-use candidate | Original AI-assisted artwork; optimized locally |
 | `firework-burst.webp` | Alpha WebP | 06 | Direct-use candidate | Original AI-assisted artwork; optimized locally |
 | `firework-smoke.webp` | Alpha WebP | 06 | Direct-use candidate | Original AI-assisted artwork; optimized locally |
@@ -174,7 +174,7 @@ plan and prompt here before import (as for Meshy above).
 | Stone railing | Dark stone balustrade along the promenade, square posts topped with warm lanterns | **Built 2026-10-02** in code from the user's design, with lanterns and three tall lamps ("Stone railing and lanterns", Phase B) | User design, code | Done |
 | Trees | Rows of palms along the Tsim Sha Tsui promenade, framing the Clock Tower | 3D palms built in code replacing the flat palm cards, plus the bauhinia tree already listed | Code (palms and bauhinia) | Palms **done 2026-10-02** ("Promenade palms", Phase B); bauhinia tree **done 2026-10-02** in code ("Bauhinia tree"), pulled forward from Milestone 3 |
 | Wet tiles | Promenade paving shining with reflected lamp light | A tileable wet-paving texture on the promenade deck, with glossy reflections | User design, code | **Done 2026-10-02**: built in code from the user's design ("Wet promenade paving", Phase B) |
-| Clouds | Heavy clouds lit coral from below by the city | A cloud layer in the sky (painted cards or a procedural layer), kept clear of the moon | User artwork or code | Milestone 4 (atmosphere) |
+| Clouds | Heavy clouds lit coral from below by the city | A cloud layer in the sky (painted cards or a procedural layer), kept clear of the moon | User artwork or code | **Done 2026-10-02**: painted cards from `coral-clouds.webp`, behind the moon (Milestone 2, part 3g) |
 | Light beams | Searchlights rising from the Central towers | "Searchlight beams" in Phase D, now including 01 | Code | Milestone 4 |
 | More realistic buildings | Recognisable towers (Bank of China, Central Plaza) with lit window grids The code-built skyline (Phase B, P0), with a few landmark towers modelled more closely in code (no GLB, user decision 2026-10-01) | Code, from the user's references (photos, Meshy models) | Milestone 3 |
 | More light at ground level in Central | A bright band of street and podium lights along the Central waterfront, with long reflections | A waterfront light strip plus the "Skyline reflections" layer in Phase D | Code | Reflections **done 2026-10-02** ("Skyline reflections", Phase D); the waterfront light strip in Milestone 4 |
