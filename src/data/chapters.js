@@ -349,15 +349,18 @@ export const chapters = [
     // behind every burst: burst, the index above; cell, the puff on the
     // smoke sheet; size, its width in % of the viewport width; dx / dy, its
     // centre's offset from the burst in % of the viewport; opacity at its
-    // fullest. Three on desktop, one on phones, all clear of the copy
+    // fullest. Three on desktop, two on phones, all clear of the copy
     // (ATMOSPHERE-EFFECTS-BRIEF.md 6.7; user request, 2026-10-02).
     smoke: {
       desktop: [
-        { burst: 0, cell: 'coral', size: 30, dx: 3, dy: 11, opacity: 0.16 },
-        { burst: 1, cell: 'violet', size: 22, dx: -3, dy: 10, opacity: 0.15 },
-        { burst: 3, cell: 'lavender', size: 16, dx: -2, dy: 7, opacity: 0.14 },
+        { burst: 0, cell: 'coral', size: 30, dx: 3, dy: 11, opacity: 0.105 },
+        { burst: 1, cell: 'violet', size: 22, dx: -3, dy: 10, opacity: 0.1 },
+        { burst: 3, cell: 'lavender', size: 16, dx: -2, dy: 7, opacity: 0.09 },
       ],
-      mobile: [{ burst: 0, cell: 'coral', size: 46, dx: -2, dy: 8, opacity: 0.16 }],
+      mobile: [
+        { burst: 0, cell: 'coral', size: 46, dx: -2, dy: 8, opacity: 0.105 },
+        { burst: 4, cell: 'lavender', size: 34, dx: 2, dy: 8, opacity: 0.1 },
+      ],
     },
     probes: {
       desktop: {

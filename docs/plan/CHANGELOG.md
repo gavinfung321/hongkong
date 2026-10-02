@@ -6,6 +6,10 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-02
 
+- **Fireworks smoke lighter, second phone wisp** (user request and
+  choices): every wisp is a third weaker (at most 10.5% opacity instead
+  of 16%), and phones gain a lavender wisp under the left cyan burst that
+  gathers as the coral wisp thins. Files: `src/data/chapters.js`.
 - **Fireworks step 3, smoke** (user request): faint violet, coral and
   lavender smoke gathers beside and below the biggest bursts as they fade,
   then grows, drifts and thins over 5 s (three wisps on desktop, one on

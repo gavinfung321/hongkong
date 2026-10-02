@@ -64,7 +64,7 @@ review after each. No next task is set; ask the user.
    opening, cooling, fading and falling spark streaks; reduced motion
    holds a composed moment; see `atmosphere.md`. The user's React
    "fireworks-show" component was a technique reference only.
-3. **Smoke (done 2026-10-02):** three faint wisps on desktop, one on
+3. **Smoke (done 2026-10-02):** three faint wisps on desktop, two on
    phones, beside and below the biggest bursts, drifting and thinning
    over 5 s (`smoke` in chapter 06, `FIREWORKS.smoke`). The falling
    sparks cover the brief's embers.
