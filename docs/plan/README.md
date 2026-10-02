@@ -23,6 +23,7 @@ file (user choice, 2026-10-02).
 | [`atmosphere.md`](atmosphere.md) | Clouds, shore mist, open-water wisps | 4.5 stop 6, part 3g |
 | [`checks.md`](checks.md) | Performance budget and acceptance checks | 5, 8 |
 | [`CHANGELOG.md`](CHANGELOG.md) | Dated history of changes, newest first; the old files list | 7 |
+| [`HANDOFF.md`](HANDOFF.md) | Briefing for a fresh chat: how we work, standing rules, the next task | — |
 
 References elsewhere to "part 3e", "section 3.11", "stop 4" and so on keep
 their old numbers; the table above says which file holds them.
