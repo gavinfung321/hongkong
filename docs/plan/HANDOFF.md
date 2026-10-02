@@ -51,10 +51,10 @@ work, all done and deployed: clouds and mist (finished: the user said "we
 done with mist"), lamps re-spaced, hero chapter numbers removed on desktop,
 stronger 04 cloud, the plan split into `docs/plan/`.
 
-## Next task: fireworks, step 3 of 3 (user choice, 2026-10-02)
+## Fireworks: all three steps done (user choice, 2026-10-02)
 
-Follow `ATMOSPHERE-EFFECTS-BRIEF.md` §6.7, one step at a time, with a
-review after each:
+Built from `ATMOSPHERE-EFFECTS-BRIEF.md` §6.7, one step at a time, with a
+review after each. No next task is set; ask the user.
 
 1. **Still bursts (done 2026-10-02):** `src/scene/createFireworks.js`
    replaced the ring markers with cards of `firework-burst.webp`: eight
@@ -64,9 +64,10 @@ review after each:
    opening, cooling, fading and falling spark streaks; reduced motion
    holds a composed moment; see `atmosphere.md`. The user's React
    "fireworks-show" component was a technique reference only.
-3. Smoke (2–3 violet-coral wisps on desktop, 1 on phones) behind the
-   bursts, outside the copy. The falling sparks already cover the brief's
-   embers.
+3. **Smoke (done 2026-10-02):** three faint wisps on desktop, one on
+   phones, beside and below the biggest bursts, drifting and thinning
+   over 5 s (`smoke` in chapter 06, `FIREWORKS.smoke`). The falling
+   sparks cover the brief's embers.
 
 Where things are:
 
@@ -76,14 +77,13 @@ Where things are:
   `src/data/chapters.js` (place, size, colour, strength, rotate, mirror,
   squash, `at`); artwork, colours, halo and all timing in `FIREWORKS` in
   `src/data/atmosphere.js`. Everything is a pure function of the show
-  time (`pose(t)`). The `bursts` visibility level is 1 only in 06. Smoke
-  belongs in the same module. With `?debug`,
+  time (`pose(t)`). The `bursts` visibility level is 1 only in 06. The
+  smoke wisps live in the same module. With `?debug`,
   `window.__vh.fireworks.hold(t)` freezes the show at any moment.
-- Artwork: `public/atmosphere/firework-burst.webp` is in use. Smoke and
-  embers are still in `docs/references/production-candidates/`
-  (`firework-smoke.webp` 391 KB, over the 300 KB aim; `firework-embers.webp`).
-  Copy the one in use to `public/atmosphere/` and mark it "In use" in
-  `docs/ASSET-LEDGER.md`.
+- Artwork: `public/atmosphere/firework-burst.webp` and
+  `public/atmosphere/firework-smoke.webp` (re-encoded to 285 KB) are in
+  use; `firework-embers.webp` stays unused in
+  `docs/references/production-candidates/`.
 - A similar card technique: `src/scene/createAtmosphere.js` (feathered
   ShaderMaterial cards cut from a sprite sheet, placed from screen
   positions at a chapter pose).

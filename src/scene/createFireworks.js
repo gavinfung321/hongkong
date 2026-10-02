@@ -18,7 +18,7 @@ import {
   Vector2,
   Vector3,
 } from 'three';
-import { BURST_SHEET, FIREWORKS } from '../data/atmosphere.js';
+import { BURST_SHEET, FIREWORKS, SMOKE_SHEET } from '../data/atmosphere.js';
 import { aimCamera, poseFov } from '../scroll/cameraRig.js';
 import { seededRandom } from './random.js';
 
@@ -27,7 +27,8 @@ import { seededRandom } from './random.js';
 // facing the 06 camera at its configured screen place, spun, mirrored and
 // squashed so no two match. In a fixed loop a rocket rises from behind the
 // skyline, the card ignites at 70% size with a soft flare, opens, cools and
-// fades while sinking, and sparks shed from its tips fall in drooping arcs.
+// fades while sinking, and sparks shed from its tips fall in drooping arcs;
+// the biggest bursts leave violet-coral smoke that swells and drifts.
 // Everything is a pure function of the show time, so reduced motion simply
 // holds one composed moment. Rockets and sparks are one set of points in
 // the cards' plane. All of it adds light to the sky; IFC and the skyline
@@ -96,6 +97,28 @@ const pointFragmentShader = `
     float shape = exp( -d * d * 3.0 ) * ( 1.0 - smoothstep( 0.75, 1.0, d ) );
     vec3 color = mix( vColor, vec3( 1.0 ), exp( -d * d * 12.0 ) * 0.6 );
     gl_FragColor = vec4( color * shape * vAlpha, 1.0 );
+    #include <colorspace_fragment>
+  }`;
+
+// Smoke: one puff of the sheet per card, feathered so no edge shows, laid
+// over the sky normally (not added as light, so overlaps never turn white).
+const smokeVertexShader = `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+  }`;
+
+const smokeFragmentShader = `
+  uniform sampler2D tSmoke;
+  uniform vec4 uCell; // u from, v from, u to, v to
+  uniform float uOpacity;
+  varying vec2 vUv;
+  void main() {
+    vec4 c = texture2D( tSmoke, mix( uCell.xy, uCell.zw, vUv ) );
+    vec2 edge = min( vUv, 1.0 - vUv );
+    float feather = smoothstep( 0.0, 0.08, edge.x ) * smoothstep( 0.0, 0.14, edge.y );
+    gl_FragColor = c * ( uOpacity * feather );
     #include <colorspace_fragment>
   }`;
 
@@ -222,6 +245,30 @@ export function createFireworks(chapters, { onLoad } = {}) {
   };
   group.add(points);
 
+  // Smoke wisps, drawn before the bursts so every burst lights over them.
+  let smokeTexture = null;
+  let smokeLoaded = false;
+  let smokeSpecs = [];
+  const smokeGeometry = new PlaneGeometry(1, 1);
+  const smokeCount = Math.max(...Object.values(finale.smoke).map((list) => list.length));
+  const smokes = Array.from({ length: smokeCount }, () => {
+    const material = new ShaderMaterial({
+      vertexShader: smokeVertexShader,
+      fragmentShader: smokeFragmentShader,
+      uniforms: { tSmoke: { value: null }, uCell: { value: [0, 0, 1, 1] }, uOpacity: { value: 0 } },
+      transparent: true,
+      depthWrite: false,
+      premultipliedAlpha: true,
+    });
+    const mesh = new Mesh(smokeGeometry, material);
+    mesh.name = 'smoke';
+    mesh.renderOrder = -0.5; // after the clouds (-0.95), before the bursts
+    mesh.userData.noProbe = true;
+    mesh.visible = false;
+    group.add(mesh);
+    return { mesh, base: new Vector3(), width: 0, height: 0 };
+  });
+
   let sparkSize = 1;
   let rocketSize = 1;
 
@@ -304,23 +351,51 @@ export function createFireworks(chapters, { onLoad } = {}) {
     });
     points.visible = anyPoint;
     for (const buffer of [positions, colors, alphas, sizes]) buffer.needsUpdate = true;
+
+    // The smoke: gathers after its burst, swells, drifts with the wind, fades.
+    const { smoke } = FIREWORKS;
+    smokeSpecs.forEach((spec, i) => {
+      const { mesh, base, width: w, height: h } = smokes[i];
+      const s = MathUtils.euclideanModulo(t - specs[spec.burst].at - smoke.delay, loop);
+      let opacity = 0;
+      if (s < smoke.life) {
+        const u = s / smoke.life;
+        opacity = spec.opacity * level * MathUtils.smoothstep(s, 0, smoke.fadeIn) * (1 - u) ** 1.5;
+        const grow = lerpRange(smoke.grow, 1 - (1 - u) ** 2);
+        mesh.scale.set(w * grow, h * grow, 1);
+        mesh.position.copy(base).addScaledVector(right, smoke.drift[0] * w * u).addScaledVector(up, smoke.drift[1] * w * u);
+      }
+      mesh.material.uniforms.uOpacity.value = opacity;
+      mesh.visible = smokeLoaded && opacity > 0.002;
+    });
   }
 
   function refresh() {
     pose(held ?? clock ?? FIREWORKS.entry);
   }
 
-  // Fetched once the first frame is up, long before anyone reaches 06.
-  function load() {
-    if (texture) return;
-    texture = new TextureLoader().load(`${import.meta.env.BASE_URL}${BURST_SHEET.url}`, () => {
-      loaded = true;
+  function loadTexture(url, onReady) {
+    const map = new TextureLoader().load(`${import.meta.env.BASE_URL}${url}`, () => {
+      onReady();
       refresh();
       onLoad?.();
     });
-    texture.colorSpace = SRGBColorSpace;
-    texture.premultiplyAlpha = true;
+    map.colorSpace = SRGBColorSpace;
+    map.premultiplyAlpha = true;
+    return map;
+  }
+
+  // Fetched once the first frame is up, long before anyone reaches 06.
+  function load() {
+    if (texture) return;
+    texture = loadTexture(BURST_SHEET.url, () => {
+      loaded = true;
+    });
     for (const { mesh } of bursts) mesh.material.uniforms.tBurst.value = texture;
+    smokeTexture = loadTexture(SMOKE_SHEET.url, () => {
+      smokeLoaded = true;
+    });
+    for (const { mesh } of smokes) mesh.material.uniforms.tSmoke.value = smokeTexture;
   }
 
   // Frames each burst at the 06 hold pose for this screen. Every burst sits
@@ -366,6 +441,20 @@ export function createFireworks(chapters, { onLoad } = {}) {
       burst.sparkColor.setHex(FIREWORKS.sparkColors[spec.color]);
     });
     for (let i = specs.length; i < count; i++) bursts[i].mesh.visible = false;
+
+    smokeSpecs = finale.smoke[breakpoint] ?? [];
+    const [sheetW, sheetH] = SMOKE_SHEET.size;
+    smokeSpecs.forEach((spec, i) => {
+      const wisp = smokes[i];
+      const owner = specs[spec.burst];
+      const [x0, y0, x1, y1] = SMOKE_SHEET.cells[spec.cell];
+      atDepth(owner.x + spec.dx, owner.y + spec.dy, wisp.base);
+      wisp.width = (spec.size / 100) * viewWidth;
+      wisp.height = (wisp.width * (y1 - y0)) / (x1 - x0);
+      wisp.mesh.quaternion.copy(placement.quaternion);
+      wisp.mesh.material.uniforms.uCell.value = [x0 / sheetW, 1 - y1 / sheetH, x1 / sheetW, 1 - y0 / sheetH];
+    });
+    for (let i = smokeSpecs.length; i < smokeCount; i++) smokes[i].mesh.visible = false;
     refresh();
   }
 

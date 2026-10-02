@@ -345,6 +345,20 @@ export const chapters = [
         { x: 36, y: 58, size: 22, color: 'warm', strength: 0.6, rotate: 110, mirror: true, at: 4.6 },
       ],
     },
+    // Smoke left behind by the biggest bursts (createFireworks.js), drawn
+    // behind every burst: burst, the index above; cell, the puff on the
+    // smoke sheet; size, its width in % of the viewport width; dx / dy, its
+    // centre's offset from the burst in % of the viewport; opacity at its
+    // fullest. Three on desktop, one on phones, all clear of the copy
+    // (ATMOSPHERE-EFFECTS-BRIEF.md 6.7; user request, 2026-10-02).
+    smoke: {
+      desktop: [
+        { burst: 0, cell: 'coral', size: 30, dx: 3, dy: 11, opacity: 0.16 },
+        { burst: 1, cell: 'violet', size: 22, dx: -3, dy: 10, opacity: 0.15 },
+        { burst: 3, cell: 'lavender', size: 16, dx: -2, dy: 7, opacity: 0.14 },
+      ],
+      mobile: [{ burst: 0, cell: 'coral', size: 46, dx: -2, dy: 8, opacity: 0.16 }],
+    },
     probes: {
       desktop: {
         ifc: { left: 61, right: 67, top: 66 },

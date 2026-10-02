@@ -114,6 +114,16 @@ export const BURST_SHEET = {
   reach: 345,
 };
 
+// The firework smoke sheet (docs/ASSET-LEDGER.md): four puffs, given as
+// pixel rects [x0, y0, x1, y1] of the 1200 × 600 image. The grey one is
+// unused (the brief wants violet and coral smoke); the coral one's tail
+// crosses the split row, so every wisp feathers its edges.
+export const SMOKE_SHEET = {
+  url: 'atmosphere/firework-smoke.webp',
+  size: [1200, 600],
+  cells: { violet: [0, 0, 600, 314], coral: [600, 0, 1200, 314], lavender: [0, 314, 600, 600] },
+};
+
 // Burst colours (user choice, 2026-10-02): warm keeps the artwork's own
 // gold; the others are recoloured by brightness, the hottest spark centres
 // staying near white. `sparks` colours the falling sparks and rockets the
@@ -154,4 +164,9 @@ export const FIREWORKS = {
   // Point sizes as shares of the frame height; sparks' brightness.
   size: { spark: 0.0045, rocket: 0.0045 },
   sparkGain: 1.6,
+  // Smoke left by a burst (`smoke` in chapters.js): it gathers `delay`
+  // after ignition over `fadeIn`, then swells from `grow[0]` to `grow[1]`
+  // of its size, drifts with the wind (`drift`: shares of its width right
+  // and up over its life) and is gone after `life`.
+  smoke: { delay: 0.6, fadeIn: 1.2, life: 5, grow: [0.8, 1.2], drift: [0.08, 0.04] },
 };
