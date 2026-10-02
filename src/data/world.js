@@ -31,6 +31,17 @@ export const WORLD = {
   ifc: { position: [500, 3, -1180], podium: [448, 552, -1200, -1130, 22] },
   // True scale: 60 m to the top of the rim.
   wheel: { position: [335, 3, -1105], radius: 27.5, hub: 32.5 },
+  // Landmarks in their order seen from Kowloon, at about real height (user
+  // choice, 2026-10-02). Central Plaza stands well right of its true place
+  // (Wan Chai), where the Clock Tower would hide it in 01. BOC: four shafts
+  // stopping at `modules` × side metres (front, left, back, right), masts to
+  // 367 m. The Center: crown tiers are [rise, half width].
+  landmarks: {
+    boc: { position: [130, 3, -1330], side: 52, modules: [3, 4, 6, 5], mastTip: 367 },
+    cheungKong: { position: [235, 3, -1400], side: 50, height: 283 },
+    centralPlaza: { position: [-250, 3, -1340], radius: 40, height: 300, pyramid: 34, mastTip: 374 },
+    center: { position: [800, 3, -1420], half: 24, height: 290, crown: [[10, 20], [9, 16], [8, 12]], spireTip: 346 },
+  },
   // Central Ferry Piers: pavilion centres along x, jutting out from the island's edge.
   piers: { x: [400, 456, 512, 568, 624], z: -1085, depth: 30 },
 
