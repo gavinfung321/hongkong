@@ -27,7 +27,8 @@ const BLUR = 5;
 // skyline. Each light lays a soft glow on the water: as long as its mirror
 // image plus a tail toward the viewer, Gaussian across and `spread` times
 // its width, its rows shifted sideways by the wavelets so the edges are
-// ragged. Sizes are view-angle tangents.
+// ragged. Sizes are view-angle tangents. The boats' hulls lay dark mirror
+// images that hide the other lights behind them (2026-10-02).
 const REFLECT = {
   max: { desktop: 8, mobile: 8 },
   head: 0.012, // longest fade beyond the mirror image, toward the horizon
@@ -201,6 +202,46 @@ export function createWater(renderer) {
           if ( abs( v ) > 3.0 ) return 0.0;
           float t = H / along;
           return waterAlong( t, ( H + a.z ) / D, ( H + a.w ) / D, c.y, c.x, c.z ) * exp( -v * v );
+        }
+        // One piece of a hull's mirror image: ground point c, half length
+        // len along the hull axis, half beam beam, up to height h. It
+        // starts at its far waterline (the hull covers the rest), runs down
+        // to the mirror of its top and breaks up toward the far end; wobble
+        // rags its edges row by row.
+        float waterHullPiece( vec2 c, vec2 axis, float len, float beam, float h, vec2 p, float wobble ) {
+          float H = max( cameraPosition.y, 0.5 );
+          vec2 toBoat = c - cameraPosition.xz;
+          float D = length( toBoat );
+          if ( D < 1.0 ) return 0.0;
+          vec2 dir = toBoat / D;
+          vec2 rel = p - cameraPosition.xz;
+          float along = dot( rel, dir );
+          if ( along <= 0.0 ) return 0.0;
+          float side = abs( axis.x * dir.y - axis.y * dir.x );
+          float toward = sqrt( max( 0.0, 1.0 - side * side ) );
+          float width = side * len + toward * beam;
+          float reach = toward * len + side * beam;
+          float halfWidth = width / D;
+          float lateral = dot( rel, vec2( -dir.y, dir.x ) ) / along;
+          float edge = max( waterPixelTan * 2.0, halfWidth * 0.06 );
+          float across = 1.0 - smoothstep( halfWidth - edge, halfWidth + edge, abs( lateral + wobble * halfWidth * 0.12 ) );
+          float t = H / along;
+          float top = H / ( D + reach );
+          float bottom = ( H + h ) / max( D - reach, 1.0 );
+          float soft = max( waterPixelTan * 3.0, ( bottom - top ) * 0.25 );
+          float down = clamp( ( t - top ) / max( bottom - top, 1e-5 ), 0.0, 1.0 );
+          return across * smoothstep( top - waterPixelTan, top, t ) * ( 1.0 - smoothstep( bottom - soft, bottom + soft * 0.5, t ) ) * ( 1.0 - 0.45 * down );
+        }
+        // A hull's mirror image in four pieces along its length, so it
+        // follows the boat's outline in perspective. a: x, z, half beam,
+        // height; c: axis x, z, half length.
+        float waterHull( vec4 a, vec4 c, vec2 p, float wobble ) {
+          float k = 0.0;
+          for ( int j = 0; j < 4; j ++ ) {
+            float s = ( float( j ) - 1.5 ) * 0.5;
+            k = max( k, waterHullPiece( a.xy + c.xy * c.z * s, c.xy, c.z * 0.25, a.z, a.w, p, wobble ) );
+          }
+          return k;
         }`,
       )
       .replace(
@@ -233,10 +274,23 @@ export function createWater(renderer) {
           float drift = waterTime * ${GLINT.drift.toFixed(2)};
           float wobble = ( waterNoise( vec2( 3.7, floor( row ) * 0.61 + drift * 0.3 ) ) - 0.5 ) * ${(REFLECT.wobble * 2).toFixed(2)};
 
+          // Hulls (kind 2 in waterRefC.w) first: what they hide, and their colour.
+          float hullMask = 0.0;
+          vec3 hullShine = vec3( 0.0 );
+          for ( int i = 0; i < REFLECT_MAX; i ++ ) {
+            if ( i >= waterRefCount ) break;
+            if ( waterRefC[ i ].w < 1.5 ) continue;
+            float k = waterHull( waterRefA[ i ], waterRefC[ i ], vWaterWorld.xz, wobble );
+            hullMask = max( hullMask, k );
+            hullShine += waterRefB[ i ].rgb * k;
+          }
+          // Lights: the boats' own (kind 1) show over their hulls, the rest are hidden.
           vec3 shine = vec3( 0.0 );
           for ( int i = 0; i < REFLECT_MAX; i ++ ) {
             if ( i >= waterRefCount ) break;
-            shine += waterRefB[ i ].rgb * waterStreak( waterRefA[ i ], waterRefC[ i ], waterRefB[ i ].w, vWaterWorld.xz, wobble );
+            if ( waterRefC[ i ].w > 1.5 ) continue;
+            float keep = waterRefC[ i ].w > 0.5 ? 1.0 : 1.0 - hullMask;
+            shine += keep * waterRefB[ i ].rgb * waterStreak( waterRefA[ i ], waterRefC[ i ], waterRefB[ i ].w, vWaterWorld.xz, wobble );
           }
 
           // Skyline shimmer: the strip read where this line of sight meets
@@ -252,7 +306,7 @@ export function createWater(renderer) {
               float near = H / Ds;
               float far = ( H + city.a * waterCityRange.w * ${CITY.lit.toFixed(2)} ) / Ds;
               float span = far - near;
-              shine += city.rgb * ${CITY.power.toFixed(3)} * waterAlong( t, near, far, max( rowMin, span * 0.2 ), max( rowMin * 2.0, span * ${CITY.tail.toFixed(2)} ), 0.5 );
+              shine += ( 1.0 - hullMask ) * city.rgb * ${CITY.power.toFixed(3)} * waterAlong( t, near, far, max( rowMin, span * 0.2 ), max( rowMin * 2.0, span * ${CITY.tail.toFixed(2)} ), 0.5 );
             }
           }
 
@@ -273,6 +327,14 @@ export function createWater(renderer) {
             float glint = smoothstep( threshold, threshold + 0.06, n ) * mix( 0.45, 1.0, smoothstep( threshold, 1.0, n ) );
             vec3 glow = shine / lum * ( glint * ( 0.3 + 0.9 * density ) + 0.05 * density );
             totalEmissiveRadiance += 1.5 * ( 1.0 - exp( -glow / 1.5 ) );
+          }
+
+          // The hull's mirror image: darker water, dimly hull-coloured,
+          // broken into the same wavelet rows.
+          if ( hullMask > 0.0 ) {
+            diffuseColor.rgb *= 1.0 - 0.6 * hullMask;
+            float ripple = waterNoise( g * vec2( 0.35, 1.0 ) + vec2( drift * 0.2, 0.0 ) );
+            totalEmissiveRadiance += hullShine * ( 0.5 + 0.5 * ripple );
           }
         }`,
       )
@@ -365,12 +427,18 @@ export function createWater(renderer) {
       reflection.waterRefA.value[i].set(s.x, s.z, s.h0, s.h1);
       const power = s.power * fade;
       reflection.waterRefB.value[i].set(s.colour.r * power, s.colour.g * power, s.colour.b * power, width);
+      if (s.kind === 'hull') {
+        const heading = s.follow.rotation.y;
+        reflection.waterRefA.value[i].z = s.extent[1];
+        reflection.waterRefC.value[i].set(Math.cos(heading), -Math.sin(heading), s.extent[0], 2);
+        return;
+      }
       const mirror = (s.h1 - s.h0) / Math.max(Math.hypot(s.x - camera.position.x, s.z - camera.position.z), 1);
       reflection.waterRefC.value[i].set(
         Math.max(s.tail * mirror, shortest),
         MathUtils.clamp(mirror * 0.25, shortest, REFLECT.head),
         s.taper,
-        0,
+        s.follow ? 1 : 0,
       );
     });
     reflection.waterRefCount.value = kept.length;

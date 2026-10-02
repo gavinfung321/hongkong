@@ -1340,6 +1340,40 @@ all six.
          misses. Draw calls unchanged. Strobe at the 01 hold unchanged
          (still 0.18%, side steps 0.36%); at scroll speed the 01 skyline
          pops 6.8% of pixels (7.4% before).
+     - **Part 3f: boats sit in the water (user choice, 2026-10-02).** The
+       user saw white light under the ferry and felt both boats floated
+       above the water. The light was the foam skirt: unlit, pale vertical
+       streaks all round the hull. The floating came from the water
+       reflecting only lights, not the hulls (so the boats sat on an
+       unbroken glitter, or on black with a gap down to the sail
+       reflections), from nothing showing the boats under way, and from
+       the glints being laid out round the camera, so the boats slide over
+       them as it moves. The user chose three fixes, before the lighting
+       pass:
+       - **White water on the surface** (new `src/scene/wakes.js`): the
+         foam skirt is gone. Each boat trails a flat wake, a child of the
+         boat held level on the water against its bob and roll: a bow
+         wave, a thin wash hugging the hull, a churned trail behind the
+         stern and the two arms of the V. A fixed mask shapes it while
+         streaky foam streams through it from bow to stern (ferry 3 m/s,
+         junk 1.8 m/s, frozen in reduced motion), so the boats read as
+         sailing even when the scroll stops; lit by the scene, so the
+         cabin lights warm it near the hull. The junk's salmon waterline
+         stripe darkens toward the water, so its lowest line isn't its
+         brightest.
+       - **Hull reflections** (`waterReflections.js`, `createWater.js`):
+         each hull lays a dark, dimly coloured mirror image on the water
+         from its waterline down by its height (ferry 3 m, green; junk
+         3.6 m, brown), in four pieces along the hull so it follows the
+         boat in perspective, rippled like the glints and breaking up
+         away from the hull. It hides the city and moon glints behind it;
+         the boats' own window and sail reflections show through.
+       - **Checks:** composition probe: only the four older misses; draw
+         calls unchanged (the wake replaces the foam skirt). In 01 both
+         boats sit on their own dark reflections; in 03 and 04 the wakes
+         trail behind the sterns. At wave height the flat wake reads thin;
+         a bow spray (the staged `harbour-spray.webp`) stays a later
+         option.
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -1429,7 +1463,8 @@ Stop for the user's review after each step, as in the grey-box.
 - `src/scene/createVessels.js`: Star Ferry reshaped, then rebuilt from photos
   (lofted hull, rubbing strip, tyres, open lower deck with lit cabin, green
   band, upper deck with bridge ends and life rings, roof canisters, funnel,
-  tripod masts, rigging, navigation lights, foam skirt following the hull;
+  tripod masts, rigging, navigation lights, foam skirt following the hull
+  (replaced by a wake on the water, part 3f);
   shared outline and ribbon helpers); rebuilt junk (lofted
   hull, deckhouse, canopy, rails, tyres, rudder, battened sails, rigging;
   masthead pennants removed, user request, 2026-10-01); vessel lights.
@@ -1533,7 +1568,12 @@ Stop for the user's review after each step, as in the grey-box.
   UVs for angled walls; `src/scene/landmarks.js` paints all four
   landmarks with them (part 3e, step 2); `createIsland.js` IFC Mall
   podium painted the same way, and the ferry pier halls' colonnade painted
-  with `pierHall` in place of modelled posts (part 3e).
+  with `pierHall` in place of modelled posts (part 3e). New
+  `src/scene/wakes.js` (flat wakes that stream past the boats);
+  `createVessels.js` wakes in place of the ferry's foam skirt, updated
+  each frame; `surfaces.js` foam strip removed, junk waterline darkened;
+  `waterReflections.js` hull sources; `createWater.js` hull mirror images
+  that hide the glints behind them (part 3f).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
   copy and footer hidden while loading and during the fade),
@@ -1570,7 +1610,10 @@ The milestone passes when:
    into small horizontal glints with dark gaps, ragged edges and soft ends,
    over a dim continuous shimmer from the skyline; no vertical rectangles,
    no glare or hot blobs under the boats, nothing strobing while the camera
-   moves (user choices and requests, 2026-10-02). IFC is the brightest
+   moves (user choices and requests, 2026-10-02). The ferry and junk sit in
+   the water: no white light at the ferry's foot, a dark rippled mirror
+   image under each hull, and a wake streaming behind each boat even when
+   the scroll stops (user choice, 2026-10-02). IFC is the brightest
    tower in 01 and 05; no Central building is lit as much, and in 05 the
    towers around it are clearly quieter, together well under IFC's bright
    pixels (user requests, 2026-10-02). The mountains have rough ridges with the Peak's outline,
