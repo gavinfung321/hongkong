@@ -305,7 +305,10 @@ function start(initGuard, header) {
       ready = true;
       window.clearTimeout(initGuard);
       performance.mark('vh:first-frame');
-      requestAnimationFrame(() => root.classList.add('is-ready'));
+      requestAnimationFrame(() => {
+        root.classList.remove('is-booting');
+        root.classList.add('is-ready');
+      });
     }
   }
 

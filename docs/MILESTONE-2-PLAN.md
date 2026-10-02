@@ -431,6 +431,27 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   `src/ui/siteFooter.js` publishes `--footer-in` (0 → 1) and `is-at-footer`.
   Also works in the poster-only fallback, where it is a plain footer.
 
+### 3.12 Loading screen (user choice, 2026-10-02)
+
+The user asked why a flat drawing showed before the site loaded. It was the
+Milestone 1 fallback poster (greybox shapes that no longer match the scene),
+on screen for about 1–2 s per load, with the copy in its plain stacked layout
+until `main.js` ran (measured on the live site, simulated 4G: page 0.7 s,
+script 1.4 s, first 3D frame 1.7 s).
+
+- **Now:** while the scene loads, only the poster's night-sky gradient shows,
+  with the header and the vertical title; the poster art, copy and footer
+  are hidden (`is-booting`, set by a tiny inline script in `index.html`).
+  `main.js` lifts it with the first 3D frame, which fades in over the sky;
+  the art stays hidden during that fade. The poster art only shows in the
+  fallback (no WebGL 2, context lost, init error or timeout), and an inline
+  12 s timer shows the poster and copy if the script never arrives.
+- **Later (Milestone 5):** a real snapshot of the hero frame replaces the
+  drawing, for loading and fallback alike (option B, chosen for launch).
+- Checked on a production build: loading shows the sky only, then a clean
+  fade into the 3D scene; `?fallback` shows the poster and copy; with the
+  script blocked, the poster and copy appear at 12 s.
+
 ## 4. Look test (frame 01 only)
 
 Each layer below is added one at a time and screenshotted before and after.
@@ -1267,6 +1288,10 @@ Stop for the user's review after each step, as in the grey-box.
   mountain code in `createIsland.js`; `src/data/world.js` (the Peak outline,
   the third range, mist and lights); `src/scene/createMoon.js` (draw order)
   (part 2).
+- Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
+  `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
+  copy and footer hidden while loading and during the fade),
+  `src/main.js` and `src/ui/fallback.js` (lift `is-booting`).
 - Publishing (user choice, 2026-10-02): `vite.config.js` builds with the
   base `/hongkong/` on GitHub; new `.github/workflows/deploy.yml` builds and
   publishes to GitHub Pages on every push to `main`; `.gitignore` keeps the
@@ -1331,7 +1356,9 @@ The milestone passes when:
    continuous mode; user request, 2026-10-02), and still tells the whole story. In continuous mode the water
    does not blink or strobe while the mouse moves or during scroll
    transitions.
-5. The poster-only fallback still works, with a usable nav.
+5. The poster-only fallback still works, with a usable nav. A normal load
+   shows only the night sky until the 3D scene fades in: no poster art and
+   no plain-layout copy flash first (user choice, 2026-10-02).
 6. Frame 01 with the look-test layers is approved by the user against the
    storyboard and the Kage reference.
 7. The performance budget in section 5 is met on the laptop and the iPhone 11.
@@ -1362,7 +1389,7 @@ step.
 |---|---|
 | 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk, Clock Tower, IFC and wheel are already rebuilt from reference photos, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals, display fonts (the bauhinia tree is built in code, 2026-10-02). Also the user's stone railing (built in code with lanterns and tall lamps, 2026-10-02), promenade palms, wet paving tiles (built in code, 2026-10-02) and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
 | 4. Atmosphere, all chapters | Clouds lit from below and searchlight beams from the Central towers (user reminders, 2026-10-01), the look-test layers rolled out to 02–06, extra particles alongside the petals (sea spray, city bokeh, firework embers in 06), real fireworks, a sparkle trail added to the cursor ring (3.10) |
-| 5. Copy and launch | Final copy, poster images, a full performance pass on both iPhones, deployment |
+| 5. Copy and launch | Final copy, poster images (a real snapshot of the hero frame replaces the drawn fallback poster, for loading and fallback; user choice, 2026-10-02), a full performance pass on both iPhones, deployment |
 
 **Published early (user choice, 2026-10-02).** The work in progress is live at
 <https://gavinfung321.github.io/hongkong/> from the public repo
