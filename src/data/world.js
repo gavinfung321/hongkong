@@ -85,12 +85,13 @@ export const WORLD = {
     // tower on the promontory's south end. `only: 'mobile'`: outside the
     // desktop frame, where it would only sweep across the tower mid-move.
     // `only: 'desktop'`: the desktop camera looks across the promontory and
-    // sees few of the others; on mobile these would sit beside the tower.
+    // sees few of the others; on mobile these would sit beside the tower or,
+    // for the coconut at x −82.4 and the row's last palm, left of the frame.
     palms: [
       { position: [-75.4, 2.5, -7.4], height: 10, shape: 'coconut', yaw: 2.32, only: 'desktop' },
       { position: [-70.4, 2.5, -25.6], height: 12.5, shape: 'fan', yaw: 2.32, only: 'desktop' },
       { position: [-52, 2.5, 5], height: 10.5, shape: 'coconut', yaw: 2.32, only: 'desktop' },
-      { position: [-82.4, 2.5, 9.1], height: 11, shape: 'coconut', yaw: -0.83 },
+      { position: [-82.4, 2.5, 9.1], height: 11, shape: 'coconut', yaw: -0.83, only: 'desktop' },
       { position: [-52.5, 2.5, 0.2], height: 9, shape: 'fan', yaw: -0.83 },
       { position: [-66.7, 2.5, 55.1], height: 10, shape: 'coconut', yaw: Math.PI },
       { position: [-53.5, 2.5, 38], height: 9, shape: 'fan', yaw: 0, only: 'mobile' },
@@ -98,7 +99,7 @@ export const WORLD = {
       { position: [-74.5, 2.5, -46.5], height: 11.5, shape: 'coconut', yaw: 2.7 },
       { position: [-79, 2.5, -50], height: 9.5, shape: 'fan', yaw: 3.0 },
       { position: [-83.5, 2.5, -47], height: 12, shape: 'coconut', yaw: 2.6 },
-      { position: [-88, 2.5, -50], height: 10.5, shape: 'fan', yaw: 3.1 },
+      { position: [-88, 2.5, -50], height: 10.5, shape: 'fan', yaw: 3.1, only: 'desktop' },
     ],
   },
 

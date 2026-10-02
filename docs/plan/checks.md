@@ -23,10 +23,12 @@ shader fix):** 01 hold 47 fps, 1% low 41, worst second 33, 148 calls,
 42k triangles; 02 hold 34 fps, 1% low 28, worst second 32, 103 calls,
 73k triangles; pixel ratio at its phone cap of 1.5 (no automatic drop).
 Both pass; 02 is close to the line, and the move from 01 to 02 stuttered
-(32 shaders built mid-scroll, now fixed). In 02 the palms are 35k of
+(32 shaders built mid-scroll, now fixed). In 02 the palms were 35k of
 the 73k triangles: nine palms of 0.7–1.2k triangles, each drawn four
 times (a depth pass and a colour pass, each split into back and front
-faces).
+faces). Now each palm draws twice and phones skip two palms left of the
+frame: phone 02 52k triangles, 98 calls (user choice, 2026-10-02).
+To be re-measured on the iPhone.
 
 If the iPhone 11 misses its target, layers are switched off on mobile in this
 order: bloom (built in part 3e, step 5; it already switches itself off
