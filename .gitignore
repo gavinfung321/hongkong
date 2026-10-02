@@ -5,3 +5,11 @@ dist/
 Thumbs.db
 *.log
 
+# References of unknown rights or AI-made: kept locally, never published.
+docs/references/bauhinia/bauhinia-tree.png
+docs/references/bauhinia/bauhinia-flowers-rain.jpg
+docs/references/bauhinia/bauhinia-flower-closeup.jpg
+docs/references/bauhinia/generated/
+docs/references/atmosphere/
+docs/references/foreground/
+

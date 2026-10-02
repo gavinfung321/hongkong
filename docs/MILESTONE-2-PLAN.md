@@ -1135,6 +1135,10 @@ Stop for the user's review after each step, as in the grey-box.
   `src/main.js`: the sources, fades tied to the ferry, junk, IFC, wheel and
   railing gating, `water.reflect` before each render (user choice,
   2026-10-02).
+- Publishing (user choice, 2026-10-02): `vite.config.js` builds with the
+  base `/hongkong/` on GitHub; new `.github/workflows/deploy.yml` builds and
+  publishes to GitHub Pages on every push to `main`; `.gitignore` keeps the
+  reference images of unknown rights and the AI-made references local.
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font; the
   stone railing and lamps built in code from the user's designs; the wet
   paving; the palms; the bauhinia tree; the skyline reflections.
@@ -1217,3 +1221,13 @@ step.
 | 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk, Clock Tower, IFC and wheel are already rebuilt from reference photos, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals, display fonts (the bauhinia tree is built in code, 2026-10-02). Also the user's stone railing (built in code with lanterns and tall lamps, 2026-10-02), promenade palms, wet paving tiles (built in code, 2026-10-02) and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
 | 4. Atmosphere, all chapters | Clouds lit from below and searchlight beams from the Central towers (user reminders, 2026-10-01), the look-test layers rolled out to 02–06, extra particles alongside the petals (sea spray, city bokeh, firework embers in 06), real fireworks, a sparkle trail added to the cursor ring (3.10) |
 | 5. Copy and launch | Final copy, poster images, a full performance pass on both iPhones, deployment |
+
+**Published early (user choice, 2026-10-02).** The work in progress is live at
+<https://gavinfung321.github.io/hongkong/> from the public repo
+`gavinfung321/hongkong` ("hongkong" chosen over "hong-kong": shorter, matches
+the HONG KONG wordmark, easy to type on a phone). Every push to `main`
+rebuilds the site (`.github/workflows/deploy.yml`), so the iPhone checks can
+use the live address. Before the first push, three bauhinia reference photos
+of unknown rights were removed from the whole history; they stay on the
+user's computer. Milestone 5 still owns the final launch (copy, posters,
+performance).
