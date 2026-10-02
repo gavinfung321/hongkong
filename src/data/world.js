@@ -65,13 +65,14 @@ export const WORLD = {
       // at the tower, and they would sit in front of its lit base.
       { from: [-60, 40], to: [-60, 61.7], y: 2.5, skipFirst: true, lanterns: false },
     ],
-    // Tall cast-iron lamps on the Clock Tower promontory, seen in 02 only:
-    // either side of the tower and short of the ferry on desktop, clear of the
-    // tower on mobile, outside the 01 frames (they line up with the tower there).
+    // Tall cast-iron lamps on the Clock Tower promontory: either side of the
+    // tower and short of the ferry in desktop 02, left of the tower in mobile
+    // 02. Spaced so they also stand apart left of the tower in the hero and 01
+    // on wide windows (user request, 2026-10-02); at 16:10 only the first shows.
     lamps: [
-      [-74.5, 2.5, 3.5],
-      [-69.5, 2.5, 17],
-      [-66, 2.5, 21],
+      [-71.5, 2.5, -9.5],
+      [-67, 2.5, 14.5],
+      [-70, 2.5, 24],
     ],
     // The bauhinia tree on the arrival promenade, just right of and behind the
     // 01 camera, leaning out over the water so its crown frames the top-right
@@ -130,6 +131,20 @@ export const WORLD = {
     mist: { z: -1650, x: [-3200, 3800], height: 340 },
     // Homes and roads on the near range's lower slopes (Mid-Levels).
     lights: { x: [-700, 1400], clusters: 80, perCluster: 12, seed: 21 },
+  },
+
+  // Low-rise lights on a far shore west of the island, along the left of the
+  // 04 frame's waterline (user choice, 2026-10-02). The shore bends toward
+  // Kowloon as it runs west, so the lights at the frame's left edge stay
+  // within the fog's reach. Out of frame in every other hold. `points`: the
+  // shoreline [x, z]; `height`: tallest lights at the island end and the far
+  // end. `glints`: [x, z] of the faint reflections they lay on the water.
+  farShore: {
+    points: [[-1000, -1160], [-1350, -1080], [-1600, -920], [-1750, -790], [-1850, -700]],
+    count: 420,
+    height: [18, 7],
+    seed: 23,
+    glints: [[-1180, -1125], [-1470, -1010], [-1690, -840]],
   },
 
   // Behind the far range, upper right of the opening frame; its lower edge dips

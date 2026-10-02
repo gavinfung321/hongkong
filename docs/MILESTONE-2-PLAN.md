@@ -115,8 +115,10 @@ How it is built:
 
 ### 3.3 "Scroll to cross" hint and chapter counter
 
-- Bottom-left: a small "Scroll to cross" label with a short line, and the
-  numbers **01–06** beneath it.
+- Bottom-left: a small "Scroll to cross" label with a short line. The
+  numbers **01–06** that stood beneath it on desktop are removed (user
+  request, 2026-10-02): the nav bar, menu and side pager already link every
+  chapter. The notes on the numbers below are history.
 - The hint shows only in the hero and fades out as the wordmark sinks. Its line
   loops: a bright stroke draws in over a faint track and leaves to the right
   (user request, 2026-10-01).
@@ -125,7 +127,7 @@ How it is built:
   it turns sail coral and rises (user request, an exception to coral being
   reserved for the sails).
 - On mobile the counter shrinks to the current number only ("01 / 06"), so it
-  never collides with copy.
+  never collides with copy. It stays (user choice, 2026-10-02).
 - Dimmed so the scene leads: hint at 50% and numbers at 40% opacity, full on
   hover (user request, 2026-10-01).
 - Chapter 01's body no longer ends with "Scroll to cross the water."; the
@@ -359,7 +361,8 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
 - Each dash is a link to its chapter. On hover it lengthens and the chapter
   name appears to its left.
 - Desktop only: on phones IFC stands at the right edge in 03–05, and the
-  vertical label already shows the chapter. Hidden in the poster-only
+  vertical label already shows the chapter (confirmed, user choice,
+  2026-10-02). Hidden in the poster-only
   fallback. Like the counter, it duplicates the menu, so it is hidden from
   screen readers and the tab order.
 - Built in `index.html` (`.side-pager`) and `styles.css`; `siteHeader.js`
@@ -867,10 +870,16 @@ all six.
      and two thin rails, and a cast-iron lantern with warm glass and a soft
      glow on every second big post (16 lanterns). Three tall cast-iron lamps
      after the user's lamp design (octagonal pedestal, fluted column, six-sided
-     lantern, 4.2 m) stand on the Clock Tower promontory, seen in 02 only:
-     either side of the tower and short of the ferry on desktop, clear of the
-     tower on mobile, outside both 01 frames (they line up with the tower
-     there). The lamps are not real lights (the scene keeps 3): materials that
+     lantern, 4.2 m) stand on the Clock Tower promontory: either side of
+     the tower and short of the ferry in desktop 02, left of the tower in
+     mobile 02. *Re-spaced (user request, 2026-10-02):* on wide windows
+     the hero and 01 show the promontory left of the tower, where the
+     three stood almost one behind another (within 2°) and read as one
+     cluster. Now they stand evenly apart there (about 2%, 10% and 16% of
+     the width at 1536 × 730), keep their places in desktop 02 (15%, 42%,
+     54%) and spread evenly left of the tower on phones (9%, 17%, 24%);
+     at 16:10 only one shows in the hero, clear of the edge (5%). The
+     lamps are not real lights (the scene keeps 3): materials that
      opt in get a warm pool around each lantern and lamp (`lamps.js`), which
      the paving and palms will share. Railing sizes and lantern spacing are
      the constants in `lamps.js` and `createForeground.js`; lamp positions
@@ -1472,7 +1481,10 @@ all six.
          its own card: 02 a low band over the right-hand ridge, below the
          copy and above the ferry; 04 a thin band above the low mountains
          on the left; 05 a thin band between the copy and Bank of China's
-         mast (after the chapter fade about 14%, 10% and 8%). Phones: 01 a
+         mast (after the chapter fade about 14%, 10% and 8%). The 04 band
+         was still too faint to fill the left of the frame (user request,
+         2026-10-02): it is now 45% before the fade (about 23% after) and
+         a little wider. Phones: 01 a
          band above the moon, 06 a band between IFC's crown and the
          fireworks (both 12%); 02–05 on phones already show the 01 band
          and need no cards of their own. Each card
@@ -1556,6 +1568,19 @@ all six.
          IFC and the landmarks still lead (05 share 27%, under a third).
          In 05 the water in front of the piers stays dark. The Clock
          Tower, ferry, junk sails, IFC crown and copy are untouched.
+       - **Far shore lights in 04 (user choice, 2026-10-02):** the user
+         found the left of 04 empty: dark water, a faint cloud and the
+         end of the skyline. A far shore west of the island now carries
+         low-rise lights along the left of the waterline: 420 soft warm
+         dots (a fifth cool) of a fixed 1.4–2.2 px, in loose clusters
+         along a shoreline that bends toward Kowloon as it runs west, so
+         the lights at the frame's left edge (about 1.7 km out) stay
+         within the fog's reach; lower and dimmer toward the far end, and
+         fogged like the skyline (`WORLD.farShore`, `farShore.js`). Three
+         faint warm reflections run down the dark water beneath them
+         (`waterReflections.js`, lowest rank, so they never displace the
+         boats' or IFC's). Out of frame in every other hold, on phones
+         too; one more draw call in desktop 04 (83).
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -1573,7 +1598,7 @@ Measured with the `?fps` overlay on a production build, as in
 |---|---|---|
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
-| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. With the 3D palms: desktop 02 137. With the bauhinia tree: desktop 01 170 (desktop only). The water reflections add none. The mountain rebuild adds 3 everywhere (third range, mist, slope lights): desktop 01 173, 02 140, 05 48; mobile 01 117. The landmarks and varied tops add 12 (four skyline-top sets, six landmark meshes, one mast mesh, one set of warning lights): desktop 01 185, 02 149, 03 100, 05 60; mobile 01 129. The far-tower window dots add 1: desktop 01 186, 02 150, 05 61; mobile 01 130. Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
+| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. With the 3D palms: desktop 02 137. With the bauhinia tree: desktop 01 170 (desktop only). The water reflections add none. The mountain rebuild adds 3 everywhere (third range, mist, slope lights): desktop 01 173, 02 140, 05 48; mobile 01 117. The landmarks and varied tops add 12 (four skyline-top sets, six landmark meshes, one mast mesh, one set of warning lights): desktop 01 185, 02 149, 03 100, 05 60; mobile 01 129. The far-tower window dots add 1: desktop 01 186, 02 150, 05 61; mobile 01 130. The far shore lights add 1 in desktop 04 only (83 with the clouds and mist). Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
 | New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). The stone railing adds a 64 × 64 granite tile and a 64 × 96 post panel (24 textures; the lantern glows are drawn in their shader). The wet paving adds a 240 × 240 slab tile (25 textures). The palms add a 256 × 256 frond and bark atlas (26 textures). The bauhinia tree adds a 512 × 512 leaf and flower atlas (27 textures; its falling petals reuse the petal texture). The water reflections add a 256 × 1 skyline strip (28 textures, 1 KB). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
 | Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b; the promenade lanterns and lamps are faked in the materials (`lamps.js`) | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
@@ -1771,7 +1796,15 @@ Stop for the user's review after each step, as in the grey-box.
   cloud cards, then the harbour mist belt), `public/atmosphere/coral-clouds.webp`
   and `public/atmosphere/harbour-mist.webp`; `src/main.js` adds, places and
   fades them; `src/data/chapters.js` gains `clouds`, `mist` and `seaMist`
-  levels per chapter (part 3g).
+  levels per chapter (part 3g). New `src/scene/farShore.js` (far shore
+  lights in 04), added by `createIsland.js`; `src/data/world.js` gains
+  `farShore`; `src/scene/waterReflections.js` adds its reflections (part
+  3g, 2026-10-02).
+- Chapter counter numbers removed (3.3, user request, 2026-10-02):
+  `index.html` and `src/styles.css`; the hint and the phone's "01 / 06"
+  stay.
+- Promenade lamps re-spaced (2026-10-02): `WORLD.foreground.lamps` in
+  `src/data/world.js`.
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
   copy and footer hidden while loading and during the fade),
@@ -1860,7 +1893,12 @@ The milestone passes when:
    foot on phones (user choices, 2026-10-02); the shore mist is
    warm-tinted separate drifts, not a grey film, and leaves the water in
    front of the 05 piers dark (user choice, 2026-10-02), never over the Clock Tower, the boats, the sails, IFC's
-   crown or the copy (user request, 2026-10-02), and no brace line, mast or warning light shimmers
+   crown or the copy (user request, 2026-10-02); the left of desktop 04
+   carries a stronger coral band and a far shore of low lights with faint
+   reflections on the water, never over the junk or the copy (user
+   choice, 2026-10-02); the three tall promenade lamps stand apart, never
+   bunched, in the hero and 01 on wide windows, in desktop 02 and on
+   phones (user request, 2026-10-02), and no brace line, mast or warning light shimmers
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
@@ -1869,8 +1907,10 @@ The milestone passes when:
    Mobile shows it horizontal and smaller, floating in the sky between the
    copy and the moon with the tower, junk, moon and IFC uncovered (user
    request, 2026-10-02).
-3. Nav links, counter numbers, the menu and "Return to the harbour" all land
-   on the right hold. The menu works with the keyboard and a screen reader.
+3. Nav links, the menu and "Return to the harbour" all land on the right
+   hold. The hero's bottom-left shows only "Scroll to cross" on desktop, no
+   chapter numbers, and "01 / 06" beneath it on phones (user request,
+   2026-10-02). The menu works with the keyboard and a screen reader.
    The vertical label shows the current chapter and never covers a subject.
    The side pager (desktop) marks the current chapter and its dashes land on
   the right hold. "Return to the harbour" is a thin rounded button on one
