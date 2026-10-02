@@ -6,6 +6,14 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Bow spray removed** (user request and choice): the splash on the
+  ferry and junk still looked forceful and unrealistic. The artwork is a
+  breaking wave throwing droplets, so no size or strength fixes that; a
+  bow foam built in code was offered and declined. The wakes stay the
+  boats' only white water. Draw calls back to desktop 01 211, phone 01
+  148; JS 209.4 KB gzip; `?off=spray` gone. Files: `src/scene/spray.js`
+  and `public/atmosphere/harbour-spray.webp` (deleted),
+  `src/scene/createVessels.js`, `src/data/atmosphere.js`, `src/main.js`.
 - **Milestone 2 review** (build step 6, user request): 14 hold screenshots
   (hero and 01–06, desktop and phone), the composition probe, copy
   overflow at three sizes, parallax corners, navigation, reduced motion,
