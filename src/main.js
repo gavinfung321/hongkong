@@ -51,9 +51,9 @@ const MOBILE_FACADE_BIAS = 0.5;
 // ?bloom=0 turns the glow off, ?bloom=2 doubles it: for side-by-side checks.
 const BLOOM_SCALE = params.has('bloom') ? Math.max(0, Number(params.get('bloom')) || 0) : 1;
 // Phone measurement switches, live like ?fps: ?dpr=1.25 caps the pixel ratio,
-// ?aa=0 turns off edge smoothing, ?off=water,clouds,mist,palms,petals,beams hides layers.
+// ?aa=0 turns off edge smoothing, ?off=water,clouds,mist,palms,petals,beams,spray hides layers.
 const DPR_CAP = Number(params.get('dpr')) || 0;
-const OFF_LAYERS = { water: ['water'], clouds: ['cloud'], mist: ['mist', 'sea-mist'], palms: ['palms'], petals: ['petals'], beams: ['searchlights'] };
+const OFF_LAYERS = { water: ['water'], clouds: ['cloud'], mist: ['mist', 'sea-mist'], palms: ['palms'], petals: ['petals'], beams: ['searchlights'], spray: ['spray'] };
 const OFF = (params.get('off') ?? '').split(',').flatMap((key) => OFF_LAYERS[key.trim()] ?? []);
 
 function start(initGuard, header) {
@@ -72,7 +72,11 @@ function start(initGuard, header) {
   scene.add(water.mesh);
   const kowloon = createKowloonEdge();
   const island = createIsland();
-  const vessels = createVessels();
+  const vessels = createVessels({
+    onLoad: () => {
+      needsRender = true;
+    },
+  });
   const foreground = createForeground();
   const wordmark = createWordmark(renderer, HERO.wordmark.text);
   const moon = createMoon();

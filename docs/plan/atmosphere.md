@@ -1,4 +1,4 @@
-# Sky, clouds, mist, searchlights and fireworks
+# Sky, clouds, mist, searchlights, bow spray and fireworks
 
 Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, item 5, stop 6, part 3g; the fireworks in 06.
 
@@ -197,6 +197,35 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
   - **Checks:** draw calls one per visible beam (desktop 01 211, 05 83;
     phone 05 73). No shaders built mid-scroll (04 → 05). JS 209.1 KB
     gzip. `?off=beams` hides them.
+
+- **Bow spray (user choice, 2026-10-03).** Following
+  `ATMOSPHERE-EFFECTS-BRIEF.md` §6.4: white water at the ferry's and the
+  junk's bows, adding contact and speed to the flat wakes (which stay).
+  New `src/scene/spray.js`; `SPRAY` in `src/data/atmosphere.js`; the
+  staged `harbour-spray.webp` ships unchanged as
+  `public/atmosphere/harbour-spray.webp` (1280 × 428, 182 KB).
+  - **Card:** one upright card of the artwork per boat, a child of the
+    boat so it rides the bob, turned about the vertical to face the
+    camera and set out on the hull's side toward it; its foam edge sits
+    on the waterline. Ferry: 24 m wide, centred 9 m forward of
+    midships, so it wraps the bow and the front of the hull. Junk:
+    15 m, fainter, below the tyre line. Dimmed to a blue-grey for the
+    night (under the glow threshold) and fogged like the boats, so it
+    is only a hint in the wide 01 view.
+  - **Seen at an angle**, a flat card sank behind the hull's near side,
+    so only the spray ahead of the bow showed. Its depth alone is
+    pulled toward the camera (ferry 14 m, junk 10 m): it clears its own
+    hull but stays behind anything nearer, such as the railing and
+    palms in 02 or the other boat.
+  - **Strength:** calm at a hold (ferry 62%, junk 50%), up to 90% / 75%
+    while the boat moves (full at 8 m/s), easing between the two. A
+    slow swell in size of under 6%, built from two waves of unrelated
+    periods (4.3 s and 2.9 s), so no loop shows. Reduced motion: still,
+    at the calm strength. It fades with its boat's gate.
+  - **Checks:** desktop and phone 03 and 04, desktop 01 and 02. Draw
+    calls one per visible boat (desktop 01 213, 03 121, 04 95; phone 03
+    117, 04 90). No shaders built mid-scroll. JS 210.1 KB gzip.
+    `?off=spray` hides it.
 
 - **Fireworks in 06 (user choice, 2026-10-02).** Pulled forward from
   Milestone 4, following `ATMOSPHERE-EFFECTS-BRIEF.md` §6.7 in three

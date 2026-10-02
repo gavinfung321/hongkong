@@ -379,5 +379,5 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
          calls unchanged (the wake replaces the foam skirt). In 01 both
          boats sit on their own dark reflections; in 03 and 04 the wakes
          trail behind the sterns. At wave height the flat wake reads thin;
-         a bow spray (the staged `harbour-spray.webp`) stays a later
-         option.
+         the bow spray now covers it (see "Bow spray" in
+         [atmosphere.md](atmosphere.md), user choice, 2026-10-03).
