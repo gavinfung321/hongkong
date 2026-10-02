@@ -6,6 +6,14 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Film grade** (user choice; colour pass, README "Open" 6): the whole
+  frame is graded in the glow's last pass: contrast round the night's
+  mid-tones, indigo shadows, warm highlights, a little more colour where
+  it is weak. 01 clearly improved (deeper indigo sky; warmer Clock Tower,
+  moon and sails; IFC leads more), so it stays, in every chapter. ACES
+  and AgX were tried and rejected (crushed or bleached; grey haze).
+  No extra pass; `?grade=0` turns it off. Files: `src/scene/bloom.js`,
+  `src/scene/createScene.js`, `src/main.js`.
 - **Bow spray** (user choice): white water at the ferry's and junk's
   bows from the staged `harbour-spray.webp` (now in
   `public/atmosphere/`), because the flat wakes read thin at wave

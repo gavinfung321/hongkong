@@ -15,8 +15,10 @@ import {
 // A soft glow round the brightest lights (user choice, 2026-10-02: realism
 // step 5). The scene renders to the screen as before; that frame is copied,
 // its brightest parts are halved down a chain of smaller images and added
-// back up on the way out (a wide, soft blur for little cost), and only the
-// glow is added onto the screen, in linear light. The first halving
+// back up on the way out (a wide, soft blur for little cost), and the glow
+// is added in linear light as the frame is graded back onto the screen
+// (the film grade, below). Phones without float targets get neither. The
+// first halving
 // averages the brightest pixels down, so lone sub-pixel lights can't sparkle
 // in it. Weaker and tighter on phones. Objects on the OVERLAY layer (the 香港
 // wordmark, the near petals) are drawn afterwards, so they stay crisp.
@@ -97,18 +99,40 @@ const upShader = `
     gl_FragColor = vec4( sum / 16.0, 1.0 );
   }`;
 
-// Added onto the screen: the difference the glow makes once summed in linear
-// light, so the frame itself is untouched (and a failed copy adds nothing).
+// The film grade (user choice, 2026-10-03; README "Open" 6), applied to the
+// whole finished frame with its glow. Three's tone mapping would skip every
+// custom shader, so it is done here, once. Contrast round the night's
+// mid-tones with a soft shoulder (1 stays 1), indigo in the shadows, warmth
+// in the highlights, a little more colour where colour is weak. Chosen over
+// ACES (crushed the skyline, or bleached the highlights) and AgX (grey haze).
+const film = `
+  vec3 film( vec3 c ) {
+    c = 0.12 * pow( c / 0.12, vec3( 1.12 ) );
+    c = c * 1.18 / ( 1.0 + 0.18 * c );
+    vec3 s = toScreen( clamp( c, 0.0, 1.0 ) );
+    float l = dot( s, vec3( 0.2126, 0.7152, 0.0722 ) );
+    s += vec3( 0.004, -0.004, 0.018 ) * ( 1.0 - smoothstep( 0.0, 0.4, l ) );
+    s += vec3( 0.03, 0.01, -0.02 ) * smoothstep( 0.45, 1.0, l );
+    float spread = max( s.r, max( s.g, s.b ) ) - min( s.r, min( s.g, s.b ) );
+    return clamp( mix( vec3( l ), s, 1.0 + 0.18 * ( 1.0 - spread ) ), 0.0, 1.0 );
+  }`;
+
+// Without the grade, added onto the screen: the difference the glow makes
+// once summed in linear light, so the frame itself is untouched (and a
+// failed copy adds nothing). With it, the graded frame replaces the screen.
 const compositeShader = `
   uniform sampler2D tFrame;
   uniform sampler2D tBloom;
   uniform float uStrength;
+  uniform bool uGrade;
   varying vec2 vUv;
   ${srgb}
+  ${film}
   void main() {
     vec3 frame = texture2D( tFrame, vUv ).rgb;
     vec3 glow = texture2D( tBloom, vUv ).rgb * uStrength;
-    gl_FragColor = vec4( toScreen( min( toLinear( frame ) + glow, 1.0 ) ) - frame, 1.0 );
+    vec3 lit = min( toLinear( frame ) + glow, 1.0 );
+    gl_FragColor = uGrade ? vec4( film( lit ), 1.0 ) : vec4( toScreen( lit ) - frame, 1.0 );
   }`;
 
 export function createBloom(renderer) {
@@ -127,8 +151,13 @@ export function createBloom(renderer) {
   const up = pass(upShader, { tSource: { value: null }, uTexel: { value: new Vector2() } }, AdditiveBlending);
   const composite = pass(
     compositeShader,
-    { tFrame: { value: null }, tBloom: { value: null }, uStrength: { value: 0 } },
-    AdditiveBlending,
+    {
+      tFrame: { value: null },
+      tBloom: { value: null },
+      uStrength: { value: 0 },
+      uGrade: { value: true },
+    },
+    NoBlending,
   );
 
   const quad = new Mesh(new PlaneGeometry(2, 2), down);
@@ -151,7 +180,8 @@ export function createBloom(renderer) {
 
   return {
     get active() {
-      return supported && frame !== null && composite.uniforms.uStrength.value > 0;
+      const { uStrength, uGrade } = composite.uniforms;
+      return supported && frame !== null && (uStrength.value > 0 || uGrade.value);
     },
     setSize(width, height) {
       if (size.x === width && size.y === height) return;
@@ -165,11 +195,16 @@ export function createBloom(renderer) {
       composite.uniforms.uStrength.value = strength;
       levels = Math.min(MAX_LEVELS, count);
     },
-    // Adds the glow to the frame just drawn on screen.
+    setGrade(on) {
+      composite.uniforms.uGrade.value = on;
+      composite.blending = on ? NoBlending : AdditiveBlending;
+    },
+    // Adds the glow to the frame just drawn on screen, and grades it.
     render() {
       renderer.setRenderTarget(null);
       renderer.copyFramebufferToTexture(frame);
-      for (let i = 0; i < levels; i++) {
+      const glowing = composite.uniforms.uStrength.value > 0;
+      for (let i = 0; glowing && i < levels; i++) {
         const source = i === 0 ? null : mips[i - 1];
         down.uniforms.tSource.value = source ? source.texture : frame;
         down.uniforms.uTexel.value.set(1 / (source ? source.width : size.x), 1 / (source ? source.height : size.y));
@@ -178,7 +213,7 @@ export function createBloom(renderer) {
       }
       const autoClear = renderer.autoClear;
       renderer.autoClear = false;
-      for (let i = levels - 1; i > 0; i--) {
+      for (let i = glowing ? levels - 1 : 0; i > 0; i--) {
         up.uniforms.tSource.value = mips[i].texture;
         up.uniforms.uTexel.value.set(1 / mips[i].width, 1 / mips[i].height);
         draw(up, mips[i - 1]);
