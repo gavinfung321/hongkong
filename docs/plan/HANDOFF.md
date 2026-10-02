@@ -1,4 +1,4 @@
-# Handoff — Milestone 2 review done; user decisions next
+# Handoff — Milestone 2 closed; next milestone to choose
 
 Written 2026-10-02 to start a fresh chat; updated 2026-10-03. Read this
 file, then [`README.md`](README.md) and
@@ -57,10 +57,11 @@ stronger 04 cloud, the plan split into `docs/plan/`. Since then: the
 cloud ceiling (two layers in every chapter, wind drift; see
 `atmosphere.md`), user petal artwork, automatic phone sharpness. On
 2026-10-03: searchlights, bow spray (the junk's only a small bow wave),
-the film grade, and the Milestone 2 review. The review leaves three
-decisions to the user: sign-off of 01, the phone re-measure (deferred),
-and raising the draw-call and texture budgets. The paper grain from the
-atmosphere brief was offered and not built.
+the film grade, and the Milestone 2 review. The user approved 01 and
+raised the budgets (draw calls ≤ 220, code-drawn textures ≤ 32), so
+Milestone 2 is closed. Carried forward: the phone re-measure (Milestone
+5) and the paper grain from the atmosphere brief (offered, not built).
+No next task is set; ask the user which milestone (3, 4 or 5) comes next.
 
 ## Fireworks: all three steps done (user choice, 2026-10-02)
 
