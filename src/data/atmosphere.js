@@ -55,20 +55,23 @@ export const MIST_SHEET = {
 };
 
 // Low harbour mist (user request, 2026-10-02; ATMOSPHERE-EFFECTS-BRIEF.md
-// 6.2): one belt of upright cards on the water just off the island's
-// waterfront, facing Kowloon, so it parts the water from the podiums and the
-// skyline in every chapter that looks across. Boats, the Clock Tower and the
-// junk stand in front of it. x / z: card centre in world metres; width and
-// height in metres (the art stretches sideways, so four long cards keep the
-// draw calls down); opacity at a chapter's full `mist` level. The lowest
-// band sits in front of the wheel and IFC's podium.
+// 6.2): separate drifts standing on the island's waterfront just behind the
+// ferry piers, facing Kowloon, so they soften the foot of the podiums and
+// the skyline without veiling the water. Boats, the Clock Tower and the junk
+// stand in front of them. The gap around the wheel and IFC keeps 05's
+// subjects clear. x / z: card centre in world metres, `y` its foot; width in
+// metres (height follows the band's own shape); opacity at a chapter's full
+// `mist` level. `tint` colours the grey art like haze lit by the city: warm
+// amber-rose at the foot, dusky lavender at the top (user choice, 2026-10-02).
 export const MIST = {
   drift: { share: 0.008, period: [90, 130] },
+  tint: { low: [1.4, 0.8, 0.55], high: [0.9, 0.72, 0.88] },
+  y: 3,
   cards: [
-    { x: -760, z: -1045, width: 700, height: 33, band: 'flat', opacity: 0.3 },
-    { x: -90, z: -1035, width: 700, height: 37, band: 'broad', opacity: 0.3 },
-    { x: 560, z: -1030, width: 700, height: 26, band: 'low', opacity: 0.3 },
-    { x: 1200, z: -1045, width: 700, height: 35, band: 'broad', opacity: 0.3 },
+    { x: -800, z: -1110, width: 480, band: 'broad', opacity: 0.45 },
+    { x: -300, z: -1112, width: 380, band: 'flat', opacity: 0.45 },
+    { x: 90, z: -1110, width: 340, band: 'low', opacity: 0.45 },
+    { x: 800, z: -1112, width: 460, band: 'broad', opacity: 0.45 },
   ],
 };
 
@@ -81,6 +84,8 @@ export const MIST = {
 // move to 03, before the camera comes near them.
 export const SEA_MIST = {
   face: [-13, 99.5],
+  // Milder than the shore drifts: farther from the city's light.
+  tint: { low: [1.15, 0.9, 0.75], high: [0.92, 0.82, 0.92] },
   cards: [
     // Behind the Clock Tower, left.
     { x: -150, z: -280, width: 260, band: 'low', opacity: 0.22 },
