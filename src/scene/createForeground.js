@@ -15,8 +15,6 @@ import {
   PlaneGeometry,
   Quaternion,
   RingGeometry,
-  Shape,
-  ShapeGeometry,
   SphereGeometry,
   Vector3,
 } from 'three';
@@ -24,11 +22,8 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { WORLD } from '../data/world.js';
 import { aimCamera } from '../scroll/cameraRig.js';
 import { RAILING_BAY, addLampLight, glowMaterial, railingLayout } from './lamps.js';
+import { createPalms } from './palms.js';
 import { promenadeGranite, railingPanel } from './surfaces.js';
-
-function fadeMaterial(color, extra = {}) {
-  return new MeshBasicMaterial({ color, transparent: true, opacity: 1, ...extra });
-}
 
 // ---- Promenade railing --------------------------------------------------------
 // Built from the user's stone balustrade design (reference only): a granite
@@ -229,43 +224,6 @@ function createLamps(positions) {
   return group;
 }
 
-// ---- Palms ------------------------------------------------------------------
-
-function palmShape(height) {
-  const shape = new Shape();
-  const lean = height * 0.12;
-  shape.moveTo(-0.25, 0);
-  shape.quadraticCurveTo(lean * 0.3, height * 0.5, lean - 0.15, height);
-  shape.lineTo(lean + 0.15, height);
-  shape.quadraticCurveTo(lean * 0.3 + 0.4, height * 0.5, 0.25, 0);
-  shape.lineTo(-0.25, 0);
-
-  const fronds = [];
-  for (let i = 0; i < 7; i++) {
-    const a = Math.PI * (0.05 + (i / 6) * 0.9);
-    const len = height * (0.32 + 0.08 * Math.sin(i * 1.7));
-    const tipX = lean + Math.cos(a) * len;
-    const tipY = height + Math.sin(a) * len * 0.45 - len * 0.25;
-    const frond = new Shape();
-    frond.moveTo(lean, height);
-    frond.quadraticCurveTo(lean + Math.cos(a) * len * 0.5, height + Math.sin(a) * len * 0.5 + 0.6, tipX, tipY);
-    frond.quadraticCurveTo(lean + Math.cos(a) * len * 0.5, height + Math.sin(a) * len * 0.5 - 0.6, lean, height);
-    fronds.push(frond);
-  }
-  return [shape, ...fronds];
-}
-
-function createPalms(palms, material) {
-  const group = new Group();
-  for (const { position, height, yaw } of palms) {
-    const palm = new Mesh(new ShapeGeometry(palmShape(height), 6), material);
-    palm.position.set(position[0], position[1], position[2]);
-    palm.rotation.y = yaw;
-    group.add(palm);
-  }
-  return group;
-}
-
 // ---- Firework burst markers -------------------------------------------------
 
 const BURST_COLORS = { warm: 0xfff1d6, coral: 0xff7a8a, cyan: 0x7fe3f0 };
@@ -296,21 +254,19 @@ const placementCamera = new PerspectiveCamera();
 const ndc = new Vector3();
 
 export function createForeground() {
-  const palmMaterial = fadeMaterial(0x110f1a, { side: DoubleSide });
-
   const railing = createRailing(WORLD.foreground.railings, { fade: true });
   railing.group.name = 'railing';
   const edgeRailing = createRailing(WORLD.foreground.edgeRailings, { fade: false });
   edgeRailing.group.name = 'edgeRailing';
   const lamps = createLamps(WORLD.foreground.lamps);
-  const palms = createPalms(WORLD.foreground.palms, palmMaterial);
-  palms.name = 'palms';
+  const palms = createPalms(WORLD.foreground.palms);
+  palms.group.name = 'palms';
   const bursts = createBursts(4);
   bursts.group.name = 'bursts';
 
   const groups = {
     railing: { object: railing.group, materials: railing.materials, glows: railing.glows },
-    palms: { object: palms, materials: [palmMaterial] },
+    palms: { object: palms.group, materials: [palms.material] },
     bursts: { object: bursts.group, materials: bursts.items.map((b) => b.material) },
   };
 
@@ -346,7 +302,7 @@ export function createForeground() {
   }
 
   const group = new Group();
-  group.add(railing.group, edgeRailing.group, lamps, palms, bursts.group);
+  group.add(railing.group, edgeRailing.group, lamps, palms.group, bursts.group);
 
-  return { group, placeBursts, setOpacity };
+  return { group, placeBursts, setOpacity, update: palms.update, setBreakpoint: palms.setBreakpoint };
 }

@@ -60,6 +60,10 @@ function start(initGuard, header) {
     palms: (value) => foreground.setOpacity('palms', value),
     bursts: (value) => foreground.setOpacity('bursts', value),
     petals: (value) => petals.setDensity(value),
+  }, {
+    // The palms pass in front of the Clock Tower early in the 01 → 02 move
+    // and, on mobile, early in the 02 → 03 move.
+    palms: { in: [0.62, 0.9], out: [0, 0.1] },
   });
 
   const rig = createCameraRig(camera, chapters, { hold: SCROLL.hold });
@@ -106,6 +110,7 @@ function start(initGuard, header) {
     rig.setAspect(width / height);
     vessels.setPaths(chapters, breakpoint);
     petals.setBreakpoint(breakpoint);
+    foreground.setBreakpoint(breakpoint);
     copy.setBreakpoint(breakpoint);
     const finale = chapters[chapters.length - 1];
     const pose = finale.camera[breakpoint];
@@ -268,6 +273,7 @@ function start(initGuard, header) {
       wordmark.sinkAt(state.pRendered, state.pTop, HERO.sinkEnd, HERO.fadeEnd);
       water.update(dt);
       island.update(time);
+      foreground.update(time);
       petals.update(dt, camera, dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0);
       lastRendered = state.pRendered;
     }

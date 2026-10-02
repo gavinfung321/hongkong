@@ -847,8 +847,32 @@ all six.
      roughness is below a pixel, it would clash with the illustrated scene
      and pull the eye from the tower and copy. Checked: 1 cm camera steps
      as before (hold 1 20,036 px, hold 2 10,040, hero 27,759).
-   - **Stop 3: palms** (3D, two shapes, slow sway, a row of 4–6 more behind
-     the tower; user choices, 2026-10-02) follows.
+   - **Stop 3: palms (built 2026-10-02, user request).** The flat palm
+     cards are replaced by 3D palms in two shapes: a tall coconut palm
+     with a curved, leaning trunk and long drooping fronds, and a straighter
+     palm with a rounder crown of shorter fronds over a skirt of brown dead
+     ones. Fronds are curved, V-folded ribbons cut into leaflets by a small
+     texture drawn in code (one frond plus a bark strip, `palmAtlas`);
+     leaflet edges blend over one pixel, and the gaps fill in on distant
+     crowns so they never shimmer. They sway slowly (trunk bend plus frond
+     flutter, each palm on its own phase) and hold still in reduced motion.
+     They take the warm lamp pools like the railing. Nine palms: the four
+     around the tower (the one standing over the inlet water moved onto
+     land at x −53.5, z 38; it shows on mobile only, as it is outside the
+     desktop frame and would only sweep across the tower), plus a row of
+     five behind the tower on the promontory's south end (x −70 to −88,
+     z −46.5 to −50, 9.5–12 m), left of the tower in both 02 framings.
+     No crown crosses the tower at the 02 hold, and none crosses it
+     mid-move: the palms fade in late in the 01 → 02 move (62–90% of it,
+     after they pass the tower) and out early in 02 → 03 (first 10%), set
+     per key in `createGating` (`windows`). One instanced mesh per shape
+     plus a depth-only twin for the fade: 4 draw calls. Code: `palms.js`;
+     positions and shapes in `WORLD.foreground.palms`. Checked: all 12
+     frames as before (only the four older misses), all mouse corners pass,
+     draw calls desktop 02 137 (was 133), mobile 02 75 (unchanged). With
+     1 cm camera steps hold 2 now changes 13,634 px (was 10,040): the
+     near palm's leaflets moving about a pixel per step; with the camera
+     still the palms change 7 px, so nothing flickers.
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -866,8 +890,8 @@ Measured with the `?fps` overlay on a production build, as in
 |---|---|---|
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
-| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
-| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). The stone railing adds a 64 × 64 granite tile and a 64 × 96 post panel (24 textures; the lantern glows are drawn in their shader). The wet paving adds a 240 × 240 slab tile (25 textures). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
+| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. With the 3D palms: desktop 02 137. Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
+| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). The stone railing adds a 64 × 64 granite tile and a 64 × 96 post panel (24 textures; the lantern glows are drawn in their shader). The wet paving adds a 240 × 240 slab tile (25 textures). The palms add a 256 × 256 frond and bark atlas (26 textures). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
 | Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b; the promenade lanterns and lamps are faked in the materials (`lamps.js`) | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
 
@@ -982,9 +1006,17 @@ Stop for the user's review after each step, as in the grey-box.
   footer rises (the nav bar is not forced back); new `src/ui/siteFooter.js`
   (`--footer-in`, `is-at-footer`), started from `src/main.js` (user
   requests, 2026-10-02).
+- New: `src/scene/palms.js` (two 3D palm shapes, sway and leaflet
+  cut-out shader, instanced meshes with fade twins, mobile-only palms);
+  `src/scene/surfaces.js`: `palmAtlas`; `src/scene/createForeground.js`:
+  the palms replace the flat cards, `update` and `setBreakpoint`;
+  `src/data/world.js`: nine palms with shapes, the water palm moved onto
+  land; `src/scene/gating.js`: per-key fade windows; `src/main.js`: the
+  palms' late fade-in and early fade-out, sway in continuous mode only
+  (user request, 2026-10-02).
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font; the
   stone railing and lamps built in code from the user's designs; the wet
-  paving.
+  paving; the palms.
 
 ## 8. Acceptance checks
 
@@ -996,7 +1028,9 @@ The milestone passes when:
    parallax is plainly visible (user request, 2026-10-01). On narrow desktop
    windows (down to an aspect of about 1.1) the 02 Clock Tower keeps its full
    height and the ferry stays whole; no palm crosses the tower (user
-   request, 2026-10-01); no promenade lamp crosses the tower or the ferry,
+   request, 2026-10-01), at the hold or while the camera moves in and out
+   of 02, and the 3D palms sway gently with no flicker (user request,
+   2026-10-02); no promenade lamp crosses the tower or the ferry,
    and a half-faded railing is an even veil with no rails showing through
    its posts (2026-10-02). The promenade reads as dark wet stone slabs with
    narrow, broken lamp reflections, quieter than the tower and copy, with
@@ -1018,7 +1052,8 @@ The milestone passes when:
   forced back; the footer's chapter links land on their holds (user
   requests, 2026-10-02).
 4. Reduced-motion mode shows no sinking, no parallax, no particles and no
-   cursor ring, and the Observation Wheel holds still (it turns slowly in
+   cursor ring, the palms hold still (user request, 2026-10-02), and the
+   Observation Wheel holds still (it turns slowly in
    continuous mode; user request, 2026-10-02), and still tells the whole story. In continuous mode the water
    does not blink or strobe while the mouse moves or during scroll
    transitions.
