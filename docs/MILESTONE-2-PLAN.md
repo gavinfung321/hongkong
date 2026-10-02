@@ -1227,6 +1227,34 @@ all six.
          moving past, not shimmer. Background light against the main
          buildings: 05 10,700 against 23,500 (unchanged), 01 1,440 against
          9,100. Draw calls desktop 01 186, 05 61; mobile 01 130.
+     - **Part 3d: no IFC flicker while scrolling, and fewer background
+       lights (user request, 2026-10-02).** The user saw IFC flicker while
+       scrolling on a phone, and still too many lights on the other towers
+       in 01–03, 05 and 06.
+       - **IFC flicker:** IFC's crisp windows are a few pixels each on a
+         phone, so when the camera moves fast they jump between pixels and
+         twinkle. While the scroll moves faster than a gentle pace, every
+         window grid (IFC and skyline) now softens toward its floor-strip
+         and glow look, up to three times as soft, easing in over about
+         0.1 s and back to crisp about 1.5 s after the scroll stops (new
+         `cityMotion` and `updateCityMotion` in `cityWindows.js`, driven
+         from `src/main.js`; off in reduced motion). At the hold IFC looks
+         exactly as locked. On the mobile scroll path the share of IFC
+         pixels that pop between frames fell from 43% to 8% (05 to 06),
+         17% to 2% (04 to 05) and 7.6% to 5% (01 to 02).
+       - **Fewer background lights:** every skyline tower is now 3–6% lit
+         (was 5–12%), still spread evenly with 10% almost dark; 06 dims the
+         skyline to 60% like 05 (`city: 0.6` in `src/data/chapters.js`).
+       - **Far-tower dots sized in metres:** a dot now covers about 6 m of
+         wall (clamped to 1.5–3.2 px), so phones, where towers are smaller
+         on screen, get smaller, calmer dots instead of the desktop size.
+       - **Checks:** bright background pixels (luma over 60) against the
+         main buildings: 01 1,440 → 720 (main 8,600), 02 1,950 → 1,070, 03
+         3,790 → 1,870 (main 16,200), 05 10,670 → 6,720 (main 22,500), 06
+         3,040 → 1,730 (main 7,900). Composition probe: only the four older
+         misses. Draw calls unchanged. Strobe at the 01 hold unchanged
+         (still 0.18%, side steps 0.36%); at scroll speed the 01 skyline
+         pops 6.8% of pixels (7.4% before).
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -1408,6 +1436,10 @@ Stop for the user's review after each step, as in the grey-box.
   skyline windows in `createIsland.js` (part 3b). `cityWindows.js` `vary`
   option and `cityDensity`, new `src/scene/cityDots.js` (window dots on far
   towers), `createIsland.js` shared `SKYLINE_WINDOWS` settings (part 3c).
+  `cityWindows.js` `cityMotion` / `updateCityMotion` (windows soften while
+  scrolling), `src/main.js` (feeds it the scroll speed), `createIsland.js`
+  3–6% lit skyline, `src/data/chapters.js` `city: 0.6` in 06,
+  `cityDots.js` dots sized in metres (part 3d).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
   copy and footer hidden while loading and during the fade),
@@ -1459,7 +1491,10 @@ The milestone passes when:
    the brightest tower, the other towers together give off well under the
    main buildings' light, spread thinly over every tower rather than
    crowded on a few, and far towers (the 02 background) show lit windows
-   too (user requests and choices, 2026-10-02), and no brace line, mast or warning light shimmers
+   too (user requests and choices, 2026-10-02); in 01–03, 05 and 06 the
+   other towers give off no more than about a third of the main
+   buildings' bright light, and IFC does not twinkle or flicker while
+   scrolling on a phone (user request, 2026-10-02), and no brace line, mast or warning light shimmers
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its

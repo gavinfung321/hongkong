@@ -10,6 +10,7 @@ import { createForeground } from './scene/createForeground.js';
 import { createWordmark } from './scene/createWordmark.js';
 import { createMoon } from './scene/createMoon.js';
 import { createPetals } from './scene/createPetals.js';
+import { cityMotion, updateCityMotion } from './scene/cityWindows.js';
 import { createGating, makeFadeable } from './scene/gating.js';
 import { createCameraRig, fovForAspect } from './scroll/cameraRig.js';
 import { createScrollConductor } from './scroll/scrollConductor.js';
@@ -75,7 +76,7 @@ function start(initGuard, header) {
     petals: (value) => petals.setDensity(value),
     city: (value) => island.setCityLevel(value),
   }, {
-    // The city dims across the whole move into 05, not in its first 40%.
+    // The city dims across the whole move into 05 (and stays dim in 06), not in its first 40%.
     city: { in: [0, 1], out: [0, 1] },
     // The palms pass in front of the Clock Tower early in the 01 → 02 move
     // and, on mobile, early in the 02 → 03 move.
@@ -262,6 +263,8 @@ function start(initGuard, header) {
     header.update(state.index, hero);
 
     if (stepped) {
+      // Still frames only: windows always crisp.
+      cityMotion.value = 0;
       if (wordmark.fadeTo(hero ? 1 : 0, dt)) needsRender = true;
       if (state.index !== shownKeyframe) {
         if (shownKeyframe < 0) {
@@ -290,7 +293,9 @@ function start(initGuard, header) {
       water.update(dt);
       island.update(time);
       foreground.update(time);
-      petals.update(dt, camera, dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0);
+      const speed = dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0;
+      petals.update(dt, camera, speed);
+      updateCityMotion(speed, dt);
       lastRendered = state.pRendered;
     }
 
