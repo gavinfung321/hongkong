@@ -1,5 +1,7 @@
 import {
   CanvasTexture,
+  DataTexture,
+  LinearFilter,
   MathUtils,
   Mesh,
   MeshStandardMaterial,
@@ -20,27 +22,30 @@ const TILE = 120;
 // moon path. Sharp ripples strobe during scroll transitions (the camera moves
 // up to ~3 m per frame, about half a ripple), so the water stays glassy.
 const BLUR = 5;
-// Reflections of a few lights (waterReflections.js, user choice,
-// 2026-10-02): at most this many sources in view are drawn, by rank. Each is
-// a streak under its light, as long as its mirror image plus a short tail
-// toward the viewer (glassy water barely stretches it), widened and its
-// ends moved by the ripples (the same blurred sample as the lighting).
-// Sizes are view-angle tangents.
+// Reflections (waterReflections.js, user choice, 2026-10-02): a few lights
+// (at most this many in view, by rank) and a dim shimmer under the whole
+// skyline. Each light lays a soft glow on the water: as long as its mirror
+// image plus a tail toward the viewer, Gaussian across and `spread` times
+// its width, its rows shifted sideways by the wavelets so the edges are
+// ragged. Sizes are view-angle tangents.
 const REFLECT = {
   max: { desktop: 8, mobile: 8 },
   head: 0.012, // longest fade beyond the mirror image, toward the horizon
-  minPixels: 3, // shortest fade either way, so ends never alias
-  edge: 0.004, // soft edge across
-  spread: 1.5, // ripple slope → wider dashes
-  jitter: 1.5, // ripple slope → streak end, in tails
-  gain: 0.7,
+  minPixels: 3, // shortest fade either way and narrowest half width
+  spread: 1.5,
+  wobble: 0.6, // sideways shift of each wavelet row, in half widths
+  gain: 0.8,
 };
-// The streaks break into horizontal ripple bands, a noise laid out in view
-// angles around the camera: cells per full turn of azimuth (about 60 px wide
-// on desktop, wider than a streak, so bands cross it whole) and per unit of
-// depression tangent (about 4 px tall). It keeps its size on screen at any
-// distance and drifts slowly, so moving the camera can't make it strobe.
-const DASH = { azimuth: 120, depression: 300, drift: 0.5 };
+// The glow is drawn as glints: thin horizontal slivers where a wavelet faces
+// the light, dense in the bright core and sparse at the edges. They are laid
+// out in view angles around the camera, so they keep their size on screen
+// and moving the camera can't make them strobe; they drift and twinkle.
+// Rows are `rowPixels` CSS px tall in the distance and grow toward the viewer
+// (1 / `grow` of the depression tangent), slivers `aspect` times as long.
+// maxDensity keeps dark gaps between glints even in the brightest core.
+const GLINT = { rowPixels: 2, grow: 30, aspect: 4, density: 2, maxDensity: 0.72, drift: 0.9 };
+// The skyline shimmer: brightness of the strip read along the island front.
+const CITY = { power: 0.08, lit: 0.6, tail: 0.25 };
 // Plane segments per side. Positions interpolated across one 8 km triangle
 // lose enough float precision to make the streaks shiver as the camera moves.
 const SEGMENTS = 64;
@@ -122,6 +127,9 @@ export function createWater(renderer) {
     waterRefC: { value: Array.from({ length: MAX }, () => new Vector4()) }, // tail, head, taper
     waterRefCount: { value: 0 },
     waterTime: { value: 0 },
+    waterPixelTan: { value: 0.001 }, // view tangent per CSS pixel
+    waterCity: { value: null }, // skyline strip: rgb brightness, a height
+    waterCityRange: { value: new Vector4(0, 1, 0, 0) }, // x0, x1, front z, full height
   };
 
   // Samples the ripples at least BLUR mip levels down; where the texture is
@@ -151,26 +159,34 @@ export function createWater(renderer) {
         uniform vec4 waterRefC[ REFLECT_MAX ];
         uniform int waterRefCount;
         uniform float waterTime;
+        uniform float waterPixelTan;
+        uniform sampler2D waterCity;
+        uniform vec4 waterCityRange;
         varying vec3 vWaterWorld;
         float waterHash( vec2 p ) {
           return fract( sin( dot( p, vec2( 127.1, 311.7 ) ) ) * 43758.5453 );
         }
-        // Value noise that repeats every \`period\` cells in x (the azimuth).
-        float waterNoise( vec2 p, float period ) {
+        float waterNoise( vec2 p ) {
           vec2 i = floor( p );
           vec2 f = fract( p );
           f = f * f * ( 3.0 - 2.0 * f );
-          float x0 = mod( i.x, period );
-          float x1 = mod( i.x + 1.0, period );
-          return mix( mix( waterHash( vec2( x0, i.y ) ), waterHash( vec2( x1, i.y ) ), f.x ),
-                      mix( waterHash( vec2( x0, i.y + 1.0 ) ), waterHash( vec2( x1, i.y + 1.0 ) ), f.x ), f.y );
+          return mix( mix( waterHash( i ), waterHash( i + vec2( 1.0, 0.0 ) ), f.x ),
+                      mix( waterHash( i + vec2( 0.0, 1.0 ) ), waterHash( i + 1.0 ), f.x ), f.y );
+        }
+        // Inside a mirror image spanning depression tangents near..far,
+        // dimming by taper along it, fading over head beyond it and tail
+        // toward the viewer.
+        float waterAlong( float t, float near, float far, float head, float tail, float taper ) {
+          float inside = clamp( t, near, far );
+          float drop = t - inside;
+          float u = drop / ( drop > 0.0 ? tail : head );
+          return ( 1.0 - taper * ( inside - near ) / max( far - near, 1e-5 ) ) * exp( -u * u );
         }
         // A light strip at ground point a.xy, lit from height a.z to a.w,
-        // width half wide. Its mirror image spans the depression tangents
-        // (H + h) / D; the fragment lights up inside it, dimming by c.z along
-        // it, and fades over c.y beyond it and c.x toward the viewer.
-        // ripple: the local slope, which widens the streak and moves its end.
-        float waterStreak( vec4 a, vec4 c, float width, vec2 p, vec2 ripple ) {
+        // width half wide; its mirror image spans the depression tangents
+        // (H + h) / D. c: tail, head, taper. wobble shifts this wavelet row
+        // sideways, in half widths.
+        float waterStreak( vec4 a, vec4 c, float width, vec2 p, float wobble ) {
           float H = max( cameraPosition.y, 0.5 );
           vec2 toLight = a.xy - cameraPosition.xz;
           float D = length( toLight );
@@ -179,19 +195,12 @@ export function createWater(renderer) {
           vec2 rel = p - cameraPosition.xz;
           float along = dot( rel, dir );
           if ( along <= 0.0 ) return 0.0;
-          float spread = 1.0 + ${REFLECT.spread.toFixed(2)} * abs( ripple.x );
+          float halfWidth = max( width / D, ${REFLECT.minPixels.toFixed(1)} * waterPixelTan );
           float lateral = dot( rel, vec2( -dir.y, dir.x ) ) / along;
-          float side = max( abs( lateral ) - width / D, 0.0 );
-          float v = side / ( ${REFLECT.edge.toFixed(4)} * spread );
-          if ( v > 4.0 ) return 0.0;
+          float v = ( lateral + wobble * halfWidth ) / ( halfWidth * ${REFLECT.spread.toFixed(2)} );
+          if ( abs( v ) > 3.0 ) return 0.0;
           float t = H / along;
-          float near = ( H + a.z ) / D;
-          float far = ( H + a.w ) / D;
-          float inside = clamp( t, near, far );
-          float drop = t - inside + ripple.y * c.x * ${REFLECT.jitter.toFixed(2)};
-          float u = drop / ( drop > 0.0 ? c.x : c.y );
-          float taper = 1.0 - c.z * ( inside - near ) / ( far - near );
-          return taper * exp( -u * u - v * v );
+          return waterAlong( t, ( H + a.z ) / D, ( H + a.w ) / D, c.y, c.x, c.z ) * exp( -v * v );
         }`,
       )
       .replace(
@@ -208,25 +217,63 @@ export function createWater(renderer) {
         '#include <emissivemap_fragment>',
         `#include <emissivemap_fragment>
         {
+          float H = max( cameraPosition.y, 0.5 );
+          vec2 fromEye = vWaterWorld.xz - cameraPosition.xz;
+          float dist = max( length( fromEye ), 1.0 );
+          float t = H / dist;
+          // Wavelet rows in view angles: rowPixels tall far off, growing
+          // toward the viewer. Azimuth is measured from −z (toward the
+          // island), so its seam lies behind every camera.
+          float rowMin = waterPixelTan * ${GLINT.rowPixels.toFixed(2)};
+          float t0 = rowMin * ${GLINT.grow.toFixed(1)};
+          float row = t < t0 ? t / rowMin : ${GLINT.grow.toFixed(1)} * ( 1.0 + log( t / t0 ) );
+          float rowTan = max( rowMin, t / ${GLINT.grow.toFixed(1)} );
+          float azimuth = atan( fromEye.x, -fromEye.y );
+          vec2 g = vec2( azimuth / ( rowTan * ${GLINT.aspect.toFixed(1)} ), row );
+          float drift = waterTime * ${GLINT.drift.toFixed(2)};
+          float wobble = ( waterNoise( vec2( 3.7, floor( row ) * 0.61 + drift * 0.3 ) ) - 0.5 ) * ${(REFLECT.wobble * 2).toFixed(2)};
+
           vec3 shine = vec3( 0.0 );
           for ( int i = 0; i < REFLECT_MAX; i ++ ) {
             if ( i >= waterRefCount ) break;
-            shine += waterRefB[ i ].rgb * waterStreak( waterRefA[ i ], waterRefC[ i ], waterRefB[ i ].w, vWaterWorld.xz, waterRipple );
+            shine += waterRefB[ i ].rgb * waterStreak( waterRefA[ i ], waterRefC[ i ], waterRefB[ i ].w, vWaterWorld.xz, wobble );
           }
-          // Dashes: near ripples facing away go dark, and the view-angle
-          // noise breaks every streak into short horizontal strokes.
-          vec2 fromEye = vWaterWorld.xz - cameraPosition.xz;
-          float depression = max( cameraPosition.y, 0.5 ) / max( length( fromEye ), 1.0 );
-          float azimuth = atan( fromEye.y, fromEye.x ) / 6.2832 + 0.5;
-          vec2 dashUv = vec2( azimuth * ${DASH.azimuth.toFixed(1)}, depression * ${DASH.depression.toFixed(1)} );
-          float dash = 0.65 * waterNoise( dashUv + vec2( 0.0, waterTime * ${DASH.drift.toFixed(2)} ), ${DASH.azimuth.toFixed(1)} )
-            + 0.35 * waterNoise( dashUv * 2.0 + vec2( 17.0, -waterTime * ${DASH.drift.toFixed(2)} ), ${(DASH.azimuth * 2).toFixed(1)} );
-          shine *= ( 0.15 + 1.5 * smoothstep( 0.3, 0.75, dash ) ) * ( 0.4 + 0.9 * smoothstep( -0.15, 0.45, waterRipple.y ) );
+
+          // Skyline shimmer: the strip read where this line of sight meets
+          // the island front; its mirror image runs from that point's
+          // horizon down by the buildings' lit height.
+          if ( fromEye.y < -1.0 && cameraPosition.z > waterCityRange.z ) {
+            float k = ( waterCityRange.z - cameraPosition.z ) / fromEye.y;
+            if ( k > 1.0 ) {
+              vec2 hit = cameraPosition.xz + fromEye * k;
+              float u = ( hit.x - waterCityRange.x ) / ( waterCityRange.y - waterCityRange.x );
+              vec4 city = texture2D( waterCity, vec2( u + wobble * 0.004, 0.5 ) );
+              float Ds = dist * k;
+              float near = H / Ds;
+              float far = ( H + city.a * waterCityRange.w * ${CITY.lit.toFixed(2)} ) / Ds;
+              float span = far - near;
+              shine += city.rgb * ${CITY.power.toFixed(3)} * waterAlong( t, near, far, max( rowMin, span * 0.2 ), max( rowMin * 2.0, span * ${CITY.tail.toFixed(2)} ), 0.5 );
+            }
+          }
+
           // Water mirrors more at grazing angles.
           vec3 toEye = normalize( cameraPosition - vWaterWorld );
           float fresnel = 0.02 + 0.98 * pow( 1.0 - clamp( toEye.y, 0.0, 1.0 ), 5.0 );
-          shine *= fresnel * ${REFLECT.gain.toFixed(2)};
-          totalEmissiveRadiance += 1.5 * ( 1.0 - exp( -shine / 1.5 ) );
+          shine *= fresnel * ${REFLECT.gain.toFixed(2)} * ( 0.7 + 0.6 * smoothstep( -0.2, 0.4, waterRipple.y ) );
+
+          // Glints: a sliver noise thresholded by the local brightness, so the
+          // core is nearly solid and the edges break into sparse slivers.
+          float lum = max( max( shine.r, shine.g ), shine.b );
+          if ( lum > 0.0005 ) {
+            float n = 0.62 * waterNoise( g + vec2( drift * 0.4, -drift ) )
+              + 0.38 * waterNoise( g * vec2( 1.9, 2.3 ) + vec2( 31.0 - drift * 0.7, drift * 0.8 ) );
+            n = clamp( ( n - 0.5 ) * 2.4 + 0.5, 0.0, 1.0 ); // about even from 0 to 1
+            float density = clamp( lum * ${GLINT.density.toFixed(2)}, 0.0, ${GLINT.maxDensity.toFixed(2)} );
+            float threshold = 1.0 - density;
+            float glint = smoothstep( threshold, threshold + 0.06, n ) * mix( 0.45, 1.0, smoothstep( threshold, 1.0, n ) );
+            vec3 glow = shine / lum * ( glint * ( 0.3 + 0.9 * density ) + 0.05 * density );
+            totalEmissiveRadiance += 1.5 * ( 1.0 - exp( -glow / 1.5 ) );
+          }
         }`,
       )
       .replace(
@@ -270,12 +317,23 @@ export function createWater(renderer) {
     fades[key] = value;
   }
 
+  // city: { data (RGBA bytes, one texel per step along x), x0, x1, z, height }
+  // from waterReflections.js.
+  function setCity({ data, x0, x1, z, height }) {
+    const texture = new DataTexture(data, data.length / 4, 1);
+    texture.magFilter = texture.minFilter = LinearFilter;
+    texture.needsUpdate = true;
+    reflection.waterCity.value = texture;
+    reflection.waterCityRange.value.set(x0, x1, z, height);
+  }
+
   // Before each render: follows the boats, keeps the sources whose streak
   // falls in view (they run straight down the screen from their light).
   function reflect(camera, breakpoint) {
     camera.updateMatrixWorld();
     const tanH = Math.tan((camera.fov * Math.PI) / 360) * camera.aspect;
-    const pixel = (2 * tanH) / renderer.getDrawingBufferSize(buffer).x;
+    const pixel = (2 * tanH) / renderer.getSize(buffer).x;
+    reflection.waterPixelTan.value = pixel;
     const shortest = REFLECT.minPixels * pixel;
     const limit = REFLECT.max[breakpoint] ?? MAX;
     kept.length = 0;
@@ -299,7 +357,7 @@ export function createWater(renderer) {
       const depth = -view.z;
       if (depth < 1) continue;
       const x = view.x / depth / tanH;
-      if (Math.abs(x) > 1.1 + width / depth / tanH) continue;
+      if (Math.abs(x) > 1.1 + (2 * REFLECT.spread * width) / depth / tanH) continue;
       kept.push([s, width, fade]);
       if (kept.length === limit) break;
     }
@@ -318,5 +376,5 @@ export function createWater(renderer) {
     reflection.waterRefCount.value = kept.length;
   }
 
-  return { mesh, update, setSources, setFade, reflect };
+  return { mesh, update, setSources, setFade, setCity, reflect };
 }
