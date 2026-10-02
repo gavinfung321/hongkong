@@ -18,6 +18,12 @@ Measured with the `?fps` overlay on a production build, as in
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
 | Shaders built mid-scroll | 0: all 73 are built in one unseen frame before the loading screen lifts (2026-10-02; was 32 on the way from 01 to 02 on phones) | same |
 
+**Laptop, Milestone 2 review (2026-10-03):** production build in Cursor's
+browser (AMD Radeon 860M, 1187 × 952, pixel ratio 1), 36 s scroll from the
+top to the footer: 60 fps average (display limit), 1% low 57.7, worst
+second 60, no frame over 50 ms (longest 17.6 ms). JS 210.5 KB gzip. See
+`docs/milestone-2-review/REVIEW.md`.
+
 **First iPhone 11 reading (user, 2026-10-02, live site, before the
 shader fix):** 01 hold 47 fps, 1% low 41, worst second 33, 148 calls,
 42k triangles; 02 hold 34 fps, 1% low 28, worst second 32, 103 calls,
@@ -33,8 +39,9 @@ second 31, so triangles were not the limit; the cost is per pixel.
 
 **Measurement switches** (live, like `?fps`, user choice 2026-10-02):
 `?dpr=1.25` caps the pixel ratio, `?aa=0` turns off edge smoothing,
-`?bloom=0` turns off the glow, and `?off=water,clouds,mist,palms,petals,beams`
-hides any of those layers (`beams`: the searchlights, 2026-10-03). The `?fps` box lists the switches in use.
+`?bloom=0` turns off the glow, `?grade=0` the film grade, and
+`?off=water,clouds,mist,palms,petals,beams,spray` hides any of those layers
+(`beams`: the searchlights; `spray`: the bow spray; 2026-10-03). The `?fps` box lists the switches in use.
 
 If the iPhone 11 misses its target, layers are switched off on mobile in this
 order: bloom (built in part 3e, step 5), particles, glow sprites, lit windows.

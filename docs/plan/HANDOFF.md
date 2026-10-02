@@ -1,7 +1,8 @@
-# Handoff — next task: fireworks in 06
+# Handoff — Milestone 2 review done; user decisions next
 
-Written 2026-10-02 to start a fresh chat. Read this file, then
-[`README.md`](README.md) and `docs/ATMOSPHERE-EFFECTS-BRIEF.md` §6.7 and §12.
+Written 2026-10-02 to start a fresh chat; updated 2026-10-03. Read this
+file, then [`README.md`](README.md) and
+[`../milestone-2-review/REVIEW.md`](../milestone-2-review/REVIEW.md).
 
 ## The project and the user
 
@@ -16,7 +17,8 @@ Written 2026-10-02 to start a fresh chat. Read this file, then
   `?hold=N` opens chapter N at its hold; `?debug` adds `window.__vh`
   (scene, camera, world, solver tools); `?fps` shows the frame-rate overlay.
   Phone measurement switches (live): `?dpr=1.25`, `?aa=0`, `?bloom=0`,
-  `?off=water,clouds,mist,palms,petals` (see `checks.md`).
+  `?off=water,clouds,mist,palms,petals,beams,spray`, `?grade=0` (see
+  `checks.md`).
 
 ## How the user likes to work
 
@@ -53,7 +55,12 @@ work, all done and deployed: clouds and mist (finished: the user said "we
 done with mist"), lamps re-spaced, hero chapter numbers removed on desktop,
 stronger 04 cloud, the plan split into `docs/plan/`. Since then: the
 cloud ceiling (two layers in every chapter, wind drift; see
-`atmosphere.md`), user petal artwork, automatic phone sharpness.
+`atmosphere.md`), user petal artwork, automatic phone sharpness. On
+2026-10-03: searchlights, bow spray (the junk's only a small bow wave),
+the film grade, and the Milestone 2 review. The review leaves three
+decisions to the user: sign-off of 01, the phone re-measure (deferred),
+and raising the draw-call and texture budgets. The paper grain from the
+atmosphere brief was offered and not built.
 
 ## Fireworks: all three steps done (user choice, 2026-10-02)
 
@@ -99,7 +106,9 @@ needed). They drove headless Edge (playwright-core, SwiftShader):
 
 - screenshots of every hold on desktop (1440 × 900) and phone (390 × 844);
 - the composition probe (only known misses: desktop and narrow 05
-  wheel.left/right; mobile 01 ifc.top; mobile 03 ifc.left, wheel.left);
+  wheel.left/right; mobile 01 ifc.top; mobile 03 ifc.left, wheel.left;
+  plus box-only copy-region flags in desktop 01 and 03 and phone 02 and
+  04, with no text on a subject — see the review);
 - draw calls per hold (desktop 06 is about 64 now);
 - bright-pixel counts so IFC keeps the lead.
 

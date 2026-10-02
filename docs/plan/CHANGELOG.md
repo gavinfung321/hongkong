@@ -6,6 +6,14 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Milestone 2 review** (build step 6, user request): 14 hold screenshots
+  (hero and 01–06, desktop and phone), the composition probe, copy
+  overflow at three sizes, parallax corners, navigation, reduced motion,
+  fallback, and laptop frame rates on the real GPU (60 fps, 1% low 57.7).
+  Checks 1–5 pass with the known misses; waiting for the user: sign-off
+  of 01, the phone re-measure, and the draw-call and texture budgets.
+  Files: `docs/milestone-2-review/` (new), `docs/plan/README.md`,
+  `docs/plan/checks.md`, `docs/plan/HANDOFF.md`.
 - **Junk spray as a bow wave** (user request and choice): in desktop 04
   the junk's 15 m spray card along the hull read as a wave crashing into
   its side, too violent for a junk that "slides alongside". Now a small
