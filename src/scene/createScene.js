@@ -98,5 +98,5 @@ export function createScene(canvas, { antialias }) {
     camera.layers.enable(0);
   }
 
-  return { renderer, scene, camera, sky, resize, render, setBloom: bloom.setLook };
+  return { renderer, scene, camera, sky, resize, render, setBloom: bloom.setLook, setGrade: bloom.setGrade };
 }

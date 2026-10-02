@@ -317,6 +317,30 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
            hero. Composition probe: only the four older misses; draw
            calls of the scene unchanged (the glow adds about ten small
            full-screen passes).
+       - **Film grade (user choice, 2026-10-03; README "Open" 6):** the
+         glow's last pass now grades the whole frame with its glow
+         before writing it back to the screen, so it costs no extra
+         pass. Three's own tone mapping would skip every custom shader
+         (clouds, beams, fireworks, mountains, lamps and more), so the
+         grade is one pass over the finished frame instead. The grade:
+         contrast round the night's mid-tones (darks a little deeper,
+         lights a little brighter, with a soft shoulder so white stays
+         white), indigo added to the shadows, warmth to the highlights,
+         and a little more colour where colour is weak. In every
+         chapter the sky reads a deeper indigo-violet, the Clock
+         Tower, moon, sails and lamps warmer and richer, the towers
+         slightly darker so IFC and the lights lead, and the fireworks
+         more saturated. Tried against ACES (crushed the skyline to
+         silhouettes; brighter, it bleached the highlights: cyan burst
+         to white, pale moon) and AgX (a grey haze, salmon sails). The
+         grade stays on when the frame-rate guard turns the glow off,
+         so the look doesn't change; phones without float targets get
+         neither. 香港 and the near petals are drawn after it, ungraded,
+         as with the glow. `?grade=0` turns it off for side-by-side
+         checks.
+         - **Checks:** desktop 00, 01, 03–06 and phone 01, 04, 06
+           against the grade off; `?grade=0` matches the old frame
+           exactly. No shaders built mid-scroll. JS 210.4 KB gzip.
        - **IFC Mall podium (user request, 2026-10-02):** the user saw the
          base of IFC still flickering on phones; it still used the window
          shader. It now has a painted skin too: four 5.5 m retail floors of

@@ -20,7 +20,7 @@ file (user choice, 2026-10-02).
 | [`interface.md`](interface.md) | What we take from Kage; hero, wordmark, hint and counter, nav and menu, logo, vertical text, copy regions, parallax, moon, side pager, cursor ring, return button, footer, loading screen | 2, 3 |
 | [`scene-models.md`](scene-models.md) | Halftone, lit windows, the code-built ferry, Clock Tower, IFC, wheel and junk, glow | 4.1–4.3 (step 2b) |
 | [`scene-promenade.md`](scene-promenade.md) | Petals, railing and lamps, wet paving, palms, bauhinia tree, water reflections | 4.4, 4.5 stops 1–5 |
-| [`scene-city.md`](scene-city.md) | Central towers, mountains, landmarks, window lights, painted facades, glow, wakes | 4.5 stop 6, parts 1–3f |
+| [`scene-city.md`](scene-city.md) | Central towers, mountains, landmarks, window lights, painted facades, glow, film grade, wakes | 4.5 stop 6, parts 1–3f |
 | [`atmosphere.md`](atmosphere.md) | Clouds, shore mist, open-water wisps, searchlights, bow spray, fireworks in 06 | 4.5 stop 6, part 3g |
 | [`checks.md`](checks.md) | Performance budget and acceptance checks | 5, 8 |
 | [`CHANGELOG.md`](CHANGELOG.md) | Dated history of changes, newest first; the old files list | 7 |
@@ -65,7 +65,8 @@ The milestone has two halves:
   footer; loading screen.
 - **Models:** everything built in code, no GLB files: Star Ferry, junk,
   Clock Tower, IFC with its podium, Observation Wheel, Central Ferry Piers,
-  four landmarks; lit windows and a soft glow.
+  four landmarks; lit windows and a soft glow; a film grade over the
+  whole frame.
 - **Promenade:** bauhinia petals, stone railing with lanterns and three tall
   lamps (spread apart in every view), wet paving, palms, bauhinia tree,
   glittering water reflections.
@@ -80,9 +81,10 @@ The milestone has two halves:
 
 ## Open
 
-6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
-   it is only kept if 01 clearly improves, and the palette is re-tuned for all
-   frames in a later milestone.
+Nothing open in the look test. The colour pass (was item 6) is done: a
+film grade over the finished frame, kept because 01 clearly improved (user
+choice, 2026-10-03; see "Film grade" in [`scene-city.md`](scene-city.md)).
+Next is build step 6, measure and review.
 
 **Not in the look test:** 3D models (GLBs; later dropped altogether, all 3D
 is built in code, user decision 2026-10-01), real fireworks, the sparkle cursor,

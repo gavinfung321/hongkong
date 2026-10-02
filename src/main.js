@@ -50,6 +50,8 @@ const MOBILE_WINDOW_SOFT = 1.5;
 const MOBILE_FACADE_BIAS = 0.5;
 // ?bloom=0 turns the glow off, ?bloom=2 doubles it: for side-by-side checks.
 const BLOOM_SCALE = params.has('bloom') ? Math.max(0, Number(params.get('bloom')) || 0) : 1;
+// ?grade=0 turns the film grade off: for side-by-side checks.
+const GRADE = params.get('grade') !== '0';
 // Phone measurement switches, live like ?fps: ?dpr=1.25 caps the pixel ratio,
 // ?aa=0 turns off edge smoothing, ?off=water,clouds,mist,palms,petals,beams,spray hides layers.
 const DPR_CAP = Number(params.get('dpr')) || 0;
@@ -66,6 +68,7 @@ function start(initGuard, header) {
   // while scrolling (user report, 2026-10-02).
   const world = createScene(canvas, { antialias: params.get('aa') !== '0' });
   const { renderer, scene, camera } = world;
+  world.setGrade(GRADE);
 
   scene.add(createLighting());
   const water = createWater(renderer);
