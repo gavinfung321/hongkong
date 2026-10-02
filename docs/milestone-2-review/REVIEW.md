@@ -34,9 +34,11 @@ ring and parallax, footer, loading screen); every model rebuilt in code
 skyline); the promenade (stone railing, lanterns and lamps, wet paving,
 palms, bauhinia tree, petals); glittering water with hull reflections and
 wakes; three mountain ranges; a two-layer cloud ceiling drifting on the
-wind; shore mist and open-water wisps; searchlights over Central; bow
-spray; a firework show in 06; a soft glow on the brightest lights; and a
-film grade over the whole frame.
+wind; shore mist and open-water wisps; searchlights over Central; a
+firework show in 06; a soft glow on the brightest lights; and a film
+grade over the whole frame. A bow spray was tried and removed as too
+forceful (your choice, 2026-10-03); the screenshots were retaken without
+it.
 
 ## Acceptance checks
 
@@ -89,7 +91,7 @@ to the hero with focus on the site title.
 
 Stepped mode, no cursor ring, petals off; with the mouse moved, the frame
 does not change at all over 2 s (no parallax, no animation). The
-searchlights, fireworks and spray hold one pose.
+searchlights and fireworks hold one pose.
 
 ### 5. Fallback — pass
 
@@ -115,13 +117,13 @@ the top to the footer:
 | Worst 1 s | — | 60 |
 | Frames over 50 ms | none | **none** (longest 17.6 ms) |
 | Shaders built mid-scroll | 0 | **0** |
-| JS bundle (gzip) | ≤ 230 KB | **210.5 KB** |
+| JS bundle (gzip) | ≤ 230 KB | **209.4 KB** (210.5 KB when measured, before the spray was removed) |
 
 **iPhone 11, 2026-10-02 (you):** average fps 01 47, 02 32, 03 43, 04 33,
 05 34, 06 38, all over the 30 target. 1% low 01 41, 02 28, 03 34, 04 28,
 05 **18**, 06 30: 05 missed its 24 target (short dips). You then judged
 the frame rate fine. These readings predate the cloud ceiling,
-searchlights, bow spray and film grade; you chose not to re-measure for
+searchlights and film grade; you chose not to re-measure for
 now, expecting most visitors on an iPhone 16 (2026-10-03). The phone
 drops its pixel ratio from 1.5 to 1.25 by itself if it falls under 40
 fps. If 05's dips matter on the target phones, its searchlights and
@@ -131,7 +133,7 @@ clouds are the first layers to test with the `?off=` switches.
 
 | Budget | Was | Now | Site today |
 |---|---|---|---|
-| Draw calls | ≤ 100 | **≤ 220** | Desktop 01 213, 02 166, 03 121, 04 95, 05 83, 06 65; phone 01 149, 02 101, 03 117, 04 90, 05 73, 06 57 |
+| Draw calls | ≤ 100 | **≤ 220** | Desktop 01 211, 02 165, 03 120, 04 93, 05 83, 06 65; phone 01 148, 02 101, 03 116, 04 88, 05 73, 06 57 |
 | Generated textures | ≤ 4, each ≤ 512 px | **≤ 32 small code-drawn textures**, about 6 MB of GPU memory, plus the wordmark and artwork | 28 (about 5.5 MB) |
 
 Why: the laptop holds 60 fps at these counts, the iPhone 11's own switch

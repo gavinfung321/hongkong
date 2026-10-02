@@ -17,15 +17,12 @@ import {
   MeshStandardMaterial,
   PointLight,
   Shape,
-  SRGBColorSpace,
   ShapeGeometry,
   SphereGeometry,
-  TextureLoader,
   TorusGeometry,
   Vector2,
   Vector3,
 } from 'three';
-import { SPRAY } from '../data/atmosphere.js';
 import { lambert } from './palette.js';
 import { strut } from './strut.js';
 import {
@@ -37,7 +34,6 @@ import {
   junkCloth,
   junkHull,
 } from './surfaces.js';
-import { createSpray } from './spray.js';
 import { createWake } from './wakes.js';
 
 // Both vessels are built with their bow pointing along local +X.
@@ -773,21 +769,13 @@ function headingFrom(vector) {
   return Math.atan2(-vector.z, vector.x);
 }
 
-export function createVessels({ onLoad } = {}) {
+export function createVessels() {
   const group = new Group();
   const ferry = createFerry();
   const junk = createJunk();
   ferry.rotation.order = 'YXZ';
   junk.rotation.order = 'YXZ';
   group.add(ferry, junk);
-
-  const sprayArt = new TextureLoader().load(`${import.meta.env.BASE_URL}${SPRAY.url}`, () => onLoad?.());
-  sprayArt.colorSpace = SRGBColorSpace;
-  for (const [boat, key] of [[ferry, 'ferry'], [junk, 'junk']]) {
-    const spray = createSpray(sprayArt, SPRAY[key]);
-    boat.add(spray.mesh);
-    boat.userData.spray = spray;
-  }
 
   const vessels = [
     { key: 'ferry', object: ferry, curve: null, phase: 0, heading: 0 },
@@ -834,7 +822,6 @@ export function createVessels({ onLoad } = {}) {
         object.rotation.z = 0;
       }
       object.userData.wake.update(object, time, animate);
-      object.userData.spray.update(object, time, animate);
     }
   }
 

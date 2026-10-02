@@ -17,7 +17,7 @@ file, then [`README.md`](README.md) and
   `?hold=N` opens chapter N at its hold; `?debug` adds `window.__vh`
   (scene, camera, world, solver tools); `?fps` shows the frame-rate overlay.
   Phone measurement switches (live): `?dpr=1.25`, `?aa=0`, `?bloom=0`,
-  `?off=water,clouds,mist,palms,petals,beams,spray`, `?grade=0` (see
+  `?off=water,clouds,mist,palms,petals,beams`, `?grade=0` (see
   `checks.md`).
 
 ## How the user likes to work
@@ -56,7 +56,8 @@ done with mist"), lamps re-spaced, hero chapter numbers removed on desktop,
 stronger 04 cloud, the plan split into `docs/plan/`. Since then: the
 cloud ceiling (two layers in every chapter, wind drift; see
 `atmosphere.md`), user petal artwork, automatic phone sharpness. On
-2026-10-03: searchlights, bow spray (the junk's only a small bow wave),
+2026-10-03: searchlights, a bow spray (tried, then removed as too
+forceful; the user declined a code-built bow foam too),
 the film grade, and the Milestone 2 review. The user approved 01 and
 raised the budgets (draw calls ≤ 220, code-drawn textures ≤ 32), so
 Milestone 2 is closed. Carried forward: the phone re-measure (Milestone

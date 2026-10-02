@@ -1,4 +1,4 @@
-# Sky, clouds, mist, searchlights, bow spray and fireworks
+# Sky, clouds, mist, searchlights and fireworks
 
 Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, item 5, stop 6, part 3g; the fireworks in 06.
 
@@ -198,39 +198,14 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
     phone 05 73). No shaders built mid-scroll (04 → 05). JS 209.1 KB
     gzip. `?off=beams` hides them.
 
-- **Bow spray (user choice, 2026-10-03).** Following
-  `ATMOSPHERE-EFFECTS-BRIEF.md` §6.4: white water at the ferry's and the
-  junk's bows, adding contact and speed to the flat wakes (which stay).
-  New `src/scene/spray.js`; `SPRAY` in `src/data/atmosphere.js`; the
-  staged `harbour-spray.webp` ships unchanged as
-  `public/atmosphere/harbour-spray.webp` (1280 × 428, 182 KB).
-  - **Card:** one upright card of the artwork per boat, a child of the
-    boat so it rides the bob, turned about the vertical to face the
-    camera and set out on the hull's side toward it; its foam edge sits
-    on the waterline. Ferry: 24 m wide, centred 9 m forward of
-    midships, so it wraps the bow and the front of the hull. Junk: only
-    a small bow wave where the stem cuts the water, 5.5 m wide, cut
-    from the low right-hand part of the art (its cut edge feathered),
-    fainter; the hull, tyres and waterline stay clear (user choice,
-    2026-10-03: a 15 m card along the hull read as a wave crashing
-    into its side in desktop 04). On phones it is a speck at the stem.
-    Dimmed to a blue-grey for the
-    night (under the glow threshold) and fogged like the boats, so it
-    is only a hint in the wide 01 view.
-  - **Seen at an angle**, a flat card sank behind the hull's near side,
-    so only the spray ahead of the bow showed. Its depth alone is
-    pulled toward the camera (ferry 14 m, junk 10 m): it clears its own
-    hull but stays behind anything nearer, such as the railing and
-    palms in 02 or the other boat.
-  - **Strength:** calm at a hold (ferry 62%, junk 45%), up to 90% / 65%
-    while the boat moves (full at 8 m/s), easing between the two. A
-    slow swell in size of under 6%, built from two waves of unrelated
-    periods (4.3 s and 2.9 s), so no loop shows. Reduced motion: still,
-    at the calm strength. It fades with its boat's gate.
-  - **Checks:** desktop and phone 03 and 04, desktop 01 and 02. Draw
-    calls one per visible boat (desktop 01 213, 03 121, 04 95; phone 03
-    117, 04 90). No shaders built mid-scroll. JS 210.1 KB gzip.
-    `?off=spray` hides it.
+- **No bow spray (user choice, 2026-10-03).** The boats show white
+  water only through their flat wakes (`wakes.js`, see `scene-city.md`).
+  `ATMOSPHERE-EFFECTS-BRIEF.md` §6.4's spray card was built from the
+  staged `harbour-spray.webp` and removed the same day: the artwork is a
+  breaking wave throwing droplets, so even small and faint it read as
+  too forceful for boats at harbour speed, first on the junk in desktop
+  04, then on both (user request). A bow foam built in code was offered
+  instead and declined. See the changelog, 2026-10-03.
 
 - **Fireworks in 06 (user choice, 2026-10-02).** Pulled forward from
   Milestone 4, following `ATMOSPHERE-EFFECTS-BRIEF.md` §6.7 in three

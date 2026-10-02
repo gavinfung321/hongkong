@@ -21,7 +21,7 @@ file (user choice, 2026-10-02).
 | [`scene-models.md`](scene-models.md) | Halftone, lit windows, the code-built ferry, Clock Tower, IFC, wheel and junk, glow | 4.1–4.3 (step 2b) |
 | [`scene-promenade.md`](scene-promenade.md) | Petals, railing and lamps, wet paving, palms, bauhinia tree, water reflections | 4.4, 4.5 stops 1–5 |
 | [`scene-city.md`](scene-city.md) | Central towers, mountains, landmarks, window lights, painted facades, glow, film grade, wakes | 4.5 stop 6, parts 1–3f |
-| [`atmosphere.md`](atmosphere.md) | Clouds, shore mist, open-water wisps, searchlights, bow spray, fireworks in 06 | 4.5 stop 6, part 3g |
+| [`atmosphere.md`](atmosphere.md) | Clouds, shore mist, open-water wisps, searchlights, fireworks in 06 (no bow spray) | 4.5 stop 6, part 3g |
 | [`checks.md`](checks.md) | Performance budget and acceptance checks | 5, 8 |
 | [`CHANGELOG.md`](CHANGELOG.md) | Dated history of changes, newest first; the old files list | 7 |
 | [`HANDOFF.md`](HANDOFF.md) | Briefing for a fresh chat: how we work, standing rules, the next task | — |
@@ -74,7 +74,7 @@ The milestone has two halves:
   slope lights, painted landmark facades, wakes.
 - **Atmosphere:** a coral cloud ceiling in every chapter (dim back layer,
   lit front banks, drifting on the wind); searchlights sweeping over
-  Central in 01 and 05; white water at the ferry's and junk's bows;
+  Central in 01 and 05;
   separate shore mist drifts (none in desktop 01); open-water wisps in the
   hero and 01; a firework show in 06 (eight bursts on desktop, six on
   phones, in an 8 s loop with rockets, falling sparks and drifting smoke).
@@ -139,7 +139,7 @@ Stop for the user's review after each step, as in the grey-box.
 | Milestone | Content |
 |---|---|
 | 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk, Clock Tower, IFC and wheel are already rebuilt from reference photos, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals, display fonts (the bauhinia tree is built in code, 2026-10-02). Also the user's stone railing (built in code with lanterns and tall lamps, 2026-10-02), promenade palms, wet paving tiles (built in code, 2026-10-02) and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
-| 4. Atmosphere, all chapters | Follow `ATMOSPHERE-EFFECTS-BRIEF.md`: clouds and local mist, ferry spray, restrained searchlights, global print texture, chapter colour progression, and illustrated fireworks with smoke and embers. Local glows remain the baseline; a soft bloom is built (Milestone 2, part 3e, step 5; user choice, 2026-10-02). Coral clouds and the harbour mist are built (Milestone 2, part 3g; user request, 2026-10-02). |
+| 4. Atmosphere, all chapters | Follow `ATMOSPHERE-EFFECTS-BRIEF.md`: clouds and local mist, ferry spray (tried and dropped, user choice, 2026-10-03), restrained searchlights, global print texture, chapter colour progression, and illustrated fireworks with smoke and embers. Local glows remain the baseline; a soft bloom is built (Milestone 2, part 3e, step 5; user choice, 2026-10-02). Coral clouds and the harbour mist are built (Milestone 2, part 3g; user request, 2026-10-02). |
 | 5. Copy and launch | Follow `FINAL-NARRATIVE-COPY.md` for the proposed final chapter, interface, footer, fallback and metadata wording. Add final poster images (a real snapshot of the hero frame replaces the drawn fallback poster, for loading and fallback; user choice, 2026-10-02), an entrance screen with real build progress, after Kage's technique (3.12; user request, 2026-10-02), a full performance pass on both iPhones, deployment. |
 
 **Published early (user choice, 2026-10-02).** The work in progress is live at
