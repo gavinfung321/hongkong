@@ -20,7 +20,7 @@ file (user choice, 2026-10-02).
 | [`scene-models.md`](scene-models.md) | Halftone, lit windows, the code-built ferry, Clock Tower, IFC, wheel and junk, glow | 4.1–4.3 (step 2b) |
 | [`scene-promenade.md`](scene-promenade.md) | Petals, railing and lamps, wet paving, palms, bauhinia tree, water reflections | 4.4, 4.5 stops 1–5 |
 | [`scene-city.md`](scene-city.md) | Central towers, mountains, landmarks, window lights, painted facades, glow, wakes | 4.5 stop 6, parts 1–3f |
-| [`atmosphere.md`](atmosphere.md) | Clouds, shore mist, open-water wisps | 4.5 stop 6, part 3g |
+| [`atmosphere.md`](atmosphere.md) | Clouds, shore mist, open-water wisps, fireworks in 06 | 4.5 stop 6, part 3g |
 | [`checks.md`](checks.md) | Performance budget and acceptance checks | 5, 8 |
 | [`CHANGELOG.md`](CHANGELOG.md) | Dated history of changes, newest first; the old files list | 7 |
 | [`HANDOFF.md`](HANDOFF.md) | Briefing for a fresh chat: how we work, standing rules, the next task | — |
@@ -72,7 +72,8 @@ The milestone has two halves:
   slope lights, painted landmark facades, wakes.
 - **Atmosphere:** coral clouds per chapter (04's stronger on the left);
   separate shore mist drifts (none in desktop 01); open-water wisps in the
-  hero and 01.
+  hero and 01; still firework bursts in 06, eight on desktop and six on
+  phones (animation, rockets, sparks and smoke to follow).
 
 ## Open
 

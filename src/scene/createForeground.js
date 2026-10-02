@@ -1,26 +1,20 @@
 import {
   BoxGeometry,
-  CircleGeometry,
   ConeGeometry,
   CylinderGeometry,
-  DoubleSide,
   Float32BufferAttribute,
   Group,
   InstancedMesh,
   Matrix4,
-  Mesh,
   MeshBasicMaterial,
   MeshLambertMaterial,
-  PerspectiveCamera,
   PlaneGeometry,
   Quaternion,
-  RingGeometry,
   SphereGeometry,
   Vector3,
 } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { WORLD } from '../data/world.js';
-import { aimCamera } from '../scroll/cameraRig.js';
 import { RAILING_BAY, addLampLight, glowMaterial, railingLayout } from './lamps.js';
 import { createBauhinia } from './bauhinia.js';
 import { createPalms } from './palms.js';
@@ -225,35 +219,6 @@ function createLamps(positions) {
   return group;
 }
 
-// ---- Firework burst markers -------------------------------------------------
-
-const BURST_COLORS = { warm: 0xfff1d6, coral: 0xff7a8a, cyan: 0x7fe3f0 };
-
-function createBursts(count) {
-  const group = new Group();
-  const items = [];
-  for (let i = 0; i < count; i++) {
-    const material = new MeshBasicMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 1,
-      depthWrite: false,
-      fog: false,
-      side: DoubleSide,
-    });
-    const burst = new Group();
-    const ring = new Mesh(new RingGeometry(0.82, 1, 48), material);
-    const core = new Mesh(new CircleGeometry(0.12, 16), material);
-    burst.add(ring, core);
-    group.add(burst);
-    items.push({ object: burst, material });
-  }
-  return { group, items };
-}
-
-const placementCamera = new PerspectiveCamera();
-const ndc = new Vector3();
-
 export function createForeground() {
   const railing = createRailing(WORLD.foreground.railings, { fade: true });
   railing.group.name = 'railing';
@@ -264,39 +229,12 @@ export function createForeground() {
   palms.group.name = 'palms';
   const bauhinia = createBauhinia(WORLD.foreground.bauhinia);
   bauhinia.group.name = 'bauhinia';
-  const bursts = createBursts(4);
-  bursts.group.name = 'bursts';
 
   const groups = {
     railing: { object: railing.group, materials: railing.materials, glows: railing.glows },
     palms: { object: palms.group, materials: [palms.material] },
     bauhinia: { object: bauhinia.group, materials: bauhinia.materials },
-    bursts: { object: bursts.group, materials: bursts.items.map((b) => b.material) },
   };
-
-  // Burst markers are placed in front of the chapter 06 pose for the active breakpoint.
-  function placeBursts(pose, aspect, specs) {
-    placementCamera.fov = pose.fov;
-    placementCamera.aspect = aspect;
-    placementCamera.near = 0.5;
-    placementCamera.far = 5000;
-    aimCamera(placementCamera, new Vector3().fromArray(pose.position), new Vector3().fromArray(pose.target));
-    placementCamera.updateMatrixWorld();
-
-    const depth = 1600;
-    const viewWidth = 2 * depth * Math.tan((pose.fov * Math.PI) / 360) * aspect;
-    const forward = placementCamera.getWorldDirection(new Vector3());
-    specs.forEach((spec, i) => {
-      const item = bursts.items[i];
-      ndc.set((spec.x / 100) * 2 - 1, 1 - (spec.y / 100) * 2, 0.5).unproject(placementCamera);
-      const dir = ndc.sub(placementCamera.position).normalize();
-      // Same depth for every marker, so the lens shift doesn't enlarge high ones.
-      item.object.position.copy(placementCamera.position).addScaledVector(dir, depth / dir.dot(forward));
-      item.object.scale.setScalar((spec.size / 100) * viewWidth * 0.5);
-      item.object.quaternion.copy(placementCamera.quaternion);
-      item.material.color.setHex(BURST_COLORS[spec.color]);
-    });
-  }
 
   function setOpacity(key, value) {
     const entry = groups[key];
@@ -306,12 +244,12 @@ export function createForeground() {
   }
 
   const group = new Group();
-  group.add(railing.group, edgeRailing.group, lamps, palms.group, bauhinia.group, bursts.group);
+  group.add(railing.group, edgeRailing.group, lamps, palms.group, bauhinia.group);
 
   function update(seconds) {
     palms.update(seconds);
     bauhinia.update(seconds);
   }
 
-  return { group, placeBursts, setOpacity, update, setBreakpoint: palms.setBreakpoint };
+  return { group, setOpacity, update, setBreakpoint: palms.setBreakpoint };
 }

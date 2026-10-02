@@ -11,6 +11,7 @@ import { createWordmark } from './scene/createWordmark.js';
 import { createMoon } from './scene/createMoon.js';
 import { createPetals } from './scene/createPetals.js';
 import { createAtmosphere } from './scene/createAtmosphere.js';
+import { createFireworks } from './scene/createFireworks.js';
 import { citySoft } from './scene/cityWindows.js';
 import { facadeBias } from './scene/facades.js';
 import { BLOOM } from './scene/bloom.js';
@@ -65,7 +66,12 @@ function start(initGuard, header) {
       needsRender = true;
     },
   });
-  scene.add(moon.group, atmosphere.group, kowloon.group, island.group, vessels.group, foreground.group, wordmark.mesh, petals.group);
+  const fireworks = createFireworks(chapters, {
+    onLoad: () => {
+      needsRender = true;
+    },
+  });
+  scene.add(moon.group, atmosphere.group, kowloon.group, island.group, vessels.group, foreground.group, fireworks.group, wordmark.mesh, petals.group);
   water.setSources(reflectionSources({
     tower: kowloon.clockTower,
     ferry: vessels.ferry,
@@ -87,7 +93,7 @@ function start(initGuard, header) {
     railing: (value) => foreground.setOpacity('railing', value),
     palms: (value) => foreground.setOpacity('palms', value),
     bauhinia: (value) => foreground.setOpacity('bauhinia', value),
-    bursts: (value) => foreground.setOpacity('bursts', value),
+    bursts: (value) => fireworks.setLevel(value),
     petals: (value) => petals.setDensity(value),
     city: (value) => island.setCityLevel(value),
     clouds: (value) => atmosphere.setLevel(value),
@@ -160,10 +166,7 @@ function start(initGuard, header) {
     petals.setBreakpoint(breakpoint);
     foreground.setBreakpoint(breakpoint);
     copy.setBreakpoint(breakpoint);
-    const finale = chapters[chapters.length - 1];
-    const pose = finale.camera[breakpoint];
-    const fov = fovForAspect(pose.fov, width / height, breakpoint);
-    foreground.placeBursts({ ...pose, fov }, width / height, finale.bursts[breakpoint]);
+    fireworks.place(breakpoint, width / height);
     const opening = chapters[0].camera[breakpoint];
     const openingFov = fovForAspect(opening.fov, width / height, breakpoint);
     wordmark.place({ ...opening, fov: openingFov }, width / height, HERO.wordmark[breakpoint]);
@@ -348,6 +351,7 @@ function start(initGuard, header) {
       ready = true;
       window.clearTimeout(initGuard);
       performance.mark('vh:first-frame');
+      fireworks.load();
       requestAnimationFrame(() => {
         root.classList.remove('is-booting');
         root.classList.add('is-ready');

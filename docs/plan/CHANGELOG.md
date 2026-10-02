@@ -6,6 +6,17 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-02
 
+- **Fireworks step 1, still bursts** (user choice): the four ring markers
+  in 06 are now firework bursts from the shared `firework-burst.webp`,
+  spun, mirrored and tinted so no two match (warm keeps the art's gold).
+  Four were too few and too weak (user request), so there are eight on
+  desktop and six on phones, about 35% bigger, with a stronger centre
+  glow; the phone keeps a 35% remnant. Step 2 will animate these cards
+  and add our own three.js rockets and sparks (user choice; the shared
+  React component is a technique reference only). First of three steps
+  in `ATMOSPHERE-EFFECTS-BRIEF.md` §6.7. Files: `src/scene/createFireworks.js` (new),
+  `src/scene/createForeground.js`, `src/main.js`, `src/data/atmosphere.js`,
+  `src/data/chapters.js`, `public/atmosphere/firework-burst.webp`.
 - **Plan split** (user choice): `docs/MILESTONE-2-PLAN.md` became
   `docs/plan/` (this changelog, a short README and one file per area), so
   each update edits one short file. The old file is now a pointer.
