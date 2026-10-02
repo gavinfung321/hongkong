@@ -448,7 +448,24 @@ all six.
    own share of lit windows (Central 30%, Kowloon 22%, IFC 45%), warm with a
    quarter cool. Unlit windows are darker glass. Where a window shrinks to a
    couple of pixels, the grid fades to its average glow, so distant towers
-   can't shimmer. Still to try: a brighter band of ground-level lights along
+   can't shimmer.
+   - **Floor strips and a warmer IFC (user choice, 2026-10-02).** IFC read
+     as a flat grey-blue slab in 01: at 1.4 km its 2.6 m bays are about
+     2.3 px wide, so the grid had faded about three-quarters of the way to
+     its average, a dim cool glow on cool glass. Each direction now fades
+     on its own: when bays get too narrow but floors are still a few pixels
+     tall, each floor becomes a strip of lit and dark runs of four bays, as
+     a tower reads from across the harbour; only when floors or runs get too
+     small does the wall fade to its average. IFC's windows are warmer
+     (cool share 45%, top tiers 60%, was 75% and 85%), lit 50% (was 42%),
+     brighter (strength 1.25, top tiers 1.4) and its faded glow stronger
+     (`glow` 0.5, was 0.35). The skyline towers in 01 gain floor strips
+     too. Checked: 1 cm camera steps as before (holds 1–5: 19,197 /
+     16,776 / 14,806 / 12,968 / 6,640 px); at scroll speed (1.5 m per frame)
+     the 01 skyline changes 6.7% of pixels (5.6% before), from the extra lit
+     detail; the Clock Tower is unchanged. On mobile 01 IFC is too small
+     for strips and shows the warmer average glow.
+   Still to try: a brighter band of ground-level lights along
    the Central waterfront, as in the storyboard (user reminder, 2026-10-01).
    Partly done with the lit Central Ferry Piers (2b, 2026-10-02).
 2b. **Lighting and surfaces (user request, 2026-10-01: "why Kage's torii and
@@ -1062,7 +1079,8 @@ Stop for the user's review after each step, as in the grey-box.
 - New: `src/scene/surfaces.js` (code-drawn surface textures; ferry upper
   deck, cabin and hull redrawn with the ferry rebuild; Clock Tower shaft,
   pilaster and crown textures and Roman-numeral dials redrawn with the tower
-  rebuild), `src/scene/cityWindows.js` (lit-window grid shader) and
+  rebuild), `src/scene/cityWindows.js` (lit-window grid shader; floor
+  strips and the `glow` option, user choice, 2026-10-02) and
   `src/scene/strut.js` (shared helper for thin rods: ferry masts, tower
   mast).
 - `src/scene/createLighting.js`: lower sky fill.
