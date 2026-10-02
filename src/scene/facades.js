@@ -1,5 +1,6 @@
 import { CanvasTexture, MeshLambertMaterial, RepeatWrapping, SRGBColorSpace } from 'three';
 import { seededRandom } from './random.js';
+import { cityLight, cityLightGlsl } from './cityLight.js';
 
 // Painted curtain-wall facades for the main towers, drawn in code (user
 // choice, 2026-10-02). Lit floors read as glass bands behind thin mullions,
@@ -270,12 +271,29 @@ export const facadeBias = { value: 0 };
 // A lit facade: the colour map lit by the scene, the glow map added on top.
 // neon: optional { map, color, repeat }, a line mask (red channel) glowing in
 // `color`, repeating `repeat` times up the colour map's tile.
+// The street light and sky reflection (cityLight.js) are added on top.
 export function facadeMaterial({ map, emissiveMap }, glow, { neon } = {}) {
   const material = new MeshLambertMaterial({ color: 0xffffff, map, emissive: 0xffffff, emissiveMap, emissiveIntensity: glow });
   material.onBeforeCompile = (shader) => {
     shader.uniforms.uFacadeBias = facadeBias;
-    let emissive = 'totalEmissiveRadiance *= texture2D( emissiveMap, vEmissiveMapUv, uFacadeBias ).rgb;';
-    let head = 'uniform float uFacadeBias;';
+    Object.assign(shader.uniforms, cityLight);
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', '#include <common>\nvarying float vFacadeY;')
+      .replace(
+        '#include <begin_vertex>',
+        `#include <begin_vertex>
+        vec4 facadeWorld = vec4( transformed, 1.0 );
+        #ifdef USE_INSTANCING
+          facadeWorld = instanceMatrix * facadeWorld;
+        #endif
+        vFacadeY = ( modelMatrix * facadeWorld ).y;`,
+      );
+    let emissive = `vec4 facadeGlow = texture2D( emissiveMap, vEmissiveMapUv, uFacadeBias );
+      totalEmissiveRadiance *= facadeGlow.rgb;
+      float facadeLit = max( max( facadeGlow.r, facadeGlow.g ), facadeGlow.b );
+      totalEmissiveRadiance += streetLight( diffuseColor.rgb, vFacadeY );
+      totalEmissiveRadiance += skyInGlass( normal, normalize( vViewPosition ), vFacadeY ) * ( 1.0 - smoothstep( 0.05, 0.35, facadeLit ) );`;
+    let head = `uniform float uFacadeBias;\nvarying float vFacadeY;\n${cityLightGlsl}`;
     if (neon) {
       Object.assign(shader.uniforms, {
         uNeonMap: { value: neon.map },
