@@ -10,6 +10,7 @@ import { createForeground } from './scene/createForeground.js';
 import { createWordmark } from './scene/createWordmark.js';
 import { createMoon } from './scene/createMoon.js';
 import { createPetals } from './scene/createPetals.js';
+import { createAtmosphere } from './scene/createAtmosphere.js';
 import { citySoft } from './scene/cityWindows.js';
 import { facadeBias } from './scene/facades.js';
 import { BLOOM } from './scene/bloom.js';
@@ -59,7 +60,12 @@ function start(initGuard, header) {
   const wordmark = createWordmark(renderer, HERO.wordmark.text);
   const moon = createMoon();
   const petals = createPetals();
-  scene.add(moon.group, kowloon.group, island.group, vessels.group, foreground.group, wordmark.mesh, petals.group);
+  const atmosphere = createAtmosphere(chapters, {
+    onLoad: () => {
+      needsRender = true;
+    },
+  });
+  scene.add(moon.group, atmosphere.group, kowloon.group, island.group, vessels.group, foreground.group, wordmark.mesh, petals.group);
   water.setSources(reflectionSources({
     tower: kowloon.clockTower,
     ferry: vessels.ferry,
@@ -84,7 +90,10 @@ function start(initGuard, header) {
     bursts: (value) => foreground.setOpacity('bursts', value),
     petals: (value) => petals.setDensity(value),
     city: (value) => island.setCityLevel(value),
+    clouds: (value) => atmosphere.setLevel(value),
   }, {
+    // Clouds change gently across the whole move.
+    clouds: { in: [0, 1], out: [0, 1] },
     // The city dims across the whole move into 05 (and stays dim in 06), not in its first 40%.
     city: { in: [0, 1], out: [0, 1] },
     // The palms pass in front of the Clock Tower early in the 01 → 02 move
@@ -154,6 +163,7 @@ function start(initGuard, header) {
     const opening = chapters[0].camera[breakpoint];
     const openingFov = fovForAspect(opening.fov, width / height, breakpoint);
     wordmark.place({ ...opening, fov: openingFov }, width / height, HERO.wordmark[breakpoint]);
+    atmosphere.place(breakpoint, width / height);
     needsRender = true;
   }
 
@@ -317,6 +327,7 @@ function start(initGuard, header) {
       water.update(dt);
       island.update(time);
       foreground.update(time);
+      atmosphere.update(time);
       const speed = dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0;
       petals.update(dt, camera, speed);
       lastRendered = state.pRendered;
