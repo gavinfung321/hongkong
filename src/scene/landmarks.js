@@ -19,13 +19,14 @@ import {
   Vector3,
 } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { addCityWindows } from './cityWindows.js';
+import { braceWall, curtainWall, facadeMaterial, facadeUVs, neonLines } from './facades.js';
 import { prism } from './prism.js';
 import { WORLD } from '../data/world.js';
 
 // Four Central landmarks built in code (user choice, 2026-10-02): Bank of
-// China Tower, Cheung Kong Center, Central Plaza and The Center. Lit well
-// below IFC, so IFC still leads; their glow follows the `city` level.
+// China Tower, Cheung Kong Center, Central Plaza and The Center, each with
+// its own painted skin (`facades.js`). Lit well below IFC, so IFC still
+// leads; their glow follows the `city` level.
 // Every line pattern is a mip-mapped texture, so it fades with distance
 // instead of shimmering.
 
@@ -70,25 +71,6 @@ function chamfered(sides, r, cut, start) {
 }
 
 // ---- Bank of China Tower ------------------------------------------------------
-
-// The white X braces and corner lines on one facade module (side × side).
-function braceTexture() {
-  return canvasTexture(256, 256, (ctx) => {
-    ctx.fillStyle = 'rgba(255,255,255,0.06)';
-    ctx.fillRect(0, 0, 256, 256);
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 10;
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(256, 256);
-    ctx.moveTo(256, 0);
-    ctx.lineTo(0, 256);
-    ctx.stroke();
-    // Edges: half of each line on either side of the tile seam.
-    ctx.lineWidth = 12;
-    ctx.strokeRect(0, 0, 256, 256);
-  });
-}
 
 // Four triangular shafts round a square, each stopping at its own height
 // under a roof cut at 45°, so each face ends on one of its diagonals. UVs
@@ -143,15 +125,11 @@ function bocGeometry(side, modules) {
   return geometry;
 }
 
-const BOC_GLOW = 0.45;
+const BOC_GLOW = 0.6;
 
+// Painted skin (user choice, 2026-10-02): glass facets, offices and lit braces.
 function createBOC({ position, side, modules, mastTip }) {
-  const material = new MeshLambertMaterial({
-    color: 0x3c4458,
-    emissive: 0xe8eeff,
-    emissiveMap: braceTexture(),
-    emissiveIntensity: BOC_GLOW,
-  });
+  const material = facadeMaterial(braceWall({ modules: Math.max(...modules), seed: 917 }), BOC_GLOW);
   const tower = new Mesh(bocGeometry(side, modules), material);
   tower.position.set(...position);
   tower.name = 'boc';
@@ -170,25 +148,27 @@ function createBOC({ position, side, modules, mastTip }) {
 // ---- Cheung Kong Center ---------------------------------------------------------
 
 // A plain square box whose whole glass skin glows an even cool white at
-// night, with a brighter crown band.
+// night, behind a silver grid, with a brighter crown band.
+const CHEUNG_KONG_GLOW = 0.4;
+
 function createCheungKong({ position, side, height }) {
   const group = new Group();
   group.name = 'cheungKong';
   const half = side / 2;
   const square = (s) => plan([[s, s], [-s, s], [-s, -s], [s, -s]]);
-  const body = new Mesh(
-    prism(square(half), 0, height),
-    addCityWindows(new MeshLambertMaterial({ color: 0x4a5266 }), {
-      lit: 2,
-      floor: 4,
-      bay: 3,
-      cool: 0xcfdcf5,
-      coolShare: 1,
-      strength: 0.32,
-      glass: 0.8,
-      close: 0.7,
-    }),
-  );
+  const skin = curtainWall({
+    bays: 32,
+    floors: 72,
+    bay: 3,
+    floor: 4,
+    lit: 1,
+    coolShare: 1,
+    level: [0.85, 1],
+    rooms: false,
+    colours: { slab: '#5a6274', slabEdge: '#646d80', glass: '#384052', mullion: '#9aa4b8' },
+    seed: 283,
+  });
+  const body = new Mesh(facadeUVs(prism(square(half), 0, height)), facadeMaterial(skin, CHEUNG_KONG_GLOW));
   // 1.5 m proud of the glass, clear of its depth at 1.4 km.
   const crownMaterial = new MeshBasicMaterial({ color: 0x8fa0bc });
   const crown = new Mesh(prism(square(half + 1.5), height - 8, height), crownMaterial);
@@ -196,7 +176,7 @@ function createCheungKong({ position, side, height }) {
   group.position.set(...position);
   return {
     mesh: group,
-    windows: [[body.material.userData.cityWindows, 0.32]],
+    glow: [[body.material, CHEUNG_KONG_GLOW]],
     basics: [[crownMaterial, new Color(0x8fa0bc)]],
     beacons: [[position[0] + half - 2, position[1] + height + 1, position[2] + half - 2], [position[0] - half + 2, position[1] + height + 1, position[2] + half - 2]],
   };
@@ -214,22 +194,24 @@ function barTexture() {
 
 // A chamfered triangle, one face to the harbour, under a lit crown band, a
 // glass pyramid and a mast.
+const PLAZA_GLOW = 0.6;
+
 function createCentralPlaza({ position, radius, height, pyramid, mastTip }) {
   const group = new Group();
   group.name = 'centralPlaza';
   const corners = (r) => chamfered(3, r, 0.12, -Math.PI / 2);
-  const body = new Mesh(
-    prism(plan(corners(radius)), 0, height),
-    addCityWindows(new MeshLambertMaterial({ color: 0x6a6050 }), {
-      lit: 0.35,
-      maxLit: 0.45,
-      floor: 4,
-      bay: 3,
-      coolShare: 0.05,
-      strength: 0.45,
-      close: 0.7,
-    }),
-  );
+  // Gold-tinted glass and bronze cladding, mostly warm offices.
+  const skin = curtainWall({
+    bays: 32,
+    floors: 80,
+    bay: 3,
+    floor: 4,
+    lit: 0.4,
+    coolShare: 0.1,
+    colours: { slab: '#5c5040', slabEdge: '#6a5c48', glass: '#2e2a28', mullion: '#a08c62' },
+    seed: 374,
+  });
+  const body = new Mesh(facadeUVs(prism(plan(corners(radius)), 0, height)), facadeMaterial(skin, PLAZA_GLOW));
   // The band stands 1.5 m out from the glass (inradius is half the circumradius).
   const bars = barTexture();
   bars.repeat.set(1, 1 / 30);
@@ -245,8 +227,7 @@ function createCentralPlaza({ position, radius, height, pyramid, mastTip }) {
   const top = height + pyramid;
   return {
     mesh: group,
-    windows: [[body.material.userData.cityWindows, 0.45]],
-    glow: [[pyramidMaterial, 1]],
+    glow: [[pyramidMaterial, 1], [body.material, PLAZA_GLOW]],
     bands: [bandMaterial],
     masts: [[[position[0], position[1] + top - 4, position[2]], mastTip - top + 4, 2]],
   };
@@ -254,16 +235,10 @@ function createCentralPlaza({ position, radius, height, pyramid, mastTip }) {
 
 // ---- The Center --------------------------------------------------------------------
 
-// Horizontal neon lines every 12 m up the whole tower.
-function lineTexture() {
-  return canvasTexture(4, 64, (ctx) => {
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(0, 0, 4, 12);
-  });
-}
+// A chamfered square shaft of dark glass with a stepped crown and a spire,
+// ringed by colour-changing neon lines every two floors.
+const CENTER = { glow: 0.5, floors: 80, linesEvery: 2, duty: 0.2, neon: 0.8 };
 
-// A chamfered square shaft with a stepped crown and a spire, ringed by
-// colour-changing neon lines.
 function createCenter({ position, half, height, crown, spireTip }) {
   const corners = (r) => chamfered(4, r * Math.SQRT2, 0.16, Math.PI / 4);
   const parts = [prism(plan(corners(half)), 0, height)];
@@ -272,20 +247,27 @@ function createCenter({ position, half, height, crown, spireTip }) {
     parts.push(prism(plan(corners(size)), y, y + rise));
     y += rise;
   }
-  const lines = lineTexture();
-  lines.repeat.set(1, 1 / 12);
-  const material = addCityWindows(
-    new MeshLambertMaterial({ color: 0x3a3f50, emissive: 0xffffff, emissiveMap: lines, emissiveIntensity: 0.5 }),
-    { lit: 0.15, maxLit: 0.2, floor: 4, bay: 3, strength: 0.5, close: 0.7 },
-  );
-  const mesh = new Mesh(mergeGeometries(parts), material);
+  const skin = curtainWall({
+    bays: 24,
+    floors: CENTER.floors,
+    bay: 3,
+    floor: 4,
+    lit: 0.15,
+    coolShare: 0.5,
+    colours: { slab: '#323848', slabEdge: '#3a4152', glass: '#1e2432', mullion: '#4c5468' },
+    seed: 346,
+  });
+  const neon = new Color();
+  const material = facadeMaterial(skin, CENTER.glow, {
+    neon: { map: neonLines(CENTER.duty), color: neon, repeat: CENTER.floors / CENTER.linesEvery },
+  });
+  const mesh = new Mesh(facadeUVs(mergeGeometries(parts)), material);
   mesh.position.set(...position);
   mesh.name = 'center';
   return {
     mesh,
-    glow: [[material, 0.5]],
-    windows: [[material.userData.cityWindows, 0.5]],
-    hue: material,
+    glow: [[material, CENTER.glow]],
+    hue: neon,
     masts: [[[position[0], position[1] + y - 2, position[2]], spireTip - y + 2, 2.5]],
   };
 }
@@ -369,7 +351,6 @@ export function createLandmarks() {
   ];
 
   const glow = built.flatMap((b) => b.glow ?? []);
-  const windows = built.flatMap((b) => b.windows ?? []);
   const basics = built.flatMap((b) => b.basics ?? []);
   const bands = built.flatMap((b) => b.bands ?? []);
   const hue = built.find((b) => b.hue).hue;
@@ -377,24 +358,27 @@ export function createLandmarks() {
   const tower = new Color();
   let level = 1;
 
+  function apply() {
+    for (const material of bands) material.color.copy(plaza).multiplyScalar(level);
+    hue.copy(tower).multiplyScalar(CENTER.neon * level);
+  }
+
   // Central Plaza's bars and The Center's lines drift slowly through the
   // colours, a little out of step with each other.
   function paint(time) {
     const [plazaPeriod, plazaS, plazaL] = CYCLE.plaza;
     const [towerPeriod, towerS, towerL] = CYCLE.center;
     plaza.setHSL((time / plazaPeriod) % 1, plazaS, plazaL);
-    for (const material of bands) material.color.copy(plaza).multiplyScalar(level);
     tower.setHSL((time / towerPeriod + 0.4) % 1, towerS, towerL);
-    hue.emissive.copy(tower);
+    apply();
   }
   paint(0);
 
   function setLevel(value) {
     level = value;
     for (const [material, base] of glow) material.emissiveIntensity = base * value;
-    for (const [uniforms, base] of windows) uniforms.uCityStrength.value = base * value;
     for (const [material, base] of basics) material.color.copy(base).multiplyScalar(value);
-    for (const material of bands) material.color.copy(plaza).multiplyScalar(value);
+    apply();
   }
 
   return { group, masts, beacons, setLevel, update: paint };
