@@ -4,12 +4,13 @@ Written 2026-10-03, at the end of build step 6 (measure and review). The plan
 is in [`../plan/README.md`](../plan/README.md); the acceptance checks are
 section 8 of [`../plan/checks.md`](../plan/checks.md).
 
-**Result:** checks 1–5 pass, with the known framing misses listed below,
-and the laptop meets its frame-rate targets. Two items wait for you: a
-final sign-off of 01 (check 6), and phone frame rates after the latest
-layers (check 7; the last iPhone 11 reading had one 1% low under target in
-05, and you chose not to re-measure for now, 2026-10-03). Two budgets are
-over and need a decision: draw calls and generated textures.
+**Result: Milestone 2 is closed (2026-10-03).** Checks 1–5 pass, with
+the known framing misses listed below; you approved 01 (check 6); the
+laptop meets its frame-rate targets. One item stays open by your choice:
+phone frame rates after the latest layers (check 7; the last iPhone 11
+reading had one 1% low under target in 05), carried to Milestone 5's
+performance pass. The draw-call and texture budgets were raised to match
+the site (your choice).
 
 ## Screenshots
 
@@ -95,13 +96,13 @@ searchlights, fireworks and spray hold one pose.
 `?fallback` shows the poster page with all six chapters and a working nav
 (11 links), no canvas.
 
-### 6. Frame 01 approved against the storyboard — waiting for you
+### 6. Frame 01 approved against the storyboard — pass
 
 Every layer was reviewed with you as it was built (see
-[`../plan/CHANGELOG.md`](../plan/CHANGELOG.md)). A final look at
-`01-desktop.png` and `01-mobile.png` closes it.
+[`../plan/CHANGELOG.md`](../plan/CHANGELOG.md)), and you approved
+`01-desktop.png` and `01-mobile.png` (2026-10-03).
 
-### 7. Performance budget — laptop pass; phones waiting
+### 7. Performance budget — laptop pass; phones carried to Milestone 5
 
 **Laptop, 2026-10-03:** production build in Cursor's browser (Chromium,
 AMD Radeon 860M, 1187 × 952 at pixel ratio 1), a steady 36 s scroll from
@@ -126,12 +127,17 @@ drops its pixel ratio from 1.5 to 1.25 by itself if it falls under 40
 fps. If 05's dips matter on the target phones, its searchlights and
 clouds are the first layers to test with the `?off=` switches.
 
-## Budgets over — decision needed
+## Budgets raised (your choice, 2026-10-03)
 
-| Budget | Limit | Now | Suggestion |
+| Budget | Was | Now | Site today |
 |---|---|---|---|
-| Draw calls | ≤ 100 | Desktop 01 213, 02 166, 03 121, 04 95, 05 83, 06 65; phone 01 149, 02 101, 03 117, 04 90, 05 73, 06 57 | Raise the limit to about 220: the laptop holds 60 fps at these counts, and the iPhone 11's own switch test showed pixel count, not calls, as its cost. Merging the ferry's and Clock Tower's meshes (40 and 32 calls in 01) is the fix if a phone falls short |
-| Generated textures | ≤ 4, each ≤ 512 px | 28 small code-drawn textures (about 5.5 MB of GPU memory) plus the artwork | Raise the limit: they replace model files, and memory is modest |
+| Draw calls | ≤ 100 | **≤ 220** | Desktop 01 213, 02 166, 03 121, 04 95, 05 83, 06 65; phone 01 149, 02 101, 03 117, 04 90, 05 73, 06 57 |
+| Generated textures | ≤ 4, each ≤ 512 px | **≤ 32 small code-drawn textures**, about 6 MB of GPU memory, plus the wordmark and artwork | 28 (about 5.5 MB) |
+
+Why: the laptop holds 60 fps at these counts, the iPhone 11's own switch
+test showed pixel count, not draw calls, as its cost, and the textures
+stand in for model files. If a phone falls short, merging the ferry's and
+Clock Tower's meshes (40 and 32 calls in 01) is the first fix.
 
 ## Still to do after this milestone
 
