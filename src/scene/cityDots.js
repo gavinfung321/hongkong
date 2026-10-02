@@ -16,13 +16,14 @@ const DOTS = {
   metres: 6,
   size: [1.5, 3.2],
   perLit: 13, // wall area (m²) per dot, per lit share
+  run: 3, // longest run of dots in one office
   offset: 1.5, // metres in front of the wall, clear of its depth
   fade: [0.22, 0.45], // floors per pixel: dots fade in across this range
   brightness: [0.22, 0.2],
 };
 
 export function createCityDots(buildings, windows, seed) {
-  const { floor = 3.6, bay = 3.2, warm = 0xffc07a, cool = 0xc4d6ff, coolShare = 0.25, strength = 1 } = windows;
+  const { floor = 3.6, warm = 0xffc07a, cool = 0xc4d6ff, coolShare = 0.25, strength = 1 } = windows;
   const random = seededRandom(seed);
   const warmColor = new Color(warm);
   const coolColor = new Color(cool);
@@ -35,19 +36,27 @@ export function createCityDots(buildings, windows, seed) {
     // Walls facing ±z run along x (the width), walls facing ±x along z.
     for (const [nx, nz] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) {
       const length = nx ? b.depth : b.w;
-      const bays = Math.max(1, Math.floor(length / bay));
+      const fit = Math.max(1, Math.floor(length / DOTS.metres));
       const expected = (length * b.h * density) / DOTS.perLit;
       const count = Math.floor(expected + random());
-      for (let i = 0; i < count; i++) {
-        const along = (Math.floor(random() * bays) + 0.5) * (length / bays) - length / 2;
+      // Offices, as on the window grid: runs of 1–3 touching dots on one
+      // floor in one colour (user choice, 2026-10-02: realism step 4).
+      for (let placed = 0; placed < count; ) {
+        const run = Math.min(count - placed, fit, 1 + Math.floor(random() * DOTS.run));
+        const span = (run - 1) * DOTS.metres;
+        const start = -span / 2 + (random() - 0.5) * Math.max(0, length - DOTS.metres - span);
         const y = 3 + (Math.floor(random() * floors) + 0.5) * floor;
-        const x = nx ? b.x + nx * (b.w / 2 + DOTS.offset) : b.x + along;
-        const z = nz ? b.z + nz * (b.depth / 2 + DOTS.offset) : b.z + along;
-        position.push(x, y, z);
-        c.copy(random() < coolShare ? coolColor : warmColor).multiplyScalar(
-          (DOTS.brightness[0] + DOTS.brightness[1] * random()) * strength,
-        );
-        color.push(c.r, c.g, c.b);
+        const tint = random() < coolShare ? coolColor : warmColor;
+        const level = DOTS.brightness[0] + DOTS.brightness[1] * random();
+        for (let i = 0; i < run; i++) {
+          const along = start + i * DOTS.metres;
+          const x = nx ? b.x + nx * (b.w / 2 + DOTS.offset) : b.x + along;
+          const z = nz ? b.z + nz * (b.depth / 2 + DOTS.offset) : b.z + along;
+          position.push(x, y, z);
+          c.copy(tint).multiplyScalar(level * (0.9 + 0.2 * random()) * strength);
+          color.push(c.r, c.g, c.b);
+        }
+        placed += run;
       }
     }
   }

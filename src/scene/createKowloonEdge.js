@@ -249,7 +249,7 @@ function createClockTower() {
 function createKowloonSkyline() {
   const { x, z, count, height, seed } = WORLD.kowloon.skyline;
   const random = seededRandom(seed);
-  const material = addCityWindows(new MeshLambertMaterial({ color: 0xffffff }), { lit: 0.22, strength: 0.8 });
+  const material = addCityWindows(new MeshLambertMaterial({ color: 0xffffff }), { lit: 0.22, strength: 0.8, ribbon: 0.2 });
   const mesh = new InstancedMesh(unitBox, material, count);
   const matrix = new Matrix4();
   const q = new Quaternion();
