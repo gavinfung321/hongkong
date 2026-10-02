@@ -17,7 +17,7 @@ import {
   Vector3,
 } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { COLOURS, FALL, WIND, petalTexture } from './createPetals.js';
+import { COLOURS, FALL, PETAL_CARD, WIND, petalTexture } from './createPetals.js';
 import { seededRandom } from './random.js';
 import { bauhiniaAtlas } from './surfaces.js';
 
@@ -215,7 +215,7 @@ function fallingPetals(spawns, random, { yaw, scale, height }) {
   const wind = WIND.clone().applyAxisAngle(up, -yaw).divideScalar(scale);
   const landing = (FALLING.landing - height) / scale;
   const material = new MeshBasicMaterial({ map: petalTexture(), transparent: true, side: DoubleSide, depthWrite: false });
-  const mesh = new InstancedMesh(new PlaneGeometry(0.7, 1), material, FALLING.count);
+  const mesh = new InstancedMesh(new PlaneGeometry(...PETAL_CARD), material, FALLING.count);
   mesh.frustumCulled = false;
   mesh.renderOrder = 3;
   mesh.userData.noProbe = true;

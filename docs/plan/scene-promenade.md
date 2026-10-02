@@ -8,8 +8,20 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
    the site's constant effect, instead of Kage's leaves. Rain was considered
    and rejected: it contradicts the clear moon and the fireworks, and Kage's
    "rain" feel mostly comes from the diagonal-line overlay (step 1).
-   - **Look:** single loose petals drawn in code (no artwork), tinted in four
-     muted shades from deep magenta to pale orchid so the coral sails lead.
+   - **Look (user choice, 2026-10-02):** single loose petals from the user's
+     artwork (`public/atmosphere/bauhinia-petal.webp`, 512 × 500, 29 KB):
+     vivid fuchsia with pale veins, wavy edges and a curled stalk. Its own
+     colour is kept, dimmed for the night in four shades (55–78% of its
+     brightness), so the petals sit in the scene and the coral sails still
+     lead. Cards match the artwork's proportions (0.92 × 0.9), sized so the
+     petal is as long as the old code-drawn one. The artwork loads into a
+     clear canvas texture, so the petals stay invisible until it arrives
+     and no shader changes. The bauhinia tree's falling petals use the same
+     petal (user choice). Replaced the code-drawn petal tinted from deep
+     magenta to pale orchid; motion, counts and per-chapter density
+     unchanged, as `ATMOSPHERE-EFFECTS-BRIEF.md` §6.3 asks. A/B shots of
+     the hero, 01 and 03 on desktop and phone: the coral sails lead, no
+     petal sits on the copy; composition probe as before.
    - **Depth:** a near layer of a few large petals (6 desktop / 4 mobile)
      drawn over everything, including 香港; a far layer of small fogged
      petals (70 / 32). Both travel with the camera, so moving still gives
@@ -23,13 +35,10 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
    - **Cost:** two instanced draw calls, 76 petals updated per frame.
    - Built in `src/scene/createPetals.js`; sizes, counts, colours and wind are
      the constants at the top.
-   - **Later (user, 2026-10-01):** the user will make the petal artwork
-     (`bauhinia-petals.webp`) and a blossoming tree or branch cutout
-     (`bauhinia-tree.webp`) from the reference photos in
-     `docs/references/bauhinia/` (ledger, "Reference material"). The real
-     flower is a more vivid fuchsia than our muted tints, with pale (not dark)
-     veins and wavy edges, so colours and veins get re-tuned when the sprites
-     arrive.
+   - **Artwork (done 2026-10-02):** the petal artwork the user planned
+     (2026-10-01) arrived as the single petal `bauhinia-petal.webp` rather
+     than a sheet; its pale veins and wavy edges replace the old dark-veined
+     code petal (see "Look"). The tree is built in code (stop 4).
 5. **Promenade pass (user request, 2026-10-02).** The closest layer to the
    camera, done in three stops with a review after each: railing and lamps,
    wet paving, palms. The user ranked it first of the remaining work

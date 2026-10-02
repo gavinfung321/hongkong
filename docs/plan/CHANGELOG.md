@@ -6,6 +6,12 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-02
 
+- **Bauhinia petal artwork** (user choice): the drifting petals and the
+  tree's falling petals now use the user's `bauhinia-petal.webp` (29 KB):
+  its own fuchsia, pale veins, wavy edges and curled stalk, dimmed for the
+  night in four shades. Motion, counts and densities unchanged. Files:
+  `src/scene/createPetals.js`, `src/scene/bauhinia.js`,
+  `public/atmosphere/bauhinia-petal.webp`.
 - **Automatic phone sharpness** (user choice): the iPhone 11 switch test
   showed pixel count is the only cost that matters in 02 (pixel ratio 1.25:
   43 fps against about 34; glow, edge smoothing and water: no gain). Phones

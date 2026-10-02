@@ -16,8 +16,8 @@ import {
 import { seededRandom } from './random.js';
 import { OVERLAY } from './bloom.js';
 
-// Bauhinia (洋紫荊) petals drifting over the harbour: an original petal drawn in
-// code, tinted per instance. Two depth layers live in boxes that travel with the
+// Bauhinia (洋紫荊) petals drifting over the harbour: the user's petal artwork,
+// shaded per instance. Two depth layers live in boxes that travel with the
 // camera; petals wrap around inside them, so the camera's own motion still gives
 // parallax.
 //   near: a few large petals close to the lens, drawn over everything,
@@ -28,8 +28,13 @@ const LAYERS = {
   near: { box: [5, 4, 5], ahead: 4, size: [0.13, 0.2], max: { desktop: 6, mobile: 4 } },
   far: { box: [50, 26, 44], ahead: 30, size: [0.2, 0.34], max: { desktop: 70, mobile: 32 } },
 };
-// Deep magenta to pale orchid, slightly muted so the junk's coral sails lead.
-export const COLOURS = [0x9c3a7a, 0xb45591, 0xc97cad, 0xdaa6c6];
+// The artwork's own fuchsia, dimmed for the night in four shades, so the petals
+// sit in the scene and the junk's coral sails lead (user choice, 2026-10-02).
+export const COLOURS = [0x8c8c8c, 0xa0a0a0, 0xb4b4b4, 0xc8c8c8];
+// Card size: the artwork's 512 × 500 proportions, scaled so the petal's length
+// matches the old code-drawn petal's.
+export const PETAL_CARD = [0.92, 0.9];
+const PETAL_ART = { url: 'atmosphere/bauhinia-petal.webp', size: [512, 500] };
 // Toward screen left, away from the bauhinia on the hero's right edge.
 export const WIND = new Vector3(-0.35, 0, 0.1); // metres per second
 export const FALL = [0.25, 0.5]; // metres per second
@@ -39,41 +44,24 @@ const FADE_WIDTH = 0.15; // share of the density range over which each petal shr
 let petal;
 // Shared with the bauhinia's falling petals.
 export function petalTexture() {
-  petal ??= drawPetal();
+  petal ??= loadPetal();
   return petal;
 }
 
-function drawPetal() {
+// A canvas the artwork's size, clear (so the petals are invisible) until the
+// artwork has loaded and is drawn into it: the texture keeps its size, so no
+// reallocation, and the petal shader is the same before and after.
+function loadPetal() {
   const canvas = document.createElement('canvas');
-  canvas.width = canvas.height = 128;
-  const ctx = canvas.getContext('2d');
-  ctx.translate(64, 64);
-
-  // Obovate: a narrow claw at the base, widening to a rounded tip.
-  ctx.beginPath();
-  ctx.moveTo(0, 60);
-  ctx.bezierCurveTo(-12, 32, -54, -6, -38, -44);
-  ctx.bezierCurveTo(-24, -66, 24, -66, 38, -44);
-  ctx.bezierCurveTo(54, -6, 12, 32, 0, 60);
-  ctx.closePath();
-  const body = ctx.createRadialGradient(0, -18, 4, 0, -10, 70);
-  body.addColorStop(0, '#ffffff');
-  body.addColorStop(1, '#cfcfcf');
-  ctx.fillStyle = body;
-  ctx.fill();
-
-  ctx.clip();
-  ctx.strokeStyle = 'rgba(70, 0, 50, 0.22)';
-  ctx.lineWidth = 2;
-  for (const spread of [-26, -12, 0, 12, 26]) {
-    ctx.beginPath();
-    ctx.moveTo(0, 56);
-    ctx.quadraticCurveTo(spread * 0.3, 0, spread, -52);
-    ctx.stroke();
-  }
-
+  [canvas.width, canvas.height] = PETAL_ART.size;
   const texture = new CanvasTexture(canvas);
   texture.colorSpace = SRGBColorSpace;
+  const image = new Image();
+  image.onload = () => {
+    canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+    texture.needsUpdate = true;
+  };
+  image.src = `${import.meta.env.BASE_URL}${PETAL_ART.url}`;
   return texture;
 }
 
@@ -87,7 +75,7 @@ function createLayer(name, layer, texture, random, onTop) {
     depthWrite: false,
     depthTest: !onTop,
   });
-  const mesh = new InstancedMesh(new PlaneGeometry(0.7, 1), material, total);
+  const mesh = new InstancedMesh(new PlaneGeometry(...PETAL_CARD), material, total);
   mesh.name = 'petals';
   mesh.frustumCulled = false;
   if (onTop) {
