@@ -292,8 +292,8 @@ function createCenter({ position, half, height, crown, spireTip }) {
 
 // ---- Masts and aviation lights -----------------------------------------------------
 
-// Dark and low-contrast: they are only a pixel or two wide, and on phones
-// (no antialiasing) a bright one would crawl as the camera moves.
+// Dark and low-contrast: they are only a pixel or two wide, and a bright one
+// would crawl as the camera moves.
 export function mastMesh(masts) {
   const geometry = mergeGeometries(
     masts.map(([[x, y, z], height, width]) => unitBox.clone().scale(width, height, width).translate(x, y, z)),

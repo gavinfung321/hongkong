@@ -10,7 +10,7 @@ import { createForeground } from './scene/createForeground.js';
 import { createWordmark } from './scene/createWordmark.js';
 import { createMoon } from './scene/createMoon.js';
 import { createPetals } from './scene/createPetals.js';
-import { cityMotion, updateCityMotion } from './scene/cityWindows.js';
+import { citySoft } from './scene/cityWindows.js';
 import { createGating, makeFadeable } from './scene/gating.js';
 import { createCameraRig, fovForAspect } from './scroll/cameraRig.js';
 import { createScrollConductor } from './scroll/scrollConductor.js';
@@ -29,6 +29,8 @@ const VEIL_IN = 150;
 const VEIL_OUT = 200;
 const MOBILE_ASPECT = 0.8;
 const ADAPTIVE = { desktop: 45, mobile: 28, window: 2, step: 0.25, floor: 1 };
+// Window edge blur on phones, in pixels (desktop 1).
+const MOBILE_WINDOW_SOFT = 1.5;
 
 function start(initGuard, header) {
   const canvas = document.getElementById('world');
@@ -36,8 +38,9 @@ function start(initGuard, header) {
   const sections = [...document.querySelectorAll('.chapter')];
   root.style.setProperty('--chapter-length', `${SCROLL.chapterLength}svh`);
 
-  const antialias = window.matchMedia('(pointer: fine)').matches;
-  const world = createScene(canvas, { antialias });
+  // Phones too: without it IFC's 1–2 px piers, slots, bands and fins crawl
+  // while scrolling (user report, 2026-10-02).
+  const world = createScene(canvas, { antialias: true });
   const { renderer, scene, camera } = world;
 
   scene.add(createLighting());
@@ -125,6 +128,7 @@ function start(initGuard, header) {
   function rebuild() {
     rig.setBreakpoint(breakpoint);
     rig.setAspect(width / height);
+    citySoft.value = breakpoint === 'mobile' ? MOBILE_WINDOW_SOFT : 1;
     vessels.setPaths(chapters, breakpoint);
     petals.setBreakpoint(breakpoint);
     foreground.setBreakpoint(breakpoint);
@@ -263,8 +267,6 @@ function start(initGuard, header) {
     header.update(state.index, hero);
 
     if (stepped) {
-      // Still frames only: windows always crisp.
-      cityMotion.value = 0;
       if (wordmark.fadeTo(hero ? 1 : 0, dt)) needsRender = true;
       if (state.index !== shownKeyframe) {
         if (shownKeyframe < 0) {
@@ -295,7 +297,6 @@ function start(initGuard, header) {
       foreground.update(time);
       const speed = dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0;
       petals.update(dt, camera, speed);
-      updateCityMotion(speed, dt);
       lastRendered = state.pRendered;
     }
 
