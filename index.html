@@ -94,7 +94,7 @@
 
     <!-- Duplicates the menu's links, so it is hidden from screen readers and the tab order. -->
     <div class="chapter-counter" aria-hidden="true">
-      <p class="chapter-counter__hint">Let's cross the harbour</p>
+      <p class="chapter-counter__hint">Scroll to cross</p>
       <ol class="chapter-counter__list">
         <li><a href="#chapter-01" data-nav-index="0" tabindex="-1"><span>01</span></a></li>
         <li><a href="#chapter-02" data-nav-index="1" tabindex="-1"><span>02</span></a></li>
@@ -201,14 +201,66 @@
             The last fireworks fade above the city. The crossing ends quietly here.
           </p>
           <p class="chapter__action">
-            <a href="#top">Return to the harbour</a>
+            <a class="pill-link" href="#top">
+              Return to the harbour
+              <svg class="pill-link__arrow" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+                <path d="M6 11 V1.5 M1.75 5.75 L6 1.5 L10.25 5.75" />
+              </svg>
+            </a>
           </p>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
-      <p>Victoria Harbour — a night crossing. Grey-box prototype.</p>
+      <div class="site-footer__statement">
+        <svg class="site-footer__mark" viewBox="0 0 24 28" aria-hidden="true" focusable="false">
+          <path class="brand__mast" d="M5 1 V27" />
+          <path class="brand__sail" d="M6 3 Q15 4 21 9 Q19.5 16 15.5 21 Q11.5 24.5 6 25 Z" />
+          <path class="brand__battens" d="M6 8.5 L20.4 11 M6 14 L19 16 M6 19.5 L16.4 20.8" />
+        </svg>
+        <p>
+          One night on Victoria Harbour, crossed in six chapters: from the old Clock Tower in Tsim Sha Tsui
+          to the last fireworks over Central. Every boat, tower and wave is built in code.
+        </p>
+      </div>
+
+      <div class="site-footer__columns">
+        <nav class="site-footer__column" aria-labelledby="footer-chapters">
+          <h2 class="site-footer__heading" id="footer-chapters">Chapters</h2>
+          <ul>
+            <li><a href="#chapter-01">Harbour at Dusk</a></li>
+            <li><a href="#chapter-02">The Kowloon Edge</a></li>
+            <li><a href="#chapter-03">Across the Water</a></li>
+            <li><a href="#chapter-04">Red Sails</a></li>
+            <li><a href="#chapter-05">City of Light</a></li>
+            <li><a href="#chapter-06">Afterglow</a></li>
+          </ul>
+        </nav>
+        <section class="site-footer__column" aria-labelledby="footer-landmarks">
+          <h2 class="site-footer__heading" id="footer-landmarks">Landmarks</h2>
+          <ul>
+            <li>Clock Tower <span class="site-footer__year">1915</span></li>
+            <li>Star Ferry <span class="site-footer__year">since 1888</span></li>
+            <li>Two IFC <span class="site-footer__year">2003</span></li>
+            <li>Observation Wheel <span class="site-footer__year">2014</span></li>
+          </ul>
+        </section>
+        <section class="site-footer__column" aria-labelledby="footer-colophon">
+          <h2 class="site-footer__heading" id="footer-colophon">Colophon</h2>
+          <ul>
+            <li>Built live in Three.js and WebGL</li>
+            <li>Every model and texture made in code</li>
+            <li><a href="#top">Back to the start</a></li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="site-footer__bar">
+        <p>© 2026 Victoria Harbour — A Night Crossing</p>
+        <p class="site-footer__zh" lang="zh-Hant">維港夜色</p>
+        <p>WebGL · Three.js · Hong Kong</p>
+      </div>
     </footer>
 
     <script type="module" src="/src/main.js"></script>

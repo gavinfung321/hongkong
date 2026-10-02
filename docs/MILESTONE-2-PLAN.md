@@ -38,6 +38,8 @@ depth comes from layers around the simple 3D:
 | Mostly dark frames with a vignette | Our navy and aubergine palette, plus a vignette |
 | Layers shift with the mouse | Cursor parallax on desktop |
 | Nav bar, chapter counter, vertical 影の道, chapter label | Nav bar, counter, vertical 維港之夜, per-chapter Chinese label |
+| Thin outlined pill button | "Return to the harbour" as a thin pill with our own ↑ arrow (3.12) |
+| Footer: statement, three link columns, bottom bar, scene dimmed behind | Our footer with original copy: statement, Chapters / Landmarks / Colophon, 維港夜色 bar (3.13) |
 
 **Licence rule:** Kage's licence grants no reuse. We copy *techniques* only,
 which are common web techniques. No Kage code, images, lettering, layout
@@ -77,14 +79,23 @@ Agreed with the user:
 - **Height:** raised over the boats (user request, 2026-10-02: "move higher,
   it's ok to cover the boats"). Its feet stand at 74% of the screen height on
   desktop (was 88%) and 73% on mobile (was 80%), so it now spans roughly
-  38–73% on desktop. The feet have to stay below the horizon (57.5% desktop,
-  70% mobile at the opening pose), so on mobile this is about as high as it
-  can stand on the water.
+  38–73% on desktop. The feet have to stay below the horizon (57.5% desktop
+  at the opening pose).
+- **Mobile floats in the sky** (user request, 2026-10-02: "push higher near
+  the middle of the page"). On water it could rise no higher than 70% (the
+  horizon) and covered the tower, junk and IFC. It now floats in the empty
+  sky between the copy and the moon: feet at 42%, about 78% of the width,
+  spanning roughly 27–43%, so the moon rises just below it and the tower,
+  junk, moon and IFC all show. Not the exact middle (50%), which would cover
+  the moon and the tower and IFC tops. It sits 190 m ahead of the camera,
+  the same distance the water placement had, so its size, haze and the
+  first-scroll sink and fade are unchanged (`depth` in the `HERO` block,
+  `place()` in `createWordmark.js`). Desktop still stands on the water.
 - **Exit:** from the first scroll it moves down out of the frame and fades,
   while the camera pushes in (chapter 01's `holdDolly`, which now starts at
   the top of the page instead of at the hold). Both start immediately, with no
   dead zone.
-- **Mobile:** stays horizontal (not stacked) and smaller, about 85% of the
+- **Mobile:** stays horizontal (not stacked) and smaller, about 78% of the
   screen width.
 - **Reduced motion:** no sinking; it simply fades out when you leave the hero.
 
@@ -118,8 +129,9 @@ How it is built:
 - Dimmed so the scene leads: hint at 50% and numbers at 40% opacity, full on
   hover (user request, 2026-10-01).
 - Chapter 01's body no longer ends with "Scroll to cross the water."; the
-  hint already says it, and the hint now reads "Let's cross the harbour"
-  instead of "Scroll to cross" (user requests, 2026-10-01).
+  hint already says it. The hint read "Let's cross the harbour" for a while
+  (user request, 2026-10-01) and is back to "Scroll to cross", shorter and a
+  clear instruction (user request, 2026-10-02).
 - Chapter 01's kicker is "Victoria Harbour" (was "Arrival"), naming the
   place like the other chapters, and its body reads "Night settles on the
   water, and the island begins to glow." so the name isn't repeated (user
@@ -363,6 +375,49 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   clicks (`pointer-events: none`) and stops animating once it catches up.
 - Built in `src/ui/cursorRing.js` with styles in `styles.css`; the follow
   speed is `FOLLOW` in the script.
+
+### 3.12 "Return to the harbour" button (user request, 2026-10-02)
+
+- Chapter 06's link is now a rounded button, after the button style in the
+  user's Kage screenshot (technique only): a 1 px pill outline in dim cream
+  (22%), a thin (light-weight) uppercase label with wide letter spacing, no
+  text shadow, and our own ↑ arrow, since it goes back up to the hero (not
+  Kage's ↗). On hover the outline brightens, a faint fill appears and the
+  arrow lifts.
+- Mobile uses smaller type and tighter spacing so it stays on one line
+  within the 06 copy, clear of the firework rings.
+- Built as `.pill-link` in `index.html` and `styles.css`; system fonts'
+  light weights (Segoe UI on Windows, SF on iPhone), no font file.
+
+### 3.13 Footer (user request, 2026-10-02)
+
+- **The chapter layer leaves as the footer rises.** Chapter 06's copy, the
+  vertical 煙花 label and the side pager fade out over the footer's first
+  half screen (they used to stay on, and the label collided with the footer
+  text on mobile). Past halfway the header slides back in, as on Kage, so
+  the nav is there at the end (user choice).
+- **A richer footer**, after the layout of the user's Kage screenshot, with
+  original copy (no Kage text, lettering or code):
+  - a statement in large light type beside our red-sail mark: "One night on
+    Victoria Harbour, crossed in six chapters: from the old Clock Tower in
+    Tsim Sha Tsui to the last fireworks over Central. Every boat, tower and
+    wave is built in code.";
+  - a hairline, then three columns with small uppercase headings (user
+    choice): **Chapters** (links to all six), **Landmarks** (facts, not
+    links: Clock Tower 1915, Star Ferry since 1888, Two IFC 2003,
+    Observation Wheel 2014) and **Colophon** (built live in Three.js and
+    WebGL; every model and texture made in code; back to the start);
+  - a bottom bar: "© 2026 Victoria Harbour — A Night Crossing", 維港夜色
+    ("Victoria Harbour at night") in the centre, "WebGL · Three.js · Hong
+    Kong" on the right.
+- The 06 scene stays behind it, dimmed by a dark gradient. On mobile the
+  chapters and landmarks sit side by side with the colophon below, the
+  landmark years on their own line, and the bottom bar stacks.
+- Replaces the grey-box line "Grey-box prototype." Placeholder copy until
+  the copy milestone, like the chapters.
+- Built in `index.html` (`.site-footer`) and `styles.css`;
+  `src/ui/siteFooter.js` publishes `--footer-in` (0 → 1) and `is-at-footer`.
+  Also works in the poster-only fallback, where it is a plain footer.
 
 ## 4. Look test (frame 01 only)
 
@@ -907,6 +962,12 @@ Stop for the user's review after each step, as in the grey-box.
   `src/scene/createKowloonEdge.js`: the wet-paving ground material, weaker
   lantern pools on it; `src/scene/gating.js`: faded copies keep the program
   cache key (user request, 2026-10-02).
+- `src/data/chapters.js` and `src/scene/createWordmark.js`: mobile 香港
+  floats in the sky (`depth` placement, feet at 42%, width 78%);
+  `index.html`: hint "Scroll to cross", the 06 pill button, the new footer;
+  `src/styles.css`: pill button, footer, the chapter layer fading as the
+  footer rises; new `src/ui/siteFooter.js` (`--footer-in`, `is-at-footer`),
+  started from `src/main.js` (user requests, 2026-10-02).
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font; the
   stone railing and lamps built in code from the user's designs; the wet
   paving.
@@ -930,12 +991,18 @@ The milestone passes when:
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
    feet, raised over the boats (user request, 2026-10-02), and sinks and
    fades out with the 01 copy from the first scroll.
-   Mobile shows it horizontal and smaller.
+   Mobile shows it horizontal and smaller, floating in the sky between the
+   copy and the moon with the tower, junk, moon and IFC uncovered (user
+   request, 2026-10-02).
 3. Nav links, counter numbers, the menu and "Return to the harbour" all land
    on the right hold. The menu works with the keyboard and a screen reader.
    The vertical label shows the current chapter and never covers a subject.
    The side pager (desktop) marks the current chapter and its dashes land on
-   the right hold.
+   the right hold. "Return to the harbour" is a thin rounded button on one
+   line, clear of the 06 firework rings on mobile. When the footer arrives,
+   the 06 copy, vertical label and side pager are gone and the header is
+   back; the footer's chapter links land on their holds (user requests,
+   2026-10-02).
 4. Reduced-motion mode shows no sinking, no parallax, no particles and no
    cursor ring, and the Observation Wheel holds still (it turns slowly in
    continuous mode; user request, 2026-10-02), and still tells the whole story. In continuous mode the water

@@ -90,8 +90,9 @@ export function createWordmark(renderer, text) {
     mesh.position.y = restY - sink * height * DROP;
   }
 
-  // Stands the wordmark on the water so it fills spec.width % of the screen,
-  // with its feet at (spec.x, spec.foot) % as seen from chapter 01's opening pose.
+  // Fills spec.width % of the screen with its feet at (spec.x, spec.foot) %
+  // as seen from chapter 01's opening pose: standing on the water, or, with
+  // spec.depth (metres ahead of the camera), floating in the sky.
   function place(pose, viewAspect, spec) {
     const position = new Vector3().fromArray(pose.position);
     // The hold dolly starts half a vector back (see holdDollyOffset).
@@ -105,15 +106,20 @@ export function createWordmark(renderer, text) {
 
     ndc.set((spec.x / 100) * 2 - 1, 1 - (spec.foot / 100) * 2, 0.5).unproject(placementCamera);
     const ray = ndc.sub(position).normalize();
-    if (ray.y >= -1e-3) return;
-    const foot = position.clone().addScaledVector(ray, -position.y / ray.y);
-
     forward.fromArray(pose.target).sub(position).setY(0).normalize();
+    let foot;
+    if (spec.depth) {
+      foot = position.clone().addScaledVector(ray, spec.depth / ray.dot(forward));
+    } else {
+      if (ray.y >= -1e-3) return;
+      foot = position.clone().addScaledVector(ray, -position.y / ray.y);
+    }
+
     const depth = foot.clone().sub(position).dot(forward);
     const viewWidth = 2 * depth * Math.tan(MathUtils.degToRad(pose.fov / 2)) * viewAspect;
     const width = (spec.width / 100) * viewWidth;
     height = width / aspect;
-    restY = -height * padBottom;
+    restY = foot.y - height * padBottom;
 
     mesh.scale.set(width, height, 1);
     mesh.position.set(foot.x, restY, foot.z);

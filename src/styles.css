@@ -213,14 +213,151 @@ a:focus-visible {
 
 .chapter__action {
   margin-top: 1.5rem;
-  font-weight: 600;
 }
 
+/* A thin rounded button with a dim outline. */
+.pill-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 24px 14px 28px;
+  border: 1px solid rgb(243 233 210 / 0.22);
+  border-radius: 999px;
+  background: rgb(14 12 30 / 0.2);
+  color: var(--color-cream);
+  font-size: 0.75rem;
+  font-weight: 300;
+  letter-spacing: 0.26em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-shadow: none;
+  white-space: nowrap;
+  transition:
+    border-color 250ms ease,
+    background-color 250ms ease,
+    color 250ms ease;
+}
+
+.pill-link:hover {
+  border-color: rgb(243 233 210 / 0.5);
+  background: rgb(243 233 210 / 0.06);
+  color: var(--color-ivory);
+}
+
+.pill-link__arrow {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pill-link:hover .pill-link__arrow {
+  transform: translateY(-3px);
+}
+
+/* Footer: a statement, three columns and a bottom bar. */
 .site-footer {
-  padding: 48px var(--page-inset);
+  padding: 96px var(--page-inset) max(24px, env(safe-area-inset-bottom));
   background: var(--color-fog);
-  font-size: 0.875rem;
-  opacity: 0.85;
+  color: var(--color-soft);
+  font-size: 0.8125rem;
+  font-weight: 300;
+}
+
+.site-footer__statement {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgb(243 233 210 / 0.12);
+}
+
+.site-footer__mark {
+  width: 26px;
+  height: 30px;
+  flex: none;
+  margin-top: 2px;
+}
+
+.site-footer__statement p {
+  max-width: 46ch;
+  color: var(--color-ivory);
+  font-size: clamp(1.25rem, 1.9vw, 1.625rem);
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+.site-footer__columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 40px 0 48px;
+}
+
+.site-footer__column {
+  padding-inline-end: 24px;
+}
+
+.site-footer__column + .site-footer__column {
+  padding-inline-start: 24px;
+  border-left: 1px solid rgb(243 233 210 / 0.1);
+}
+
+.site-footer__heading {
+  margin-bottom: 16px;
+  color: var(--color-muted);
+  font-size: 0.625rem;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.site-footer__column li {
+  padding: 5px 0;
+}
+
+.site-footer__column a {
+  color: var(--color-soft);
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.site-footer__column a:hover {
+  color: var(--color-warm);
+}
+
+.site-footer__year {
+  margin-inline-start: 8px;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+}
+
+.site-footer__bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid rgb(243 233 210 / 0.12);
+  color: var(--color-muted);
+  font-size: 0.625rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.site-footer__bar p:last-child {
+  text-align: right;
+}
+
+.site-footer__zh {
+  font-family: "Microsoft JhengHei", "PingFang TC", "Heiti TC", "Noto Sans TC", sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
 }
 
 @media (max-aspect-ratio: 4/5), (max-width: 600px) {
@@ -241,6 +378,60 @@ a:focus-visible {
 
   .chapter__body {
     font-size: 1rem;
+  }
+
+  .pill-link {
+    gap: 12px;
+    padding: 10px 16px 10px 18px;
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+  }
+
+  .site-footer__year {
+    display: block;
+    margin: 0;
+  }
+
+  .site-footer {
+    padding-top: 72px;
+  }
+
+  .site-footer__statement {
+    gap: 16px;
+    padding-bottom: 32px;
+  }
+
+  .site-footer__mark {
+    width: 20px;
+    height: 24px;
+  }
+
+  .site-footer__statement p {
+    font-size: 1.125rem;
+  }
+
+  /* Chapters and landmarks side by side, the colophon below. */
+  .site-footer__columns {
+    grid-template-columns: 1fr 1fr;
+    padding: 32px 0;
+    row-gap: 28px;
+  }
+
+  .site-footer__column:last-child {
+    grid-column: 1 / -1;
+    padding-inline-start: 0;
+    padding-top: 24px;
+    border-left: 0;
+    border-top: 1px solid rgb(243 233 210 / 0.1);
+  }
+
+  .site-footer__bar {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .site-footer__bar p:last-child {
+    text-align: left;
   }
 }
 
@@ -887,6 +1078,27 @@ html:not(.is-enhanced) .vertical-text__labels {
   z-index: 2;
 }
 
+/* The scene stays behind the footer, dimmed. */
+.is-enhanced .site-footer {
+  background: linear-gradient(to bottom, rgb(14 12 30 / 0), rgb(14 12 30 / 0.82) 160px, rgb(14 12 30 / 0.94));
+}
+
+/* The chapter layer leaves as the footer rises (--footer-in, siteFooter.js),
+   and the header comes back over it. */
+.is-enhanced .vertical-text,
+.is-enhanced .side-pager {
+  opacity: calc(1 - var(--footer-in, 0));
+}
+
+.is-at-footer .chapter__copy,
+.is-at-footer .side-pager {
+  pointer-events: none;
+}
+
+.is-at-footer .site-header {
+  transform: none;
+}
+
 .is-enhanced .chapter {
   display: block;
   height: var(--chapter-length, 150svh);
@@ -906,7 +1118,7 @@ html:not(.is-enhanced) .vertical-text__labels {
   padding: 0;
   border-radius: 0;
   background: none;
-  opacity: var(--copy-opacity, 0);
+  opacity: calc(var(--copy-opacity, 0) * (1 - var(--footer-in, 0)));
   transform: translateY(calc(var(--copy-shift, 0) * 1px));
   text-shadow: 0 1px 3px rgb(0 0 0 / 0.8), 0 0 18px rgb(10 9 24 / 0.7);
 }
@@ -937,7 +1149,7 @@ html:not(.is-enhanced) .vertical-text__labels {
 }
 
 .is-enhanced .chapter__action {
-  margin-top: 0.75rem;
+  margin-top: 1.25rem;
 }
 
 [data-breakpoint="mobile"].is-enhanced .chapter__title {
@@ -947,6 +1159,10 @@ html:not(.is-enhanced) .vertical-text__labels {
 
 [data-breakpoint="mobile"].is-enhanced #chapter-01 .chapter__title {
   font-size: 2.25rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__action {
+  margin-top: 0.875rem;
 }
 
 [data-breakpoint="mobile"].is-enhanced {

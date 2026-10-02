@@ -14,6 +14,7 @@ import { createCameraRig, fovForAspect } from './scroll/cameraRig.js';
 import { createScrollConductor } from './scroll/scrollConductor.js';
 import { createCopyLayer } from './ui/copyLayer.js';
 import { createSiteHeader } from './ui/siteHeader.js';
+import { createSiteFooter } from './ui/siteFooter.js';
 import { createCursorRing } from './ui/cursorRing.js';
 import { createPointerParallax } from './ui/pointerParallax.js';
 import { enterFallback, supportsWebGL2, watchContext } from './ui/fallback.js';
@@ -373,6 +374,7 @@ function start(initGuard, header) {
 function boot() {
   // The header works in the poster-only fallback too, where links scroll natively.
   const header = createSiteHeader();
+  createSiteFooter();
   createCursorRing();
   if (params.has('fallback')) return enterFallback('requested');
   if (!supportsWebGL2()) return enterFallback('no-webgl2');
