@@ -1,4 +1,5 @@
 import {
+  Color,
   Group,
   MathUtils,
   Mesh,
@@ -24,9 +25,9 @@ import { seededRandom } from './random.js';
 // rectangle. They sway slowly sideways, and hold still in reduced motion.
 //
 // Harbour mist (user request, 2026-10-02): the same kind of card, cut from
-// the mist sheet, standing on the water off the island's waterfront. Fogged
-// like the skyline behind it and depth tested, so everything in front of it
-// stays crisp. Open-water patches farther out on the harbour, for the wide
+// the mist sheet, in separate drifts on the island's waterfront behind the
+// piers, tinted like haze lit by the city. Fogged like the skyline behind
+// it and depth tested, so everything in front of it stays crisp. Open-water patches farther out on the harbour, for the wide
 // views, face the 01 camera.
 const FEATHER = [0.06, 0.18]; // edge fade, as a share of the card's width / height
 
@@ -45,12 +46,15 @@ const fragmentShader = `
   uniform sampler2D tSheet;
   uniform vec4 uBand; // v from, v to, feather x, feather y
   uniform float uOpacity;
+  uniform vec3 uTintLow; // colour at the card's foot
+  uniform vec3 uTintHigh; // and at its top
   varying vec2 vUv;
   void main() {
     vec4 c = texture2D( tSheet, vec2( vUv.x, mix( uBand.x, uBand.y, vUv.y ) ) );
     vec2 edge = min( vUv, 1.0 - vUv );
     float feather = smoothstep( 0.0, uBand.z, edge.x ) * smoothstep( 0.0, uBand.w, edge.y );
-    gl_FragColor = vec4( c.rgb, c.a * feather * uOpacity );
+    vec3 tint = mix( uTintLow, uTintHigh, smoothstep( 0.0, 0.8, vUv.y ) );
+    gl_FragColor = vec4( c.rgb * tint, c.a * feather * uOpacity );
     #include <colorspace_fragment>
     #include <fog_fragment>
   }`;
@@ -81,7 +85,7 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
   const cloudSheet = loadSheet(CLOUD_SHEET);
   const mistSheet = loadSheet(MIST_SHEET);
 
-  function makeCard(spec, sheet, texture, { fog, renderOrder, drift, name }) {
+  function makeCard(spec, sheet, texture, { fog, renderOrder, drift, name, tint = { low: [1, 1, 1], high: [1, 1, 1] } }) {
     const [r0, r1] = sheet.bands[spec.band];
     const height = sheet.size[1];
     const material = new ShaderMaterial({
@@ -92,6 +96,8 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
         tSheet: { value: texture },
         uBand: { value: [1 - r1 / height, 1 - r0 / height, FEATHER[0], FEATHER[1]] },
         uOpacity: { value: 0 },
+        uTintLow: { value: new Color(...tint.low) },
+        uTintHigh: { value: new Color(...tint.high) },
       },
       transparent: true,
       depthWrite: false,
@@ -133,6 +139,7 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
       renderOrder: 0,
       drift: { ...MIST.drift, share: -MIST.drift.share },
       name: 'mist',
+      tint: MIST.tint,
     }),
   );
   const seaMist = SEA_MIST.cards.map((spec) =>
@@ -141,13 +148,14 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
       renderOrder: 0,
       drift: { ...MIST.drift, share: -MIST.drift.share },
       name: 'sea-mist',
+      tint: SEA_MIST.tint,
     }),
   );
   const [faceX, faceZ] = SEA_MIST.face;
   for (const card of [...mist, ...seaMist]) {
     const { spec, mesh } = card;
-    mesh.scale.set(spec.width, spec.height ?? spec.width / card.aspect, 1);
-    card.base.set(spec.x, mesh.scale.y / 2, spec.z);
+    mesh.scale.set(spec.width, spec.width / card.aspect, 1);
+    card.base.set(spec.x, (mist.includes(card) ? MIST.y : 0) + mesh.scale.y / 2, spec.z);
     mesh.position.copy(card.base);
     if (seaMist.includes(card)) mesh.lookAt(faceX, card.base.y, faceZ);
     card.right.set(1, 0, 0).applyQuaternion(mesh.quaternion);

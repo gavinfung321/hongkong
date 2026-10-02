@@ -263,8 +263,8 @@ export const chapters = [
     },
     visibility: {
       // city: the towers around IFC at 60%, so IFC leads (user choice, 2026-10-02).
-      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, petals: 0.6, city: 0.6, clouds: 0.4, mist: 0.6, seaMist: 0 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, petals: 0.6, city: 0.6, clouds: 0.4, mist: 0.6, seaMist: 0 },
+      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, petals: 0.6, city: 0.6, clouds: 0.4, mist: 0.4, seaMist: 0 },
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, petals: 0.6, city: 0.6, clouds: 0.4, mist: 0.4, seaMist: 0 },
     },
     fogDensity: 0.00045,
     vessels: {

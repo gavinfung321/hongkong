@@ -1487,30 +1487,38 @@ all six.
          calls: see the stage 2 checks (clouds and mist measured together).
        - **Stage 2, harbour mist (done; user request, 2026-10-02):** the
          staged `harbour-mist.webp` (four soft blue-grey bands) now ships
-         as `public/atmosphere/harbour-mist.webp`. One belt of four long
-         upright cards (700 m each, the art stretched sideways to save
-         draw calls) stands on the water just off the island's waterfront,
-         from the far west to past The Center, facing Kowloon (`MIST` in
-         `src/data/atmosphere.js`), 26–37 m tall, the lowest band in
-         front of the wheel and IFC's podium. It lives in the world, so
-         every chapter sees it where it is: boats, the Clock Tower and the
-         junk stand in front of it and stay crisp, and it takes the
-         distance fog like the skyline behind it. Not a full-screen wash:
-         it only lies along the waterline. Strength per chapter (`mist` in
-         `src/data/chapters.js`, changing across the whole move): 01 0.6
-         (a faint horizon band), 02 0.5 (02 looks past the island's end,
-         so it barely shows), 03 0.8 (behind the ferry, before the
-         skyline), 04 1 (strongest, at the shore behind the junk), 05 0.6
-         (parting the water from the piers and podiums), 06 0.15 (fading
-         as the camera tilts into the clear sky); full is 30% opacity.
-         It sways 0.8% of each card's width the opposite way to the
-         clouds, and holds still in reduced motion.
+         as `public/atmosphere/harbour-mist.webp`. Four separate drifts
+         (upright cards, 340–480 m wide, 20–32 m tall, the art at its own
+         shape) stand on the island's waterfront just behind the ferry
+         piers, facing Kowloon (`MIST` in `src/data/atmosphere.js`), with
+         gaps between them; the widest gap keeps the wheel and IFC clear.
+         They live in the world, so every chapter sees them where they
+         are: boats, the Clock Tower and the junk stand in front and stay
+         crisp, and they take the distance fog like the skyline behind.
+         A tint colours the grey art like haze lit by the city: warm
+         amber-rose at the foot, dusky lavender at the top. Strength per
+         chapter (`mist` in `src/data/chapters.js`, changing across the
+         whole move): 01 0.6, 02 0.5 (02 looks past the island's end, so
+         it barely shows), 03 0.8 (behind the ferry), 04 1 (strongest, a
+         wisp at the shore behind the junk), 05 0.4 (softening the foot of
+         the podiums), 06 0.15 (fading as the camera tilts into the clear
+         sky); full is 45% opacity. They sway 0.8% of their width the
+         opposite way to the clouds, and hold still in reduced motion.
+         *Rework (user choice, 2026-10-02):* the first version, one
+         continuous belt on the water in front of the piers in the art's
+         own blue-grey, stretched sideways, read as a grey film: it
+         washed out the warm street glow at the foot of Central, ran as
+         one even ribbon with a straight top, and in 05 (camera about
+         270 m away) veiled the water and its glints. The user chose all
+         three fixes: warm tint, separate unstretched drifts, and moving
+         them off the water with 05 eased.
        - **Open-water patches (user choice, 2026-10-02):** the user
          expected the mist spread across the sea, not only along the far
          shore. Four low patches (`SEA_MIST`, 14–20 m tall, 260–380 m
          wide) lie out on the harbour 380–750 m from the 01 camera, facing
          it: behind the Clock Tower, behind the junk, behind the ferry
-         farther out, and toward the Central piers. From the promenade's
+         farther out, and toward the Central piers; a milder version of
+         the drifts' warm tint. From the promenade's
          height they read as layered banks across the whole width of the
          water, behind the boats, in the hero and 01. Their own level
          (`seaMist`: 01 1, 02 0.7, 0 from 03 on) uses the default gate,
@@ -1526,10 +1534,11 @@ all six.
          7, 4, 4, 4, 4. Only desktop 01 is over the brief's aim of 12;
          phones stay well under. The skyline band's other
          towers gain a few bright pixels where the mist lifts the dark
-         waterfront (05: 8,770 → 9,000 at luma over 60; 03: 2,210 →
-         2,650); IFC and the landmarks still lead (05 share 27%, under a
-         third). The Clock Tower, ferry, junk sails, IFC crown and copy
-         are untouched.
+         waterfront (luma over 60, before the mist → now: 05 8,770 →
+         8,940; 03 2,210 → 2,350; the first belt had 9,000 and 2,650);
+         IFC and the landmarks still lead (05 share 27%, under a third).
+         In 05 the water in front of the piers stays dark. The Clock
+         Tower, ferry, junk sails, IFC crown and copy are untouched.
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -1827,7 +1836,9 @@ The milestone passes when:
    on the left (user choice, 2026-10-02); a soft low mist lies along the
    island's waterline, strongest behind the junk in 04, faint in 01,
    gone in 06, and in the hero and 01 low banks spread across the open
-   water behind the boats (user choice, 2026-10-02), never over the Clock Tower, the boats, the sails, IFC's
+   water behind the boats (user choice, 2026-10-02); the shore mist is
+   warm-tinted separate drifts, not a grey film, and leaves the water in
+   front of the 05 piers dark (user choice, 2026-10-02), never over the Clock Tower, the boats, the sails, IFC's
    crown or the copy (user request, 2026-10-02), and no brace line, mast or warning light shimmers
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).
