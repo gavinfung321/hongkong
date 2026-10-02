@@ -1,4 +1,5 @@
 import { Color } from 'three';
+import { cityLight, cityLightGlsl } from './cityLight.js';
 
 // Bays per run of a lit floor strip, once single bays are too narrow to draw.
 const RUN = 4;
@@ -29,7 +30,8 @@ export const citySoft = { value: 1 };
 // can't shimmer: where bays shrink below a couple of pixels but floors don't,
 // each floor becomes a strip of lit and dark runs of RUN bays (user choice,
 // 2026-10-02: IFC read as a flat slab in 01); where floors or runs shrink too,
-// the wall fades to its average glow.
+// the wall fades to its average glow. The street's warm light washes the
+// lowest floors (cityLight.js).
 export function addCityWindows(material, options = {}) {
   const {
     lit = 0.3, // share of windows lit
@@ -63,7 +65,7 @@ export function addCityWindows(material, options = {}) {
   material.userData.cityWindows = uniforms;
 
   material.onBeforeCompile = (shader) => {
-    Object.assign(shader.uniforms, uniforms);
+    Object.assign(shader.uniforms, uniforms, cityLight);
     shader.vertexShader = shader.vertexShader
       .replace(
         '#include <common>',
@@ -101,7 +103,8 @@ export function addCityWindows(material, options = {}) {
         varying vec2 vCitySeed;
         float cityHash( vec2 p ) {
           return fract( sin( dot( p, vec2( 127.1, 311.7 ) ) ) * 43758.5453 );
-        }`,
+        }
+        ${cityLightGlsl}`,
       )
       .replace(
         '#include <emissivemap_fragment>',
@@ -151,6 +154,7 @@ export function addCityWindows(material, options = {}) {
             totalEmissiveRadiance += mix( mix( detail, strips, bays ), average, far ) * uCityStrength;
             diffuseColor.rgb *= mix( 1.0, uCityGlass, mix( mix( shape, strip, bays ), 0.3, far ) );
           }
+          totalEmissiveRadiance += streetLight( diffuseColor.rgb, vCityPos.y );
         }`,
       );
   };

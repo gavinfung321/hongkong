@@ -1310,6 +1310,23 @@ all six.
          05 29,300 / 6,730, 06 8,500 / 2,190 (other 1,730 before, the
          brighter landmarks at the frame edge). Composition probe: only the
          four older misses; draw calls unchanged.
+       - **Step 3, lighting and materials (done):** new
+         `src/scene/cityLight.js`, shared by the painted facades and the
+         window shader.
+         - *Sky in the glass:* the painted towers' glass mirrors the dusk
+           sky (horizon purple to a muted blue higher up), strongest where
+           a wall is seen edge-on and toward the tops; lit offices keep
+           their colour. Each IFC face and each Bank of China facet now
+           catches a different amount, so the glass reads as glass.
+         - *Street glow:* warm light from the streets washes the lowest
+           floors of every tower, fading over about 16 m.
+         - *IFC crown uplight:* the crown fins are brightest at their feet
+           and fade to 15% at the tips.
+         - **Checks:** IFC still leads. Bright pixels (luma over 60), main
+           buildings / other towers: 01 11,000 / 720, 03 19,200 / 2,150,
+           05 33,000 / 7,700, 06 9,200 / 2,230; the other towers' share is
+           unchanged (03 11%, 05 23%). No new meshes: draw calls and
+           framing unchanged.
        - **IFC Mall podium (user request, 2026-10-02):** the user saw the
          base of IFC still flickering on phones; it still used the window
          shader. It now has a painted skin too: four 5.5 m retail floors of
@@ -1573,7 +1590,10 @@ Stop for the user's review after each step, as in the grey-box.
   `createVessels.js` wakes in place of the ferry's foam skirt, updated
   each frame; `surfaces.js` foam strip removed, junk waterline darkened;
   `waterReflections.js` hull sources; `createWater.js` hull mirror images
-  that hide the glints behind them (part 3f).
+  that hide the glints behind them (part 3f). New `src/scene/cityLight.js`
+  (street glow and sky in the glass) used by `facades.js` and
+  `cityWindows.js`; `createIsland.js` uplit IFC crown fins (part 3e,
+  step 3).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
   copy and footer hidden while loading and during the fade),
@@ -1639,7 +1659,9 @@ The milestone passes when:
    and the four landmarks have their own glass skins
    (Bank of China glowing braces over dark facets, Cheung Kong silver,
    Central Plaza bronze, The Center neon floor lines) that hold still
-   while scrolling (user choice, 2026-10-02), and no brace line, mast or warning light shimmers
+   while scrolling; their glass catches the dusk sky, warm street light
+   washes the foot of Central and IFC's crown fins are uplit (user choice,
+   2026-10-02), and no brace line, mast or warning light shimmers
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its

@@ -213,6 +213,29 @@ const IFC_TIERS = [
 const IFC_SLOT = [1.5, 1.5]; // half width, depth
 const IFC_BANDS = [64, 128, 192, 256]; // bronze refuge-floor bands
 const IFC_GLOW = [0.85, 1]; // lit glass: shaft, upper tiers
+const FIN_TIP = 0.15; // fin brightness at the tip, against 1 at the foot
+
+// Uplit crown (user choice, 2026-10-02): floodlights at the fins' feet, so
+// each fin is brightest at its base and fades toward its tip. The blade's
+// own height runs 0 to 1 before each instance stretches it.
+function upliftFins(material) {
+  material.onBeforeCompile = (shader) => {
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', '#include <common>\nvarying float vFinUp;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvFinUp = position.y;');
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>', '#include <common>\nvarying float vFinUp;')
+      .replace(
+        '#include <emissivemap_fragment>',
+        `#include <emissivemap_fragment>
+        float finLight = mix( 1.0, ${FIN_TIP.toFixed(2)}, pow( clamp( vFinUp, 0.0, 1.0 ), 1.5 ) );
+        totalEmissiveRadiance *= finLight;
+        diffuseColor.rgb *= finLight;`,
+      );
+  };
+  material.customProgramCacheKey = () => 'ifc-fins';
+  return material;
+}
 
 function createIFC() {
   const ifc = new Group();
@@ -255,7 +278,7 @@ function createIFC() {
   const blade = new Shape([new Vector2(-1.4, 0), new Vector2(1.4, 0), new Vector2(0.2, 1), new Vector2(-0.2, 1)]);
   const finGeometry = new ExtrudeGeometry(blade, { depth: 0.8, bevelEnabled: false }).translate(0, 0, -0.4);
   const finOffsets = [[15, 19], [9, 15], [3, 12], [-3, 12], [-9, 15], [-15, 19]];
-  const fins = new InstancedMesh(finGeometry, new MeshLambertMaterial({ color: 0xffffff, emissive: 0xc9d4e8 }), finOffsets.length * 4);
+  const fins = new InstancedMesh(finGeometry, upliftFins(new MeshLambertMaterial({ color: 0xffffff, emissive: 0xc9d4e8 })), finOffsets.length * 4);
   const lean = new Quaternion();
   for (let k = 0; k < 4; k++) {
     const yaw = (k * Math.PI) / 2;
