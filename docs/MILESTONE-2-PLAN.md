@@ -1231,17 +1231,30 @@ all six.
        lights (user request, 2026-10-02).** The user saw IFC flicker while
        scrolling on a phone, and still too many lights on the other towers
        in 01–03, 05 and 06.
-       - **IFC flicker:** IFC's crisp windows are a few pixels each on a
-         phone, so when the camera moves fast they jump between pixels and
-         twinkle. While the scroll moves faster than a gentle pace, every
-         window grid (IFC and skyline) now softens toward its floor-strip
-         and glow look, up to three times as soft, easing in over about
-         0.1 s and back to crisp about 1.5 s after the scroll stops (new
-         `cityMotion` and `updateCityMotion` in `cityWindows.js`, driven
-         from `src/main.js`; off in reduced motion). At the hold IFC looks
-         exactly as locked. On the mobile scroll path the share of IFC
-         pixels that pop between frames fell from 43% to 8% (05 to 06),
-         17% to 2% (04 to 05) and 7.6% to 5% (01 to 02).
+       - **IFC flicker, second try (user choice, 2026-10-02):** the first
+         try softened every window grid while scrolling, toward its strips
+         and glow. The user then saw IFC still flicker on phones and turn
+         into a grey slab on desktop mid-scroll, with the other towers'
+         lights gone: the softening pushed walls into their flat glow, and
+         each flick switched IFC between three looks. It is removed;
+         windows keep one look whether or not the camera moves. Instead:
+         - Antialiasing is on for phones too (`src/main.js`; the brief
+           allowed it if 30 fps holds, and the low-frame-rate fallback
+           still lowers the resolution). IFC's piers, face slots, bronze
+           bands and crown fins are 1–2 px wide on a phone and crawled
+           without it.
+         - On phones, single windows over about 6 px get edges 1.5 times
+           softer (`citySoft` in `cityWindows.js`). Smaller windows and
+           floor strips are left alone, as softening them dimmed IFC in 01;
+           it never moves a wall to its strips or glow.
+         - Checks: IFC holds exactly as locked on phones (01 and 05 side
+           by side) and desktop mid-scroll keeps every lit window. On the
+           mobile scroll path, holds and slow moves are steady; a fast
+           05 → 06 move still scores high frame to frame because the window
+           grid slides about one floor per frame, and the windows keep
+           their pattern. If that still reads as flicker on the phone, the
+           next steps are 2× phone resolution, then a short blur along the
+           scroll direction that keeps each window's brightness.
        - **Fewer background lights:** every skyline tower is now 3–6% lit
          (was 5–12%), still spread evenly with 10% almost dark; 06 dims the
          skyline to 60% like 05 (`city: 0.6` in `src/data/chapters.js`).
@@ -1436,8 +1449,9 @@ Stop for the user's review after each step, as in the grey-box.
   skyline windows in `createIsland.js` (part 3b). `cityWindows.js` `vary`
   option and `cityDensity`, new `src/scene/cityDots.js` (window dots on far
   towers), `createIsland.js` shared `SKYLINE_WINDOWS` settings (part 3c).
-  `cityWindows.js` `cityMotion` / `updateCityMotion` (windows soften while
-  scrolling), `src/main.js` (feeds it the scroll speed), `createIsland.js`
+  `cityWindows.js` `citySoft` (softer single-window edges on phones),
+  `src/main.js` (antialiasing on phones too, sets `citySoft` per
+  breakpoint), `src/scene/landmarks.js` (comment only), `createIsland.js`
   3–6% lit skyline, `src/data/chapters.js` `city: 0.6` in 06,
   `cityDots.js` dots sized in metres (part 3d).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
@@ -1494,7 +1508,8 @@ The milestone passes when:
    too (user requests and choices, 2026-10-02); in 01–03, 05 and 06 the
    other towers give off no more than about a third of the main
    buildings' bright light, and IFC does not twinkle or flicker while
-   scrolling on a phone (user request, 2026-10-02), and no brace line, mast or warning light shimmers
+   scrolling on a phone, nor change look mid-scroll on any screen: no grey
+   slab, lit windows stay lit (user requests, 2026-10-02), and no brace line, mast or warning light shimmers
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its

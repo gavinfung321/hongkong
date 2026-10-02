@@ -15,26 +15,12 @@ export function cityDensity(x, z, { lit = 0.3, maxLit = 1, vary = 1.3, dark = 0 
   return cityHash(sx * 0.071 + 3.1, sz * 0.071 + 3.1) < dark ? density * 0.1 : density;
 }
 
-// Shared by every window material: 0 at rest, rising while the camera moves
-// fast. Windows are drawn as if that many times smaller, so they soften into
-// floor strips and glow mid-move and come back crisp at the hold (user
-// report, 2026-10-02: IFC twinkled while scrolling on phones, its 3–4 px
-// windows sliding ~10 px a frame).
-export const cityMotion = { value: 0 };
-
-// Full softening (windows drawn as if 3× smaller) from about 0.12 chapters
-// per second, a gentle scroll; at 2× IFC still twinkled at the 05 → 06 pace.
-// It comes on fast and eases off slowly, so the windows sharpen gently as
-// the camera settles.
-const MOTION = { max: 2, speed: [0.02, 0.12], rise: 0.08, fall: 0.4 };
-
-// speed: scroll progress in chapters per second; dt in seconds.
-export function updateCityMotion(speed, dt) {
-  const t = Math.min(Math.max((speed - MOTION.speed[0]) / (MOTION.speed[1] - MOTION.speed[0]), 0), 1);
-  const target = MOTION.max * t * t * (3 - 2 * t);
-  const tau = target > cityMotion.value ? MOTION.rise : MOTION.fall;
-  cityMotion.value += (target - cityMotion.value) * (1 - Math.exp(-dt / tau));
-}
+// Shared by every window material: how many pixels wide each single
+// window's edge blur is. Phones' 3–4 px windows twinkle as the camera moves
+// with crisp edges, so they get softer ones (user report, 2026-10-02). It
+// leaves floor strips alone, never moves a wall to its strips or glow, and
+// stays constant: switching looks mid-scroll read as flicker and greyed IFC out.
+export const citySoft = { value: 1 };
 
 // Adds a lit-window grid to a lit material (Lambert or Standard, instanced or
 // not). The grid is laid out in world metres on every wall, so it doesn't
@@ -72,7 +58,7 @@ export function addCityWindows(material, options = {}) {
     uCityGlass: { value: glass },
     uCityGlow: { value: glow },
     uCityClose: { value: close },
-    uCityMotion: cityMotion,
+    uCitySoft: citySoft,
   };
   material.userData.cityWindows = uniforms;
 
@@ -110,7 +96,7 @@ export function addCityWindows(material, options = {}) {
         uniform float uCityGlass;
         uniform float uCityGlow;
         uniform float uCityClose;
-        uniform float uCityMotion;
+        uniform float uCitySoft;
         varying vec3 vCityPos;
         varying vec2 vCitySeed;
         float cityHash( vec2 p ) {
@@ -133,7 +119,8 @@ export function addCityWindows(material, options = {}) {
             vec2 cell = floor( g );
             vec2 f = fract( g );
             vec2 w0 = max( fwidth( g ), vec2( 1e-4 ) );
-            vec2 w = w0 * ( 1.0 + uCityMotion );
+            // Only windows over ~6 px are softened: blurring smaller ones dims them.
+            vec2 w = w0 * mix( vec2( uCitySoft ), vec2( 1.0 ), smoothstep( 0.1, 0.2, w0 ) );
             float shape =
               ( smoothstep( 0.2 - w.x, 0.2 + w.x, f.x ) - smoothstep( 0.8 - w.x, 0.8 + w.x, f.x ) ) *
               ( smoothstep( 0.28 - w.y, 0.28 + w.y, f.y ) - smoothstep( 0.78 - w.y, 0.78 + w.y, f.y ) );
@@ -146,10 +133,10 @@ export function addCityWindows(material, options = {}) {
             vec3 detail = tint * on * ( 0.5 + 0.5 * cityHash( cell + 7.7 ) ) * shape * closeGain;
             // Floor strips: the window band of each floor, lit in runs of RUN
             // bays, at the bays' average coverage across.
-            float bandY = smoothstep( 0.28 - w.y, 0.28 + w.y, f.y ) - smoothstep( 0.78 - w.y, 0.78 + w.y, f.y );
+            float bandY = smoothstep( 0.28 - w0.y, 0.28 + w0.y, f.y ) - smoothstep( 0.78 - w0.y, 0.78 + w0.y, f.y );
             float runX = g.x / ${RUN.toFixed(1)};
             float run = floor( runX );
-            float wr = w.x / ${RUN.toFixed(1)};
+            float wr = w0.x / ${RUN.toFixed(1)};
             float fr = fract( runX );
             float runEdge = smoothstep( 0.0, wr, fr ) * smoothstep( 0.0, wr, 1.0 - fr );
             float runOn = step( cityHash( vec2( run, cell.y ) + seed * 0.137 ), density );
@@ -159,8 +146,8 @@ export function addCityWindows(material, options = {}) {
             // 0.3 window area × 0.75 mean brightness, lifted: a true average
             // of the dots reads dimmer than the dots themselves.
             vec3 average = mix( uCityWarm, uCityCool, uCityCoolShare ) * min( density, 1.0 ) * uCityGlow;
-            float bays = smoothstep( 0.2, 0.5, w.x );
-            float far = smoothstep( 0.2, 0.5, max( w.y, wr ) );
+            float bays = smoothstep( 0.2, 0.5, w0.x );
+            float far = smoothstep( 0.2, 0.5, max( w0.y, wr ) );
             totalEmissiveRadiance += mix( mix( detail, strips, bays ), average, far ) * uCityStrength;
             diffuseColor.rgb *= mix( 1.0, uCityGlass, mix( mix( shape, strip, bays ), 0.3, far ) );
           }
