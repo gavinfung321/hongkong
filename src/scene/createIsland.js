@@ -25,6 +25,8 @@ import {
 import { PALETTE, basic, lambert } from './palette.js';
 import { addCityWindows } from './cityWindows.js';
 import { createMountains } from './createMountains.js';
+import { createBeacons, createLandmarks, mastMesh } from './landmarks.js';
+import { prism } from './prism.js';
 import { WORLD } from '../data/world.js';
 import { seededRandom } from './random.js';
 import { strut } from './strut.js';
@@ -63,22 +65,107 @@ function createSkyline() {
   const mid = new Color(PALETTE.proxyMid);
   const warm = new Color(0x6e5a4c);
 
+  // Landmark footprints, [x, z, half reach]: towers there step aside.
+  const { boc, cheungKong, centralPlaza, center } = WORLD.landmarks;
+  const clear = [
+    [boc.position, boc.side / 2 + 30],
+    [cheungKong.position, cheungKong.side / 2 + 30],
+    [centralPlaza.position, centralPlaza.radius + 30],
+    [center.position, center.half + 30],
+  ].map(([[lx, , lz], r]) => [lx, lz, r]);
+
+  const buildings = [];
   for (let i = 0; i < count; i++) {
     let px = x[0] + random() * (x[1] - x[0]);
     const pz = z[0] + Math.pow(random(), 0.8) * (z[1] - z[0]);
     if (Math.abs(px - ifcX) < 70 && Math.abs(pz - ifcZ) < 70) px += px < ifcX ? -80 : 80;
     if (Math.abs(px - wheelX) < 45 && pz > wheelZ - 60) px += px < wheelX ? -50 : 50;
+    for (const [lx, lz, r] of clear) {
+      if (Math.abs(px - lx) < r && Math.abs(pz - lz) < r) px += px < lx ? -(r + 10) : r + 10;
+    }
     const d = (px - peakX) / 480;
     const h = Math.min(maxHeight, 30 + 230 * Math.exp(-d * d) * (0.45 + 0.55 * random()) + random() * 35);
     const w = 18 + random() * 30;
-    matrix.compose(new Vector3(px, 3, pz), q, new Vector3(w, h, 18 + random() * 30));
+    const depth = 18 + random() * 30;
+    matrix.compose(new Vector3(px, 3, pz), q, new Vector3(w, h, depth));
     mesh.setMatrixAt(i, matrix);
     color.copy(dark).lerp(mid, 0.25 + random() * 0.5);
     if (random() < 0.12) color.lerp(warm, 0.6);
     mesh.setColorAt(i, color);
+    buildings.push({ x: px, z: pz, w, h, depth, color: color.clone() });
   }
   mesh.name = 'skyline';
-  return mesh;
+  return { mesh, buildings };
+}
+
+// Varied tops on the skyline towers (user choice, 2026-10-02): narrower
+// upper sections, lit roof bands, a few pyramid roofs, and masts with red
+// warning lights on the tallest. Drawn from their own random sequence, so
+// the towers themselves don't move.
+const TOPS = {
+  setback: { minHeight: 90, share: 0.35, width: [0.55, 0.2], rise: [0.1, 0.1] },
+  crown: { minHeight: 100, share: 0.25, height: 2.5, inset: 0.92, warm: 0xffd9a0, cool: 0xcfe0ff, glow: [0.3, 0.2] },
+  pyramid: { minHeight: 110, share: 0.1, rise: 0.5 },
+  mast: { minHeight: 140, share: 0.3, height: [15, 25] },
+};
+
+function createTops(buildings, windowMaterial, seed) {
+  const random = seededRandom(seed);
+  const setbacks = [];
+  const crowns = [];
+  const pyramids = [];
+  const masts = [];
+  const warm = new Color(TOPS.crown.warm);
+  const cool = new Color(TOPS.crown.cool);
+  for (const b of buildings) {
+    const rolls = [random(), random(), random(), random(), random(), random()];
+    let roof = b.h;
+    let w = b.w;
+    let depth = b.depth;
+    // The upper section is inset at least 2 m from the walls below.
+    if (b.h > TOPS.setback.minHeight && rolls[0] < TOPS.setback.share) {
+      const scale = TOPS.setback.width[0] + TOPS.setback.width[1] * rolls[1];
+      const rise = b.h * (TOPS.setback.rise[0] + TOPS.setback.rise[1] * rolls[2]);
+      w *= scale;
+      depth *= scale;
+      setbacks.push({ ...b, y: roof, w, h: rise, depth });
+      roof += rise;
+    }
+    if (b.h > TOPS.crown.minHeight && rolls[3] < TOPS.crown.share) {
+      const tint = (rolls[4] < 0.3 ? cool : warm).clone().multiplyScalar(TOPS.crown.glow[0] + TOPS.crown.glow[1] * rolls[5]);
+      crowns.push({ x: b.x, z: b.z, y: roof, w: w * TOPS.crown.inset, h: TOPS.crown.height, depth: depth * TOPS.crown.inset, color: tint });
+    } else if (b.h > TOPS.pyramid.minHeight && rolls[3] < TOPS.crown.share + TOPS.pyramid.share) {
+      pyramids.push({ x: b.x, z: b.z, y: roof, w, h: w * TOPS.pyramid.rise, depth, color: b.color });
+      continue;
+    }
+    if (roof > TOPS.mast.minHeight && rolls[4] < TOPS.mast.share) {
+      masts.push([[b.x, 3 + roof, b.z], TOPS.mast.height[0] + TOPS.mast.height[1] * rolls[5], 2]);
+    }
+  }
+
+  const matrix = new Matrix4();
+  const q = new Quaternion();
+  const instanced = (geometry, material, list, name) => {
+    const mesh = new InstancedMesh(geometry, material, Math.max(list.length, 1));
+    mesh.count = list.length;
+    list.forEach((t, i) => {
+      mesh.setMatrixAt(i, matrix.compose(new Vector3(t.x, 3 + (t.y ?? 0), t.z), q, new Vector3(t.w, t.h, t.depth)));
+      if (t.color) mesh.setColorAt(i, t.color);
+    });
+    mesh.name = name;
+    return mesh;
+  };
+  const crownMaterial = new MeshBasicMaterial({ color: 0xffffff });
+  const pyramidGeometry = new ConeGeometry(Math.SQRT1_2, 1, 4).rotateY(Math.PI / 4).translate(0, 0.5, 0);
+  const group = new Group();
+  group.name = 'skylineTops';
+  group.add(
+    instanced(unitBox, windowMaterial, setbacks, 'skylineSetbacks'),
+    instanced(unitBox, crownMaterial, crowns, 'skylineCrowns'),
+    instanced(pyramidGeometry, new MeshLambertMaterial({ color: 0xffffff }), pyramids, 'skylinePyramids'),
+  );
+  const beacons = masts.map(([[x, y, z], height]) => [x, y + height + 1, z]);
+  return { group, masts, beacons, crownMaterial };
 }
 
 // ---- Two IFC ------------------------------------------------------------------
@@ -98,14 +185,6 @@ function ifcPlan(half, notch, slot = 0, depth = 0) {
     }
   }
   return new Shape(points);
-}
-
-// A plan shape extruded upward from y0 to y1.
-function prism(shape, y0, y1) {
-  const geometry = new ExtrudeGeometry(shape, { depth: y1 - y0, bevelEnabled: false });
-  geometry.rotateX(-Math.PI / 2);
-  geometry.translate(0, y0, 0);
-  return geometry;
 }
 
 // [bottom, top, half width, corner notch]. Straight to 285 m, then shallow
@@ -342,8 +421,12 @@ function createWheel() {
 export function createIsland() {
   const group = new Group();
   group.name = 'island';
-  const skyline = createSkyline();
-  group.add(createSlab(), skyline);
+  const { mesh: skyline, buildings } = createSkyline();
+  const tops = createTops(buildings, skyline.material, WORLD.island.skyline.seed + 101);
+  const landmarks = createLandmarks();
+  const beacons = createBeacons([...tops.beacons, ...landmarks.beacons]);
+  const masts = mastMesh([...tops.masts, ...landmarks.masts]);
+  group.add(createSlab(), skyline, tops.group, landmarks.group, masts, beacons.points);
   const mountains = createMountains();
   group.add(mountains.group);
 
@@ -351,17 +434,22 @@ export function createIsland() {
   const { wheel, turn } = createWheel();
   group.add(ifc, createPodium(), createPiers(), wheel);
 
-  // Continuous mode only; in reduced motion the wheel and mist hold still.
+  // Continuous mode only; in reduced motion the wheel, mist, beacons and
+  // landmark colours hold still.
   function update(time) {
     turn((time / WHEEL_TURN) * Math.PI * 2);
     mountains.update(time);
+    landmarks.update(time);
+    beacons.update(time);
   }
 
-  // Skyline window level per chapter (`city` in each chapter's visibility):
-  // 05 dims the towers around IFC (user choice, 2026-10-02).
+  // Skyline and landmark light level per chapter (`city` in each chapter's
+  // visibility): 05 dims the towers around IFC (user choice, 2026-10-02).
   const skylineWindows = skyline.material.userData.cityWindows;
   function setCityLevel(value) {
     skylineWindows.uCityStrength.value = SKYLINE_STRENGTH * value;
+    tops.crownMaterial.color.setScalar(value);
+    landmarks.setLevel(value);
   }
 
   return { group, ifc, wheel, update, setCityLevel };

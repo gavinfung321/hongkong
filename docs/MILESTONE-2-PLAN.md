@@ -1147,6 +1147,46 @@ all six.
          in part 1; three more draw calls in every hold (desktop 01 173).
          In 05 the shoulder hides more of the moon behind the towers (a
          sliver shows left of IFC).
+     - **Part 3: building shapes and four landmarks (user choices,
+       2026-10-02; built the same day).** All four landmarks the user picked,
+       built in code at about real height in their order seen from Kowloon,
+       plus varied tops on the plain skyline boxes. All are lit well below
+       IFC and fade with the `city` level in 05 like the skyline.
+       - **Bank of China Tower** (`WORLD.landmarks.boc`, left of IFC under
+         the moon): four triangular shafts round a 52 m square, stopping at
+         3, 4, 6 and 5 facade modules (156–312 m), each roof cut at 45° so
+         each face ends on a diagonal. White X braces and corner lines on
+         dark glass (a mip-mapped texture, so the lines fade with distance
+         instead of shimmering), twin masts to 367 m.
+       - **Cheung Kong Center** (just right of BOC, 283 m): a plain square
+         box whose whole skin glows an even cool white (every window lit,
+         dim), with a pale crown band 1.5 m proud of the glass.
+       - **Central Plaza** (374 m): a chamfered triangle, one face to the
+         harbour, with four colour bars near the top that drift slowly
+         through the colours (90 s per cycle), a glass pyramid and a mast.
+         It stands well right of its true place in Wan Chai, where the Clock
+         Tower would hide it in 01; it shows between the tower and the ferry
+         in 01 and at the left edge of 05 and 06.
+       - **The Center** (right of IFC, 346 m): a chamfered square shaft with
+         three crown steps and a spire, neon lines every 12 m, the whole
+         tower slowly changing colour (60 s per cycle).
+       - **Varied tops** on the skyline boxes, from their own random
+         sequence so the towers don't move: a narrower upper section on 35%
+         of those over 90 m, a dim warm or cool lit roof band on 25% of
+         those over 100 m, a pyramid roof on 10%, and dark masts on 30% of
+         those over 140 m. Skyline towers step aside from the landmark
+         footprints.
+       - **Masts and warning lights:** masts are dark and low-contrast (one
+         or two pixels wide; on phones, without antialiasing, a bright one
+         would crawl). Each carries a red light, a fixed 2.6 px dot that
+         nearer towers hide, pulsing slowly in continuous mode and holding
+         still in reduced motion, as do the colour cycles.
+       - **Checks:** the composition probe shows only the four older misses;
+         moon, IFC and copy uncovered in every frame. 1 cm camera steps
+         holds 1–5: 19,124 / 16,726 / 14,871 / 13,026 / 6,806 px (5: +4%,
+         the BOC braces); strobe at scroll speed 6.3% for the 01 skyline and
+         unchanged for the Clock Tower. Twelve more draw calls (desktop 01
+         185, 05 60; mobile 01 129).
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -1164,7 +1204,7 @@ Measured with the `?fps` overlay on a production build, as in
 |---|---|---|
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
-| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. With the 3D palms: desktop 02 137. With the bauhinia tree: desktop 01 170 (desktop only). The water reflections add none. The mountain rebuild adds 3 everywhere (third range, mist, slope lights): desktop 01 173, 02 140, 05 48; mobile 01 117. Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
+| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. With the 3D palms: desktop 02 137. With the bauhinia tree: desktop 01 170 (desktop only). The water reflections add none. The mountain rebuild adds 3 everywhere (third range, mist, slope lights): desktop 01 173, 02 140, 05 48; mobile 01 117. The landmarks and varied tops add 12 (four skyline-top sets, six landmark meshes, one mast mesh, one set of warning lights): desktop 01 185, 02 149, 03 100, 05 60; mobile 01 129. Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
 | New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). The stone railing adds a 64 × 64 granite tile and a 64 × 96 post panel (24 textures; the lantern glows are drawn in their shader). The wet paving adds a 240 × 240 slab tile (25 textures). The palms add a 256 × 256 frond and bark atlas (26 textures). The bauhinia tree adds a 512 × 512 leaf and flower atlas (27 textures; its falling petals reuse the petal texture). The water reflections add a 256 × 1 skyline strip (28 textures, 1 KB). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
 | Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b; the promenade lanterns and lamps are faked in the materials (`lamps.js`) | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
@@ -1319,7 +1359,12 @@ Stop for the user's review after each step, as in the grey-box.
   and a moonlit edge, the mist band, the slope lights), replacing the
   mountain code in `createIsland.js`; `src/data/world.js` (the Peak outline,
   the third range, mist and lights); `src/scene/createMoon.js` (draw order)
-  (part 2).
+  (part 2). New `src/scene/landmarks.js` (Bank of China Tower, Cheung Kong
+  Center, Central Plaza, The Center, masts, warning lights) and
+  `src/scene/prism.js` (the shared extrusion helper, moved out of
+  `createIsland.js`); `createIsland.js` varied skyline tops and landmark
+  clearance, `setCityLevel` also dims the landmarks; `src/data/world.js`
+  `landmarks` (part 3).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
   copy and footer hidden while loading and during the fade),
@@ -1365,7 +1410,12 @@ The milestone passes when:
    to the water, with no cliff-like cut in any frame or move (user request,
    2026-10-02); the ridge still hides
    the moon's lower edge in 01, and nothing on them twinkles while the
-   camera moves (user choices, 2026-10-02).
+   camera moves (user choices, 2026-10-02). Bank of China Tower, Cheung
+   Kong Center, Central Plaza and The Center are recognisable, the skyline
+   has varied tops, none of them covers the moon, IFC or copy, IFC stays
+   the brightest tower, and no brace line, mast or warning light shimmers
+   while the camera moves; warning lights and colour cycles hold still in
+   reduced motion (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
    feet, raised over the boats (user request, 2026-10-02), and sinks and
    fades out with the 01 copy from the first scroll.
