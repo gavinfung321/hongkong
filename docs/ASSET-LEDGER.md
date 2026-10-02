@@ -131,6 +131,37 @@ midground, background and atmosphere. Each one still has to pass gate 5 below
 | Smoke wisps | Alpha WebP | 06 | Sky | Drift after the fireworks, for the afterglow |
 | Promenade crowd silhouettes | Alpha WebP | 06 | Foreground | People watching the fireworks; scale and warmth |
 
+## Generated staging assets — 2026-10-02
+
+These original assets were generated for this project with OpenAI image
+generation under the user's direction, then converted and optimized locally to
+alpha WebP. PNG source masters and first-generation WebPs remain under their
+respective `docs/references/*/generated/` folders. The smaller review copies are
+in `docs/references/production-candidates/`. They are staging files, not runtime
+assets, and have not been moved into `public/`.
+
+Their approved, conditional and reference-only roles are defined in
+`ASSET-INTEGRATION-BLUEPRINT.md`; dimensions, sizes and alpha checks are recorded
+in `ASSET-QA-REPORT.md`.
+
+| Staged filename | Type | Chapters | Current decision | Source / provenance |
+|---|---|---:|---|---|
+| `bauhinia-petal.webp` | Alpha WebP | 01–05 | Direct-use candidate | Original AI-assisted artwork based on the user's Bauhinia reference photos; optimized locally |
+| `harbour-spray.webp` | Alpha WebP | 03–04 | Direct-use candidate | Original AI-assisted artwork; optimized locally |
+| `coral-clouds.webp` | Alpha WebP | 01, 06 | Direct-use candidate | Original AI-assisted artwork; optimized locally |
+| `harbour-mist.webp` | Alpha WebP | 01–05 | Direct-use candidate | Original AI-assisted artwork; optimized locally |
+| `firework-burst.webp` | Alpha WebP | 06 | Direct-use candidate | Original AI-assisted artwork; optimized locally |
+| `firework-smoke.webp` | Alpha WebP | 06 | Direct-use candidate | Original AI-assisted artwork; optimized locally |
+| `firework-embers.webp` | Alpha WebP | 06 | Direct-use candidate | Original AI-assisted artwork; optimized locally |
+| `bauhinia-flower-cluster.webp` | Alpha WebP | Hero, 01 | Conditional accent | Original AI-assisted artwork based on the user's Bauhinia reference photo; optimized locally |
+| `bauhinia-tree.webp` | Alpha WebP | Hero, 01–02 | Conditional replacement | Original AI-assisted artwork based on the user's Bauhinia reference photos; optimized locally |
+| `bauhinia-trunk-branches.webp` | Alpha WebP | Hero, 01–02 | Conditional layered-tree component | Original AI-assisted artwork; optimized locally |
+| `wet-paving.webp` | Alpha WebP | 01–02 | Conditional material source | Original AI-assisted artwork; optimized locally |
+| `ferry-bow-fragment.webp` | Alpha WebP | 03 | Conditional editorial overlay | Original AI-assisted artwork; optimized locally |
+| `promenade-railing.webp` | Alpha WebP | 01–02 | Reference / fallback | Original AI-assisted artwork; optimized locally |
+| `promenade-lamp.webp` | Alpha WebP | 01–02 | Reference / fallback | Original AI-assisted artwork; optimized locally |
+| `water-reflections.webp` | Alpha WebP | 01, 05 | Reference / fallback | Original AI-assisted artwork; optimized locally |
+
 ## User reminders (2026-10-01)
 
 Things the user plans to add, so the harbour looks closer to the frame 01
