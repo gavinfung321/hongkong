@@ -70,7 +70,8 @@ export const MIST = {
   cards: [
     { x: -800, z: -1110, width: 480, band: 'broad', opacity: 0.45 },
     { x: -300, z: -1112, width: 380, band: 'flat', opacity: 0.45 },
-    { x: 90, z: -1110, width: 340, band: 'low', opacity: 0.45 },
+    // A short section: 05 sees this drift from close by, where a full band reads as a strip.
+    { x: 110, z: -1110, width: 180, band: 'low', u: [0.2, 0.75], opacity: 0.45 },
     { x: 800, z: -1112, width: 460, band: 'broad', opacity: 0.45 },
   ],
 };
