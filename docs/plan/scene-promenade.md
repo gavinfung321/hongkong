@@ -208,8 +208,55 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
        46,800 px (27,700 without the tree): the leaf cards shifting about
        a pixel. With the camera still it changes 24 px, so nothing
        flickers. Hold 1 is unchanged (20,140 px against 20,040).
-     - **Code:** `bauhinia.js`; the atlas is `bauhiniaAtlas` in `surfaces.js`;
-       placement is `WORLD.foreground.bauhinia`.
+     - **Code:** `bauhinia.js`; placement is `WORLD.foreground.bauhinia`.
+     - **Realistic foliage (user request, 2026-10-03:** "make the current
+       tree more realistic, just like our current flying petal").** The
+       code-drawn atlas is replaced by `public/atmosphere/bauhinia-foliage.webp`
+       (1024 × 1024, 155 KB), cut from the user's own artwork: a leaf made
+       of the cluster artwork's clean leaf lobe and its mirror (two lobes,
+       as a bauhinia leaf has), an open flower made of five copies of the
+       drifting petals' artwork with pale stamens, the cluster's bud spray,
+       and a clump of six of the new leaves. Same four-cell layout, so the
+       tree's shape is unchanged. Three changes make it read: flowers turn
+       toward the hero / 01 desktop camera (`viewer`; seen edge-on they were
+       pink slivers), cards are shaded down toward the bottom and inside of
+       the crown, and every card has a little more of its own light (leaves
+       0.09, flowers 0.32), so the artwork's veins and colour show at night
+       as the petals' do. The atlas loads into a clear canvas texture like
+       the petals, so the shaders are the same before and after. Both foliage
+       materials now draw in one pass (`forceSinglePass`, as the palms):
+       the tree costs 2 fewer draw calls. Recipe: `docs/ASSET-LEDGER.md`.
+   - **Stop 4b: bauhinia bush (built 2026-10-03, user request:** "one more
+     bauhinia bush on the left bottom corner … a realistic one, similar to
+     the existing tree but a bush this time to feel different").** Replaces
+     the 2.5D foreground-card test (railing and flower cutouts on planes at
+     the lens), which the user found "very weird" and asked to remove; it was
+     never committed.
+     - **Shape:** a low, dense mound 7 m long, 2.3 m tall and 2.6 m deep,
+       its long side along railing A on the arrival promenade (x −19.6,
+       z 88.7, 2.2 m inside the railing). Nine thin stems fan out from a
+       tight base under an ellipsoid crown with seven lumps, so the outline
+       is uneven. About 1,900 cards from the same atlas: clumps and leaves
+       through the crown's outer half metre, and 260 flowers and 80 bud
+       sprays on its upper surface (far more flowers than the tree), turned
+       toward the camera. 26 fallen petals (the petals' artwork) lie on the
+       paving around it, 3 cm up so they never fight the slabs. The
+       lanterns' warm pools light its leaves and stems (`addLampLight`).
+     - **Framing:** in the hero it runs from the left edge to about 26% of
+       the width, 65–85% of the height, below the Clock Tower's lit base
+       (clear by about 4%) and the copy, beside the lantern on railing A.
+       The 01 hold's push brings it into the bottom-left corner (0–16%,
+       68–100%). The bottom-left paving below it in the hero stays open:
+       anything nearer would leave the frame by the hold.
+     - **Chapters and breakpoints:** desktop 01 and the hero only (`bush` in
+       each chapter's `visibility`). Not on phones: mobile 01 has no deck.
+       The 01 → 02 camera passes over it, so it is gone by 8% of that move
+       (`windows` in `main.js`), while the camera is still about 1.8 m clear
+       of the crown.
+     - **Cost:** 4 draw calls (wood, foliage, its depth twin, fallen petals):
+       desktop hero 216, 01 213 (with the tree's 2 saved); phones unchanged.
+     - **Code:** `createBauhiniaBush` in `bauhinia.js`; placement and size
+       are `WORLD.foreground.bauhiniaBush`.
    - **Stop 5: water reflections (built 2026-10-02, user choice; reworked
      twice the same day, user requests).** The harbour glitters like the
      user's photo of the junks at night: the lights break into many small

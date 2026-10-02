@@ -78,7 +78,14 @@ export const WORLD = {
     // 01 camera, leaning out over the water so its crown frames the top-right
     // corner of the hero and 01 (its trunk stays out of frame). Yaw turns the
     // lean, as for the palms.
-    bauhinia: { position: [1.2, 2.5, 100], yaw: 1.91, scale: 1, seed: 5 },
+    // `viewer`: the hero / 01 desktop camera, which the flowers turn toward.
+    bauhinia: { position: [1.2, 2.5, 100], yaw: 1.91, scale: 1, seed: 5, viewer: [-13, 5.9, 102] },
+    // A low bauhinia bush on the arrival promenade just inside railing A
+    // (user request, 2026-10-03), its long side along the railing: it fills
+    // the bottom-left corner of the hero under the Clock Tower and slides
+    // into the corner by the 01 hold. Desktop only (mobile 01 has no deck).
+    // size: [length, height, depth] in metres.
+    bauhiniaBush: { position: [-19.6, 2.5, 88.7], yaw: -0.7, size: [7, 2.3, 2.6], seed: 11, viewer: [-13, 5.9, 102] },
     // 3D palms around the Clock Tower (frame 02), in two shapes. Yaw turns the
     // trunk's lean: 0 leans toward +x, π/2 toward −z. None may cross the
     // tower in either chapter 02 framing. The row of five stands behind the
