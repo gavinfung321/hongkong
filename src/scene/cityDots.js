@@ -9,7 +9,12 @@ import { seededRandom } from './random.js';
 // than a pixel, so they can't shimmer; each one fades in only where its
 // building's floors have shrunk that far, so close-ups don't get doubles.
 const DOTS = {
-  size: 3.2, // CSS pixels, soft all the way in, so they read as window glow, not specks
+  // Soft all the way in, so they read as window glow, not specks. About 6 m
+  // across, so each covers the same share of its tower on any screen (fixed
+  // CSS pixels made them twice as dense on phones, user request,
+  // 2026-10-02), between 1.5 and 3.2 CSS pixels.
+  metres: 6,
+  size: [1.5, 3.2],
   perLit: 13, // wall area (m²) per dot, per lit share
   offset: 1.5, // metres in front of the wall, clear of its depth
   fade: [0.22, 0.45], // floors per pixel: dots fade in across this range
@@ -52,7 +57,8 @@ export function createCityDots(buildings, windows, seed) {
   geometry.setAttribute('color', new Float32BufferAttribute(color, 3));
   const material = new ShaderMaterial({
     uniforms: {
-      uSize: { value: DOTS.size },
+      uSize: { value: [...DOTS.size] },
+      uMetres: { value: DOTS.metres },
       uHeight: { value: 900 },
       uFloor: { value: floor },
       uFade: { value: DOTS.fade },
@@ -60,7 +66,8 @@ export function createCityDots(buildings, windows, seed) {
       uLevel: { value: 1 },
     },
     vertexShader: `
-      uniform float uSize;
+      uniform vec2 uSize;
+      uniform float uMetres;
       uniform float uHeight;
       uniform float uFloor;
       uniform vec2 uFade;
@@ -70,12 +77,13 @@ export function createCityDots(buildings, windows, seed) {
       void main() {
         vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
         float depth = -mvPosition.z;
+        float pixelsPerMetre = projectionMatrix[ 1 ][ 1 ] * uHeight * 0.5 / depth;
         // Floors per pixel, as the window grid measures them.
-        float floorsPerPixel = depth / ( uFloor * projectionMatrix[ 1 ][ 1 ] * uHeight * 0.5 );
+        float floorsPerPixel = 1.0 / ( uFloor * pixelsPerMetre );
         float fade = smoothstep( uFade.x, uFade.y, floorsPerPixel );
         float fog = exp( -uFog * uFog * depth * depth );
         vColor = color * fade * fog;
-        gl_PointSize = fade > 0.0 ? uSize : 0.0;
+        gl_PointSize = fade > 0.0 ? clamp( uMetres * pixelsPerMetre, uSize.x, uSize.y ) : 0.0;
         gl_Position = projectionMatrix * mvPosition;
       }`,
     fragmentShader: `
@@ -95,7 +103,8 @@ export function createCityDots(buildings, windows, seed) {
   points.userData.noProbe = true;
   points.onBeforeRender = (renderer, scene) => {
     const ratio = renderer.getPixelRatio();
-    material.uniforms.uSize.value = DOTS.size * ratio;
+    material.uniforms.uSize.value[0] = DOTS.size[0] * ratio;
+    material.uniforms.uSize.value[1] = DOTS.size[1] * ratio;
     material.uniforms.uHeight.value = renderer.domElement.height;
     material.uniforms.uFog.value = scene.fog?.density ?? 0;
   };

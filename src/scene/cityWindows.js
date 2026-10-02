@@ -15,6 +15,27 @@ export function cityDensity(x, z, { lit = 0.3, maxLit = 1, vary = 1.3, dark = 0 
   return cityHash(sx * 0.071 + 3.1, sz * 0.071 + 3.1) < dark ? density * 0.1 : density;
 }
 
+// Shared by every window material: 0 at rest, rising while the camera moves
+// fast. Windows are drawn as if that many times smaller, so they soften into
+// floor strips and glow mid-move and come back crisp at the hold (user
+// report, 2026-10-02: IFC twinkled while scrolling on phones, its 3–4 px
+// windows sliding ~10 px a frame).
+export const cityMotion = { value: 0 };
+
+// Full softening (windows drawn as if 3× smaller) from about 0.12 chapters
+// per second, a gentle scroll; at 2× IFC still twinkled at the 05 → 06 pace.
+// It comes on fast and eases off slowly, so the windows sharpen gently as
+// the camera settles.
+const MOTION = { max: 2, speed: [0.02, 0.12], rise: 0.08, fall: 0.4 };
+
+// speed: scroll progress in chapters per second; dt in seconds.
+export function updateCityMotion(speed, dt) {
+  const t = Math.min(Math.max((speed - MOTION.speed[0]) / (MOTION.speed[1] - MOTION.speed[0]), 0), 1);
+  const target = MOTION.max * t * t * (3 - 2 * t);
+  const tau = target > cityMotion.value ? MOTION.rise : MOTION.fall;
+  cityMotion.value += (target - cityMotion.value) * (1 - Math.exp(-dt / tau));
+}
+
 // Adds a lit-window grid to a lit material (Lambert or Standard, instanced or
 // not). The grid is laid out in world metres on every wall, so it doesn't
 // stretch with each box's scale. Each building (its world x / z) gets its own
@@ -51,6 +72,7 @@ export function addCityWindows(material, options = {}) {
     uCityGlass: { value: glass },
     uCityGlow: { value: glow },
     uCityClose: { value: close },
+    uCityMotion: cityMotion,
   };
   material.userData.cityWindows = uniforms;
 
@@ -88,6 +110,7 @@ export function addCityWindows(material, options = {}) {
         uniform float uCityGlass;
         uniform float uCityGlow;
         uniform float uCityClose;
+        uniform float uCityMotion;
         varying vec3 vCityPos;
         varying vec2 vCitySeed;
         float cityHash( vec2 p ) {
@@ -109,7 +132,8 @@ export function addCityWindows(material, options = {}) {
             vec2 g = vec2( across, vCityPos.y - 3.0 ) / uCityCell;
             vec2 cell = floor( g );
             vec2 f = fract( g );
-            vec2 w = max( fwidth( g ), vec2( 1e-4 ) );
+            vec2 w0 = max( fwidth( g ), vec2( 1e-4 ) );
+            vec2 w = w0 * ( 1.0 + uCityMotion );
             float shape =
               ( smoothstep( 0.2 - w.x, 0.2 + w.x, f.x ) - smoothstep( 0.8 - w.x, 0.8 + w.x, f.x ) ) *
               ( smoothstep( 0.28 - w.y, 0.28 + w.y, f.y ) - smoothstep( 0.78 - w.y, 0.78 + w.y, f.y ) );
@@ -118,7 +142,7 @@ export function addCityWindows(material, options = {}) {
             density *= mix( 1.0, 0.1, step( cityHash( seed * 0.071 + 3.1 ), uCityDark ) );
             float on = step( cityHash( cell + seed * 0.137 ), density );
             vec3 tint = mix( uCityWarm, uCityCool, step( 1.0 - uCityCoolShare, cityHash( cell.yx + seed ) ) );
-            float closeGain = mix( uCityClose, 1.0, smoothstep( 0.08, 0.25, w.x ) );
+            float closeGain = mix( uCityClose, 1.0, smoothstep( 0.08, 0.25, w0.x ) );
             vec3 detail = tint * on * ( 0.5 + 0.5 * cityHash( cell + 7.7 ) ) * shape * closeGain;
             // Floor strips: the window band of each floor, lit in runs of RUN
             // bays, at the bays' average coverage across.

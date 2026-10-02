@@ -303,8 +303,9 @@ export const chapters = [
       mobile: { left: 6, top: 9, right: 60, bottom: 35 },
     },
     visibility: {
-      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 1, petals: 0 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 1, petals: 0 },
+      // city: the towers around IFC stay at 60%, as in 05 (user request, 2026-10-02).
+      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 1, petals: 0, city: 0.6 },
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 1, petals: 0, city: 0.6 },
     },
     fogDensity: 0.00036,
     vessels: {

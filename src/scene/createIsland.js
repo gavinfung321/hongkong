@@ -40,11 +40,13 @@ const SKYLINE_STRENGTH = 0.7;
 // lower, so 04–06 don't sparkle like IFC (user choice, 2026-10-02). The
 // same light spread evenly: every tower 5–12% lit and only 10% almost dark,
 // so no tower is crowded with lights beside unlit ones (user choice,
-// 2026-10-02; was 0.5–20% with 40% dark).
+// 2026-10-02; was 0.5–20% with 40% dark). Then about half again, 3–6% per
+// tower, as the other towers still drew the eye in 01–03 and 05–06 (user
+// request, 2026-10-02; was 5–12%).
 const SKYLINE_WINDOWS = {
-  lit: 0.085,
-  maxLit: 0.12,
-  vary: 0.82,
+  lit: 0.045,
+  maxLit: 0.065,
+  vary: 0.8,
   dark: 0.1,
   strength: SKYLINE_STRENGTH,
   close: 0.7,
