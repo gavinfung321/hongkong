@@ -1,10 +1,10 @@
-import { CanvasTexture, Color, RepeatWrapping, SRGBColorSpace } from 'three';
+import { CanvasTexture, ClampToEdgeWrapping, Color, RepeatWrapping, SRGBColorSpace } from 'three';
 import { seededRandom } from './random.js';
 
 // Original surface textures drawn in code (no image files): Clock Tower brick
 // and granite, clock dials, ferry windows and hull, junk sail cloth and hull,
-// the Observation Wheel's hub glow, the promenade railing's granite and the
-// paving slabs.
+// the Observation Wheel's hub glow, the promenade railing's granite, the
+// paving slabs and the palms' fronds and bark.
 // Fine detail is kept to a few pixels per metre so mipmaps average it calmly.
 
 function canvas(width, height) {
@@ -546,6 +546,56 @@ export function promenadePaving() {
   }
   const t = texture(c);
   t.anisotropy = 8;
+  return t;
+}
+
+// ---- Palms ------------------------------------------------------------------
+
+// The palms' shared atlas, 256 × 256, light grey so vertex colours tint it.
+// u 0–0.75: one frond, base at the bottom, tip at the top: a midrib with
+// leaflets slanting toward the tip, transparent between them (cut out in
+// the shader). u 0.78–1: opaque bark with leaf-scar rings.
+export const PALM_FROND_U = 0.74;
+export const PALM_BARK_U = [0.8, 0.98];
+
+export function palmAtlas() {
+  const S = 256;
+  const random = seededRandom(37);
+  const [c, ctx] = canvas(S, S);
+  const mid = 96;
+  ctx.lineCap = 'round';
+  for (let y = 226; y > 6; y -= 7 + random() * 2) {
+    for (const side of [-1, 1]) {
+      const reach = 88 * (0.82 + random() * 0.18);
+      const tone = 200 + Math.floor(random() * 40);
+      ctx.strokeStyle = `rgb(${tone}, ${tone}, ${tone})`;
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(mid, y);
+      ctx.quadraticCurveTo(mid + side * reach * 0.5, y - 10, mid + side * reach, y - 22 - random() * 6);
+      ctx.stroke();
+    }
+  }
+  ctx.strokeStyle = '#eee';
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.moveTo(mid, S);
+  ctx.lineTo(mid, 2);
+  ctx.stroke();
+
+  const x0 = Math.floor(S * 0.78);
+  ctx.fillStyle = '#9a8b7d';
+  ctx.fillRect(x0, 0, S - x0, S);
+  for (let y = 3; y < S; y += 6 + random() * 3) {
+    ctx.fillStyle = `rgba(60, 50, 42, ${0.5 + random() * 0.3})`;
+    ctx.fillRect(x0, Math.floor(y), S - x0, 2);
+  }
+  for (let i = 0; i < 400; i++) {
+    ctx.fillStyle = `rgba(${random() < 0.5 ? '40, 32, 26' : '190, 175, 160'}, 0.25)`;
+    ctx.fillRect(x0 + Math.floor(random() * (S - x0)), Math.floor(random() * S), 1, 2);
+  }
+  const t = texture(c);
+  t.wrapS = t.wrapT = ClampToEdgeWrapping;
   return t;
 }
 

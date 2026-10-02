@@ -62,13 +62,21 @@ export const WORLD = {
       [-69.5, 2.5, 17],
       [-66, 2.5, 21],
     ],
-    // Palm silhouette cards around the Clock Tower (frame 02). Yaw faces the cards
-    // toward the chapter 02 cameras.
+    // 3D palms around the Clock Tower (frame 02), in two shapes. Yaw turns the
+    // trunk's lean: 0 leans toward +x, π/2 toward −z. None may cross the
+    // tower in either chapter 02 framing. The row of five stands behind the
+    // tower on the promontory's south end. `only: 'mobile'`: outside the
+    // desktop frame, where it would only sweep across the tower mid-move.
     palms: [
-      { position: [-82.4, 2.5, 9.1], height: 11, yaw: -0.11 },
-      { position: [-52.5, 2.5, 0.2], height: 9, yaw: -0.57 },
-      { position: [-66.7, 2.5, 55.1], height: 10, yaw: 0.07 },
-      { position: [-55.6, 2.5, 41.6], height: 9, yaw: -0.11 },
+      { position: [-82.4, 2.5, 9.1], height: 11, shape: 'coconut', yaw: -0.83 },
+      { position: [-52.5, 2.5, 0.2], height: 9, shape: 'fan', yaw: -0.83 },
+      { position: [-66.7, 2.5, 55.1], height: 10, shape: 'coconut', yaw: Math.PI },
+      { position: [-53.5, 2.5, 38], height: 9, shape: 'fan', yaw: 0, only: 'mobile' },
+      { position: [-70, 2.5, -50], height: 10, shape: 'fan', yaw: 2.9 },
+      { position: [-74.5, 2.5, -46.5], height: 11.5, shape: 'coconut', yaw: 2.7 },
+      { position: [-79, 2.5, -50], height: 9.5, shape: 'fan', yaw: 3.0 },
+      { position: [-83.5, 2.5, -47], height: 12, shape: 'coconut', yaw: 2.6 },
+      { position: [-88, 2.5, -50], height: 10.5, shape: 'fan', yaw: 3.1 },
     ],
   },
 
