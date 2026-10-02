@@ -14,7 +14,7 @@ export function supportsWebGL2() {
 
 // Switches permanently to the poster + document-flow story. Never shows an error.
 export function enterFallback(reason) {
-  root.classList.remove('is-enhanced', 'is-ready');
+  root.classList.remove('is-enhanced', 'is-ready', 'is-booting');
   root.classList.add('is-fallback');
   root.dataset.fallback = reason;
   const canvas = document.getElementById('world');

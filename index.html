@@ -10,6 +10,15 @@
     />
     <title>Victoria Harbour — A Night Crossing</title>
     <link rel="stylesheet" href="/src/styles.css" />
+    <!-- While the 3D scene loads, only the night sky shows: no fallback poster
+         art, no text in its plain layout. main.js lifts this on the first 3D
+         frame or on fallback; the timer lifts it if the script never arrives. -->
+    <script>
+      document.documentElement.classList.add('is-booting');
+      setTimeout(function () {
+        document.documentElement.classList.remove('is-booting');
+      }, 12000);
+    </script>
   </head>
   <body>
     <div class="poster" aria-hidden="true">

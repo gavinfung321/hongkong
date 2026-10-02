@@ -100,6 +100,17 @@ a:focus-visible {
   display: none;
 }
 
+/* Loading (index.html): the poster's sky only, so neither the fallback art nor
+   the text's plain layout flashes before the 3D scene (user choice, 2026-10-02).
+   The art stays hidden while the poster fades out over the first 3D frame;
+   only the fallback shows it. */
+.is-booting .poster__art,
+.is-ready .poster__art,
+.is-booting .story,
+.is-booting .site-footer {
+  visibility: hidden;
+}
+
 @media (max-aspect-ratio: 4/5) {
   .poster__art--landscape {
     display: none;
