@@ -15,7 +15,8 @@
 //              widening), so a tall subject keeps its size.
 // copy:        copy-safe region as % of the viewport (left / top / right / bottom).
 // visibility:  1 = shown, 0 = gated (faded out) at this chapter's hold pose.
-//              petals is a density (omitted = 1).
+//              petals is a density (omitted = 1); city is the skyline
+//              windows' level (omitted = 1).
 // vessels:     [x, z] world position of each vessel at this chapter's hold pose,
 //              per breakpoint (mobile is re-authored, not cropped).
 // probes:      composition targets (% of viewport) checked by the debug probe.
@@ -261,8 +262,9 @@ export const chapters = [
       mobile: { left: 6, top: 9, right: 62, bottom: 44 },
     },
     visibility: {
-      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, petals: 0.6 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, petals: 0.6 },
+      // city: the towers around IFC at 60%, so IFC leads (user choice, 2026-10-02).
+      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, petals: 0.6, city: 0.6 },
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, petals: 0.6, city: 0.6 },
     },
     fogDensity: 0.00045,
     vessels: {

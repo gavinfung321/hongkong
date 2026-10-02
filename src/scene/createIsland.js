@@ -31,6 +31,7 @@ import { strut } from './strut.js';
 import { hubGlow } from './surfaces.js';
 
 const unitBox = new BoxGeometry(1, 1, 1).translate(0, 0.5, 0);
+const SKYLINE_STRENGTH = 0.7;
 
 function createSlab() {
   const [x0, x1, z0, z1, top] = WORLD.island.slab;
@@ -46,8 +47,14 @@ function createSkyline() {
   const [wheelX, , wheelZ] = WORLD.wheel.position;
   const random = seededRandom(seed);
   // Dimmer than IFC and capped well below its 50%, so IFC leads (user choice,
-  // 2026-10-02; was lit 0.3, up to ~50%, strength 0.9).
-  const material = addCityWindows(new MeshLambertMaterial({ color: 0xffffff }), { lit: 0.2, maxLit: 0.3, strength: 0.7 });
+  // 2026-10-02; was lit 0.3, up to ~50%, strength 0.9). Close-up windows
+  // peak lower, so 04–06 don't sparkle like IFC (user choice, 2026-10-02).
+  const material = addCityWindows(new MeshLambertMaterial({ color: 0xffffff }), {
+    lit: 0.2,
+    maxLit: 0.3,
+    strength: SKYLINE_STRENGTH,
+    close: 0.7,
+  });
   const mesh = new InstancedMesh(unitBox, material, count);
   const matrix = new Matrix4();
   const q = new Quaternion();
@@ -335,7 +342,8 @@ function createWheel() {
 export function createIsland() {
   const group = new Group();
   group.name = 'island';
-  group.add(createSlab(), createSkyline());
+  const skyline = createSkyline();
+  group.add(createSlab(), skyline);
   const mountains = createMountains();
   group.add(mountains.group);
 
@@ -349,5 +357,12 @@ export function createIsland() {
     mountains.update(time);
   }
 
-  return { group, ifc, wheel, update };
+  // Skyline window level per chapter (`city` in each chapter's visibility):
+  // 05 dims the towers around IFC (user choice, 2026-10-02).
+  const skylineWindows = skyline.material.userData.cityWindows;
+  function setCityLevel(value) {
+    skylineWindows.uCityStrength.value = SKYLINE_STRENGTH * value;
+  }
+
+  return { group, ifc, wheel, update, setCityLevel };
 }
