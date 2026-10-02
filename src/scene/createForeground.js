@@ -16,7 +16,7 @@ import {
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { WORLD } from '../data/world.js';
 import { RAILING_BAY, addLampLight, glowMaterial, railingLayout } from './lamps.js';
-import { createBauhinia } from './bauhinia.js';
+import { createBauhinia, createBauhiniaBush } from './bauhinia.js';
 import { createPalms } from './palms.js';
 import { promenadeGranite, railingPanel } from './surfaces.js';
 
@@ -229,11 +229,14 @@ export function createForeground() {
   palms.group.name = 'palms';
   const bauhinia = createBauhinia(WORLD.foreground.bauhinia);
   bauhinia.group.name = 'bauhinia';
+  const bush = createBauhiniaBush(WORLD.foreground.bauhiniaBush);
+  bush.group.name = 'bauhiniaBush';
 
   const groups = {
     railing: { object: railing.group, materials: railing.materials, glows: railing.glows },
     palms: { object: palms.group, materials: [palms.material] },
     bauhinia: { object: bauhinia.group, materials: bauhinia.materials },
+    bush: { object: bush.group, materials: bush.materials },
   };
 
   function setOpacity(key, value) {
@@ -244,11 +247,12 @@ export function createForeground() {
   }
 
   const group = new Group();
-  group.add(railing.group, edgeRailing.group, lamps, palms.group, bauhinia.group);
+  group.add(railing.group, edgeRailing.group, lamps, palms.group, bauhinia.group, bush.group);
 
   function update(seconds) {
     palms.update(seconds);
     bauhinia.update(seconds);
+    bush.update(seconds);
   }
 
   return { group, setOpacity, update, setBreakpoint: palms.setBreakpoint };

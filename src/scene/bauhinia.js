@@ -1,5 +1,6 @@
 import {
   BufferGeometry,
+  CanvasTexture,
   Color,
   DoubleSide,
   Euler,
@@ -7,6 +8,7 @@ import {
   Group,
   InstancedBufferAttribute,
   InstancedMesh,
+  MathUtils,
   Matrix4,
   Mesh,
   MeshBasicMaterial,
@@ -14,18 +16,20 @@ import {
   PlaneGeometry,
   QuadraticBezierCurve3,
   Quaternion,
+  SRGBColorSpace,
   Vector3,
 } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { COLOURS, FALL, PETAL_CARD, WIND, petalTexture } from './createPetals.js';
+import { addLampLight } from './lamps.js';
 import { seededRandom } from './random.js';
-import { bauhiniaAtlas } from './surfaces.js';
 
 // A Hong Kong orchid tree (Bauhinia blakeana) built in code, after the user's
 // reference images (references only): a trunk leaning out over the water,
 // forking low into dark arching limbs, and a loose crown of broad two-lobed
 // leaves with magenta flowers bunched on its outer twigs. Local frame: the
-// trunk leans toward +x; metres.
+// trunk leans toward +x; metres. A low bauhinia bush (createBauhiniaBush)
+// shares its foliage.
 
 const TRUNK = { height: 5, lean: 4, base: 0.32, top: 0.21 };
 const LIMBS = { count: 5, length: 3.6, radius: 0.15, bias: 1.8 };
@@ -33,13 +37,26 @@ const LEVELS = 4; // limb = 1; its forks down to the twigs at LEVELS
 const FORKS = [0, 0, 3, 2, 2]; // children per branch, by child level
 const SHRINK = 0.68;
 
+// The foliage atlas, cut from the user's flower-cluster and petal artwork
+// (docs/ASSET-LEDGER.md), 1024 × 1024 in four 512 px cells: u 0–0.5, v 0.5–1
+// one two-lobed leaf, stalk at the bottom; u 0.5–1, v 0.5–1 one open flower
+// made of the drifting petals' artwork, centred; u 0–0.5, v 0–0.5 a spray of
+// buds, base at the bottom; u 0.5–1, v 0–0.5 a clump of six leaves, base at
+// the bottom.
+const FOLIAGE_ART = { url: 'atmosphere/bauhinia-foliage.webp', size: [1024, 1024] };
+
 // Atlas cells (u0, v0) and card sizes in metres.
+// `glow`: the card's own light, as if lit by the moon and the city, so the
+// artwork's veins and colour read at night like the drifting petals.
 const CARDS = {
-  leaf: { cell: [0, 0.5], size: [0.15, 0.21], glow: 0.03, flutter: 0.14 },
-  clump: { cell: [0.5, 0], size: [0.36, 0.5], glow: 0.03, flutter: 0.06 },
-  flower: { cell: [0.5, 0.5], size: [0.19, 0.25], glow: 0.26, flutter: 0.08 },
-  buds: { cell: [0, 0], size: [0.16, 0.22], glow: 0.12, flutter: 0.1 },
+  leaf: { cell: [0, 0.5], size: [0.2, 0.28], glow: 0.09, flutter: 0.14 },
+  clump: { cell: [0.5, 0], size: [0.42, 0.58], glow: 0.07, flutter: 0.06 },
+  flower: { cell: [0.5, 0.5], size: [0.2, 0.27], glow: 0.32, flutter: 0.08 },
+  buds: { cell: [0, 0], size: [0.16, 0.22], glow: 0.15, flutter: 0.1 },
 };
+// Foliage deep in a crown or low on it is shaded down to this (1 at the top
+// of the outer surface), so the crowns read round instead of flat.
+const SHADE_FLOOR = 0.45;
 const BARK = [0.3, 0.24, 0.2];
 // Petals that leave the flowers, drift with the harbour wind and land on the
 // water (y = 0), then start again from another flower.
@@ -122,30 +139,81 @@ function tube(curve, [r0, r1], shade) {
   return geometry;
 }
 
-// Cards: [{ kind, position, normal, tip }]; normal faces out of the crown,
-// tip runs from stalk to tip.
+// Brightness of a card from its height in the crown (0 bottom, 1 top) and its
+// depth inside it (0 outer surface, 1 deep); flowers sit at the tips and
+// stay brighter.
+function crownShade(kind, height, depth) {
+  const shade = SHADE_FLOOR + (1 - SHADE_FLOOR) * (0.35 + 0.65 * height) * (1 - 0.5 * depth);
+  return kind === 'flower' ? 0.5 * (1 + shade) : shade;
+}
+
+// Cards: [{ kind, position, normal, tip, shade }]; normal faces out of the
+// crown, tip runs from stalk to tip.
 function foliage(skeleton, random) {
   const cards = [];
   const centre = skeleton.trunkTop.clone().add(new Vector3(2, 2, 0));
   const jitter = () => new Vector3(random() - 0.5, random() - 0.5, random() - 0.5);
-  const add = (kind, at, spread, dir, outwardBias) => {
+  const add = (kind, at, spread, dir, outwardBias, depth) => {
     const position = at.clone().add(jitter().multiplyScalar(spread));
     const outward = position.clone().sub(centre).normalize();
     const normal = outward.multiplyScalar(outwardBias).add(jitter().multiplyScalar(1.6)).addScaledVector(up, 0.3).normalize();
     const tip = dir.clone().addScaledVector(jitter(), 1.2);
-    cards.push({ kind, position, normal, tip });
+    cards.push({ kind, position, normal, tip, depth });
   };
   for (const { position, dir } of skeleton.tips) {
-    for (let i = 0; i < 14; i++) add('leaf', position, 0.9, dir, 1);
-    for (let i = 0; i < 7; i++) add('clump', position, 1.1, dir, 1);
-    for (let i = 0; i < 6; i++) add('flower', position.clone().addScaledVector(dir, 0.2), 0.7, dir, 2);
-    add('buds', position.clone().addScaledVector(dir, 0.15), 0.5, dir, 1.5);
+    for (let i = 0; i < 14; i++) add('leaf', position, 0.9, dir, 1, 0);
+    for (let i = 0; i < 7; i++) add('clump', position, 1.1, dir, 1, 0.2);
+    for (let i = 0; i < 6; i++) add('flower', position.clone().addScaledVector(dir, 0.2), 0.7, dir, 2, 0);
+    add('buds', position.clone().addScaledVector(dir, 0.15), 0.5, dir, 1.5, 0);
   }
   for (const { curve, level } of skeleton.branches) {
     if (level < LEVELS - 2) continue;
     const n = level === LEVELS ? 1 : 2;
-    for (let i = 0; i < 3 * n; i++) add('clump', curve.getPoint(0.4 + random() * 0.5), 0.7, up, 0.6);
-    for (let i = 0; i < 4 * n; i++) add('leaf', curve.getPoint(0.3 + random() * 0.7), 0.6, up, 0.6);
+    for (let i = 0; i < 3 * n; i++) add('clump', curve.getPoint(0.4 + random() * 0.5), 0.7, up, 0.6, 0.7);
+    for (let i = 0; i < 4 * n; i++) add('leaf', curve.getPoint(0.3 + random() * 0.7), 0.6, up, 0.6, 0.7);
+  }
+  const heights = cards.map(({ position }) => position.y);
+  const low = Math.min(...heights);
+  const high = Math.max(...heights);
+  for (const card of cards) card.shade = crownShade(card.kind, (card.position.y - low) / (high - low), card.depth);
+  return cards;
+}
+
+// A low, dense mound: an ellipsoid crown of semi-axes [a, b, c] whose centre
+// stands `lift` above the ground, cut flat near the ground, with a few
+// lumps so its outline is uneven. Cards sit on and just under its surface;
+// flowers only on the upper outer surface, many more of them than on the
+// tree.
+const BUSH_FOLIAGE = { clump: 700, leaf: 880, flower: 260, buds: 80, inset: 0.45, ground: 0.3, lumps: 7, lump: 0.22 };
+
+function bushFoliage([a, b, c], lift, random) {
+  const cards = [];
+  const jitter = () => new Vector3(random() - 0.5, random() - 0.5, random() - 0.5);
+  const lumps = Array.from({ length: BUSH_FOLIAGE.lumps }, () => [
+    new Vector3(random() - 0.5, random() * 0.8, random() - 0.5).normalize(),
+    BUSH_FOLIAGE.lump * (0.5 + random()),
+  ]);
+  const swell = (dir) => lumps.reduce((sum, [axis, amount]) => sum + amount * Math.max(0, dir.dot(axis)) ** 6, 0.92);
+  const direction = new Vector3();
+  for (const kind of ['clump', 'leaf', 'flower', 'buds']) {
+    for (let i = 0; i < BUSH_FOLIAGE[kind]; i++) {
+      // Uniform on the sphere, then stretched onto the ellipsoid.
+      const z = random() * 2 - 1;
+      const phi = random() * Math.PI * 2;
+      const r = Math.sqrt(1 - z * z);
+      direction.set(r * Math.cos(phi), z, r * Math.sin(phi));
+      const outer = kind === 'flower' || kind === 'buds';
+      if (outer && direction.y < -0.25) direction.y = -direction.y * 0.6;
+      const depth = outer ? random() * 0.25 : Math.pow(random(), 1.5);
+      const scale = swell(direction) - (depth * BUSH_FOLIAGE.inset) / Math.min(a, b, c);
+      const position = new Vector3(direction.x * a * scale, direction.y * b * scale + lift, direction.z * c * scale);
+      if (position.y < BUSH_FOLIAGE.ground) position.y = BUSH_FOLIAGE.ground + random() * 0.15;
+      const normal = new Vector3(direction.x / a, direction.y / b, direction.z / c).normalize();
+      normal.add(jitter().multiplyScalar(1.4)).addScaledVector(up, 0.35).normalize();
+      const tip = up.clone().multiplyScalar(0.8).addScaledVector(normal, 0.5).addScaledVector(jitter(), 1.2);
+      const height = MathUtils.clamp((direction.y + 1) / 2, 0, 1);
+      cards.push({ kind, position, normal, tip, shade: crownShade(kind, height, depth) });
+    }
   }
   return cards;
 }
@@ -275,7 +343,7 @@ function depthTwin(mesh, material) {
 // spec: { position, yaw, scale, seed }. Returns the group, the faded
 // materials, and update(time) for the flutter and falling petals (not called
 // in reduced motion, where the petals hang still).
-export function createBauhinia({ position, yaw = 0, scale = 1, seed = 5 }) {
+export function createBauhinia({ position, yaw = 0, scale = 1, seed = 5, viewer = null }) {
   const random = seededRandom(seed);
   const time = { value: 0 };
   const skeleton = grow(random);
@@ -292,46 +360,11 @@ export function createBauhinia({ position, yaw = 0, scale = 1, seed = 5 }) {
   );
   wood.renderOrder = 2;
 
-  const map = bauhiniaAtlas();
-  const leafMaterial = addCardShader(
-    new MeshLambertMaterial({ map, side: DoubleSide, transparent: true }),
-    time,
-    true,
-  );
   const cards = foliage(skeleton, random);
-  const leaves = new InstancedMesh(new PlaneGeometry(1, 1).translate(0, 0.5, 0), leafMaterial, cards.length);
-  const info = new Float32Array(cards.length * 4);
-  const m = new Matrix4();
-  const x = new Vector3();
-  const y = new Vector3();
-  const colour = new Color();
-  cards.forEach(({ kind, position: p, normal, tip }, i) => {
-    const card = CARDS[kind];
-    const size = card.size[0] + (card.size[1] - card.size[0]) * random();
-    y.copy(tip).addScaledVector(normal, -tip.dot(normal)).normalize();
-    x.crossVectors(y, normal).normalize();
-    m.makeBasis(x.clone().multiplyScalar(size), y.clone().multiplyScalar(size), normal.clone().multiplyScalar(size));
-    // Flowers are centred on their point; the others hang from their stalk.
-    const origin = kind === 'flower' ? p.clone().addScaledVector(y, -size / 2) : p;
-    m.setPosition(origin);
-    leaves.setMatrixAt(i, m);
-    const tone = kind === 'flower' ? 0.9 + random() * 0.2 : 0.75 + random() * 0.35;
-    leaves.setColorAt(i, colour.setRGB(tone, tone * (0.95 + random() * 0.1), tone));
-    info.set([...card.cell, card.glow, card.flutter], i * 4);
+  const { leaves, leafTwin, material: leafMaterial } = foliageMeshes(cards, random, time, {
+    viewer: viewer && localViewer(viewer, position, yaw, scale),
   });
-  leaves.geometry.setAttribute('cardInfo', new InstancedBufferAttribute(info, 4));
-  leaves.computeBoundingSphere();
-  leaves.boundingSphere.radius += 0.5;
-  leaves.renderOrder = 2;
-
-  // Drawn just before the tree: while it fades, only its front surface
-  // blends, so leaves behind leaves don't show through.
-  const depthOnly = { colorWrite: false, transparent: true, polygonOffset: true, polygonOffsetFactor: 0, polygonOffsetUnits: 2 };
-  const leafTwin = depthTwin(
-    leaves,
-    addCardShader(new MeshBasicMaterial({ map, side: DoubleSide, ...depthOnly }), time, false),
-  );
-  const woodTwin = depthTwin(wood, new MeshBasicMaterial(depthOnly));
+  const woodTwin = depthTwin(wood, new MeshBasicMaterial(DEPTH_ONLY));
 
   const spawns = cards.filter(({ kind }) => kind === 'flower').map(({ position: p }) => p);
   const falling = fallingPetals(spawns, random, { yaw, scale, height: position[1] });
@@ -343,6 +376,168 @@ export function createBauhinia({ position, yaw = 0, scale = 1, seed = 5 }) {
     update(seconds) {
       time.value = seconds;
       falling.step(seconds);
+    },
+  };
+}
+
+let foliageArt;
+// A clear canvas the atlas's size until the artwork has loaded and is drawn
+// into it (as the drifting petals do): the foliage stays invisible until
+// then, and its shader is the same before and after.
+function foliageTexture() {
+  if (foliageArt) return foliageArt;
+  const canvas = document.createElement('canvas');
+  [canvas.width, canvas.height] = FOLIAGE_ART.size;
+  foliageArt = new CanvasTexture(canvas);
+  foliageArt.colorSpace = SRGBColorSpace;
+  const image = new Image();
+  image.onload = () => {
+    canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+    foliageArt.needsUpdate = true;
+  };
+  image.src = `${import.meta.env.BASE_URL}${FOLIAGE_ART.url}`;
+  return foliageArt;
+}
+
+// Drawn just before the foliage: while it fades, only its front surface
+// blends, so leaves behind leaves don't show through.
+const DEPTH_ONLY = { colorWrite: false, transparent: true, polygonOffset: true, polygonOffsetFactor: 0, polygonOffsetUnits: 2 };
+
+// How far flowers turn toward the viewer: edge-on they read as pink slivers.
+const FLOWER_FACING = 1.3;
+
+// The viewer's position in a group's local frame (position, yaw, uniform scale).
+function localViewer(viewer, position, yaw, scale = 1) {
+  return new Vector3().fromArray(viewer).sub(new Vector3().fromArray(position)).applyAxisAngle(up, -yaw).divideScalar(scale);
+}
+
+// The foliage cards as one instanced mesh, and its depth-only twin.
+// `lamps`: strength of the lantern pools on the leaves (0: none); `viewer`:
+// local point the flowers turn toward.
+function foliageMeshes(cards, random, time, { lamps = 0, viewer = null } = {}) {
+  if (viewer) {
+    for (const card of cards) {
+      if (card.kind !== 'flower') continue;
+      const toward = viewer.clone().sub(card.position).normalize();
+      card.normal = card.normal.clone().addScaledVector(toward, FLOWER_FACING).normalize();
+    }
+  }
+  const map = foliageTexture();
+  // One pass for both faces (three.js would draw transparent two-sided cards
+  // twice): the depth twin already keeps the nearest card in front.
+  let material = addCardShader(new MeshLambertMaterial({ map, side: DoubleSide, transparent: true, forceSinglePass: true }), time, true);
+  if (lamps > 0) material = addLampLight(material, lamps);
+  const leaves = new InstancedMesh(new PlaneGeometry(1, 1).translate(0, 0.5, 0), material, cards.length);
+  const info = new Float32Array(cards.length * 4);
+  const m = new Matrix4();
+  const x = new Vector3();
+  const y = new Vector3();
+  const colour = new Color();
+  cards.forEach(({ kind, position: p, normal, tip, shade }, i) => {
+    const card = CARDS[kind];
+    const size = card.size[0] + (card.size[1] - card.size[0]) * random();
+    y.copy(tip).addScaledVector(normal, -tip.dot(normal)).normalize();
+    x.crossVectors(y, normal).normalize();
+    m.makeBasis(x.clone().multiplyScalar(size), y.clone().multiplyScalar(size), normal.clone().multiplyScalar(size));
+    // Flowers are centred on their point; the others hang from their stalk.
+    const origin = kind === 'flower' ? p.clone().addScaledVector(y, -size / 2) : p;
+    m.setPosition(origin);
+    leaves.setMatrixAt(i, m);
+    const tone = (kind === 'flower' ? 0.9 + random() * 0.2 : 0.75 + random() * 0.35) * shade;
+    leaves.setColorAt(i, colour.setRGB(tone, tone * (0.95 + random() * 0.1), tone));
+    info.set([...card.cell, card.glow, card.flutter], i * 4);
+  });
+  leaves.geometry.setAttribute('cardInfo', new InstancedBufferAttribute(info, 4));
+  leaves.computeBoundingSphere();
+  leaves.boundingSphere.radius += 0.5;
+  leaves.renderOrder = 2;
+  const leafTwin = depthTwin(
+    leaves,
+    addCardShader(new MeshBasicMaterial({ map, side: DoubleSide, forceSinglePass: true, ...DEPTH_ONLY }), time, false),
+  );
+  return { leaves, leafTwin, material };
+}
+
+// Fallen petals on the ground around the bush: flat, a few centimetres up
+// so they never fight the paving.
+const FALLEN = { count: 26, lift: 0.03, size: [0.12, 0.18] };
+
+function fallenPetals([a, , c], random) {
+  const material = new MeshBasicMaterial({ map: petalTexture(), transparent: true, depthWrite: false });
+  const mesh = new InstancedMesh(new PlaneGeometry(...PETAL_CARD).rotateX(-Math.PI / 2), material, FALLEN.count);
+  const colour = new Color();
+  const m = new Matrix4();
+  const q = new Quaternion();
+  const s = new Vector3();
+  const p = new Vector3();
+  for (let i = 0; i < FALLEN.count; i++) {
+    // In a ring just outside the crown's footprint, thinning outward.
+    const angle = random() * Math.PI * 2;
+    const reach = 0.85 + Math.pow(random(), 2) * 0.6;
+    p.set(Math.cos(angle) * a * reach, FALLEN.lift, Math.sin(angle) * c * reach);
+    q.setFromAxisAngle(up, random() * Math.PI * 2);
+    s.setScalar(FALLEN.size[0] + (FALLEN.size[1] - FALLEN.size[0]) * random());
+    mesh.setMatrixAt(i, m.compose(p, q, s));
+    // Dimmer than the drifting petals: they lie in the bush's shadow.
+    mesh.setColorAt(i, colour.setHex(COLOURS[Math.floor(random() * 2)]).multiplyScalar(0.8));
+  }
+  mesh.computeBoundingSphere();
+  mesh.renderOrder = 2;
+  mesh.userData.noProbe = true;
+  return { mesh, material };
+}
+
+// spec: { position, yaw, size: [length, height, depth], seed }. A low,
+// dense Hong Kong orchid bush (user request, 2026-10-03): several thin stems
+// from the ground under a mounded crown, flowers all over its top, fallen
+// petals around it, and the lanterns' warm light on its leaves. Returns the
+// group, the faded materials, and update(time) for the flutter.
+export function createBauhiniaBush({ position, yaw = 0, size = [7, 2.3, 2.6], seed = 11, lamps = 1.5, viewer = null }) {
+  const random = seededRandom(seed);
+  const time = { value: 0 };
+  const [length, height, depth] = size;
+  const lift = height * 0.55;
+  const axes = [length / 2, height - lift, depth / 2];
+
+  const group = new Group();
+  group.position.fromArray(position);
+  group.rotation.y = yaw;
+
+  // Stems: fanning out and up from a tight base to just under the crown's
+  // surface, each forking once near its end.
+  const branches = [];
+  const STEMS = 9;
+  for (let i = 0; i < STEMS; i++) {
+    const azimuth = ((i + random() * 0.6) / STEMS) * Math.PI * 2;
+    const base = new Vector3((random() - 0.5) * axes[0] * 0.5, 0, (random() - 0.5) * axes[2] * 0.4);
+    const reach = 0.55 + random() * 0.2;
+    const end = new Vector3(Math.cos(azimuth) * axes[0] * reach, lift + (0.1 + random() * 0.5) * axes[1], Math.sin(azimuth) * axes[2] * reach);
+    const middle = base.clone().lerp(end, 0.5).setY(end.y * 0.35);
+    const stem = new QuadraticBezierCurve3(base, middle, end);
+    branches.push({ curve: stem, radius: [0.05, 0.03] });
+    for (let k = 0; k < 2; k++) {
+      const from = stem.getPoint(0.7 + random() * 0.2);
+      const to = from.clone().add(new Vector3((random() - 0.5) * 0.9, 0.3 + random() * 0.4, (random() - 0.5) * 0.9));
+      branches.push({ curve: new QuadraticBezierCurve3(from, from.clone().lerp(to, 0.5).add(new Vector3(0, 0.1, 0)), to), radius: [0.025, 0.012] });
+    }
+  }
+  const bark = addLampLight(new MeshLambertMaterial({ vertexColors: true, transparent: true }), lamps);
+  const wood = new Mesh(mergeGeometries(branches.map(({ curve, radius }) => tube(curve, radius, 0.8))), bark);
+  wood.renderOrder = 2;
+
+  const cards = bushFoliage(axes, lift, random);
+  const { leaves, leafTwin, material: leafMaterial } = foliageMeshes(cards, random, time, {
+    lamps,
+    viewer: viewer && localViewer(viewer, position, yaw),
+  });
+  const fallen = fallenPetals(axes, random);
+
+  group.add(leafTwin, wood, leaves, fallen.mesh);
+  return {
+    group,
+    materials: [bark, leafMaterial, fallen.material],
+    update(seconds) {
+      time.value = seconds;
     },
   };
 }

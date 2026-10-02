@@ -113,6 +113,7 @@ function start(initGuard, header) {
     railing: (value) => foreground.setOpacity('railing', value),
     palms: (value) => foreground.setOpacity('palms', value),
     bauhinia: (value) => foreground.setOpacity('bauhinia', value),
+    bush: (value) => foreground.setOpacity('bush', value),
     bursts: (value) => fireworks.setLevel(value),
     petals: (value) => petals.setDensity(value),
     city: (value) => island.setCityLevel(value),
@@ -129,6 +130,9 @@ function start(initGuard, header) {
     // The palms pass in front of the Clock Tower early in the 01 → 02 move
     // and, on mobile, early in the 02 → 03 move.
     palms: { in: [0.62, 0.9], out: [0, 0.1] },
+    // The camera passes over the bush early in the 01 → 02 move: gone while
+    // it is still 1.8 m clear of the crown.
+    bush: { out: [0, 0.08] },
   });
 
   const rig = createCameraRig(camera, chapters, { hold: SCROLL.hold });

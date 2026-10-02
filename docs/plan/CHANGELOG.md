@@ -6,6 +6,22 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Bauhinia bush and realistic foliage** (user requests): the 2.5D
+  foreground-card test (railing and flower cutouts on planes at the lens,
+  Hero and 01) read "very weird" and was removed before it was committed.
+  In its place a low bauhinia bush stands on the arrival promenade inside
+  railing A, filling the bottom-left of the hero and 01 on desktop, gone
+  early in the move to 02. The tree and the bush now share a foliage atlas
+  cut from the user's artwork (leaf from the cluster's leaf lobe, flowers
+  from the drifting petals' artwork, buds from the cluster), with flowers
+  turned toward the camera, crown shading and a little more glow, so they
+  read like the petals. Both foliage materials draw in one pass. Draw calls
+  desktop hero 216, 01 213 (were 214 and 211); phones unchanged; JS 209.7 KB
+  gzip. Files: `src/scene/bauhinia.js`, `src/scene/surfaces.js` (old atlas
+  removed), `src/scene/createForeground.js`, `src/data/world.js`,
+  `src/data/chapters.js`, `src/main.js`,
+  `public/atmosphere/bauhinia-foliage.webp` (new), `docs/plan/scene-promenade.md`,
+  `docs/plan/checks.md`, `docs/ASSET-LEDGER.md`.
 - **Bow spray removed** (user request and choice): the splash on the
   ferry and junk still looked forceful and unrealistic. The artwork is a
   breaking wave throwing droplets, so no size or strength fixes that; a
