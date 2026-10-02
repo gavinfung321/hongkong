@@ -32,7 +32,17 @@ const INIT_TIMEOUT = 8000;
 const VEIL_IN = 150;
 const VEIL_OUT = 200;
 const MOBILE_ASPECT = 0.8;
-const ADAPTIVE = { desktop: 45, mobile: 28, window: 2, step: 0.25, floor: 1 };
+// Pixel ratio steps down when the 2 s average fps is under target. Phones aim
+// high: on the iPhone 11 pixel count was the only cost that mattered (1.25 gave
+// 02 +9 fps; glow, edge smoothing and water gave none; user choice, 2026-10-02).
+const ADAPTIVE = {
+  desktop: 45,
+  mobile: 40,
+  window: 2,
+  settle: 2,
+  step: 0.25,
+  floor: { desktop: 1, mobile: 1.25 },
+};
 // Window edge blur on phones, in pixels (desktop 1).
 const MOBILE_WINDOW_SOFT = 1.5;
 // Painted facades on phones, in mipmap levels (desktop 0).
@@ -153,13 +163,12 @@ function start(initGuard, header) {
 
   function targetPixelRatio() {
     const limit = DPR_CAP || (breakpoint === 'mobile' ? 1.5 : 2);
-    return Math.max(ADAPTIVE.floor, Math.min(window.devicePixelRatio || 1, limit, adaptiveCap));
+    return Math.max(1, Math.min(window.devicePixelRatio || 1, limit, adaptiveCap));
   }
 
-  let glow = true;
   function applyGlow() {
     const look = BLOOM[breakpoint];
-    world.setBloom({ ...look, strength: glow ? look.strength * BLOOM_SCALE : 0 });
+    world.setBloom({ ...look, strength: look.strength * BLOOM_SCALE });
   }
 
   function rebuild() {
@@ -205,10 +214,16 @@ function start(initGuard, header) {
     needsRender = true;
   }
 
-  // Lowers the pixel ratio when the 2 s average fps drops below target.
+  // Lowers the pixel ratio when the 2 s average fps drops below target,
+  // ignoring the first seconds after load (texture uploads, late artwork).
+  let adaptiveSettle = ADAPTIVE.settle;
   let adaptiveTime = 0;
   let adaptiveFrames = 0;
   function adaptResolution(dt) {
+    if (adaptiveSettle > 0) {
+      adaptiveSettle -= dt;
+      return;
+    }
     adaptiveTime += dt;
     adaptiveFrames += 1;
     if (adaptiveTime < ADAPTIVE.window) return;
@@ -216,15 +231,9 @@ function start(initGuard, header) {
     adaptiveTime = 0;
     adaptiveFrames = 0;
     if (average >= ADAPTIVE[breakpoint]) return;
-    // On phones the glow goes before any sharpness does.
-    if (glow && breakpoint === 'mobile') {
-      glow = false;
-      applyGlow();
-      debug?.log(`glow off (${average.toFixed(0)} fps)`);
-      return;
-    }
-    if (pixelRatio <= ADAPTIVE.floor) return;
-    adaptiveCap = Math.max(ADAPTIVE.floor, pixelRatio - ADAPTIVE.step);
+    const floor = ADAPTIVE.floor[breakpoint];
+    if (pixelRatio <= floor) return;
+    adaptiveCap = Math.max(floor, pixelRatio - ADAPTIVE.step);
     pixelRatio = targetPixelRatio();
     world.resize(width, height, pixelRatio);
     debug?.log(`dpr → ${pixelRatio.toFixed(2)} (${average.toFixed(0)} fps)`);
