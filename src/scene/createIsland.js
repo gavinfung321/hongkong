@@ -138,15 +138,17 @@ const IFC_BANDS = [64, 128, 192, 256]; // bronze refuge-floor bands
 function createIFC() {
   const ifc = new Group();
   ifc.name = 'ifc';
-  const windows = { floor: 4.6, bay: 2.6, strength: 1.1 };
-  const glass = addCityWindows(new MeshLambertMaterial({ color: 0x636a7e }), { ...windows, lit: 0.42, coolShare: 0.75 });
+  // Warmer and brighter than the first build, so IFC reads as a lit tower from
+  // 01's 1.4 km too (user choice, 2026-10-02).
+  const windows = { floor: 4.6, bay: 2.6, strength: 1.25, glow: 0.5 };
+  const glass = addCityWindows(new MeshLambertMaterial({ color: 0x636a7e }), { ...windows, lit: 0.5, coolShare: 0.45 });
   // The top floors are the brightest at night, and the last three tiers are
   // floodlit white under the crown.
   const glassHigh = addCityWindows(new MeshLambertMaterial({ color: 0x6a7286 }), {
     ...windows,
     lit: 0.75,
-    coolShare: 0.85,
-    strength: 1.25,
+    coolShare: 0.6,
+    strength: 1.4,
   });
   const floodlit = new MeshLambertMaterial({ color: 0xe6ecf6, emissive: 0x9aa8c4 });
   const tierMaterial = (i) => (i === 0 ? glass : i >= IFC_TIERS.length - 3 ? floodlit : glassHigh);

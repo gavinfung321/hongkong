@@ -1,10 +1,16 @@
 import { Color } from 'three';
 
+// Bays per run of a lit floor strip, once single bays are too narrow to draw.
+const RUN = 4;
+
 // Adds a lit-window grid to a lit material (Lambert or Standard, instanced or
 // not). The grid is laid out in world metres on every wall, so it doesn't
 // stretch with each box's scale. Each building (its world x / z) gets its own
-// share of lit windows. Where a window shrinks below a couple of pixels the
-// grid fades to its average glow, so distant towers can't shimmer.
+// share of lit windows. Each direction fades on its own so distant towers
+// can't shimmer: where bays shrink below a couple of pixels but floors don't,
+// each floor becomes a strip of lit and dark runs of RUN bays (user choice,
+// 2026-10-02: IFC read as a flat slab in 01); where floors or runs shrink too,
+// the wall fades to its average glow.
 export function addCityWindows(material, options = {}) {
   const {
     lit = 0.3, // share of windows lit
@@ -15,6 +21,7 @@ export function addCityWindows(material, options = {}) {
     coolShare = 0.25,
     strength = 1,
     glass = 0.7, // unlit windows darken the wall by this factor
+    glow = 0.35, // the faded wall's glow, per lit share
   } = options;
   const uniforms = {
     uCityLit: { value: lit },
@@ -24,6 +31,7 @@ export function addCityWindows(material, options = {}) {
     uCityCoolShare: { value: coolShare },
     uCityStrength: { value: strength },
     uCityGlass: { value: glass },
+    uCityGlow: { value: glow },
   };
 
   material.onBeforeCompile = (shader) => {
@@ -56,6 +64,7 @@ export function addCityWindows(material, options = {}) {
         uniform float uCityCoolShare;
         uniform float uCityStrength;
         uniform float uCityGlass;
+        uniform float uCityGlow;
         varying vec3 vCityPos;
         varying vec2 vCitySeed;
         float cityHash( vec2 p ) {
@@ -86,12 +95,25 @@ export function addCityWindows(material, options = {}) {
             float on = step( cityHash( cell + seed * 0.137 ), density );
             vec3 tint = mix( uCityWarm, uCityCool, step( 1.0 - uCityCoolShare, cityHash( cell.yx + seed ) ) );
             vec3 detail = tint * on * ( 0.5 + 0.5 * cityHash( cell + 7.7 ) ) * shape;
+            // Floor strips: the window band of each floor, lit in runs of RUN
+            // bays, at the bays' average coverage across.
+            float bandY = smoothstep( 0.28 - w.y, 0.28 + w.y, f.y ) - smoothstep( 0.78 - w.y, 0.78 + w.y, f.y );
+            float runX = g.x / ${RUN.toFixed(1)};
+            float run = floor( runX );
+            float wr = w.x / ${RUN.toFixed(1)};
+            float fr = fract( runX );
+            float runEdge = smoothstep( 0.0, wr, fr ) * smoothstep( 0.0, wr, 1.0 - fr );
+            float runOn = step( cityHash( vec2( run, cell.y ) + seed * 0.137 ), density );
+            vec3 runTint = mix( uCityWarm, uCityCool, step( 1.0 - uCityCoolShare, cityHash( vec2( cell.y, run ) + seed ) ) );
+            float strip = bandY * runEdge * 0.6;
+            vec3 strips = runTint * runOn * ( 0.55 + 0.45 * cityHash( vec2( run, cell.y ) + 7.7 ) ) * strip;
             // 0.3 window area × 0.75 mean brightness, lifted: a true average
             // of the dots reads dimmer than the dots themselves.
-            vec3 average = mix( uCityWarm, uCityCool, uCityCoolShare ) * min( density, 1.0 ) * 0.35;
-            float far = smoothstep( 0.2, 0.5, max( w.x, w.y ) );
-            totalEmissiveRadiance += mix( detail, average, far ) * uCityStrength;
-            diffuseColor.rgb *= mix( 1.0, uCityGlass, mix( shape, 0.3, far ) );
+            vec3 average = mix( uCityWarm, uCityCool, uCityCoolShare ) * min( density, 1.0 ) * uCityGlow;
+            float bays = smoothstep( 0.2, 0.5, w.x );
+            float far = smoothstep( 0.2, 0.5, max( w.y, wr ) );
+            totalEmissiveRadiance += mix( mix( detail, strips, bays ), average, far ) * uCityStrength;
+            diffuseColor.rgb *= mix( 1.0, uCityGlass, mix( mix( shape, strip, bays ), 0.3, far ) );
           }
         }`,
       );
