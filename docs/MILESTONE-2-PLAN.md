@@ -1327,6 +1327,32 @@ all six.
            05 33,000 / 7,700, 06 9,200 / 2,230; the other towers' share is
            unchanged (03 11%, 05 23%). No new meshes: draw calls and
            framing unchanged.
+       - **Step 4, background towers (done):** the window shader in
+         `src/scene/cityWindows.js`, used by the skyline and Kowloon
+         towers, now lights offices rather than scattered single windows.
+         - *Floor-clustered lights:* each floor is divided into offices of
+           3–6 bays; a lit office has three in four of its windows on, in
+           one colour and brightness, and groups of three floors are
+           busier or quieter. A quarter of the light is lone late windows.
+           Each building keeps the same average lit share (3–6%), and the
+           mid-distance floor strips light the same offices, so nothing
+           changes pattern as the camera pulls back. The far-tower dots
+           (`cityDots.js`) come in runs of 1–3 on one floor too.
+         - *Curtain-wall bands:* 45% of the Central towers (20% in
+           Kowloon) are ribbon-glazed: continuous glass bands between
+           floor slabs, the mullions fading before they get thinner than
+           a pixel, the glass catching a little dusk sky (the step 3 sky
+           at 80%). Their lit offices read as long bars, dimmed so each
+           tower gives off no more light than the punched-window ones.
+         - **Checks:** IFC still leads. Bright pixels (luma over 60), main
+           buildings / other towers: 01 11,000 / 725 (724 before), 03
+           19,200 / 2,210 (2,150), 05 33,000 / 8,740 (7,690), 06 9,160 /
+           2,230 (2,230). In 05 the wider office bars add mid-bright pixels
+           while the brightest (luma over 90) fall from 3,760 to 2,480;
+           the share is 26%, under the one-third limit. Phone flicker on
+           the Central towers at 04 → 05, 05 → 06 and 01 → 02: 0–3.8%
+           excess, the same with ribbon towers on or off. Composition
+           probe: only the four older misses; draw calls unchanged.
        - **IFC Mall podium (user request, 2026-10-02):** the user saw the
          base of IFC still flickering on phones; it still used the window
          shader. It now has a painted skin too: four 5.5 m retail floors of
@@ -1593,7 +1619,10 @@ Stop for the user's review after each step, as in the grey-box.
   that hide the glints behind them (part 3f). New `src/scene/cityLight.js`
   (street glow and sky in the glass) used by `facades.js` and
   `cityWindows.js`; `createIsland.js` uplit IFC crown fins (part 3e,
-  step 3).
+  step 3). `cityWindows.js` lights offices on each floor and gains a
+  `ribbon` option (curtain-wall towers), used by `createIsland.js` and
+  `createKowloonEdge.js`; `cityDots.js` dots in runs on one floor (part
+  3e, step 4).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
   copy and footer hidden while loading and during the fade),
@@ -1661,7 +1690,9 @@ The milestone passes when:
    Central Plaza bronze, The Center neon floor lines) that hold still
    while scrolling; their glass catches the dusk sky, warm street light
    washes the foot of Central and IFC's crown fins are uplit (user choice,
-   2026-10-02), and no brace line, mast or warning light shimmers
+   2026-10-02); the background towers' lights come in offices along their
+   floors, some towers banded curtain walls, with no more light than
+   before and no new shimmer on phones (user choice, 2026-10-02), and no brace line, mast or warning light shimmers
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its

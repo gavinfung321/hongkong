@@ -43,7 +43,9 @@ const SKYLINE_STRENGTH = 0.7;
 // so no tower is crowded with lights beside unlit ones (user choice,
 // 2026-10-02; was 0.5–20% with 40% dark). Then about half again, 3–6% per
 // tower, as the other towers still drew the eye in 01–03 and 05–06 (user
-// request, 2026-10-02; was 5–12%).
+// request, 2026-10-02; was 5–12%). Lights clustered in offices and 45% of
+// towers in ribbon-glazed curtain walls, same light (user choice,
+// 2026-10-02: realism step 4).
 const SKYLINE_WINDOWS = {
   lit: 0.045,
   maxLit: 0.065,
@@ -51,6 +53,7 @@ const SKYLINE_WINDOWS = {
   dark: 0.1,
   strength: SKYLINE_STRENGTH,
   close: 0.7,
+  ribbon: 0.45,
 };
 
 function createSlab() {
