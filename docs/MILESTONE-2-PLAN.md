@@ -1486,8 +1486,33 @@ all six.
          leads). Composition probe: only the four older misses. Two to
          three more draw calls per frame, and about one more where the 02,
          04 and 05 cards are in view.
-       - **Stage 2, harbour mist (next):** the staged `harbour-mist.webp`
-         low over the water and the mountains' foot, after review.
+       - **Stage 2, harbour mist (done; user request, 2026-10-02):** the
+         staged `harbour-mist.webp` (four soft blue-grey bands) now ships
+         as `public/atmosphere/harbour-mist.webp`. One belt of six upright
+         cards stands on the water just off the island's waterfront, from
+         the far west to past The Center, facing Kowloon (`MIST` in
+         `src/data/atmosphere.js`), 26–37 m tall, the lowest bands in
+         front of the wheel and IFC's podium. It lives in the world, so
+         every chapter sees it where it is: boats, the Clock Tower and the
+         junk stand in front of it and stay crisp, and it takes the
+         distance fog like the skyline behind it. Not a full-screen wash:
+         it only lies along the waterline. Strength per chapter (`mist` in
+         `src/data/chapters.js`, changing across the whole move): 01 0.6
+         (a faint horizon band), 02 0.5 (02 looks past the island's end,
+         so it barely shows), 03 0.8 (behind the ferry, before the
+         skyline), 04 1 (strongest, at the shore behind the junk), 05 0.6
+         (parting the water from the piers and podiums), 06 0.15 (fading
+         as the camera tilts into the clear sky); full is 30% opacity.
+         It sways 0.8% of each card's width the opposite way to the
+         clouds, and holds still in reduced motion.
+       - **Checks:** composition probe: only the four older misses. Six
+         more draw calls where the belt is in view (clouds and mist
+         together 6–11, within the brief's 12). The skyline band's other
+         towers gain a few bright pixels where the mist lifts the dark
+         waterfront (05: 8,770 → 9,000 at luma over 60; 03: 2,210 →
+         2,650); IFC and the landmarks still lead (05 share 27%, under a
+         third). The Clock Tower, ferry, junk sails, IFC crown and copy
+         are untouched.
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -1700,8 +1725,9 @@ Stop for the user's review after each step, as in the grey-box.
   layer; `src/main.js` sets the glow per breakpoint, `?bloom=` and the
   phone frame-rate fallback (part 3e, step 5). New
   `src/scene/createAtmosphere.js` and `src/data/atmosphere.js` (coral
-  cloud cards), `public/atmosphere/coral-clouds.webp`; `src/main.js` adds,
-  places and fades them; `src/data/chapters.js` gains a `clouds` level per
+  cloud cards, then the harbour mist belt), `public/atmosphere/coral-clouds.webp`
+  and `public/atmosphere/harbour-mist.webp`; `src/main.js` adds, places and
+  fades them; `src/data/chapters.js` gains `clouds` and `mist` levels per
   chapter (part 3g).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
@@ -1781,7 +1807,10 @@ The milestone passes when:
    and 05), behind the moon, ridge and towers and clear of 香港 and the
    copy on desktop and phones (user request, 2026-10-02), and no desktop
    hold has an empty side of sky: 02 has a band on the right, 04 and 05
-   on the left (user choice, 2026-10-02), and no brace line, mast or warning light shimmers
+   on the left (user choice, 2026-10-02); a soft low mist lies along the
+   island's waterline, strongest behind the junk in 04, faint in 01,
+   gone in 06, never over the Clock Tower, the boats, the sails, IFC's
+   crown or the copy (user request, 2026-10-02), and no brace line, mast or warning light shimmers
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
@@ -1838,8 +1867,8 @@ step.
 | Milestone | Content |
 |---|---|
 | 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk, Clock Tower, IFC and wheel are already rebuilt from reference photos, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals, display fonts (the bauhinia tree is built in code, 2026-10-02). Also the user's stone railing (built in code with lanterns and tall lamps, 2026-10-02), promenade palms, wet paving tiles (built in code, 2026-10-02) and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
-| 4. Atmosphere, all chapters | Follow `ATMOSPHERE-EFFECTS-BRIEF.md`: clouds and local mist, ferry spray, restrained searchlights, global print texture, chapter colour progression, and illustrated fireworks with smoke and embers. Local glows remain the baseline; a soft bloom is built (Milestone 2, part 3e, step 5; user choice, 2026-10-02). Coral clouds are built (Milestone 2, part 3g; user request, 2026-10-02). |
-| 5. Copy and launch | Final copy, poster images (a real snapshot of the hero frame replaces the drawn fallback poster, for loading and fallback; user choice, 2026-10-02), an entrance screen with real build progress, after Kage's technique (3.12; user request, 2026-10-02), a full performance pass on both iPhones, deployment |
+| 4. Atmosphere, all chapters | Follow `ATMOSPHERE-EFFECTS-BRIEF.md`: clouds and local mist, ferry spray, restrained searchlights, global print texture, chapter colour progression, and illustrated fireworks with smoke and embers. Local glows remain the baseline; a soft bloom is built (Milestone 2, part 3e, step 5; user choice, 2026-10-02). Coral clouds and the harbour mist are built (Milestone 2, part 3g; user request, 2026-10-02). |
+| 5. Copy and launch | Follow `FINAL-NARRATIVE-COPY.md` for the proposed final chapter, interface, footer, fallback and metadata wording. Add final poster images (a real snapshot of the hero frame replaces the drawn fallback poster, for loading and fallback; user choice, 2026-10-02), an entrance screen with real build progress, after Kage's technique (3.12; user request, 2026-10-02), a full performance pass on both iPhones, deployment. |
 
 **Published early (user choice, 2026-10-02).** The work in progress is live at
 <https://gavinfung321.github.io/hongkong/> from the public repo

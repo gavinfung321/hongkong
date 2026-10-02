@@ -45,3 +45,30 @@ export const CLOUDS = {
     ],
   },
 };
+
+// The generated harbour mist sheet (docs/ASSET-LEDGER.md): four bands, given
+// as pixel rows of the 1600 × 534 image, from broad and bumpy to thin and low.
+export const MIST_SHEET = {
+  url: 'atmosphere/harbour-mist.webp',
+  size: [1600, 534],
+  bands: { broad: [37, 143], flat: [163, 264], billow: [267, 408], low: [423, 509] },
+};
+
+// Low harbour mist (user request, 2026-10-02; ATMOSPHERE-EFFECTS-BRIEF.md
+// 6.2): one belt of upright cards on the water just off the island's
+// waterfront, facing Kowloon, so it parts the water from the podiums and the
+// skyline in every chapter that looks across. Boats, the Clock Tower and the
+// junk stand in front of it. x / z: card centre in world metres; width in
+// metres (height follows the band's shape); opacity at a chapter's full
+// `mist` level. The lower bands sit in front of the wheel and IFC's podium.
+export const MIST = {
+  drift: { share: 0.008, period: [90, 130] },
+  cards: [
+    { x: -830, z: -1050, width: 520, band: 'flat', opacity: 0.3 },
+    { x: -390, z: -1035, width: 560, band: 'broad', opacity: 0.3 },
+    { x: 60, z: -1050, width: 520, band: 'flat', opacity: 0.3 },
+    { x: 470, z: -1030, width: 480, band: 'low', opacity: 0.3 },
+    { x: 900, z: -1045, width: 560, band: 'broad', opacity: 0.3 },
+    { x: 1310, z: -1035, width: 440, band: 'flat', opacity: 0.3 },
+  ],
+};

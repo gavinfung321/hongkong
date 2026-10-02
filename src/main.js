@@ -91,9 +91,11 @@ function start(initGuard, header) {
     petals: (value) => petals.setDensity(value),
     city: (value) => island.setCityLevel(value),
     clouds: (value) => atmosphere.setLevel(value),
+    mist: (value) => atmosphere.setMist(value),
   }, {
-    // Clouds change gently across the whole move.
+    // Clouds and mist change gently across the whole move.
     clouds: { in: [0, 1], out: [0, 1] },
+    mist: { in: [0, 1], out: [0, 1] },
     // The city dims across the whole move into 05 (and stays dim in 06), not in its first 40%.
     city: { in: [0, 1], out: [0, 1] },
     // The palms pass in front of the Clock Tower early in the 01 → 02 move
