@@ -120,7 +120,7 @@ midground, background and atmosphere. Each one still has to pass gate 5 below
 | `mist-band.webp` | Alpha WebP, tiled | All | Between skyline layers | Drifting haze that separates near and far buildings |
 | Black kites | Small animated sprites | Hero, 01–03 | Sky | Hong Kong's signature bird gliding slowly; a living detail |
 | Sampans and distant ferries | Low-poly or cards | 01, 03–04 | Midground | Busy-harbour feel; lit windows and wakes at a distance |
-| Skyline reflections | **Built 2026-10-02** (user choice), original, streaks drawn in the water shader (`waterReflections.js`, `createWater.js`), no file | All with water in view | Water | Broken light streaks under the skyline and IFC, a gold moon path (in place of the cyan rim glare), the ferry windows, junk sails, Clock Tower, promenade lamps and Observation Wheel, in the scene's colours |
+| Skyline reflections | **Built 2026-10-02** (user choice), original, streaks drawn in the water shader (`waterReflections.js`, `createWater.js`), no file | All with water in view | Water | Soft, broken light streaks under IFC, the ferry windows, the junk's sails and deckhouse and the Clock Tower's floodlit base, in the scene's colours. Revised the same day (user request): the skyline, moon, wheel and lamp streaks were removed (they read as thin vertical bars) and the boats' streaks cut to true size |
 | Neon sign cutouts | Alpha WebP set | 05 | Foreground edges | Hanging Chinese neon signs framing the City of Light |
 | Searchlight beams | Procedural | 01, 05–06 | Sky | A nod to the Symphony of Lights show; the frame 01 storyboard shows beams rising from the Central towers (user reminder below) |
 | Smoke wisps | Alpha WebP | 06 | Sky | Drift after the fireworks, for the afterglow |

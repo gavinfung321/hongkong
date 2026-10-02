@@ -51,7 +51,6 @@ function start(initGuard, header) {
   const petals = createPetals();
   scene.add(moon.group, kowloon.group, island.group, vessels.group, foreground.group, wordmark.mesh, petals.group);
   water.setSources(reflectionSources({
-    skyline: island.group.getObjectByName('skyline'),
     tower: kowloon.clockTower,
     ferry: vessels.ferry,
     junk: vessels.junk,
@@ -66,9 +65,9 @@ function start(initGuard, header) {
     ferry: reflected('ferry', makeFadeable(vessels.ferry)),
     junk: reflected('junk', makeFadeable(vessels.junk)),
     ifc: reflected('ifc', makeFadeable(island.ifc)),
-    wheel: reflected('wheel', makeFadeable(island.wheel)),
+    wheel: makeFadeable(island.wheel),
     deck: makeFadeable(kowloon.decks),
-    railing: reflected('railing', (value) => foreground.setOpacity('railing', value)),
+    railing: (value) => foreground.setOpacity('railing', value),
     palms: (value) => foreground.setOpacity('palms', value),
     bauhinia: (value) => foreground.setOpacity('bauhinia', value),
     bursts: (value) => foreground.setOpacity('bursts', value),
