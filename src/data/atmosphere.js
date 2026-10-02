@@ -1,6 +1,6 @@
 // Sky atmosphere: distant cloud cards (user choice, 2026-10-02; see
-// docs/ATMOSPHERE-EFFECTS-BRIEF.md 6.1). How strongly they show per chapter
-// is the `clouds` visibility value in chapters.js.
+// docs/ATMOSPHERE-EFFECTS-BRIEF.md 6.1), now a cloud ceiling in every
+// chapter like the storyboard (user request, 2026-10-02).
 
 // The generated coral cloud sheet (docs/ASSET-LEDGER.md): three bands, given
 // as pixel rows of the 1600 × 534 image. The lower two touch, so every card
@@ -12,37 +12,101 @@ export const CLOUD_SHEET = {
 };
 
 // Each card is authored on screen at one chapter's hold pose, then lives in
-// the world `distance` metres out, so other chapters see it where it really
-// is and the ridge and towers hide its lower edge. x / y: % of the viewport
-// for the card's centre; width: % of the viewport width; opacity: at a
-// chapter's full `clouds` level; drift: the slow sideways sway, as a share of
-// the card's width.
+// the world its layer's `distance` out, so the ridge and towers hide its
+// lower edge. It shows in that chapter only, crossfading with the next
+// across the move. x / y: % of the viewport for the card's centre; width: %
+// of the viewport width; u: a section of the band (share of its length;
+// reversed to mirror it); opacity: at its chapter's hold.
+//
+// Two layers: a big dim `back` layer that roofs the sky and a brighter
+// `front` layer of lit cloud banks. `speed`: the wind, as a share of the
+// viewport width per second (front twice the back, for depth); the art
+// flows through each card's fixed window. `tint` darkens and cools the back
+// layer. `feather`: the cards' side fade, wide so clouds drift in and out
+// softly.
 export const CLOUDS = {
-  distance: 3000,
-  drift: { share: 0.012, period: [110, 150] },
+  feather: 0.2,
+  layers: {
+    back: { distance: 3600, speed: 0.0015, renderOrder: -0.96, tint: { low: [0.62, 0.55, 0.72], high: [0.5, 0.5, 0.66] } },
+    front: { distance: 3000, speed: 0.003, renderOrder: -0.95, tint: { low: [1.1, 0.95, 0.95], high: [0.95, 0.92, 1] } },
+  },
   cards: {
     desktop: [
-      // 01: a coral band over the far range between the Clock Tower and the
-      // moon, clear of the copy and the tower's crown.
-      { chapter: 0, band: 'tall', x: 47, y: 15, width: 36, opacity: 0.2 },
-      // 01: a thinner trace high on the right, above IFC.
-      { chapter: 0, band: 'thin', x: 88, y: 6, width: 38, opacity: 0.14 },
-      // 02, 04 and 05 each fill their own empty side of the sky (user
-      // choice, 2026-10-02); the opacities allow for the chapters' fade.
-      // 02: low over the right-hand ridge, below the copy, above the ferry.
-      { chapter: 1, band: 'low', x: 72, y: 52, width: 50, opacity: 0.18 },
-      // 04: above the low mountains on the left, below the copy. Stronger than
-      // the others, so the left of the frame isn't empty (user choice, 2026-10-02).
-      { chapter: 3, band: 'thin', x: 22, y: 34, width: 46, opacity: 0.45 },
-      // 05: between the copy and Bank of China's mast.
-      { chapter: 4, band: 'thin', x: 22, y: 33, width: 40, opacity: 0.2 },
-      // 06: a dim band beneath the fireworks, above the moon and ridge.
-      { chapter: 5, band: 'low', x: 42, y: 60, width: 80, opacity: 0.15 },
+      // 01 and the hero: a roof across the top, lit banks between the Clock
+      // Tower and the moon and above IFC, and a low bank over the ridge.
+      { chapter: 0, layer: 'back', band: 'tall', x: 30, y: 9, width: 80, opacity: 0.55 },
+      { chapter: 0, layer: 'back', band: 'tall', u: [0.5, 1], x: 85, y: 10, width: 45, opacity: 0.55 },
+      { chapter: 0, layer: 'back', band: 'low', x: 50, y: 26, width: 90, opacity: 0.5 },
+      { chapter: 0, layer: 'front', band: 'tall', u: [0.1, 0.6], x: 44, y: 15, width: 36, opacity: 0.7 },
+      { chapter: 0, layer: 'front', band: 'thin', x: 90, y: 5, width: 38, opacity: 0.6 },
+      { chapter: 0, layer: 'front', band: 'thin', u: [0.6, 1], x: 82, y: 26, width: 22, opacity: 0.6 },
+      // 02: a roof across the top, lit banks right of the tower below the
+      // copy and over the right-hand ridge, traces left above the moon and
+      // between the tower and the palms.
+      { chapter: 1, layer: 'back', band: 'tall', x: 75, y: 8, width: 70, opacity: 0.55 },
+      { chapter: 1, layer: 'back', band: 'tall', u: [1, 0.4], x: 15, y: 14, width: 45, opacity: 0.55 },
+      { chapter: 1, layer: 'back', band: 'low', x: 75, y: 42, width: 70, opacity: 0.5 },
+      { chapter: 1, layer: 'front', band: 'tall', u: [0.5, 1], x: 84, y: 30, width: 36, opacity: 0.65 },
+      { chapter: 1, layer: 'front', band: 'low', x: 70, y: 53, width: 46, opacity: 0.6 },
+      { chapter: 1, layer: 'front', band: 'thin', u: [0, 0.6], x: 8, y: 28, width: 26, opacity: 0.6 },
+      { chapter: 1, layer: 'front', band: 'thin', u: [0.2, 0.9], x: 42, y: 36, width: 22, opacity: 0.55 },
+      // 03: a roof above the moon, lit banks between the copy and the moon,
+      // above IFC and above the copy.
+      { chapter: 2, layer: 'back', band: 'tall', x: 58, y: 8, width: 80, opacity: 0.55 },
+      { chapter: 2, layer: 'back', band: 'low', u: [1, 0], x: 22, y: 32, width: 50, opacity: 0.5 },
+      { chapter: 2, layer: 'front', band: 'thin', u: [0, 0.7], x: 44, y: 18, width: 32, opacity: 0.65 },
+      { chapter: 2, layer: 'front', band: 'low', u: [0.3, 1], x: 92, y: 6, width: 25, opacity: 0.6 },
+      { chapter: 2, layer: 'front', band: 'thin', u: [1, 0.3], x: 18, y: 3, width: 30, opacity: 0.55 },
+      // 04: a roof over the sails, banks left above the low mountains, above
+      // the copy and between the masts.
+      { chapter: 3, layer: 'back', band: 'tall', x: 55, y: 7, width: 90, opacity: 0.55 },
+      { chapter: 3, layer: 'back', band: 'tall', u: [0.4, 1], x: 18, y: 40, width: 36, opacity: 0.5 },
+      { chapter: 3, layer: 'front', band: 'thin', x: 22, y: 32, width: 46, opacity: 0.65 },
+      { chapter: 3, layer: 'front', band: 'low', u: [0, 0.55], x: 70, y: 8, width: 30, opacity: 0.6 },
+      { chapter: 3, layer: 'front', band: 'low', u: [1, 0.5], x: 22, y: 4, width: 30, opacity: 0.55 },
+      // 05: dimmer, so IFC leads: a roof either side of its crown, banks
+      // between the copy and Bank of China's mast and among the towers.
+      { chapter: 4, layer: 'back', band: 'tall', x: 30, y: 8, width: 64, opacity: 0.4 },
+      { chapter: 4, layer: 'back', band: 'tall', u: [0.5, 1], x: 88, y: 12, width: 30, opacity: 0.4 },
+      { chapter: 4, layer: 'back', band: 'low', x: 50, y: 40, width: 100, opacity: 0.35 },
+      { chapter: 4, layer: 'front', band: 'thin', x: 22, y: 32, width: 38, opacity: 0.45 },
+      { chapter: 4, layer: 'front', band: 'low', u: [0.5, 1], x: 86, y: 28, width: 26, opacity: 0.45 },
+      // 06: the fireworks need dark sky, so a dim roof behind the bursts and
+      // lit banks below them, above the moon and ridge.
+      { chapter: 5, layer: 'back', band: 'tall', x: 70, y: 7, width: 70, opacity: 0.35 },
+      { chapter: 5, layer: 'back', band: 'low', x: 25, y: 45, width: 60, opacity: 0.45 },
+      { chapter: 5, layer: 'front', band: 'low', x: 42, y: 64, width: 80, opacity: 0.5 },
+      { chapter: 5, layer: 'front', band: 'thin', u: [0.4, 1], x: 87, y: 77, width: 28, opacity: 0.5 },
+      { chapter: 5, layer: 'front', band: 'tall', u: [0, 0.45], x: 15, y: 33, width: 28, opacity: 0.5 },
     ],
     mobile: [
-      { chapter: 0, band: 'tall', x: 40, y: 43, width: 150, opacity: 0.12 },
-      // 06: above IFC's crown, below the fireworks.
-      { chapter: 5, band: 'low', x: 45, y: 57, width: 170, opacity: 0.12 },
+      // The phone's sky is tall: stacked bands down to the skyline.
+      { chapter: 0, layer: 'back', band: 'tall', u: [0.2, 0.75], x: 50, y: 14, width: 160, opacity: 0.5 },
+      { chapter: 0, layer: 'back', band: 'low', x: 40, y: 30, width: 200, opacity: 0.45 },
+      { chapter: 0, layer: 'front', band: 'thin', u: [0.3, 1], x: 60, y: 22, width: 130, opacity: 0.55 },
+      { chapter: 0, layer: 'front', band: 'tall', u: [0.1, 0.65], x: 45, y: 40, width: 150, opacity: 0.6 },
+      { chapter: 1, layer: 'back', band: 'tall', x: 50, y: 8, width: 200, opacity: 0.5 },
+      { chapter: 1, layer: 'back', band: 'tall', u: [0.2, 0.8], x: 50, y: 34, width: 170, opacity: 0.45 },
+      { chapter: 1, layer: 'back', band: 'low', u: [1, 0], x: 50, y: 46, width: 180, opacity: 0.45 },
+      { chapter: 1, layer: 'front', band: 'low', u: [0.4, 1], x: 80, y: 33, width: 110, opacity: 0.55 },
+      { chapter: 1, layer: 'front', band: 'thin', u: [0, 0.6], x: 15, y: 30, width: 90, opacity: 0.55 },
+      { chapter: 2, layer: 'back', band: 'low', x: 50, y: 5, width: 200, opacity: 0.45 },
+      { chapter: 2, layer: 'back', band: 'tall', u: [0.1, 0.8], x: 50, y: 30, width: 170, opacity: 0.5 },
+      { chapter: 2, layer: 'front', band: 'low', u: [0, 0.5], x: 80, y: 28, width: 80, opacity: 0.55 },
+      { chapter: 2, layer: 'front', band: 'thin', x: 45, y: 40, width: 150, opacity: 0.55 },
+      { chapter: 3, layer: 'back', band: 'low', u: [1, 0], x: 50, y: 5, width: 200, opacity: 0.45 },
+      { chapter: 3, layer: 'back', band: 'tall', u: [0.9, 0.2], x: 50, y: 30, width: 170, opacity: 0.5 },
+      { chapter: 3, layer: 'front', band: 'low', u: [0.5, 1], x: 75, y: 26, width: 90, opacity: 0.55 },
+      { chapter: 3, layer: 'front', band: 'thin', x: 40, y: 36, width: 140, opacity: 0.55 },
+      // 05: dimmer, so IFC leads.
+      { chapter: 4, layer: 'back', band: 'low', x: 50, y: 5, width: 200, opacity: 0.4 },
+      { chapter: 4, layer: 'back', band: 'tall', x: 40, y: 32, width: 180, opacity: 0.4 },
+      { chapter: 4, layer: 'front', band: 'thin', u: [0, 0.7], x: 25, y: 30, width: 90, opacity: 0.4 },
+      { chapter: 4, layer: 'front', band: 'low', u: [0.4, 1], x: 90, y: 19, width: 60, opacity: 0.4 },
+      // 06: a dim roof behind the bursts, lit banks below them.
+      { chapter: 5, layer: 'back', band: 'tall', x: 50, y: 30, width: 200, opacity: 0.3 },
+      { chapter: 5, layer: 'back', band: 'thin', x: 40, y: 66, width: 160, opacity: 0.4 },
+      { chapter: 5, layer: 'front', band: 'low', x: 45, y: 57, width: 170, opacity: 0.45 },
     ],
   },
 };

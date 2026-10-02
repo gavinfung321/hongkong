@@ -51,7 +51,9 @@ Written 2026-10-02 to start a fresh chat. Read this file, then
 Milestone 2 is built (see README "Current state at a glance"). The latest
 work, all done and deployed: clouds and mist (finished: the user said "we
 done with mist"), lamps re-spaced, hero chapter numbers removed on desktop,
-stronger 04 cloud, the plan split into `docs/plan/`.
+stronger 04 cloud, the plan split into `docs/plan/`. Since then: the
+cloud ceiling (two layers in every chapter, wind drift; see
+`atmosphere.md`), user petal artwork, automatic phone sharpness.
 
 ## Fireworks: all three steps done (user choice, 2026-10-02)
 

@@ -6,6 +6,20 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-02
 
+- **Cloud ceiling** (user request; choices: storyboard ceiling, wind,
+  same artwork): the clouds were too thin (12–20% opacity), too few (one
+  strip per chapter, two cards on phones) and static (a 1.2% sway over two
+  minutes). Now every chapter on desktop and phones has a dim back layer
+  roofing the sky and a front layer of lit banks (5–7 cards desktop, 3–5
+  phones, 30–70%), each card showing only in its own chapter and
+  crossfading across the move. The wind scrolls the art through each
+  card's fixed window, front 0.3% of the frame per second and back half
+  that, so the clouds move but never cross the copy, moon or IFC; still in
+  reduced motion. Cards now face their chapter camera's image plane, so
+  frames that look up don't tilt them. The `clouds` level in
+  `chapters.js` is gone. Draw calls about 2–4 more per hold. Files:
+  `src/scene/createAtmosphere.js`, `src/data/atmosphere.js`,
+  `src/data/chapters.js`, `src/main.js`.
 - **Bauhinia petal artwork** (user choice): the drifting petals and the
   tree's falling petals now use the user's `bauhinia-petal.webp` (29 KB):
   its own fuchsia, pale veins, wavy edges and curled stalk, dimmed for the
