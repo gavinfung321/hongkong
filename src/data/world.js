@@ -133,20 +133,6 @@ export const WORLD = {
     lights: { x: [-700, 1400], clusters: 80, perCluster: 12, seed: 21 },
   },
 
-  // Low-rise lights on a far shore west of the island, along the left of the
-  // 04 frame's waterline (user choice, 2026-10-02). The shore bends toward
-  // Kowloon as it runs west, so the lights at the frame's left edge stay
-  // within the fog's reach. Out of frame in every other hold. `points`: the
-  // shoreline [x, z]; `height`: tallest lights at the island end and the far
-  // end. `glints`: [x, z] of the faint reflections they lay on the water.
-  farShore: {
-    points: [[-1000, -1160], [-1350, -1080], [-1600, -920], [-1750, -790], [-1850, -700]],
-    count: 420,
-    height: [18, 7],
-    seed: 23,
-    glints: [[-1180, -1125], [-1470, -1010], [-1690, -840]],
-  },
-
   // Behind the far range, upper right of the opening frame; its lower edge dips
   // behind the ridge. Faces the opening camera. Stylised: far larger than life.
   moon: { position: [742, 1000, -3300], radius: 280, facing: [-13, 6, 104], seed: 11 },
