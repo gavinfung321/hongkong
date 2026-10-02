@@ -6,6 +6,8 @@ import {
   RepeatWrapping,
   ShaderChunk,
   Vector2,
+  Vector3,
+  Vector4,
 } from 'three';
 import { PALETTE } from './palette.js';
 import { WORLD } from '../data/world.js';
@@ -17,6 +19,33 @@ const TILE = 120;
 // moon path. Sharp ripples strobe during scroll transitions (the camera moves
 // up to ~3 m per frame, about half a ripple), so the water stays glassy.
 const BLUR = 5;
+// Reflections of the city's lights (waterReflections.js, user choice,
+// 2026-10-02): at most this many sources in view are drawn, by rank. Each is
+// a streak under its light, narrow across and stretched toward the viewer by
+// the ripples (the same blurred sample as the lighting), which also widen it
+// and move its ends. Sizes are view-angle tangents.
+// Wide sources (a negative width) split into streaks `stripe` metres apart
+// across, about half of them lit, like columns of windows; where a streak
+// would be under ~2 px they blend to their average.
+const REFLECT = {
+  max: { desktop: 48, mobile: 28 },
+  head: 0.012, // fade beyond the mirror image, toward the horizon
+  tail: 0.05, // stretch toward the viewer
+  edge: 0.004, // soft edge across
+  spread: 1.5, // ripple slope → wider dashes
+  jitter: 0.035, // ripple slope → streak ends, along
+  stripe: 11,
+  gain: 0.7,
+};
+// The streaks break into short horizontal dashes, a noise laid out in view
+// angles around the camera: cells per full turn of azimuth (about 25 px wide
+// on desktop) and per unit of depression tangent (about 4 px tall). It keeps
+// its size on screen at any distance and drifts slowly, so moving the camera
+// can't make it strobe.
+const DASH = { azimuth: 300, depression: 300, drift: 0.5 };
+// Plane segments per side. Positions interpolated across one 8 km triangle
+// lose enough float precision to make the streaks shiver as the camera moves.
+const SEGMENTS = 64;
 
 // [cycles per tile x, cycles per tile y, amplitude, phase]. Integer frequencies
 // keep the height field tileable; wavelengths run from ~15 m down to ~3 m.
@@ -75,6 +104,8 @@ function createNormalTexture() {
   return texture;
 }
 
+const MAX = Math.max(...Object.values(REFLECT.max));
+
 export function createWater(renderer) {
   const normalMap = createNormalTexture();
   normalMap.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
@@ -87,21 +118,136 @@ export function createWater(renderer) {
     normalScale: new Vector2(0.55, 0.55),
   });
 
-  // Samples the ripples at least BLUR mip levels down; where the texture is
-  // already minified further away, the normal level applies.
-  material.onBeforeCompile = (shader) => {
-    shader.fragmentShader = shader.fragmentShader.replace(
-      '#include <normal_fragment_maps>',
-      ShaderChunk.normal_fragment_maps.replace(
-        'vec3 mapN = texture2D( normalMap, vNormalMapUv ).xyz * 2.0 - 1.0;',
-        `vec2 texel = vNormalMapUv * ${TEXTURE_SIZE.toFixed(1)};
-        float lod = log2( max( length( dFdx( texel ) ), length( dFdy( texel ) ) ) );
-        vec3 mapN = textureLod( normalMap, vNormalMapUv, max( lod, ${BLUR.toFixed(1)} ) ).xyz * 2.0 - 1.0;`,
-      ),
-    );
+  const reflection = {
+    waterRefA: { value: Array.from({ length: MAX }, () => new Vector4()) }, // x, z, h0, h1
+    waterRefB: { value: Array.from({ length: MAX }, () => new Vector4()) }, // rgb × power, half width
+    waterRefCount: { value: 0 },
+    waterPixelTan: { value: 0.001 }, // view tangent per pixel, across
+    waterTime: { value: 0 },
   };
 
-  const mesh = new Mesh(new PlaneGeometry(WORLD.water.size, WORLD.water.size), material);
+  // Samples the ripples at least BLUR mip levels down; where the texture is
+  // already minified further away, the normal level applies. The rim light
+  // (far behind the city, cool cyan) leaves no glare on the water: the moon
+  // draws the path instead.
+  material.onBeforeCompile = (shader) => {
+    Object.assign(shader.uniforms, reflection);
+    shader.vertexShader = shader.vertexShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+        varying vec3 vWaterWorld;`,
+      )
+      .replace(
+        '#include <worldpos_vertex>',
+        `#include <worldpos_vertex>
+        vWaterWorld = ( modelMatrix * vec4( transformed, 1.0 ) ).xyz;`,
+      );
+    shader.fragmentShader = shader.fragmentShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+        #define REFLECT_MAX ${MAX}
+        uniform vec4 waterRefA[ REFLECT_MAX ];
+        uniform vec4 waterRefB[ REFLECT_MAX ];
+        uniform int waterRefCount;
+        uniform float waterPixelTan;
+        uniform float waterTime;
+        varying vec3 vWaterWorld;
+        float waterHash( vec2 p ) {
+          return fract( sin( dot( p, vec2( 127.1, 311.7 ) ) ) * 43758.5453 );
+        }
+        // Value noise that repeats every \`period\` cells in x (the azimuth).
+        float waterNoise( vec2 p, float period ) {
+          vec2 i = floor( p );
+          vec2 f = fract( p );
+          f = f * f * ( 3.0 - 2.0 * f );
+          float x0 = mod( i.x, period );
+          float x1 = mod( i.x + 1.0, period );
+          return mix( mix( waterHash( vec2( x0, i.y ) ), waterHash( vec2( x1, i.y ) ), f.x ),
+                      mix( waterHash( vec2( x0, i.y + 1.0 ) ), waterHash( vec2( x1, i.y + 1.0 ) ), f.x ), f.y );
+        }
+        // A light strip at ground point a.xy, lit from height a.z to a.w,
+        // |width| half wide (striped if negative). Its mirror image spans the
+        // depression tangents (H + h) / D; the fragment lights up inside it,
+        // fades fast beyond it and slowly toward the viewer. ripple: the
+        // local slope, which widens the streak and moves its ends.
+        float waterStreak( vec4 a, float width, vec2 p, vec2 ripple ) {
+          float H = max( cameraPosition.y, 0.5 );
+          vec2 toLight = a.xy - cameraPosition.xz;
+          float D = length( toLight );
+          if ( D < 1.0 ) return 0.0;
+          vec2 dir = toLight / D;
+          vec2 rel = p - cameraPosition.xz;
+          float along = dot( rel, dir );
+          if ( along <= 0.0 ) return 0.0;
+          float spread = 1.0 + ${REFLECT.spread.toFixed(2)} * abs( ripple.x );
+          float lateral = dot( rel, vec2( -dir.y, dir.x ) ) / along;
+          float side = max( abs( lateral ) - abs( width ) / D, 0.0 );
+          float v = side / ( ${REFLECT.edge.toFixed(4)} * spread );
+          if ( v > 4.0 ) return 0.0;
+          float t = H / along;
+          float drop = t - clamp( t, ( H + a.z ) / D, ( H + a.w ) / D ) + ripple.y * ${REFLECT.jitter.toFixed(3)};
+          float u = drop / ( drop > 0.0 ? ${REFLECT.tail.toFixed(4)} : ${REFLECT.head.toFixed(4)} );
+          float streak = exp( -u * u - v * v );
+          if ( width < 0.0 ) {
+            float cell = lateral * D / ${REFLECT.stripe.toFixed(1)};
+            float id = floor( cell );
+            float r = fract( sin( id * 12.9898 + a.x * 0.0137 ) * 43758.5453 );
+            float lit = step( 0.55, r ) * ( 0.4 + r );
+            float f = abs( fract( cell ) - 0.5 ) * 2.0;
+            float blur = waterPixelTan * D / ${REFLECT.stripe.toFixed(1)};
+            float core = lit * ( 1.0 - smoothstep( 0.15 - blur, 0.45 + blur, f ) );
+            streak *= mix( core * 2.2, 0.45, smoothstep( 0.1, 0.25, blur ) );
+          }
+          return streak;
+        }`,
+      )
+      .replace(
+        '#include <normal_fragment_maps>',
+        ShaderChunk.normal_fragment_maps.replace(
+          'vec3 mapN = texture2D( normalMap, vNormalMapUv ).xyz * 2.0 - 1.0;',
+          `vec2 texel = vNormalMapUv * ${TEXTURE_SIZE.toFixed(1)};
+          float lod = log2( max( length( dFdx( texel ) ), length( dFdy( texel ) ) ) );
+          vec3 mapN = textureLod( normalMap, vNormalMapUv, max( lod, ${BLUR.toFixed(1)} ) ).xyz * 2.0 - 1.0;
+          vec2 waterRipple = mapN.xy;`,
+        ),
+      )
+      .replace(
+        '#include <emissivemap_fragment>',
+        `#include <emissivemap_fragment>
+        {
+          vec3 shine = vec3( 0.0 );
+          for ( int i = 0; i < REFLECT_MAX; i ++ ) {
+            if ( i >= waterRefCount ) break;
+            shine += waterRefB[ i ].rgb * waterStreak( waterRefA[ i ], waterRefB[ i ].w, vWaterWorld.xz, waterRipple );
+          }
+          // Dashes: near ripples facing away go dark, and the view-angle
+          // noise breaks every streak into short horizontal strokes.
+          vec2 fromEye = vWaterWorld.xz - cameraPosition.xz;
+          float depression = max( cameraPosition.y, 0.5 ) / max( length( fromEye ), 1.0 );
+          float azimuth = atan( fromEye.y, fromEye.x ) / 6.2832 + 0.5;
+          vec2 dashUv = vec2( azimuth * ${DASH.azimuth.toFixed(1)}, depression * ${DASH.depression.toFixed(1)} );
+          float dash = 0.65 * waterNoise( dashUv + vec2( 0.0, waterTime * ${DASH.drift.toFixed(2)} ), ${DASH.azimuth.toFixed(1)} )
+            + 0.35 * waterNoise( dashUv * 2.0 + vec2( 17.0, -waterTime * ${DASH.drift.toFixed(2)} ), ${(DASH.azimuth * 2).toFixed(1)} );
+          shine *= ( 0.06 + 1.7 * smoothstep( 0.35, 0.7, dash ) ) * ( 0.4 + 0.9 * smoothstep( -0.15, 0.45, waterRipple.y ) );
+          // Water mirrors more at grazing angles.
+          vec3 toEye = normalize( cameraPosition - vWaterWorld );
+          float fresnel = 0.02 + 0.98 * pow( 1.0 - clamp( toEye.y, 0.0, 1.0 ), 5.0 );
+          shine *= fresnel * ${REFLECT.gain.toFixed(2)};
+          totalEmissiveRadiance += 1.5 * ( 1.0 - exp( -shine / 1.5 ) );
+        }`,
+      )
+      .replace(
+        '#include <lights_fragment_begin>',
+        ShaderChunk.lights_fragment_begin.replace(
+          'getDirectionalLightInfo( directionalLight, directLight );',
+          'getDirectionalLightInfo( directionalLight, directLight );\n\t\tdirectLight.color = vec3( 0.0 );',
+        ),
+      );
+  };
+
+  const mesh = new Mesh(new PlaneGeometry(WORLD.water.size, WORLD.water.size, SEGMENTS, SEGMENTS), material);
   mesh.rotation.x = -Math.PI / 2;
   mesh.position.set(WORLD.water.center[0], 0, WORLD.water.center[1]);
   mesh.name = 'water';
@@ -109,7 +255,64 @@ export function createWater(renderer) {
   function update(dt) {
     normalMap.offset.x += dt * 0.0067;
     normalMap.offset.y += dt * 0.004;
+    reflection.waterTime.value += dt;
   }
 
-  return { mesh, update };
+  // ---- Reflections ---------------------------------------------------------
+
+  let sources = [];
+  const fades = {};
+  const view = new Vector3();
+  const buffer = new Vector2();
+  const kept = [];
+
+  function setSources(list) {
+    sources = list.slice().sort((a, b) => b.rank - a.rank);
+  }
+
+  function setFade(key, value) {
+    fades[key] = value;
+  }
+
+  // Before each render: follows the boats, keeps the sources whose streak
+  // falls in view (they run straight down the screen from their light).
+  function reflect(camera, breakpoint) {
+    camera.updateMatrixWorld();
+    const tanH = Math.tan((camera.fov * Math.PI) / 360) * camera.aspect;
+    reflection.waterPixelTan.value = (2 * tanH) / renderer.getDrawingBufferSize(buffer).x;
+    const limit = REFLECT.max[breakpoint] ?? MAX;
+    kept.length = 0;
+    for (const s of sources) {
+      const fade = s.key ? (fades[s.key] ?? 1) : 1;
+      if (fade <= 0.001) continue;
+      let width = s.width;
+      if (s.follow) {
+        const { position, rotation } = s.follow;
+        s.x = position.x;
+        s.z = position.z;
+        const ax = Math.cos(rotation.y);
+        const az = -Math.sin(rotation.y);
+        const dx = s.x - camera.position.x;
+        const dz = s.z - camera.position.z;
+        const d = Math.hypot(dx, dz) || 1;
+        const across = Math.abs((ax * -dz + az * dx) / d);
+        width = across * s.extent[0] + Math.sqrt(1 - across * across) * s.extent[1];
+      }
+      view.set(s.x, 0, s.z).applyMatrix4(camera.matrixWorldInverse);
+      const depth = -view.z;
+      if (depth < 1) continue;
+      const x = view.x / depth / tanH;
+      if (Math.abs(x) > 1.1 + width / depth / tanH) continue;
+      kept.push([s, width, fade]);
+      if (kept.length === limit) break;
+    }
+    kept.forEach(([s, width, fade], i) => {
+      reflection.waterRefA.value[i].set(s.x, s.z, s.h0, s.h1);
+      const power = s.power * fade;
+      reflection.waterRefB.value[i].set(s.colour.r * power, s.colour.g * power, s.colour.b * power, s.striped ? -width : width);
+    });
+    reflection.waterRefCount.value = kept.length;
+  }
+
+  return { mesh, update, setSources, setFade, reflect };
 }

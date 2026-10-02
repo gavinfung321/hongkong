@@ -2,6 +2,7 @@ import { chapters, HERO, SCROLL } from './data/chapters.js';
 import { createScene } from './scene/createScene.js';
 import { createLighting } from './scene/createLighting.js';
 import { createWater } from './scene/createWater.js';
+import { reflectionSources } from './scene/waterReflections.js';
 import { createKowloonEdge } from './scene/createKowloonEdge.js';
 import { createIsland } from './scene/createIsland.js';
 import { createVessels } from './scene/createVessels.js';
@@ -49,14 +50,25 @@ function start(initGuard, header) {
   const moon = createMoon();
   const petals = createPetals();
   scene.add(moon.group, kowloon.group, island.group, vessels.group, foreground.group, wordmark.mesh, petals.group);
+  water.setSources(reflectionSources({
+    skyline: island.group.getObjectByName('skyline'),
+    tower: kowloon.clockTower,
+    ferry: vessels.ferry,
+    junk: vessels.junk,
+  }));
+  // Faded subjects fade their reflections too.
+  const reflected = (key, setOpacity) => (value) => {
+    setOpacity(value);
+    water.setFade(key, value);
+  };
 
   const gating = createGating(chapters, {
-    ferry: makeFadeable(vessels.ferry),
-    junk: makeFadeable(vessels.junk),
-    ifc: makeFadeable(island.ifc),
-    wheel: makeFadeable(island.wheel),
+    ferry: reflected('ferry', makeFadeable(vessels.ferry)),
+    junk: reflected('junk', makeFadeable(vessels.junk)),
+    ifc: reflected('ifc', makeFadeable(island.ifc)),
+    wheel: reflected('wheel', makeFadeable(island.wheel)),
     deck: makeFadeable(kowloon.decks),
-    railing: (value) => foreground.setOpacity('railing', value),
+    railing: reflected('railing', (value) => foreground.setOpacity('railing', value)),
     palms: (value) => foreground.setOpacity('palms', value),
     bauhinia: (value) => foreground.setOpacity('bauhinia', value),
     bursts: (value) => foreground.setOpacity('bursts', value),
@@ -280,6 +292,7 @@ function start(initGuard, header) {
     }
 
     needsRender = false;
+    water.reflect(camera, breakpoint);
     world.render();
     if (!stepped && ready) adaptResolution(dt);
     debug?.update(state, dt, pixelRatio);

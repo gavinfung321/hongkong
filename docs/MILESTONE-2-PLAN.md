@@ -458,7 +458,10 @@ all six.
    This step does the first three in code:
    - **Darker night:** the sky fill light drops from 2.2 to 0.8
      (`createLighting.js`), so local lights carry the frame. The cyan rim
-     light is unchanged (it makes the moon path on the water).
+     light is unchanged (it made the moon path on the water). Since the
+     water reflections (step 5, stop 5; user choice, 2026-10-02) the water
+     ignores the rim light: its cyan glare is replaced by the moon's gold
+     path.
    - **Warm local lights (3 point lights):** a floodlight at the foot of the
      Clock Tower's harbour face (bright brick low, fading up the shaft), the
      ferry's cabin light and the junk's deck lanterns (warm pools on the
@@ -735,9 +738,9 @@ all six.
      petals); no surface flickers. 01 is unchanged (8,966 against 8,744
      changing pixels); 03 is up from 16,154 to 18,881, from the extra window
      edges.
-   - **Not yet:** soft shadows, glow (step 3), reflections of the lit city in
-     the water ("Skyline reflections", ledger Phase D), photo-like foreground
-     cutouts (user artwork). On mobile the skyline windows mostly blend into
+   - **Not yet:** soft shadows, glow (step 3), photo-like foreground
+     cutouts (user artwork). Reflections of the lit city in the water are
+     built (step 5, stop 5, 2026-10-02). On mobile the skyline windows mostly blend into
      their average glow; the iPhone check is in step 6.
 3. **Glow.** Two options, tested side by side:
    - **A (recommended first):** soft glow sprites behind each bright light
@@ -925,6 +928,53 @@ all six.
        flickers. Hold 1 is unchanged (20,140 px against 20,040).
      - **Code:** `bauhinia.js`; the atlas is `bauhiniaAtlas` in `surfaces.js`;
        placement is `WORLD.foreground.bauhinia`.
+   - **Stop 5: water reflections (built 2026-10-02, user choice).** The
+     harbour now mirrors the lit city as long, broken streaks of light,
+     like the user's photo of the junks at night. The user chose streaks
+     drawn by the water shader (not a mirror render, which would cost a
+     second scene draw and shimmer on phones), colours that match the scene,
+     and these sources:
+     - **Skyline and IFC:** one column per 45 m of skyline, warm to cool
+       like the windows above. Wide columns split into 11 m window stripes,
+       about half of them lit; stripes blend into their average once they
+       shrink below about 2 px, so they never shimmer. The IFC has a cool
+       striped body and a pale crown.
+     - **Moon:** a gold path from the horizon to the moon's mirror image.
+       It replaces the cyan glare the rim light put on the water.
+     - **Boats:** warm ferry windows, the junk's red sails and its
+       deckhouse lights. They follow the boats as they move and turn.
+     - **Clock Tower and promenade lamps:** a warm tower streak and a small
+       one under each lantern and tall lamp.
+     - **Observation Wheel:** a magenta column under the rim.
+     - **How a streak is drawn:** each light is an upright strip (ground
+       position, lit height, width, colour). Its reflection covers the view
+       angles of the strip's mirror image, fades quickly toward the horizon
+       and slowly toward the viewer, and is broken into dashes by a noise
+       measured in view angles (it moves with the camera, so it cannot
+       strobe) and by the blurred ripples. Brightness follows the water's
+       Fresnel sheen and is soft-clipped, so streaks stay below the tower
+       and copy.
+     - **Limits:** up to 48 sources per frame on desktop, 28 on mobile.
+       Each frame the sources behind the camera or off screen are dropped,
+       then the brightest are kept; lamps go first (they are mostly hidden
+       by the promenade edge). Sources of a faded subject (ferry, junk, IFC,
+       wheel, railing) fade with it.
+     - **Flicker fix:** the water plane is now cut into 64 × 64 squares.
+       As two 8 km triangles, the world positions across it were too
+       imprecise and the stripes shivered at 1 cm camera steps.
+     - **Checks:** all 12 frames as before (only the four older misses);
+       draw calls unchanged; no new textures; water adds about 8,000
+       triangles. With 1 cm camera steps the holds change 19,132 / 16,718 /
+       14,764 / 12,928 / 6,785 px (holds 1–5), at or below the earlier
+       numbers; with the camera still, hold 1 changes 37 px (hold 3's 1,574
+       px is the turning wheel). Strobe on the water (sideways / forward
+       moves): hold 1 3.8 / 11.6 (was 5.2 / 14.7), hold 3 1.4 / 11.8 (1.4 /
+       10.5), hold 4 0.9 / 8.2 (1.2 / 8.3), hold 5 0.9 / 16.6 (0.8 / 15.9).
+       The loop over up to 48 sources per water pixel is to be watched in
+       the iPhone 11 measurement.
+     - **Code:** `waterReflections.js` (the source list), `createWater.js`
+       (the streak shader, culling and fades), `main.js` (sources, fades,
+       per-frame `water.reflect`).
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -942,8 +992,8 @@ Measured with the `?fps` overlay on a production build, as in
 |---|---|---|
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
-| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. With the 3D palms: desktop 02 137. With the bauhinia tree: desktop 01 170 (desktop only). Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
-| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). The stone railing adds a 64 × 64 granite tile and a 64 × 96 post panel (24 textures; the lantern glows are drawn in their shader). The wet paving adds a 240 × 240 slab tile (25 textures). The palms add a 256 × 256 frond and bark atlas (26 textures). The bauhinia tree adds a 512 × 512 leaf and flower atlas (27 textures; its falling petals reuse the petal texture). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
+| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. With the 3D palms: desktop 02 137. With the bauhinia tree: desktop 01 170 (desktop only). The water reflections add none. Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
+| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). The stone railing adds a 64 × 64 granite tile and a 64 × 96 post panel (24 textures; the lantern glows are drawn in their shader). The wet paving adds a 240 × 240 slab tile (25 textures). The palms add a 256 × 256 frond and bark atlas (26 textures). The bauhinia tree adds a 512 × 512 leaf and flower atlas (27 textures; its falling petals reuse the petal texture). The water reflections add none. To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
 | Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b; the promenade lanterns and lamps are faked in the materials (`lamps.js`) | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
 
@@ -1077,9 +1127,17 @@ Stop for the user's review after each step, as in the grey-box.
   `bauhinia` gating target; `src/scene/createPetals.js`: the wind turned
   toward screen left, shared petal texture, colours and wind (user choice,
   2026-10-02).
+- New: `src/scene/waterReflections.js` (the lights the water reflects:
+  skyline columns, IFC, wheel, moon, Clock Tower, lamps, boats);
+  `src/scene/createWater.js`: reflection streak shader with stripes and
+  dashes, the rim light's glare removed, the plane cut into 64 × 64
+  squares, `setSources`, `setFade` and `reflect` (per-frame culling);
+  `src/main.js`: the sources, fades tied to the ferry, junk, IFC, wheel and
+  railing gating, `water.reflect` before each render (user choice,
+  2026-10-02).
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font; the
   stone railing and lamps built in code from the user's designs; the wet
-  paving; the palms; the bauhinia tree.
+  paving; the palms; the bauhinia tree; the skyline reflections.
 
 ## 8. Acceptance checks
 
@@ -1100,7 +1158,11 @@ The milestone passes when:
    its posts (2026-10-02). The promenade reads as dark wet stone slabs with
    narrow, broken lamp reflections, quieter than the tower and copy, with
    no glare patch on the hero's near deck and no shimmering joints or
-   flecks (user request, 2026-10-02).
+   flecks (user request, 2026-10-02). The harbour mirrors the skyline, IFC,
+   moon (a gold path, no cyan glare), ferry, junk sails, Clock Tower, lamps
+   and wheel as broken streaks in the scene's colours, quieter than the
+   subjects, with no stripes shimmering or strobing while the camera moves
+   (user choice, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
    feet, raised over the boats (user request, 2026-10-02), and sinks and
    fades out with the 01 copy from the first scroll.

@@ -14,7 +14,7 @@ specifications are in `CURSOR-GREYBOX-BRIEF.md` section 6.
 
 | Working asset | Representation | Chapters | Purpose | Exit test |
 |---|---|---:|---|---|
-| Water | Plane with a standard material and a runtime canvas normal map (no custom shader) | 01–05 | Establish horizon, motion, and reflections | Reads as water without post-processing |
+| Water | Plane with a standard material and a runtime canvas normal map; since 2026-10-02 a shader patch draws the light reflections ("Skyline reflections", Phase D; user choice) | 01–05 | Establish horizon, motion, and reflections | Reads as water without post-processing |
 | Kowloon edge | Boxes and a flat promenade strip | 01–03 | Anchor origin of journey | Direction of departure is clear |
 | Clock Tower proxy | Stacked boxes | 01–02 | Test silhouette and copy clearance | Recognisable by proportion and placement |
 | Star Ferry proxy | Rebuilt in code from the user's reference photos (user request, 2026-10-01; first reshaped from box blocks the same day): lofted double-ended green hull with sheer, flare and waterline band, wooden rubbing strip, tyre fenders; open lower deck with green posts, bulwark and a lit cabin behind; green band, white upper deck with framed lit windows and dark bridge glass at both ends, 48 white life rings; roof with liferaft canisters, funnel, tripod masts and rigging; navigation lights; foam line. No names or emblems | 01–04 (hidden on mobile 01–02) | Test crossing path and scale | Path never clips camera or foreground |
@@ -120,7 +120,7 @@ midground, background and atmosphere. Each one still has to pass gate 5 below
 | `mist-band.webp` | Alpha WebP, tiled | All | Between skyline layers | Drifting haze that separates near and far buildings |
 | Black kites | Small animated sprites | Hero, 01–03 | Sky | Hong Kong's signature bird gliding slowly; a living detail |
 | Sampans and distant ferries | Low-poly or cards | 01, 03–04 | Midground | Busy-harbour feel; lit windows and wakes at a distance |
-| Skyline reflections | Procedural streaks on the water | 01, 05 | Water | Vertical light smears under lit buildings |
+| Skyline reflections | **Built 2026-10-02** (user choice), original, streaks drawn in the water shader (`waterReflections.js`, `createWater.js`), no file | All with water in view | Water | Broken light streaks under the skyline and IFC, a gold moon path (in place of the cyan rim glare), the ferry windows, junk sails, Clock Tower, promenade lamps and Observation Wheel, in the scene's colours |
 | Neon sign cutouts | Alpha WebP set | 05 | Foreground edges | Hanging Chinese neon signs framing the City of Light |
 | Searchlight beams | Procedural | 01, 05–06 | Sky | A nod to the Symphony of Lights show; the frame 01 storyboard shows beams rising from the Central towers (user reminder below) |
 | Smoke wisps | Alpha WebP | 06 | Sky | Drift after the fireworks, for the afterglow |
@@ -141,7 +141,7 @@ plan and prompt here before import (as for Meshy above).
 | Clouds | Heavy clouds lit coral from below by the city | A cloud layer in the sky (painted cards or a procedural layer), kept clear of the moon | User artwork or code | Milestone 4 (atmosphere) |
 | Light beams | Searchlights rising from the Central towers | "Searchlight beams" in Phase D, now including 01 | Code | Milestone 4 |
 | More realistic buildings | Recognisable towers (Bank of China, Central Plaza) with lit window grids The code-built skyline (Phase B, P0), with a few landmark towers modelled more closely in code (no GLB, user decision 2026-10-01) | Code, from the user's references (photos, Meshy models) | Milestone 3 |
-| More light at ground level in Central | A bright band of street and podium lights along the Central waterfront, with long reflections | A waterfront light strip plus the "Skyline reflections" layer in Phase D | Code | Milestone 2 look test (lit windows) or Milestone 4 |
+| More light at ground level in Central | A bright band of street and podium lights along the Central waterfront, with long reflections | A waterfront light strip plus the "Skyline reflections" layer in Phase D | Code | Reflections **done 2026-10-02** ("Skyline reflections", Phase D); the waterfront light strip in Milestone 4 |
 
 ## Reference material (not for production)
 
