@@ -45,7 +45,9 @@ function createSkyline() {
   const [ifcX, , ifcZ] = WORLD.ifc.position;
   const [wheelX, , wheelZ] = WORLD.wheel.position;
   const random = seededRandom(seed);
-  const material = addCityWindows(new MeshLambertMaterial({ color: 0xffffff }), { lit: 0.3, strength: 0.9 });
+  // Dimmer than IFC and capped well below its 50%, so IFC leads (user choice,
+  // 2026-10-02; was lit 0.3, up to ~50%, strength 0.9).
+  const material = addCityWindows(new MeshLambertMaterial({ color: 0xffffff }), { lit: 0.2, maxLit: 0.3, strength: 0.7 });
   const mesh = new InstancedMesh(unitBox, material, count);
   const matrix = new Matrix4();
   const q = new Quaternion();

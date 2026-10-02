@@ -445,7 +445,8 @@ all six.
    skyline building and IFC, drawn in the shader in world metres (3.6 m
    storeys, 3.2 m bays; IFC 4 m × 2.6 m, mostly cool white), so it doesn't
    stretch with each box (`src/scene/cityWindows.js`). Each building gets its
-   own share of lit windows (Central 30%, Kowloon 22%, IFC 45%), warm with a
+   own share of lit windows (Central 30%, since 2026-10-02 20% capped at 30%,
+   step 5 stop 6; Kowloon 22%; IFC 45%, now 50%), warm with a
    quarter cool. Unlit windows are darker glass. Where a window shrinks to a
    couple of pixels, the grid fades to its average glow, so distant towers
    can't shimmer.
@@ -1014,6 +1015,28 @@ all six.
      - **Code:** `waterReflections.js` (the lights and `cityStrip`),
        `createWater.js` (the glint shader, culling, fades, `setCity`),
        `main.js` (lights, skyline strip, fades, per-frame `water.reflect`).
+   - **Stop 6: Central buildings and mountains (user choices, 2026-10-02).**
+     The user found the Central towers too bright next to IFC and asked to
+     rework the buildings and mountains next, in three parts with a review
+     after each: dim the buildings, then the mountains (shading from a dark
+     foot to a lighter ridge with an edge glow near the moon, rougher ridges
+     with a Peak outline, a scatter of slope lights, a mist band where the
+     skyline meets the mountain, a faint third range), then building shapes
+     (varied tops plus a few landmarks built in code, such as Bank of China
+     and Central Plaza).
+     - **Part 1: dimmer Central buildings (built 2026-10-02).** Every skyline
+       building had 30% of its windows lit, varied per building from 10% to
+       50%, so the busiest matched IFC's 50%; in 05 the tower right of IFC
+       was almost as bright (mean 44 against IFC's 47, bright pixels 13.7%
+       against 14.6%). Now 20% lit, capped at 30% per building (new
+       `maxLit` option in `cityWindows.js`), and windows at strength 0.7
+       (was 0.9). IFC, its podium and Kowloon are unchanged. Measured: the
+       skyline beside IFC in 01 drops from 47 to 38 (IFC 57), the tower in
+       05 from 44 to 29 with half the bright pixels (IFC 47), mobile 01 from
+       51 to 39 (IFC 80). Strobe at scroll speed: the 01 skyline changes
+       6.2% of pixels (6.7% before); the Clock Tower is unchanged. On
+       mobile the distant skyline still reads as flat slabs; the depth haze
+       (not chosen for now) or the mist band in part 2 could fix that.
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -1176,6 +1199,9 @@ Stop for the user's review after each step, as in the grey-box.
   (per-frame culling); `src/main.js`: the lights, the skyline strip, fades
   tied to the ferry, junk and IFC gating, `water.reflect` before each render
   (user choices, 2026-10-02; reworked twice the same day, user requests).
+- Central buildings and mountains (step 5, stop 6; user choices,
+  2026-10-02): `src/scene/cityWindows.js` gains a `maxLit` cap;
+  `src/scene/createIsland.js` dims the skyline windows (part 1).
 - Publishing (user choice, 2026-10-02): `vite.config.js` builds with the
   base `/hongkong/` on GitHub; new `.github/workflows/deploy.yml` builds and
   publishes to GitHub Pages on every push to `main`; `.gitignore` keeps the
@@ -1208,7 +1234,9 @@ The milestone passes when:
    into small horizontal glints with dark gaps, ragged edges and soft ends,
    over a dim continuous shimmer from the skyline; no vertical rectangles,
    no glare or hot blobs under the boats, nothing strobing while the camera
-   moves (user choices and requests, 2026-10-02).
+   moves (user choices and requests, 2026-10-02). IFC is the brightest
+   tower in 01 and 05; no Central building is lit as much (user request,
+   2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
    feet, raised over the boats (user request, 2026-10-02), and sinks and
    fades out with the 01 copy from the first scroll.
