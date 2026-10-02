@@ -31,8 +31,9 @@ export const CLOUDS = {
       // choice, 2026-10-02); the opacities allow for the chapters' fade.
       // 02: low over the right-hand ridge, below the copy, above the ferry.
       { chapter: 1, band: 'low', x: 72, y: 52, width: 50, opacity: 0.18 },
-      // 04: above the low mountains on the left, below the copy.
-      { chapter: 3, band: 'thin', x: 22, y: 34, width: 40, opacity: 0.2 },
+      // 04: above the low mountains on the left, below the copy. Stronger than
+      // the others, so the left of the frame isn't empty (user choice, 2026-10-02).
+      { chapter: 3, band: 'thin', x: 22, y: 34, width: 46, opacity: 0.45 },
       // 05: between the copy and Bank of China's mast.
       { chapter: 4, band: 'thin', x: 22, y: 33, width: 40, opacity: 0.2 },
       // 06: a dim band beneath the fireworks, above the moon and ridge.

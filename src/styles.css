@@ -528,8 +528,7 @@ a:focus-visible {
   gap: 28px;
 }
 
-.site-nav a,
-.chapter-counter a {
+.site-nav a {
   position: relative;
   text-decoration: none;
 }
@@ -714,48 +713,10 @@ a:focus-visible {
   visibility: hidden;
 }
 
-.chapter-counter__list {
-  display: flex;
-  gap: 20px;
-  font-size: 1.25rem;
-  font-weight: 300;
-  letter-spacing: 0.04em;
-}
-
-.chapter-counter a {
-  display: block;
-  padding: 4px 0;
-  opacity: 0.45;
-  transition: opacity 200ms ease;
-}
-
-.chapter-counter a span {
-  display: block;
-  transition:
-    color 250ms ease,
-    transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.chapter-counter a[aria-current] {
-  color: var(--color-cream);
-  opacity: 1;
-}
-
-.chapter-counter a[aria-current]::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1px;
-  background: var(--color-warm);
-}
-
 .chapter-counter__hint {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 10px;
   font-size: 0.6875rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -801,6 +762,7 @@ a:focus-visible {
 
 .chapter-counter__compact {
   display: none;
+  margin-top: 10px;
   font-size: 0.875rem;
   letter-spacing: 0.12em;
 }
@@ -814,23 +776,8 @@ html:not(.is-enhanced) .chapter-counter {
   display: none;
 }
 
-[data-hero="true"] .chapter-counter a {
-  opacity: 0.4;
-}
-
 [data-hero="true"] .chapter-counter__current {
   color: inherit;
-}
-
-@media (hover: hover) {
-  .chapter-counter a:hover {
-    opacity: 1;
-  }
-
-  .chapter-counter a:hover span {
-    color: var(--color-coral);
-    transform: translateY(-6px);
-  }
 }
 
 @media (max-width: 959px) {
@@ -840,10 +787,6 @@ html:not(.is-enhanced) .chapter-counter {
 }
 
 @media (max-aspect-ratio: 4/5), (max-width: 600px) {
-  .chapter-counter__list {
-    display: none;
-  }
-
   .chapter-counter__compact {
     display: block;
   }
@@ -1265,9 +1208,5 @@ html:not(.is-enhanced) .vertical-text__labels {
     animation: none;
     background: currentColor;
     opacity: 0.6;
-  }
-
-  .chapter-counter a:hover span {
-    transform: none;
   }
 }
