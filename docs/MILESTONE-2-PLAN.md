@@ -1310,6 +1310,14 @@ all six.
          05 29,300 / 6,730, 06 8,500 / 2,190 (other 1,730 before, the
          brighter landmarks at the frame edge). Composition probe: only the
          four older misses; draw calls unchanged.
+       - **IFC Mall podium (user request, 2026-10-02):** the user saw the
+         base of IFC still flickering on phones; it still used the window
+         shader. It now has a painted skin too: four 5.5 m retail floors of
+         glass behind mullions, mostly warm and neutral, 60% lit and a
+         little dimmer than the tower. **Checks:** the podium flicker test
+         at fast scroll fell from 11.8% excess to 7.3%; a plain unpainted
+         podium measures 8%, so what is left is its outline and the lit
+         pier pavilions in front, not the skin.
        - **Fewer background lights:** every skyline tower is now 3–6% lit
          (was 5–12%), still spread evenly with 10% almost dark; 06 dims the
          skyline to 60% like 05 (`city: 0.6` in `src/data/chapters.js`).
@@ -1514,7 +1522,8 @@ Stop for the user's review after each step, as in the grey-box.
   `facadeBias` per breakpoint (part 3e, step 1). `facades.js` per-tower
   colours and levels, `braceWall` (Bank of China skin), neon line mask,
   UVs for angled walls; `src/scene/landmarks.js` paints all four
-  landmarks with them (part 3e, step 2).
+  landmarks with them (part 3e, step 2); `createIsland.js` IFC Mall
+  podium painted the same way (part 3e).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
   copy and footer hidden while loading and during the fade),
@@ -1572,7 +1581,8 @@ The milestone passes when:
    scrolling on a phone, nor change look mid-scroll on any screen: no grey
    slab, lit windows stay lit (user requests, 2026-10-02); IFC reads as a
    lit glass office tower, floors as bands behind thin mullions rather than
-   scattered dots, and the four landmarks have their own glass skins
+   scattered dots, its mall podium too (no twinkling base on phones, user
+   request, 2026-10-02), and the four landmarks have their own glass skins
    (Bank of China glowing braces over dark facets, Cheung Kong silver,
    Central Plaza bronze, The Center neon floor lines) that hold still
    while scrolling (user choice, 2026-10-02), and no brace line, mast or warning light shimmers

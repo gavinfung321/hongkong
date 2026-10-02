@@ -275,13 +275,18 @@ function createIFC() {
 }
 
 // IFC Mall: the low podium at the tower's foot, kept out of the IFC group so
-// the composition probe measures the tower alone.
+// the composition probe measures the tower alone. Painted like the tower
+// (user request, 2026-10-02; the window shader twinkled on phones): four
+// retail floors, warmer and a little dimmer than IFC.
+const PODIUM_GLOW = 0.7;
+
 function createPodium() {
   const [x0, x1, z0, z1, height] = WORLD.ifc.podium;
-  const material = addCityWindows(new MeshLambertMaterial({ color: 0x4a4652 }), { lit: 0.5, floor: 5, bay: 4, coolShare: 0.2 });
-  const podium = new Mesh(unitBox, material);
+  const floors = 4;
+  const skin = curtainWall({ bay: 4, floor: height / floors, bays: 32, floors, lit: 0.6, coolShare: 0.25, level: [0.55, 0.85], seed: 451 });
+  const geometry = facadeUVs(new BoxGeometry(x1 - x0, height, z1 - z0).translate(0, height / 2, 0));
+  const podium = new Mesh(geometry, facadeMaterial(skin, PODIUM_GLOW));
   podium.position.set((x0 + x1) / 2, WORLD.island.slab[4], (z0 + z1) / 2);
-  podium.scale.set(x1 - x0, height, z1 - z0);
   podium.name = 'ifcPodium';
   return podium;
 }
