@@ -115,7 +115,8 @@ The system-font version remains the no-font and failure fallback.
 
 ### 5.1 Hero and brand
 
-- The hidden semantic H1 remains `Victoria Harbour — A Night Crossing`.
+- The hidden semantic H1 becomes `Victoria Harbour: A Night Crossing`, following
+  the no dash rule in `FINAL-NARRATIVE-COPY.md`.
 - The visible 3D `香港` wordmark uses Noto Serif TC 700, not a synthetic bold.
 - Keep the wordmark horizontal on both breakpoints and retain its approved
   world placement, gradient and scroll exit.
