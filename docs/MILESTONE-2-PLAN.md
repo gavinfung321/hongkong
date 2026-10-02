@@ -1791,7 +1791,7 @@ step.
 | Milestone | Content |
 |---|---|
 | 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk, Clock Tower, IFC and wheel are already rebuilt from reference photos, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals, display fonts (the bauhinia tree is built in code, 2026-10-02). Also the user's stone railing (built in code with lanterns and tall lamps, 2026-10-02), promenade palms, wet paving tiles (built in code, 2026-10-02) and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
-| 4. Atmosphere, all chapters | Clouds lit from below and searchlight beams from the Central towers (user reminders, 2026-10-01), the look-test layers rolled out to 02–06, extra particles alongside the petals (sea spray, city bokeh, firework embers in 06), real fireworks, a sparkle trail added to the cursor ring (3.10) |
+| 4. Atmosphere, all chapters | Follow `ATMOSPHERE-EFFECTS-BRIEF.md`: clouds and local mist, ferry spray, restrained searchlights, global print texture, chapter colour progression, and illustrated fireworks with smoke and embers. Local glows remain the baseline; a soft bloom is built (Milestone 2, part 3e, step 5; user choice, 2026-10-02). |
 | 5. Copy and launch | Final copy, poster images (a real snapshot of the hero frame replaces the drawn fallback poster, for loading and fallback; user choice, 2026-10-02), an entrance screen with real build progress, after Kage's technique (3.12; user request, 2026-10-02), a full performance pass on both iPhones, deployment |
 
 **Published early (user choice, 2026-10-02).** The work in progress is live at

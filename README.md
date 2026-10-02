@@ -27,7 +27,7 @@ npm run preview    # serve dist/ at http://localhost:4173/  (add ?fps)
 
 ## Project structure
 
-- `docs/` — creative direction, storyboard, asset planning, and the grey-box brief
+- `docs/` — creative direction, storyboard, asset planning, grey-box brief, and the approved typography/interface direction
 - `public/models/` — optimized GLB models
 - `public/textures/` — model and procedural textures
 - `public/cutouts/` — transparent WebP foreground layers
