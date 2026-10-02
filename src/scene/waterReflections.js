@@ -1,43 +1,96 @@
 import { Box3, Color, Vector3 } from 'three';
+import { seededRandom } from './random.js';
 import { WORLD } from '../data/world.js';
 
-// The lights the harbour reflects (user choice, 2026-10-02): IFC, the Clock
-// Tower, the ferry's windows and the junk's sails. The skyline, moon, wheel
-// and promenade lamps are not reflected (user choice, same day: their many
-// thin streaks read as a barcode). Each source is an upright strip of light:
-// ground position x / z, lit from height h0 to h1, `width` half wide, with a
-// colour × power. The water draws its reflection (createWater.js).
-// tail: how far the streak runs on toward the viewer, as a share of the
-// mirror image's length; taper: how much it dims along its length (0 even,
-// 1 down to nothing). Colours match the scene's own lights.
+// What the harbour reflects (user choices, 2026-10-02): IFC, the Clock Tower,
+// the ferry's windows, the junk's sails and the moon, each as a glittering
+// glow; and a dim shimmer under the whole skyline (`cityStrip`), with no
+// columns. The water draws them as glints (createWater.js).
+// Each light is an upright strip: ground position x / z, lit from height h0
+// to h1, `width` half wide, with a colour × power. tail: how far the glow
+// runs on toward the viewer, as a share of the mirror image's length; taper:
+// how much it dims along its length (0 even, 1 down to nothing).
+
+const WARM = new Color(0xffc07a); // city windows (cityWindows.js)
+const COOL = new Color(0xc4d6ff);
+const STRIP = 256; // texels along the island front
+const BLUR = 4; // texels each side, so neighbouring towers merge
 
 const box = new Box3();
 const size = new Vector3();
 const centre = new Vector3();
 
 function source(x, z, h0, h1, width, colour, power, extra = {}) {
-  return { x, z, h0, h1, width, colour: new Color(colour), power, tail: 0.35, taper: 0, rank: power, ...extra };
+  return { x, z, h0, h1, width, colour: new Color(colour), power, tail: 0.6, taper: 0, rank: power, ...extra };
 }
 
 // tower: the Clock Tower group; ferry, junk: the boats, followed every frame.
-// IFC comes from WORLD.
+// IFC and the moon come from WORLD.
 export function reflectionSources({ tower, ferry, junk }) {
   const list = [];
 
-  // One soft column, the body's width, half the tower's mirrored height.
   const [ix, iy, iz] = WORLD.ifc.position;
-  list.push(source(ix, iz, iy + 4, iy + 210, 20, 0xd2dcf0, 0.32, { key: 'ifc', tail: 0.15, taper: 0.75 }));
+  list.push(source(ix, iz, iy + 4, iy + 300, 22, 0xd8e0f2, 0.4, { key: 'ifc', tail: 0.25, taper: 0.7 }));
 
+  // The floodlit lower part (the floodlight fades up the shaft).
   tower.updateMatrixWorld(true);
   box.setFromObject(tower).getSize(size);
   box.getCenter(centre);
-  // The floodlit lower half only (the floodlight fades up the shaft).
-  list.push(source(centre.x, centre.z, box.min.y + 2, box.min.y + size.y * 0.5, size.x * 0.3, 0xffa860, 0.55, { taper: 0.6 }));
+  list.push(source(centre.x, centre.z, box.min.y + 2, box.min.y + size.y * 0.6, size.x * 0.35, 0xffa860, 0.6, { taper: 0.6 }));
 
-  // Moving: heights and half extents (along the hull, across it) in the boat's
-  // frame, covering only the lit window decks and the sails.
-  list.push(source(0, 0, 1.4, 6.6, 0, 0xffd29a, 0.3, { key: 'ferry', follow: ferry, extent: [11, 3.5] }));
-  list.push(source(0, 0, 5.6, 19.5, 0, 0xff5a36, 0.75, { key: 'junk', follow: junk, extent: [6, 0.5], taper: 0.3 }));
-  list.push(source(0, 0, 2.9, 5, 0, 0xffc890, 0.25, { key: 'junk', follow: junk, extent: [2.5, 1.5] }));
+  // A glitter path from the horizon to the moon's mirror image.
+  const { position: [mx, my, mz], radius } = WORLD.moon;
+  list.push(source(mx, mz, my * 0.08, my, radius * 0.45, 0xf6c46a, 0.3, { taper: 0.6, tail: 0.15 }));
+
+  // Moving: heights and half extents (along the hull, across it) in the boat's frame.
+  list.push(source(0, 0, 1.4, 6.6, 0, 0xffd29a, 0.32, { key: 'ferry', follow: ferry, extent: [14, 4], tail: 0.45 }));
+  list.push(source(0, 0, 5.6, 19.5, 0, 0xff5a36, 0.9, { key: 'junk', follow: junk, extent: [8, 0.5], taper: 0.3 }));
+  list.push(source(0, 0, 2.9, 5, 0, 0xffc890, 0.3, { key: 'junk', follow: junk, extent: [3, 2] }));
   return list;
+}
+
+// The skyline as a strip along the island front: per texel the lit windows'
+// colour × brightness (rgb) and the tallest tower's height (a), blurred so
+// the shimmer is continuous.
+export function cityStrip(skyline) {
+  const { x: [x0, x1], z: [front] } = WORLD.island.skyline;
+  const random = seededRandom(31);
+  const light = new Float32Array(STRIP * 3);
+  const height = new Float32Array(STRIP);
+  const m = skyline.instanceMatrix.array;
+  const colour = new Color();
+  for (let i = 0; i < skyline.count; i++) {
+    const [x, w, h] = [m[i * 16 + 12], m[i * 16], m[i * 16 + 5]];
+    colour.copy(WARM).lerp(COOL, 0.1 + random() * 0.5);
+    const a = Math.max(0, Math.floor(((x - w / 2 - x0) / (x1 - x0)) * STRIP));
+    const b = Math.min(STRIP - 1, Math.ceil(((x + w / 2 - x0) / (x1 - x0)) * STRIP));
+    for (let j = a; j <= b; j++) {
+      light[j * 3] += colour.r * h;
+      light[j * 3 + 1] += colour.g * h;
+      light[j * 3 + 2] += colour.b * h;
+      height[j] = Math.max(height[j], h);
+    }
+  }
+  const blur = (values, stride) => {
+    const out = new Float32Array(values.length);
+    for (let j = 0; j < STRIP; j++) {
+      for (let k = -BLUR; k <= BLUR; k++) {
+        const n = Math.min(STRIP - 1, Math.max(0, j + k));
+        for (let c = 0; c < stride; c++) out[j * stride + c] += values[n * stride + c] / (2 * BLUR + 1);
+      }
+    }
+    return out;
+  };
+  const smoothLight = blur(light, 3);
+  const smoothHeight = blur(height, 1);
+  const peakLight = Math.max(...smoothLight);
+  const peakHeight = Math.max(...smoothHeight);
+  const data = new Uint8Array(STRIP * 4);
+  for (let j = 0; j < STRIP; j++) {
+    // Fade out at both ends of the island.
+    const edge = Math.min(1, j / BLUR, (STRIP - 1 - j) / BLUR);
+    for (let c = 0; c < 3; c++) data[j * 4 + c] = Math.round((255 * edge * smoothLight[j * 3 + c]) / peakLight);
+    data[j * 4 + 3] = Math.round((255 * smoothHeight[j]) / peakHeight);
+  }
+  return { data, x0, x1, z: front, height: peakHeight };
 }

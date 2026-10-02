@@ -2,7 +2,7 @@ import { chapters, HERO, SCROLL } from './data/chapters.js';
 import { createScene } from './scene/createScene.js';
 import { createLighting } from './scene/createLighting.js';
 import { createWater } from './scene/createWater.js';
-import { reflectionSources } from './scene/waterReflections.js';
+import { cityStrip, reflectionSources } from './scene/waterReflections.js';
 import { createKowloonEdge } from './scene/createKowloonEdge.js';
 import { createIsland } from './scene/createIsland.js';
 import { createVessels } from './scene/createVessels.js';
@@ -55,6 +55,7 @@ function start(initGuard, header) {
     ferry: vessels.ferry,
     junk: vessels.junk,
   }));
+  water.setCity(cityStrip(island.group.getObjectByName('skyline')));
   // Faded subjects fade their reflections too.
   const reflected = (key, setOpacity) => (value) => {
     setOpacity(value);
