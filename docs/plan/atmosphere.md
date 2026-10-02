@@ -6,7 +6,8 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
 - **Part 3g: sky and clouds (user request, 2026-10-02).** Pulled
   forward from Milestone 4, following `ATMOSPHERE-EFFECTS-BRIEF.md`
   §6.1 (stage 3), one stage at a time with a review after each.
-  - **Stage 1, coral cloud cards (done):** new
+  - **Stage 1, coral cloud cards (done; the cards below were replaced
+    by the cloud ceiling, next item):** new
     `src/scene/createAtmosphere.js` and `src/data/atmosphere.js`. The
     staged `coral-clouds.webp` (three cloud bands on one sheet: tall,
     thin and low) now ships as `public/atmosphere/coral-clouds.webp`.
@@ -33,7 +34,7 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
     fireworks (both 12%); 02–05 on phones already show the 01 band
     and need no cards of their own. Each card
     sways 1.2% of its width over 110–150 s (not in reduced motion).
-    The clouds fade per chapter (`clouds` in `src/data/chapters.js`):
+    The clouds faded per chapter (`clouds` in `src/data/chapters.js`, now removed):
     full in 01 and 06, 80% in 02–03, 50% in 04 (the darkest frame),
     40% in 05. Below the glow threshold, so they never bloom.
   - **Checks:** none crosses 香港, the copy, the moon, IFC or the
@@ -41,6 +42,46 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
     the skyline band within 1% of before in every frame (IFC still
     leads). Composition probe: only the four older misses. Draw
     calls: see the stage 2 checks (clouds and mist measured together).
+  - **Cloud ceiling (user request, 2026-10-02):** the user found the
+    clouds too thin, too few next to the storyboard and static. They
+    were: 12–20% opacity smeared the art's volume away; desktop had
+    one strip per chapter and phones only two cards (01, 06); the
+    1.2% sway over two minutes couldn't be seen. The storyboard (01,
+    02, 04) has a heavy violet ceiling over the whole upper sky with
+    coral breaks. The user chose (2026-10-02) a storyboard ceiling in
+    every chapter on desktop and phones, steady wind you notice within
+    5–10 s with the front layer faster, and the same artwork with
+    crops and mirrors (no new art). This goes past the brief's §6.1
+    opacity caps (12–22%) by the user's request.
+    - **Layers:** a big dim `back` layer (3.6 km out, the art darkened
+      and cooled by its tint, 30–55%) roofs the sky; a `front` layer
+      of lit banks (3 km out, 40–70%) shows the art's dark tops and
+      coral undersides. 5–7 cards per chapter on desktop, 3–5 on
+      phones (`CLOUDS.cards` in `src/data/atmosphere.js`), each a band
+      or a section of one (`u`, reversed to mirror it).
+    - **Per chapter:** each card shows only in its own chapter and
+      crossfades with the next across the whole move (the old
+      `clouds` level in `chapters.js` is gone), so every chapter's sky
+      is composed on its own. 05 is dimmer so IFC leads; 06 keeps a
+      dim roof behind the bursts and lit banks below them.
+    - **Facing:** cards are parallel to their chapter camera's image
+      plane (were upright), so in frames that look up (02, 05, 06)
+      the corner cards stay level instead of tilting into streaks.
+    - **Wind:** the art scrolls through each card's fixed window (the
+      band wraps at its clear ends), so clouds drift right steadily
+      but never wander over the copy, the moon or IFC. Front 0.3% of
+      the frame's width per second (about 40 px in 10 s at 1440 px),
+      back half that. Wide side feathers (20%) let clouds drift in
+      and out softly. Still in reduced motion.
+    - **Checks:** 香港 is drawn over the clouds, so nothing covers it.
+      No lit front bank sits behind the copy; the dim back layer
+      reaches behind some copy and keeps it legible. IFC still leads
+      in 05 (checked by eye). Draw calls per hold: desktop 01 207, 02 165, 03 120, 04
+      93, 05 79, 06 65; phones 01 149, 02 101, 03 116, 04 88, 05 71,
+      06 59 (3–7 cloud cards each, about 2–4 more than before). Mid-move
+      shots (01→02, 04→05, phone 02→03) crossfade gently. JS 208.3 KB
+      gzip. On phones the bigger cloud area costs some pixel fill; to
+      re-check on the iPhone 11.
   - **Stage 2, harbour mist (done; user request, 2026-10-02):** the
     staged `harbour-mist.webp` (four soft blue-grey bands) now ships
     as `public/atmosphere/harbour-mist.webp`. Four separate drifts

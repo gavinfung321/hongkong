@@ -111,13 +111,11 @@ function start(initGuard, header) {
     bursts: (value) => fireworks.setLevel(value),
     petals: (value) => petals.setDensity(value),
     city: (value) => island.setCityLevel(value),
-    clouds: (value) => atmosphere.setLevel(value),
     mist: (value) => atmosphere.setMist(value),
     // Default window: gone in the first 40% of the move to 03, before the camera nears them.
     seaMist: (value) => atmosphere.setSeaMist(value),
   }, {
-    // Clouds and mist change gently across the whole move.
-    clouds: { in: [0, 1], out: [0, 1] },
+    // Mist changes gently across the whole move.
     mist: { in: [0, 1], out: [0, 1] },
     // The city dims across the whole move into 05 (and stays dim in 06), not in its first 40%.
     city: { in: [0, 1], out: [0, 1] },
@@ -298,6 +296,7 @@ function start(initGuard, header) {
     const segment = rig.update(p, { stepped: isStepped });
     vessels.update(segment, time, !isStepped);
     gating.update(segment, breakpoint, isStepped);
+    atmosphere.setSegment(segment, isStepped);
     scene.fog.density = gating.fogDensity(segment);
   }
 

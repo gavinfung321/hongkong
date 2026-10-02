@@ -71,7 +71,8 @@ The milestone has two halves:
   glittering water reflections.
 - **City:** dimmer towers so IFC leads, three mountain ranges with haze and
   slope lights, painted landmark facades, wakes.
-- **Atmosphere:** coral clouds per chapter (04's stronger on the left);
+- **Atmosphere:** a coral cloud ceiling in every chapter (dim back layer,
+  lit front banks, drifting on the wind);
   separate shore mist drifts (none in desktop 01); open-water wisps in the
   hero and 01; a firework show in 06 (eight bursts on desktop, six on
   phones, in an 8 s loop with rockets, falling sparks and drifting smoke).

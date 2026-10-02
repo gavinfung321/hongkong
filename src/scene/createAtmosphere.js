@@ -22,7 +22,14 @@ import { seededRandom } from './random.js';
 // distance) and drawn before the moon, so they never cover it; the ridge and
 // towers hide their lower edges. Cards stand upright, facing their chapter's
 // camera across the ground. Every edge is feathered, so no card shows a
-// rectangle. They sway slowly sideways, and hold still in reduced motion.
+// rectangle.
+//
+// A cloud ceiling in every chapter (user request, 2026-10-02): a dim back
+// layer and a brighter front layer. Each card shows in its own chapter and
+// crossfades with its neighbour across the move. The wind carries the clouds
+// through each card's fixed window (the art scrolls, the card stays), so they
+// drift steadily without wandering over the copy, the moon or IFC; the front
+// layer moves faster than the back. They hold still in reduced motion.
 //
 // Harbour mist (user request, 2026-10-02): the same kind of card, cut from
 // the mist sheet, in separate drifts on the island's waterfront behind the
@@ -46,12 +53,16 @@ const fragmentShader = `
   uniform sampler2D tSheet;
   uniform vec4 uBand; // v from, v to, feather x, feather y
   uniform vec2 uSpan; // u from, u to
+  uniform float uScroll; // wind offset in u; the band wraps around
   uniform float uOpacity;
   uniform vec3 uTintLow; // colour at the card's foot
   uniform vec3 uTintHigh; // and at its top
   varying vec2 vUv;
   void main() {
-    vec4 c = texture2D( tSheet, vec2( mix( uSpan.x, uSpan.y, vUv.x ), mix( uBand.x, uBand.y, vUv.y ) ) );
+    // The band's ends are clear, so the wrap shows no seam; the gradients of the
+    // unwrapped coordinate keep the wrap from dropping to the smallest mip.
+    vec2 st = vec2( mix( uSpan.x, uSpan.y, vUv.x ) + uScroll, mix( uBand.x, uBand.y, vUv.y ) );
+    vec4 c = textureGrad( tSheet, vec2( fract( st.x ), st.y ), dFdx( st ), dFdy( st ) );
     vec2 edge = min( vUv, 1.0 - vUv );
     float feather = smoothstep( 0.0, uBand.z, edge.x ) * smoothstep( 0.0, uBand.w, edge.y );
     vec3 tint = mix( uTintLow, uTintHigh, smoothstep( 0.0, 0.8, vUv.y ) );
@@ -105,6 +116,7 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
         tSheet: { value: texture },
         uBand: { value: [1 - r1 / height, 1 - r0 / height, feather, FEATHER[1]] },
         uSpan: { value: [u0, u1] },
+        uScroll: { value: 0 },
         uOpacity: { value: 0 },
         uTintLow: { value: new Color(...tint.low) },
         uTintHigh: { value: new Color(...tint.high) },
@@ -119,28 +131,37 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
     mesh.userData.noProbe = true;
     mesh.visible = false;
     group.add(mesh);
-    const [p0, p1] = drift.period;
+    const [p0, p1] = drift?.period ?? [1, 1];
     return {
       spec,
       mesh,
       texture,
-      aspect: ((u1 - u0) * sheet.size[0]) / (r1 - r0),
+      aspect: (Math.abs(u1 - u0) * sheet.size[0]) / (r1 - r0),
       base: new Vector3(),
       right: new Vector3(),
-      sway: [MathUtils.lerp(p0, p1, random()), random() * Math.PI * 2, drift.share],
+      sway: [MathUtils.lerp(p0, p1, random()), random() * Math.PI * 2, drift?.share ?? 0],
     };
   }
 
   const cards = {};
   for (const [breakpoint, specs] of Object.entries(CLOUDS.cards)) {
-    cards[breakpoint] = specs.map((spec) =>
-      makeCard(spec, CLOUD_SHEET, cloudSheet, {
+    cards[breakpoint] = specs.map((spec) => {
+      const layer = CLOUDS.layers[spec.layer];
+      const card = makeCard(spec, CLOUD_SHEET, cloudSheet, {
         fog: false,
-        renderOrder: -0.95, // after the sky, before the moon
-        drift: CLOUDS.drift,
+        renderOrder: layer.renderOrder, // after the sky, before the moon
         name: 'cloud',
-      }),
-    );
+        tint: layer.tint,
+        feather: CLOUDS.feather,
+      });
+      const [u0, u1] = spec.u ?? [0, 1];
+      card.layer = layer;
+      card.phase = spec.phase ?? random();
+      // u per second: the layer's speed is a share of the viewport width.
+      card.wind = (layer.speed / (spec.width / 100)) * (u1 - u0);
+      card.mesh.material.uniforms.uScroll.value = card.phase;
+      return card;
+    });
   }
   // Mist drifts the other way to the clouds.
   const mist = MIST.cards.map((spec) =>
@@ -173,7 +194,7 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
   }
 
   let active = [];
-  let cloudLevel = 0;
+  const chapterWeight = chapters.map(() => 0);
   let mistLevel = 0;
   let seaLevel = 0;
 
@@ -185,7 +206,7 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
 
   function apply() {
     for (const list of Object.values(cards)) {
-      for (const card of list) show(card, active.includes(card) ? cloudLevel : 0);
+      for (const card of list) show(card, active.includes(card) ? chapterWeight[card.spec.chapter] : 0);
     }
     for (const card of mist) show(card, mistLevel);
     for (const card of seaMist) show(card, seaLevel);
@@ -204,22 +225,25 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
       aimCamera(placement, position.fromArray(pose.position), target.fromArray(pose.target));
       placement.updateMatrixWorld();
       ray.set((spec.x / 100) * 2 - 1, 1 - (spec.y / 100) * 2, 0.5).unproject(placement).sub(position).normalize();
-      forward.copy(target).sub(position).setY(0).normalize();
-      card.base.copy(position).addScaledVector(ray, CLOUDS.distance);
-      const depth = CLOUDS.distance * ray.dot(forward);
+      placement.getWorldDirection(forward);
+      card.base.copy(position).addScaledVector(ray, card.layer.distance);
+      const depth = card.layer.distance * ray.dot(forward);
       const width = (spec.width / 100) * 2 * depth * Math.tan(MathUtils.degToRad(placement.fov / 2)) * viewAspect;
       mesh.scale.set(width, width / card.aspect, 1);
       mesh.position.copy(card.base);
-      // Upright, like the level camera's image plane, so high cards don't stretch.
-      mesh.lookAt(position.x, card.base.y, position.z);
-      card.right.set(1, 0, 0).applyQuaternion(mesh.quaternion);
+      // Parallel to the chapter camera's image plane, so cards stay level and
+      // undistorted in the corners of a frame that looks up.
+      mesh.quaternion.copy(placement.quaternion);
     }
     apply();
   }
 
-  function setLevel(value) {
-    if (value === cloudLevel) return;
-    cloudLevel = value;
+  // Clouds belong to their chapter: full at its hold, crossfading across the move.
+  function setSegment({ from, to, eased }, stepped) {
+    const t = stepped ? Math.round(eased) : eased;
+    const next = chapterWeight.map((_, index) => (index === from ? 1 - t : 0) + (index === to ? t : 0));
+    if (next.every((value, index) => value === chapterWeight[index])) return;
+    next.forEach((value, index) => (chapterWeight[index] = value));
     apply();
   }
 
@@ -242,10 +266,10 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
   }
 
   function update(time) {
-    for (const card of active) sway(card, time);
+    for (const card of active) card.mesh.material.uniforms.uScroll.value = card.phase - time * card.wind;
     for (const card of mist) sway(card, time);
     for (const card of seaMist) sway(card, time);
   }
 
-  return { group, place, setLevel, setMist, setSeaMist, update };
+  return { group, place, setSegment, setMist, setSeaMist, update };
 }
