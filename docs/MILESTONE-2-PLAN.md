@@ -448,6 +448,38 @@ script 1.4 s, first 3D frame 1.7 s).
   12 s timer shows the poster and copy if the script never arrives.
 - **Later (Milestone 5):** a real snapshot of the hero frame replaces the
   drawing, for loading and fallback alike (option B, chosen for launch).
+- **Later (Milestone 5): an entrance screen, after Kage (user request,
+  2026-10-02).** Studied in the local Kage copy (technique only): a dark
+  full-screen cover with a small mark, a short title, a 1 px progress line,
+  a caption and a percentage; the scene is built in small steps so the line
+  shows real progress; scrolling is locked until it is done; then the cover
+  fades out over 0.8 s and the hero plays its intro. Kage needs it more than
+  we do: it downloads about 3.7 MB (three.js, fonts, ten foreground cutouts,
+  four painted plates), we download about 0.22 MB and build everything in
+  code (first 3D frame ~1.7 s on simulated 4G). So ours is mainly an
+  entrance moment and a way to keep phones responsive while the scene
+  builds, not a necessity. Our version, all original (no Kage mark,
+  lettering, copy or code):
+  - **Look:** the night-sky colours of 3.12, the sail mark, 維港夜色 or
+    香港 in the display font, a thin cream progress line, an original
+    caption such as "Lighting the harbour", and a percentage.
+  - **Real progress:** `main.js` builds the scene in steps (water, Kowloon,
+    island and mountains, vessels, foreground, then compiling the shaders
+    ahead of the first frame), yielding between steps so the line moves
+    and the phone stays responsive. While the script itself downloads, the
+    line creeps slowly; it never runs backwards.
+  - **Exit:** a short minimum time (about 0.8 s) so fast loads don't
+    flash, a 0.8 s fade into the hero, then the opening push and the 香港
+    wordmark rising. Reloading mid-page skips the intro and fades straight
+    into that chapter. Reduced motion: no creeping line or intro, a plain
+    fade.
+  - **Safety:** it replaces the sky-only loading state above and keeps the
+    same rules: the fallback poster takes over if the 3D fails, and a timer
+    shows the poster and copy if the script never arrives. Hidden from
+    screen readers (the page title already announces the site).
+  - **When:** with the final copy and display fonts in Milestone 5, since
+    the caption and title lettering belong there; it could move earlier if
+    the user wants the entrance sooner.
 - Checked on a production build: loading shows the sky only, then a clean
   fade into the 3D scene; `?fallback` shows the poster and copy; with the
   script blocked, the poster and copy appear at 12 s.
@@ -1389,7 +1421,7 @@ step.
 |---|---|
 | 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk, Clock Tower, IFC and wheel are already rebuilt from reference photos, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals, display fonts (the bauhinia tree is built in code, 2026-10-02). Also the user's stone railing (built in code with lanterns and tall lamps, 2026-10-02), promenade palms, wet paving tiles (built in code, 2026-10-02) and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
 | 4. Atmosphere, all chapters | Clouds lit from below and searchlight beams from the Central towers (user reminders, 2026-10-01), the look-test layers rolled out to 02–06, extra particles alongside the petals (sea spray, city bokeh, firework embers in 06), real fireworks, a sparkle trail added to the cursor ring (3.10) |
-| 5. Copy and launch | Final copy, poster images (a real snapshot of the hero frame replaces the drawn fallback poster, for loading and fallback; user choice, 2026-10-02), a full performance pass on both iPhones, deployment |
+| 5. Copy and launch | Final copy, poster images (a real snapshot of the hero frame replaces the drawn fallback poster, for loading and fallback; user choice, 2026-10-02), an entrance screen with real build progress, after Kage's technique (3.12; user request, 2026-10-02), a full performance pass on both iPhones, deployment |
 
 **Published early (user choice, 2026-10-02).** The work in progress is live at
 <https://gavinfung321.github.io/hongkong/> from the public repo
