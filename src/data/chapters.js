@@ -76,9 +76,9 @@ export const chapters = [
       mobile: { left: 8, top: 9, right: 92, bottom: 39 },
     },
     visibility: {
-      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 0, bauhinia: 1, bursts: 0, clouds: 1, mist: 0.6 },
+      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 0, bauhinia: 1, bursts: 0, clouds: 1, mist: 0.6, seaMist: 1 },
       // No deck: the mobile storyboard has open water right to the bottom edge.
-      mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, deck: 0, railing: 0, palms: 0, bauhinia: 0, bursts: 0, clouds: 1, mist: 0.6 },
+      mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, deck: 0, railing: 0, palms: 0, bauhinia: 0, bursts: 0, clouds: 1, mist: 0.6, seaMist: 1 },
     },
     fogDensity: 0.00045,
     vessels: {
@@ -133,8 +133,8 @@ export const chapters = [
       mobile: { left: 8, top: 9, right: 92, bottom: 23 },
     },
     visibility: {
-      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bursts: 0, clouds: 0.8, mist: 0.5 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bursts: 0, clouds: 0.8, mist: 0.5 },
+      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bursts: 0, clouds: 0.8, mist: 0.5, seaMist: 0.7 },
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bursts: 0, clouds: 0.8, mist: 0.5, seaMist: 0.7 },
     },
     fogDensity: 0.00045,
     vessels: {
@@ -176,8 +176,8 @@ export const chapters = [
       mobile: { left: 8, top: 9, right: 92, bottom: 37 },
     },
     visibility: {
-      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, clouds: 0.8, mist: 0.8 },
-      mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, clouds: 0.8, mist: 0.8 },
+      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, clouds: 0.8, mist: 0.8, seaMist: 0 },
+      mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, clouds: 0.8, mist: 0.8, seaMist: 0 },
     },
     fogDensity: 0.00045,
     vessels: {
@@ -220,8 +220,8 @@ export const chapters = [
     // The wheel is gated here: framing alone leaves it peeking past the junk's
     // stern, and it is small and distant while it fades.
     visibility: {
-      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, clouds: 0.5, mist: 1 },
-      mobile: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, clouds: 0.5, mist: 1 },
+      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, clouds: 0.5, mist: 1, seaMist: 0 },
+      mobile: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, clouds: 0.5, mist: 1, seaMist: 0 },
     },
     fogDensity: 0.00063,
     vessels: {
@@ -263,8 +263,8 @@ export const chapters = [
     },
     visibility: {
       // city: the towers around IFC at 60%, so IFC leads (user choice, 2026-10-02).
-      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, petals: 0.6, city: 0.6, clouds: 0.4, mist: 0.6 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, petals: 0.6, city: 0.6, clouds: 0.4, mist: 0.6 },
+      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, petals: 0.6, city: 0.6, clouds: 0.4, mist: 0.6, seaMist: 0 },
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 0, petals: 0.6, city: 0.6, clouds: 0.4, mist: 0.6, seaMist: 0 },
     },
     fogDensity: 0.00045,
     vessels: {
@@ -304,8 +304,8 @@ export const chapters = [
     },
     visibility: {
       // city: the towers around IFC stay at 60%, as in 05 (user request, 2026-10-02).
-      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 1, petals: 0, city: 0.6, clouds: 1, mist: 0.15 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 1, petals: 0, city: 0.6, clouds: 1, mist: 0.15 },
+      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 1, petals: 0, city: 0.6, clouds: 1, mist: 0.15, seaMist: 0 },
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bursts: 1, petals: 0, city: 0.6, clouds: 1, mist: 0.15, seaMist: 0 },
     },
     fogDensity: 0.00036,
     vessels: {

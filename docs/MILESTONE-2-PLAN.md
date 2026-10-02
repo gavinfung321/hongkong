@@ -66,7 +66,7 @@ at the top. The wordmark needs a moment of its own first.
 - Deep links (`#chapter-01` … `#chapter-06`) and `?hold=` still land on each
   chapter's hold pose, unchanged.
 - Accessibility: the page gets one real `<h1>` in the hero, visually hidden
-  ("Victoria Harbour — A Night Crossing"). Chapter 01's title becomes an
+  ("Victoria Harbour: A Night Crossing"). Chapter 01's title becomes an
   `<h2>` like the others.
 
 ### 3.2 香港 wordmark
@@ -419,7 +419,7 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
     links: Clock Tower 1915, Star Ferry since 1888, Two IFC 2003,
     Observation Wheel 2014) and **Colophon** (built live in Three.js and
     WebGL; every model and texture made in code);
-  - a bottom bar: "© 2026 Victoria Harbour — A Night Crossing", 維港夜色
+  - a bottom bar: "© 2026 Victoria Harbour: A Night Crossing", 維港夜色
     ("Victoria Harbour at night") in the centre, "WebGL · Three.js · Hong
     Kong" on the right.
 - The 06 scene stays behind it, dimmed by a dark gradient. On mobile the
@@ -1483,15 +1483,15 @@ all six.
        - **Checks:** none crosses 香港, the copy, the moon, IFC or the
          Clock Tower crown at any hold, desktop or phone. Bright pixels in
          the skyline band within 1% of before in every frame (IFC still
-         leads). Composition probe: only the four older misses. Two to
-         three more draw calls per frame, and about one more where the 02,
-         04 and 05 cards are in view.
+         leads). Composition probe: only the four older misses. Draw
+         calls: see the stage 2 checks (clouds and mist measured together).
        - **Stage 2, harbour mist (done; user request, 2026-10-02):** the
          staged `harbour-mist.webp` (four soft blue-grey bands) now ships
-         as `public/atmosphere/harbour-mist.webp`. One belt of six upright
-         cards stands on the water just off the island's waterfront, from
-         the far west to past The Center, facing Kowloon (`MIST` in
-         `src/data/atmosphere.js`), 26–37 m tall, the lowest bands in
+         as `public/atmosphere/harbour-mist.webp`. One belt of four long
+         upright cards (700 m each, the art stretched sideways to save
+         draw calls) stands on the water just off the island's waterfront,
+         from the far west to past The Center, facing Kowloon (`MIST` in
+         `src/data/atmosphere.js`), 26–37 m tall, the lowest band in
          front of the wheel and IFC's podium. It lives in the world, so
          every chapter sees it where it is: boats, the Clock Tower and the
          junk stand in front of it and stay crisp, and it takes the
@@ -1505,9 +1505,26 @@ all six.
          as the camera tilts into the clear sky); full is 30% opacity.
          It sways 0.8% of each card's width the opposite way to the
          clouds, and holds still in reduced motion.
-       - **Checks:** composition probe: only the four older misses. Six
-         more draw calls where the belt is in view (clouds and mist
-         together 6–11, within the brief's 12). The skyline band's other
+       - **Open-water patches (user choice, 2026-10-02):** the user
+         expected the mist spread across the sea, not only along the far
+         shore. Four low patches (`SEA_MIST`, 14–20 m tall, 260–380 m
+         wide) lie out on the harbour 380–750 m from the 01 camera, facing
+         it: behind the Clock Tower, behind the junk, behind the ferry
+         farther out, and toward the Central piers. From the promenade's
+         height they read as layered banks across the whole width of the
+         water, behind the boats, in the hero and 01. Their own level
+         (`seaMist`: 01 1, 02 0.7, 0 from 03 on) uses the default gate,
+         so they are gone early in the move to 03, before the camera
+         passes near them; in 03–05 the camera is low among the boats,
+         where mist would veil them. In 02 they barely show (that view
+         skims along the water). A strip along the Kowloon shore was
+         considered and left out: it would sit right under the 01 camera
+         and behind the Clock Tower in 02.
+       - **Checks:** composition probe: only the four older misses. Draw
+         calls added by the clouds and mist together, measured by hiding
+         them: desktop 01 14, 02 12, 03 10, 04 8, 05 9, 06 9; phones 9,
+         7, 4, 4, 4, 4. Only desktop 01 is over the brief's aim of 12;
+         phones stay well under. The skyline band's other
          towers gain a few bright pixels where the mist lifts the dark
          waterfront (05: 8,770 → 9,000 at luma over 60; 03: 2,210 →
          2,650); IFC and the landmarks still lead (05 share 27%, under a
@@ -1727,8 +1744,8 @@ Stop for the user's review after each step, as in the grey-box.
   `src/scene/createAtmosphere.js` and `src/data/atmosphere.js` (coral
   cloud cards, then the harbour mist belt), `public/atmosphere/coral-clouds.webp`
   and `public/atmosphere/harbour-mist.webp`; `src/main.js` adds, places and
-  fades them; `src/data/chapters.js` gains `clouds` and `mist` levels per
-  chapter (part 3g).
+  fades them; `src/data/chapters.js` gains `clouds`, `mist` and `seaMist`
+  levels per chapter (part 3g).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
   copy and footer hidden while loading and during the fade),
@@ -1809,7 +1826,8 @@ The milestone passes when:
    hold has an empty side of sky: 02 has a band on the right, 04 and 05
    on the left (user choice, 2026-10-02); a soft low mist lies along the
    island's waterline, strongest behind the junk in 04, faint in 01,
-   gone in 06, never over the Clock Tower, the boats, the sails, IFC's
+   gone in 06, and in the hero and 01 low banks spread across the open
+   water behind the boats (user choice, 2026-10-02), never over the Clock Tower, the boats, the sails, IFC's
    crown or the copy (user request, 2026-10-02), and no brace line, mast or warning light shimmers
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).

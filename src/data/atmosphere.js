@@ -58,17 +58,37 @@ export const MIST_SHEET = {
 // 6.2): one belt of upright cards on the water just off the island's
 // waterfront, facing Kowloon, so it parts the water from the podiums and the
 // skyline in every chapter that looks across. Boats, the Clock Tower and the
-// junk stand in front of it. x / z: card centre in world metres; width in
-// metres (height follows the band's shape); opacity at a chapter's full
-// `mist` level. The lower bands sit in front of the wheel and IFC's podium.
+// junk stand in front of it. x / z: card centre in world metres; width and
+// height in metres (the art stretches sideways, so four long cards keep the
+// draw calls down); opacity at a chapter's full `mist` level. The lowest
+// band sits in front of the wheel and IFC's podium.
 export const MIST = {
   drift: { share: 0.008, period: [90, 130] },
   cards: [
-    { x: -830, z: -1050, width: 520, band: 'flat', opacity: 0.3 },
-    { x: -390, z: -1035, width: 560, band: 'broad', opacity: 0.3 },
-    { x: 60, z: -1050, width: 520, band: 'flat', opacity: 0.3 },
-    { x: 470, z: -1030, width: 480, band: 'low', opacity: 0.3 },
-    { x: 900, z: -1045, width: 560, band: 'broad', opacity: 0.3 },
-    { x: 1310, z: -1035, width: 440, band: 'flat', opacity: 0.3 },
+    { x: -760, z: -1045, width: 700, height: 33, band: 'flat', opacity: 0.3 },
+    { x: -90, z: -1035, width: 700, height: 37, band: 'broad', opacity: 0.3 },
+    { x: 560, z: -1030, width: 700, height: 26, band: 'low', opacity: 0.3 },
+    { x: 1200, z: -1045, width: 700, height: 35, band: 'broad', opacity: 0.3 },
+  ],
+};
+
+// Open-water mist patches (user choice, 2026-10-02): low banks out on the
+// harbour, 380–750 m from the 01 camera, so in the wide views (hero, 01, 02)
+// the mist spreads across the sea, not only along the far shore. Each faces
+// the 01 camera (`face`, world [x, z]) and sits behind the Clock Tower, ferry
+// and junk there; none lies in line with the Clock Tower from either 02
+// camera. Their own level (`seaMist` in chapters.js) is gone early in the
+// move to 03, before the camera comes near them.
+export const SEA_MIST = {
+  face: [-13, 99.5],
+  cards: [
+    // Behind the Clock Tower, left.
+    { x: -150, z: -280, width: 260, band: 'low', opacity: 0.22 },
+    // Behind the junk.
+    { x: 60, z: -420, width: 320, band: 'flat', opacity: 0.2 },
+    // Behind the ferry, farther out.
+    { x: -60, z: -650, width: 380, band: 'low', opacity: 0.2 },
+    // Right, toward the Central piers.
+    { x: 330, z: -560, width: 300, band: 'flat', opacity: 0.18 },
   ],
 };
