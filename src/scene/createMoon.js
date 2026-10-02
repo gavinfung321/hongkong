@@ -187,6 +187,8 @@ export function createMoon() {
   );
   disc.scale.setScalar(radius * 2);
 
+  // The farthest see-through layer, so it draws before the mist and slope lights.
+  halo.renderOrder = disc.renderOrder = -0.9;
   group.add(halo, disc);
   return { group };
 }
