@@ -147,7 +147,9 @@ plan and prompt here before import (as for Meshy above).
 
 Kept to guide original artwork and models. Unless a row says the user took the
 photo, sources and rights are unknown. None of these files is ever shipped,
-traced or used as a texture.
+traced or used as a texture. Files of unknown rights stay on the user's
+computer only: since the repo went public (2026-10-02, user choice) the three
+bauhinia photos are git-ignored and were removed from the whole history.
 
 | File | Shows | Notes for the artwork |
 |---|---|---|
