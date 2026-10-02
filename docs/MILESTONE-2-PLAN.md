@@ -1200,6 +1200,33 @@ all six.
        light: 05 from 20,700 to 10,600 bright pixels (main buildings 22,800),
        01 from 2,160 to 820 (main buildings 8,900). 1 cm camera steps hold 1
        19,099 px, hold 5 6,972; strobe unchanged.
+     - **Part 3c: lights spread evenly, and window lights on far towers
+       (user choices, 2026-10-02).** The user saw lights crowded on some
+       towers beside unlit ones, and the 02 background (the low east end of
+       Central, 1.6–2.1 km away) as unlit grey slabs while nearer towers had
+       lights.
+       - **Spread:** neighbours ranged from 0.5% lit (the dark 40%) to 20%.
+         Now every tower is 5–12% lit and only 10% are almost dark (new
+         `vary` option in `cityWindows.js`: the spread between buildings),
+         about the same total light as part 3b.
+       - **Far towers:** the window grid fades to a faint average glow once
+         its floors shrink below a few pixels, which happens at about 1.5 km
+         on desktop and sooner on phones. Far towers now get their lit
+         windows as soft dots of a fixed 3.2 px size (new
+         `src/scene/cityDots.js`, the slope lights' technique), on window
+         positions on every wall, 1.5 m proud of it, as many as each tower's
+         lit share. Each dot fades in only where its tower's floors have
+         shrunk that far (worked out per pixel, so phones get them sooner),
+         fades into the fog, and follows the `city` level. Close-ups (04–06)
+         get no doubles. One draw call.
+       - **Checks:** the composition probe shows only the four older misses.
+         1 cm camera steps as before (holds 1, 2 and 5: 19,127 / 16,597 /
+         6,599 px); at the 01 hold, small side steps give the same result
+         with and without the dots (0.34% of pixels pop). At scroll speed the
+         01 skyline pops 7.4% of pixels (6.3% without the dots): more detail
+         moving past, not shimmer. Background light against the main
+         buildings: 05 10,700 against 23,500 (unchanged), 01 1,440 against
+         9,100. Draw calls desktop 01 186, 05 61; mobile 01 130.
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -1217,7 +1244,7 @@ Measured with the `?fps` overlay on a production build, as in
 |---|---|---|
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
-| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. With the 3D palms: desktop 02 137. With the bauhinia tree: desktop 01 170 (desktop only). The water reflections add none. The mountain rebuild adds 3 everywhere (third range, mist, slope lights): desktop 01 173, 02 140, 05 48; mobile 01 117. The landmarks and varied tops add 12 (four skyline-top sets, six landmark meshes, one mast mesh, one set of warning lights): desktop 01 185, 02 149, 03 100, 05 60; mobile 01 129. Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
+| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. With the 3D palms: desktop 02 137. With the bauhinia tree: desktop 01 170 (desktop only). The water reflections add none. The mountain rebuild adds 3 everywhere (third range, mist, slope lights): desktop 01 173, 02 140, 05 48; mobile 01 117. The landmarks and varied tops add 12 (four skyline-top sets, six landmark meshes, one mast mesh, one set of warning lights): desktop 01 185, 02 149, 03 100, 05 60; mobile 01 129. The far-tower window dots add 1: desktop 01 186, 02 150, 05 61; mobile 01 130. Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
 | New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). The stone railing adds a 64 × 64 granite tile and a 64 × 96 post panel (24 textures; the lantern glows are drawn in their shader). The wet paving adds a 240 × 240 slab tile (25 textures). The palms add a 256 × 256 frond and bark atlas (26 textures). The bauhinia tree adds a 512 × 512 leaf and flower atlas (27 textures; its falling petals reuse the petal texture). The water reflections add a 256 × 1 skyline strip (28 textures, 1 KB). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
 | Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b; the promenade lanterns and lamps are faked in the materials (`lamps.js`) | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
@@ -1378,7 +1405,9 @@ Stop for the user's review after each step, as in the grey-box.
   `createIsland.js`); `createIsland.js` varied skyline tops and landmark
   clearance, `setCityLevel` also dims the landmarks; `src/data/world.js`
   `landmarks` (part 3). `cityWindows.js` `dark` option and fewer lit
-  skyline windows in `createIsland.js` (part 3b).
+  skyline windows in `createIsland.js` (part 3b). `cityWindows.js` `vary`
+  option and `cityDensity`, new `src/scene/cityDots.js` (window dots on far
+  towers), `createIsland.js` shared `SKYLINE_WINDOWS` settings (part 3c).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
   copy and footer hidden while loading and during the fade),
@@ -1428,7 +1457,9 @@ The milestone passes when:
    Kong Center, Central Plaza and The Center are recognisable, the skyline
    has varied tops, none of them covers the moon, IFC or copy, IFC stays
    the brightest tower, the other towers together give off well under the
-   main buildings' light, many of them dark (user request, 2026-10-02), and no brace line, mast or warning light shimmers
+   main buildings' light, spread thinly over every tower rather than
+   crowded on a few, and far towers (the 02 background) show lit windows
+   too (user requests and choices, 2026-10-02), and no brace line, mast or warning light shimmers
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its

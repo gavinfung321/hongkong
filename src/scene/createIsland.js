@@ -25,6 +25,7 @@ import {
 import { PALETTE, basic, lambert } from './palette.js';
 import { addCityWindows } from './cityWindows.js';
 import { createMountains } from './createMountains.js';
+import { createCityDots } from './cityDots.js';
 import { createBeacons, createLandmarks, mastMesh } from './landmarks.js';
 import { prism } from './prism.js';
 import { WORLD } from '../data/world.js';
@@ -34,6 +35,20 @@ import { hubGlow } from './surfaces.js';
 
 const unitBox = new BoxGeometry(1, 1, 1).translate(0, 0.5, 0);
 const SKYLINE_STRENGTH = 0.7;
+// Dimmer than IFC and capped well below its 50%, so IFC leads (user choice,
+// 2026-10-02; was 30% lit, up to ~50%, strength 0.9). Close-up windows peak
+// lower, so 04–06 don't sparkle like IFC (user choice, 2026-10-02). The
+// same light spread evenly: every tower 5–12% lit and only 10% almost dark,
+// so no tower is crowded with lights beside unlit ones (user choice,
+// 2026-10-02; was 0.5–20% with 40% dark).
+const SKYLINE_WINDOWS = {
+  lit: 0.085,
+  maxLit: 0.12,
+  vary: 0.82,
+  dark: 0.1,
+  strength: SKYLINE_STRENGTH,
+  close: 0.7,
+};
 
 function createSlab() {
   const [x0, x1, z0, z1, top] = WORLD.island.slab;
@@ -48,18 +63,7 @@ function createSkyline() {
   const [ifcX, , ifcZ] = WORLD.ifc.position;
   const [wheelX, , wheelZ] = WORLD.wheel.position;
   const random = seededRandom(seed);
-  // Dimmer than IFC and capped well below its 50%, so IFC leads (user choice,
-  // 2026-10-02; was lit 0.3, up to ~50%, strength 0.9). Close-up windows
-  // peak lower, so 04–06 don't sparkle like IFC (user choice, 2026-10-02).
-  // Fewer lit windows again, and 40% of the towers almost dark, so IFC and
-  // the landmarks lead (user request, 2026-10-02; was lit 0.2, up to 30%).
-  const material = addCityWindows(new MeshLambertMaterial({ color: 0xffffff }), {
-    lit: 0.13,
-    maxLit: 0.2,
-    dark: 0.4,
-    strength: SKYLINE_STRENGTH,
-    close: 0.7,
-  });
+  const material = addCityWindows(new MeshLambertMaterial({ color: 0xffffff }), SKYLINE_WINDOWS);
   const mesh = new InstancedMesh(unitBox, material, count);
   const matrix = new Matrix4();
   const q = new Quaternion();
@@ -429,7 +433,8 @@ export function createIsland() {
   const landmarks = createLandmarks();
   const beacons = createBeacons([...tops.beacons, ...landmarks.beacons]);
   const masts = mastMesh([...tops.masts, ...landmarks.masts]);
-  group.add(createSlab(), skyline, tops.group, landmarks.group, masts, beacons.points);
+  const dots = createCityDots(buildings, SKYLINE_WINDOWS, WORLD.island.skyline.seed + 202);
+  group.add(createSlab(), skyline, tops.group, landmarks.group, masts, beacons.points, dots.points);
   const mountains = createMountains();
   group.add(mountains.group);
 
@@ -452,6 +457,7 @@ export function createIsland() {
   function setCityLevel(value) {
     skylineWindows.uCityStrength.value = SKYLINE_STRENGTH * value;
     tops.crownMaterial.color.setScalar(value);
+    dots.setLevel(value);
     landmarks.setLevel(value);
   }
 

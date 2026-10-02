@@ -3,6 +3,18 @@ import { Color } from 'three';
 // Bays per run of a lit floor strip, once single bays are too narrow to draw.
 const RUN = 4;
 
+const fract = (v) => v - Math.floor(v);
+const cityHash = (x, y) => fract(Math.sin(x * 127.1 + y * 311.7) * 43758.5453);
+
+// The share of windows lit on the building standing at world x / z, as the
+// shader works it out (near enough: GPU sine can differ in the last digits).
+export function cityDensity(x, z, { lit = 0.3, maxLit = 1, vary = 1.3, dark = 0 } = {}) {
+  const sx = Math.floor(x);
+  const sz = Math.floor(z);
+  const density = Math.min(lit * (1 + vary * (cityHash(sx * 0.013, sz * 0.013) - 0.5)), maxLit);
+  return cityHash(sx * 0.071 + 3.1, sz * 0.071 + 3.1) < dark ? density * 0.1 : density;
+}
+
 // Adds a lit-window grid to a lit material (Lambert or Standard, instanced or
 // not). The grid is laid out in world metres on every wall, so it doesn't
 // stretch with each box's scale. Each building (its world x / z) gets its own
@@ -15,6 +27,7 @@ export function addCityWindows(material, options = {}) {
   const {
     lit = 0.3, // share of windows lit
     maxLit = 1, // no building lit above this share
+    vary = 1.3, // spread of the lit share between buildings: lit × (1 ± vary / 2)
     dark = 0, // share of buildings left almost unlit
     floor = 3.6, // metres per storey
     bay = 3.2, // metres per window bay
@@ -28,6 +41,7 @@ export function addCityWindows(material, options = {}) {
   } = options;
   const uniforms = {
     uCityLit: { value: [lit, maxLit] },
+    uCityVary: { value: vary },
     uCityDark: { value: dark },
     uCityCell: { value: [bay, floor] },
     uCityWarm: { value: new Color(warm) },
@@ -64,6 +78,7 @@ export function addCityWindows(material, options = {}) {
         '#include <common>',
         `#include <common>
         uniform vec2 uCityLit;
+        uniform float uCityVary;
         uniform float uCityDark;
         uniform vec2 uCityCell;
         uniform vec3 uCityWarm;
@@ -99,7 +114,7 @@ export function addCityWindows(material, options = {}) {
               ( smoothstep( 0.2 - w.x, 0.2 + w.x, f.x ) - smoothstep( 0.8 - w.x, 0.8 + w.x, f.x ) ) *
               ( smoothstep( 0.28 - w.y, 0.28 + w.y, f.y ) - smoothstep( 0.78 - w.y, 0.78 + w.y, f.y ) );
             vec2 seed = floor( vCitySeed );
-            float density = min( uCityLit.x * ( 0.35 + 1.3 * cityHash( seed * 0.013 ) ), uCityLit.y );
+            float density = min( uCityLit.x * ( 1.0 + uCityVary * ( cityHash( seed * 0.013 ) - 0.5 ) ), uCityLit.y );
             density *= mix( 1.0, 0.1, step( cityHash( seed * 0.071 + 3.1 ), uCityDark ) );
             float on = step( cityHash( cell + seed * 0.137 ), density );
             vec3 tint = mix( uCityWarm, uCityCool, step( 1.0 - uCityCoolShare, cityHash( cell.yx + seed ) ) );
