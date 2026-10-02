@@ -6,6 +6,15 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-02
 
+- **Fireworks step 3, smoke** (user request): faint violet, coral and
+  lavender smoke gathers beside and below the biggest bursts as they fade,
+  then grows, drifts and thins over 5 s (three wisps on desktop, one on
+  phones, at most 16% opacity, behind the bursts and clear of the copy).
+  The falling sparks stand in for the embers. This completes the
+  fireworks. Files: `src/scene/createFireworks.js`,
+  `src/data/atmosphere.js`, `src/data/chapters.js`,
+  `public/atmosphere/firework-smoke.webp` (re-encoded to 1200 × 600,
+  285 KB, to meet the 300 KB aim).
 - **Fireworks step 2, the show** (user choices): the 06 bursts play in a
   fixed 8 s loop: a rocket climbs from behind the skyline, the burst
   ignites at 70% size with a soft flare, opens, cools and fades, and

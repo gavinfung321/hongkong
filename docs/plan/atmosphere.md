@@ -189,5 +189,28 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
     06 49 (only live bursts draw). Working out one frame of the show
     takes 0.09 ms on desktop. Composition probe: only the four older
     misses.
-  - **Next:** step 3, two or three violet-coral smoke wisps on desktop
-    and one on phones, behind the bursts.
+  - **Step 3, smoke (done; user request, 2026-10-02):** soft smoke
+    drifts where the biggest bursts were: three wisps on desktop (coral
+    after the lead gold burst, violet under the first coral, lavender
+    under the lower-right coral) and one coral wisp on phones under the
+    lead burst, all clear of the copy (`smoke` in chapter 06 of
+    `chapters.js`; timing in `FIREWORKS.smoke`). Each is a feathered
+    card cut from `public/atmosphere/firework-smoke.webp`, drawn behind
+    every burst and in front of the clouds with normal (not added)
+    blending, so it veils the sky rather than glowing. A wisp gathers
+    0.6 s after its burst ignites, fades in over 1.2 s, is fullest as
+    the burst fades, then grows from 80% to 120% while drifting up and
+    to the right and thins away over 5 s, so it lingers after its burst
+    has gone. At most 14–16% opacity: a first try at about 30% read as
+    solid pink and blue clouds that dulled the bursts, and wisps
+    centred on their bursts muddied the sparks, so each sits beside and
+    below its burst. The falling spark streaks from step 2 stand in for
+    the brief's embers, so `firework-embers.webp` is not used. Reduced
+    motion (1.6 s) shows only a hint of the first coral wisp.
+  - **Checks (step 3):** frames at 1.6, 2.5, 3.5, 4.5 and 6.5 s plus
+    the loop contact sheets, desktop and phone: the copy, IFC's crown
+    and the moon stay clear. Draw calls at the busiest moment: desktop
+    06 56, phone 06 50 (one per visible wisp). One frame of the show
+    takes 0.08 ms on desktop. Composition probe: only the four older
+    misses. JS 207 KB gzip.
+  - The fireworks are complete (all three steps of §6.7).
