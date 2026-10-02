@@ -37,9 +37,16 @@ second 31, so triangles were not the limit; the cost is per pixel.
 hides any of those layers. The `?fps` box lists the switches in use.
 
 If the iPhone 11 misses its target, layers are switched off on mobile in this
-order: bloom (built in part 3e, step 5; it already switches itself off
-when a phone runs below target), particles, glow sprites, lit windows. The existing
-automatic resolution drop stays as the last safety net.
+order: bloom (built in part 3e, step 5), particles, glow sprites, lit windows.
+**Automatic sharpness (user choice, 2026-10-02):** the iPhone 11 switch
+test in 02 (against about 34 fps) gave glow off 32, edge smoothing off 33,
+water off 34, clouds, mist, palms and petals off 38, and pixel ratio 1.25
+43 (1% low 34): pixel count is the cost. So phones start at pixel ratio
+1.5 and, if the 2 s average falls under 40 fps (after 2 s of settling
+after load), step once to 1.25, their floor; the glow no longer switches
+itself off first. Desktop keeps 45 fps, steps of 0.25, floor 1. Checked
+with a slowed browser: phone 1.5 → 1.25 after 4 s and holds; desktop
+2 → 1 in steps.
 
 ## 8. Acceptance checks
 

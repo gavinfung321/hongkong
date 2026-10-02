@@ -6,6 +6,11 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-02
 
+- **Automatic phone sharpness** (user choice): the iPhone 11 switch test
+  showed pixel count is the only cost that matters in 02 (pixel ratio 1.25:
+  43 fps against about 34; glow, edge smoothing and water: no gain). Phones
+  now start at 1.5 and drop once to 1.25 if they average under 40 fps; the
+  glow stays on. Phones that keep up stay sharp. Files: `src/main.js`.
 - **Phone measurement switches** (user choice): the lighter palms left
   phone 02 at 31–36 fps, so the cost is per pixel, not triangles. New
   address-bar switches let the user test on the iPhone what costs most:
