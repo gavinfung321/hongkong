@@ -14,6 +14,7 @@ import {
   Vector3,
 } from 'three';
 import { seededRandom } from './random.js';
+import { OVERLAY } from './bloom.js';
 
 // Bauhinia (洋紫荊) petals drifting over the harbour: an original petal drawn in
 // code, tinted per instance. Two depth layers live in boxes that travel with the
@@ -89,7 +90,10 @@ function createLayer(name, layer, texture, random, onTop) {
   const mesh = new InstancedMesh(new PlaneGeometry(0.7, 1), material, total);
   mesh.name = 'petals';
   mesh.frustumCulled = false;
-  if (onTop) mesh.renderOrder = 11; // after the wordmark (10)
+  if (onTop) {
+    mesh.renderOrder = 11; // after the wordmark (10)
+    mesh.layers.set(OVERLAY);
+  }
 
   const colour = new Color();
   const petals = [];

@@ -9,6 +9,7 @@ import {
   Vector3,
 } from 'three';
 import { PALETTE } from './palette.js';
+import { OVERLAY } from './bloom.js';
 import { aimCamera, smoothstep } from '../scroll/cameraRig.js';
 
 // System Traditional Chinese fonts: Windows, then iOS / macOS, then Android.
@@ -78,6 +79,7 @@ export function createWordmark(renderer, text) {
   const mesh = new Mesh(geometry, material);
   mesh.name = 'wordmark';
   mesh.renderOrder = 10;
+  mesh.layers.set(OVERLAY); // drawn after the glow, so it stays crisp
 
   let restY = 0;
   let height = 1;

@@ -822,6 +822,10 @@ all six.
      phones.
    - **B:** a bloom pass from the three.js add-ons (standard, not a custom
      shader). Richer, but costs speed on phones. Desktop only if used.
+     Update (user choice, 2026-10-02): built as part 3e, step 5, on phones
+     too but weaker, as a small custom pass (`bloom.js`) rather than the
+     add-on, so it costs little and leaves 香港 crisp; it drops first if a
+     phone runs slow. The glow sprites stay.
 4. **Bauhinia petals (built; user request, 2026-10-01).** Replaces the warm
    specks. Petals of Hong Kong's flower (洋紫荊) drift across every chapter as
    the site's constant effect, instead of Kage's leaves. Rain was considered
@@ -1353,6 +1357,35 @@ all six.
            the Central towers at 04 → 05, 05 → 06 and 01 → 02: 0–3.8%
            excess, the same with ribbon towers on or off. Composition
            probe: only the four older misses; draw calls unchanged.
+       - **Step 5, glow round bright lights (done):** new
+         `src/scene/bloom.js`. The scene still renders to the screen as
+         before; that frame is copied, its brightest parts (over 0.72 of
+         full brightness, softly) are halved down a chain of five smaller
+         images (four on phones) and added back up, and only the glow is
+         added onto the screen, summed in linear light, so the rest of
+         the frame is untouched. The first halving averages bright pixels
+         down, so lone sub-pixel lights can't sparkle. What glows: the
+         moon, the Clock Tower's floodlit foot, the promenade lamps, the
+         wheel and the boats' lights. IFC's offices sit below the
+         threshold and stay crisp glass (glowing them would haze the
+         frame and triple the Clock Tower's glow). Strength 0.6 on
+         desktop, 0.35 on phones. The 香港 wordmark and the near petals
+         are drawn after the glow (a second pass on their own layer), so
+         they stay crisp; the copy is page text and untouched. If a
+         phone falls below the frame-rate target the glow switches off
+         before the resolution drops. `?bloom=0` turns it off and
+         `?bloom=2` doubles it, for side-by-side checks. A first try
+         rendered the scene into an off-screen image instead; transparent
+         layers blend differently there and the moon's faint halo showed
+         as a hard disc, so the frame copy replaced it.
+         - **Checks:** bright pixels in the skyline band within 1% of
+           glow off in every frame (IFC still leads, other towers'
+           share unchanged). Phone jitter with the glow on is the same or
+           slightly lower on 01 → 02, 04 → 05 and 05 → 06 (14.4 / 17.5 /
+           40.0% against 14.9 / 18.0 / 40.5%). 香港 edges identical in the
+           hero. Composition probe: only the four older misses; draw
+           calls of the scene unchanged (the glow adds about ten small
+           full-screen passes).
        - **IFC Mall podium (user request, 2026-10-02):** the user saw the
          base of IFC still flickering on phones; it still used the window
          shader. It now has a painted skin too: four 5.5 m retail floors of
@@ -1440,7 +1473,8 @@ Measured with the `?fps` overlay on a production build, as in
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
 
 If the iPhone 11 misses its target, layers are switched off on mobile in this
-order: bloom (if used), particles, glow sprites, lit windows. The existing
+order: bloom (built in part 3e, step 5; it already switches itself off
+when a phone runs below target), particles, glow sprites, lit windows. The existing
 automatic resolution drop stays as the last safety net.
 
 ## 6. Build steps
@@ -1622,7 +1656,11 @@ Stop for the user's review after each step, as in the grey-box.
   step 3). `cityWindows.js` lights offices on each floor and gains a
   `ribbon` option (curtain-wall towers), used by `createIsland.js` and
   `createKowloonEdge.js`; `cityDots.js` dots in runs on one floor (part
-  3e, step 4).
+  3e, step 4). New `src/scene/bloom.js` (glow round bright lights);
+  `createScene.js` adds it and draws the overlay layer after it;
+  `createWordmark.js` and `createPetals.js` (near petals) on the overlay
+  layer; `src/main.js` sets the glow per breakpoint, `?bloom=` and the
+  phone frame-rate fallback (part 3e, step 5).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
   copy and footer hidden while loading and during the fade),
@@ -1692,7 +1730,11 @@ The milestone passes when:
    washes the foot of Central and IFC's crown fins are uplit (user choice,
    2026-10-02); the background towers' lights come in offices along their
    floors, some towers banded curtain walls, with no more light than
-   before and no new shimmer on phones (user choice, 2026-10-02), and no brace line, mast or warning light shimmers
+   before and no new shimmer on phones (user choice, 2026-10-02); the
+   brightest lights (moon, Clock Tower foot, lamps, wheel, boat lights)
+   have a soft glow, weaker on phones, that adds no shimmer, while 香港,
+   the near petals and the copy stay crisp and phones hold 30 fps (the glow
+   drops first if they can't; user choice, 2026-10-02), and no brace line, mast or warning light shimmers
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its

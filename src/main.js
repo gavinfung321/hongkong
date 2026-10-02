@@ -12,6 +12,7 @@ import { createMoon } from './scene/createMoon.js';
 import { createPetals } from './scene/createPetals.js';
 import { citySoft } from './scene/cityWindows.js';
 import { facadeBias } from './scene/facades.js';
+import { BLOOM } from './scene/bloom.js';
 import { createGating, makeFadeable } from './scene/gating.js';
 import { createCameraRig, fovForAspect } from './scroll/cameraRig.js';
 import { createScrollConductor } from './scroll/scrollConductor.js';
@@ -34,6 +35,8 @@ const ADAPTIVE = { desktop: 45, mobile: 28, window: 2, step: 0.25, floor: 1 };
 const MOBILE_WINDOW_SOFT = 1.5;
 // Painted facades on phones, in mipmap levels (desktop 0).
 const MOBILE_FACADE_BIAS = 0.5;
+// ?bloom=0 turns the glow off, ?bloom=2 doubles it: for side-by-side checks.
+const BLOOM_SCALE = params.has('bloom') ? Math.max(0, Number(params.get('bloom')) || 0) : 1;
 
 function start(initGuard, header) {
   const canvas = document.getElementById('world');
@@ -128,11 +131,18 @@ function start(initGuard, header) {
     return Math.max(ADAPTIVE.floor, Math.min(window.devicePixelRatio || 1, limit, adaptiveCap));
   }
 
+  let glow = true;
+  function applyGlow() {
+    const look = BLOOM[breakpoint];
+    world.setBloom({ ...look, strength: glow ? look.strength * BLOOM_SCALE : 0 });
+  }
+
   function rebuild() {
     rig.setBreakpoint(breakpoint);
     rig.setAspect(width / height);
     citySoft.value = breakpoint === 'mobile' ? MOBILE_WINDOW_SOFT : 1;
     facadeBias.value = breakpoint === 'mobile' ? MOBILE_FACADE_BIAS : 0;
+    applyGlow();
     vessels.setPaths(chapters, breakpoint);
     petals.setBreakpoint(breakpoint);
     foreground.setBreakpoint(breakpoint);
@@ -182,7 +192,15 @@ function start(initGuard, header) {
     const average = adaptiveFrames / adaptiveTime;
     adaptiveTime = 0;
     adaptiveFrames = 0;
-    if (average >= ADAPTIVE[breakpoint] || pixelRatio <= ADAPTIVE.floor) return;
+    if (average >= ADAPTIVE[breakpoint]) return;
+    // On phones the glow goes before any sharpness does.
+    if (glow && breakpoint === 'mobile') {
+      glow = false;
+      applyGlow();
+      debug?.log(`glow off (${average.toFixed(0)} fps)`);
+      return;
+    }
+    if (pixelRatio <= ADAPTIVE.floor) return;
     adaptiveCap = Math.max(ADAPTIVE.floor, pixelRatio - ADAPTIVE.step);
     pixelRatio = targetPixelRatio();
     world.resize(width, height, pixelRatio);
@@ -372,6 +390,7 @@ function start(initGuard, header) {
   if (import.meta.env.DEV && params.has('debug')) {
     import('./ui/debug.js').then(({ createDebug }) => {
       debug = createDebug({
+        world,
         renderer,
         scene,
         camera,
