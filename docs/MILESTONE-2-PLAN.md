@@ -1255,6 +1255,41 @@ all six.
            their pattern. If that still reads as flicker on the phone, the
            next steps are 2× phone resolution, then a short blur along the
            scroll direction that keeps each window's brightness.
+     - **Part 3e: IFC painted facade (user choice, 2026-10-02).** The user
+       still saw IFC flicker on phones, and asked why IFC and Bank of China
+       look less real than the Clock Tower, ferry and junk. The hand-built
+       objects have painted, mip-mapped textures, several materials and real
+       light falloff; the towers had flat colours, a salt-and-pepper of
+       punched windows from one shared shader, no glass and no lighting
+       gradient. The shader's pixel-by-pixel windows were also why IFC
+       flickered: textures are filtered by mipmaps as they move, as on the
+       Clock Tower. The user chose all four fixes, in steps, with a review
+       after each: (1) a painted IFC facade, (2) painted skins for the four
+       landmarks, (3) a lighting and material pass (glass reflection
+       gradient, warm street glow at Central's foot, crown uplight, Bank of
+       China facets), (4) curtain-wall bands and floor-clustered lights in
+       the background towers' shader, (5) a soft glow around bright lights,
+       tuned down on phones. This unlocks the IFC window look.
+       - **Step 1, IFC (done):** new `src/scene/facades.js` paints a glass
+         curtain wall in code: floors of glass bands behind thin pale
+         mullions, lit tenant by tenant (whole floors, part-let floors and
+         dark floors with the odd late office), mostly cool and neutral
+         office white with some warm, brightest under the ceiling and soft
+         at the band edges, the odd room dark or with blinds down. The shaft
+         tile covers its full height and a whole face (32 bays × 64 floors),
+         the upper tiers have a brighter one (75% lit), and each face starts
+         the pattern at its own offset. Wall UVs are in metres from IFC's
+         foot (`facadeUVs`), so floors run on across tiers. On phones the
+         facades sample half a mipmap level blurrier (`facadeBias`, set in
+         `src/main.js`).
+       - **Checks:** a new flicker test renders each frame at the phone's
+         resolution and at four times that, filtered down, and counts
+         frame-to-frame jitter beyond the ideal image's. On 05 → 06 that
+         excess fell from 9–12% (window shader) to 0%; total jitter from
+         151% to 123%, below the ideal's 152%. IFC still leads: bright
+         pixels in 05 28,800 (22,500 before), other towers unchanged.
+         Composition probe: only the four older misses; draw calls
+         unchanged.
        - **Fewer background lights:** every skyline tower is now 3–6% lit
          (was 5–12%), still spread evenly with 10% almost dark; 06 dims the
          skyline to 60% like 05 (`city: 0.6` in `src/data/chapters.js`).
@@ -1453,7 +1488,10 @@ Stop for the user's review after each step, as in the grey-box.
   `src/main.js` (antialiasing on phones too, sets `citySoft` per
   breakpoint), `src/scene/landmarks.js` (comment only), `createIsland.js`
   3–6% lit skyline, `src/data/chapters.js` `city: 0.6` in 06,
-  `cityDots.js` dots sized in metres (part 3d).
+  `cityDots.js` dots sized in metres (part 3d). New `src/scene/facades.js`
+  (painted curtain walls, metre UVs, phone mipmap bias); `createIsland.js`
+  IFC uses them in place of the window shader; `src/main.js` sets
+  `facadeBias` per breakpoint (part 3e).
 - Loading screen (3.12; user choice, 2026-10-02): `index.html` (inline
   `is-booting` script and 12 s safety timer), `src/styles.css` (poster art,
   copy and footer hidden while loading and during the fade),
@@ -1509,7 +1547,9 @@ The milestone passes when:
    other towers give off no more than about a third of the main
    buildings' bright light, and IFC does not twinkle or flicker while
    scrolling on a phone, nor change look mid-scroll on any screen: no grey
-   slab, lit windows stay lit (user requests, 2026-10-02), and no brace line, mast or warning light shimmers
+   slab, lit windows stay lit (user requests, 2026-10-02); IFC reads as a
+   lit glass office tower, floors as bands behind thin mullions rather than
+   scattered dots (user choice, 2026-10-02), and no brace line, mast or warning light shimmers
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its

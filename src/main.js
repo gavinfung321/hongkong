@@ -11,6 +11,7 @@ import { createWordmark } from './scene/createWordmark.js';
 import { createMoon } from './scene/createMoon.js';
 import { createPetals } from './scene/createPetals.js';
 import { citySoft } from './scene/cityWindows.js';
+import { facadeBias } from './scene/facades.js';
 import { createGating, makeFadeable } from './scene/gating.js';
 import { createCameraRig, fovForAspect } from './scroll/cameraRig.js';
 import { createScrollConductor } from './scroll/scrollConductor.js';
@@ -31,6 +32,8 @@ const MOBILE_ASPECT = 0.8;
 const ADAPTIVE = { desktop: 45, mobile: 28, window: 2, step: 0.25, floor: 1 };
 // Window edge blur on phones, in pixels (desktop 1).
 const MOBILE_WINDOW_SOFT = 1.5;
+// Painted facades on phones, in mipmap levels (desktop 0).
+const MOBILE_FACADE_BIAS = 0.5;
 
 function start(initGuard, header) {
   const canvas = document.getElementById('world');
@@ -129,6 +132,7 @@ function start(initGuard, header) {
     rig.setBreakpoint(breakpoint);
     rig.setAspect(width / height);
     citySoft.value = breakpoint === 'mobile' ? MOBILE_WINDOW_SOFT : 1;
+    facadeBias.value = breakpoint === 'mobile' ? MOBILE_FACADE_BIAS : 0;
     vessels.setPaths(chapters, breakpoint);
     petals.setBreakpoint(breakpoint);
     foreground.setBreakpoint(breakpoint);

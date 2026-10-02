@@ -28,6 +28,7 @@ import { createMountains } from './createMountains.js';
 import { createCityDots } from './cityDots.js';
 import { createBeacons, createLandmarks, mastMesh } from './landmarks.js';
 import { prism } from './prism.js';
+import { curtainWall, facadeMaterial, facadeUVs } from './facades.js';
 import { WORLD } from '../data/world.js';
 import { seededRandom } from './random.js';
 import { strut } from './strut.js';
@@ -211,22 +212,19 @@ const IFC_TIERS = [
 ];
 const IFC_SLOT = [1.5, 1.5]; // half width, depth
 const IFC_BANDS = [64, 128, 192, 256]; // bronze refuge-floor bands
+const IFC_GLOW = [0.85, 1]; // lit glass: shaft, upper tiers
 
 function createIFC() {
   const ifc = new Group();
   ifc.name = 'ifc';
-  // Warmer and brighter than the first build, so IFC reads as a lit tower from
-  // 01's 1.4 km too (user choice, 2026-10-02).
-  const windows = { floor: 4.6, bay: 2.6, strength: 1.25, glow: 0.5 };
-  const glass = addCityWindows(new MeshLambertMaterial({ color: 0x636a7e }), { ...windows, lit: 0.5, coolShare: 0.45 });
+  // Painted curtain wall (user choice, 2026-10-02; was the shared window-grid
+  // shader, which twinkled on phones while scrolling). The shaft tile covers
+  // its full height and a whole face, so nothing repeats on screen.
+  const cell = { bay: 2.6, floor: 4.6 };
+  const glass = facadeMaterial(curtainWall({ ...cell, bays: 32, floors: 64, lit: 0.5, coolShare: 0.45, seed: 412 }), IFC_GLOW[0]);
   // The top floors are the brightest at night, and the last three tiers are
   // floodlit white under the crown.
-  const glassHigh = addCityWindows(new MeshLambertMaterial({ color: 0x6a7286 }), {
-    ...windows,
-    lit: 0.75,
-    coolShare: 0.6,
-    strength: 1.4,
-  });
+  const glassHigh = facadeMaterial(curtainWall({ ...cell, bays: 32, floors: 32, lit: 0.75, coolShare: 0.6, seed: 413 }), IFC_GLOW[1]);
   const floodlit = new MeshLambertMaterial({ color: 0xe6ecf6, emissive: 0x9aa8c4 });
   const tierMaterial = (i) => (i === 0 ? glass : i >= IFC_TIERS.length - 3 ? floodlit : glassHigh);
 
@@ -235,7 +233,9 @@ function createIFC() {
   const piers = new InstancedMesh(unitBox, new MeshLambertMaterial({ color: 0xc9cfdb, emissive: 0x4f5768 }), IFC_TIERS.length * 4);
   IFC_TIERS.forEach(([y0, y1, half, notch], i) => {
     const plan = i === 0 ? ifcPlan(half, notch) : ifcPlan(half, notch, ...IFC_SLOT);
-    ifc.add(new Mesh(prism(plan, y0, y1), tierMaterial(i)));
+    const geometry = prism(plan, y0, y1);
+    if (tierMaterial(i) !== floodlit) facadeUVs(geometry);
+    ifc.add(new Mesh(geometry, tierMaterial(i)));
     // Pale corner piers keep each corner square in silhouette, with the recess behind.
     [[1, 1], [-1, 1], [1, -1], [-1, -1]].forEach(([sx, sz], k) => {
       piers.setMatrixAt(i * 4 + k, m.compose(new Vector3(sx * (half - 0.8), y0, sz * (half - 0.8)), q, new Vector3(1.6, y1 - y0, 1.6)));
