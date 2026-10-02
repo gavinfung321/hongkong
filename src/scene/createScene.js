@@ -8,9 +8,11 @@ import {
   PerspectiveCamera,
   Scene,
   SphereGeometry,
+  Vector2,
   WebGLRenderer,
 } from 'three';
 import { PALETTE } from './palette.js';
+import { createBloom, OVERLAY } from './bloom.js';
 
 const SKY_RADIUS = 4000;
 const GLOW = 0.3;
@@ -58,17 +60,43 @@ export function createScene(canvas, { antialias }) {
   const sky = createSky();
   scene.add(sky);
 
+  const bloom = createBloom(renderer);
+  camera.layers.enable(OVERLAY);
+  // Several renders per frame: counted together for the fps overlay.
+  renderer.info.autoReset = false;
+
   function resize(width, height, pixelRatio) {
     renderer.setPixelRatio(pixelRatio);
     renderer.setSize(width, height, false);
+    const size = renderer.getDrawingBufferSize(new Vector2());
+    bloom.setSize(size.x, size.y);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
   }
 
   function render() {
     sky.position.copy(camera.position);
+    renderer.info.reset();
+    if (!bloom.active) {
+      renderer.render(scene, camera);
+      return;
+    }
+    camera.layers.set(0);
     renderer.render(scene, camera);
+    bloom.render();
+    // The overlay on top, unglowed, without clearing or redrawing the sky
+    // (matrices are already up to date from the first pass).
+    camera.layers.set(OVERLAY);
+    const background = scene.background;
+    scene.background = null;
+    scene.matrixWorldAutoUpdate = false;
+    renderer.autoClear = false;
+    renderer.render(scene, camera);
+    renderer.autoClear = true;
+    scene.matrixWorldAutoUpdate = true;
+    scene.background = background;
+    camera.layers.enable(0);
   }
 
-  return { renderer, scene, camera, sky, resize, render };
+  return { renderer, scene, camera, sky, resize, render, setBloom: bloom.setLook };
 }
