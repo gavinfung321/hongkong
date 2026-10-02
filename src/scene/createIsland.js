@@ -26,7 +26,6 @@ import { PALETTE, basic, lambert } from './palette.js';
 import { addCityWindows } from './cityWindows.js';
 import { createMountains } from './createMountains.js';
 import { createCityDots } from './cityDots.js';
-import { createFarShore } from './farShore.js';
 import { createBeacons, createLandmarks, mastMesh } from './landmarks.js';
 import { prism } from './prism.js';
 import { curtainWall, facadeMaterial, facadeUVs, pierHall } from './facades.js';
@@ -469,7 +468,7 @@ export function createIsland() {
   const beacons = createBeacons([...tops.beacons, ...landmarks.beacons]);
   const masts = mastMesh([...tops.masts, ...landmarks.masts]);
   const dots = createCityDots(buildings, SKYLINE_WINDOWS, WORLD.island.skyline.seed + 202);
-  group.add(createSlab(), skyline, tops.group, landmarks.group, masts, beacons.points, dots.points, createFarShore());
+  group.add(createSlab(), skyline, tops.group, landmarks.group, masts, beacons.points, dots.points);
   const mountains = createMountains();
   group.add(mountains.group);
 

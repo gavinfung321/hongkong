@@ -43,13 +43,6 @@ export function reflectionSources({ tower, ferry, junk }) {
   const { position: [mx, my, mz], radius } = WORLD.moon;
   list.push(source(mx, mz, my * 0.08, my, radius * 0.45, 0xf6c46a, 0.3, { taper: 0.6, tail: 0.15 }));
 
-  // The far shore's lights (user choice, 2026-10-02): faint warm columns
-  // down the dark water on the left of 04, longer than their low lights
-  // would cast on still water, as ripples stretch distant lights.
-  for (const [x, z] of WORLD.farShore.glints) {
-    list.push(source(x, z, 2, 60, 30, 0xffb46a, 0.16, { tail: 2, taper: 0.7, rank: 0.05 }));
-  }
-
   // Moving: heights and half extents (along the hull, across it) in the boat's frame.
   list.push(source(0, 0, 1.4, 6.6, 0, 0xffd29a, 0.32, { key: 'ferry', follow: ferry, extent: [14, 4], tail: 0.45 }));
   list.push(source(0, 0, 5.6, 19.5, 0, 0xff5a36, 0.9, { key: 'junk', follow: junk, extent: [8, 0.5], taper: 0.3 }));

@@ -9,10 +9,13 @@ The user asked (2026-10-01): "For everything we update, remember to also update 
 
 After any change to the site's behaviour, look or content:
 
-- Update the current milestone plan in `docs/` (now `docs/MILESTONE-2-PLAN.md`):
-  the section describing that feature, the files list (section 7) and the
-  acceptance checks (section 8) if they are affected.
-- Mark user-requested changes with "(user request, YYYY-MM-DD)".
+- Update the current milestone plan in `docs/plan/` (split by area on
+  2026-10-02; `docs/plan/README.md` says which file holds what):
+  - the area file for that feature, describing how the site is now;
+  - one dated entry in `docs/plan/CHANGELOG.md` (what, why, files);
+  - `docs/plan/checks.md` only if an acceptance check or budget figure changes.
+- Mark user-requested changes with "(user request, YYYY-MM-DD)" or
+  "(user choice, YYYY-MM-DD)".
 - New or changed artwork, textures or fonts also go in `docs/ASSET-LEDGER.md`
   with source and rights.
 - Commit the plan edits together with the code change.
