@@ -18,7 +18,9 @@ const vertexShader = `
   uniform float uSink;
   uniform float uPulse;
   uniform float uPull;
+  uniform vec2 uCrop;
   varying vec2 vUv;
+  varying float vAcross;
   void main() {
     vec3 centre = ( modelMatrix * vec4( 0.0, 0.0, 0.0, 1.0 ) ).xyz;
     vec3 toCamera = cameraPosition - centre;
@@ -27,7 +29,8 @@ const vertexShader = `
     vec3 right = vec3( toCamera.z, 0.0, -toCamera.x );
     centre += toCamera * uToward;
     vec3 point = centre + ( right * position.x * uSize.x + vec3( 0.0, ( position.y + 0.5 - uSink ) * uSize.y, 0.0 ) ) * uPulse;
-    vUv = uv;
+    vUv = vec2( mix( uCrop.x, uCrop.y, uv.x ), uv.y );
+    vAcross = uv.x;
     vec4 mvPosition = viewMatrix * vec4( point, 1.0 );
     gl_Position = projectionMatrix * mvPosition;
     vec4 nearer = projectionMatrix * viewMatrix * vec4( point + normalize( cameraPosition - point ) * uPull, 1.0 );
@@ -40,10 +43,13 @@ const fragmentShader = `
   uniform sampler2D tSpray;
   uniform vec3 uTint;
   uniform float uOpacity;
+  uniform float uFeather;
   varying vec2 vUv;
+  varying float vAcross;
   void main() {
     vec4 c = texture2D( tSpray, vUv );
-    gl_FragColor = vec4( c.rgb * uTint, c.a * uOpacity );
+    float edge = smoothstep( 0.0, uFeather, vAcross );
+    gl_FragColor = vec4( c.rgb * uTint, c.a * uOpacity * edge );
     #include <colorspace_fragment>
     #include <fog_fragment>
   }`;
@@ -51,14 +57,19 @@ const fragmentShader = `
 const geometry = new PlaneGeometry(1, 1);
 const tint = new Color(...SPRAY.tint);
 
-export function createSpray(texture, { bow, toward, pull, width, opacity }) {
+// `crop`: the share of the artwork's width used, [from, to]; a crop cutting
+// into the foam is feathered over the card's first 40%.
+export function createSpray(texture, { bow, toward, pull, width, opacity, crop = [0, 1] }) {
+  const height = (width * SPRAY.size[1]) / (SPRAY.size[0] * (crop[1] - crop[0]));
   const material = new ShaderMaterial({
     vertexShader,
     fragmentShader,
     uniforms: {
       ...UniformsUtils.clone(UniformsLib.fog),
       tSpray: { value: texture },
-      uSize: { value: [width, (width * SPRAY.size[1]) / SPRAY.size[0]] },
+      uSize: { value: [width, height] },
+      uCrop: { value: crop },
+      uFeather: { value: crop[0] > 0 ? 0.4 : 1e-4 },
       uToward: { value: toward },
       uSink: { value: SPRAY.sink },
       uPulse: { value: 1 },

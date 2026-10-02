@@ -131,8 +131,10 @@ export const SPRAY = {
   fullSpeed: 8,
   pulse: { size: [0.035, 0.02], period: [4.3, 2.9] },
   ferry: { bow: 9, toward: 5.5, pull: 14, width: 24, opacity: [0.62, 0.9] },
-  // Smaller and fainter: the junk sails slower (brief: optional, lower opacity).
-  junk: { bow: 6, toward: 4, pull: 10, width: 15, opacity: [0.5, 0.75] },
+  // The junk sails slowly: only a small bow wave at the stem, from the low
+  // right-hand part of the art (user choice, 2026-10-03; the full card along
+  // the hull read as a wave crashing into its side in desktop 04).
+  junk: { bow: 12.5, toward: 1.4, pull: 6, width: 5.5, crop: [0.55, 1], opacity: [0.45, 0.65] },
 };
 
 // Searchlights over Central (ATMOSPHERE-EFFECTS-BRIEF.md 6.5; user choice,
