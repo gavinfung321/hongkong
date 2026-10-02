@@ -149,26 +149,31 @@ export function addWetPaving(material, { map, tile, y }) {
           return mix( mix( paveHash( i ), paveHash( i + vec2( 1.0, 0.0 ) ), f.x ),
                       mix( paveHash( i + vec2( 0.0, 1.0 ) ), paveHash( i + vec2( 1.0, 1.0 ) ), f.x ), f.y );
         }
-        // Reflection of a light at height h above the paving: a streak around
-        // the point where the mirrored light's ray from the camera meets the
+        // Reflection of a light at height h above the paving, around the
+        // point where the mirrored light's ray from the camera meets the
         // ground. Measured in view angles (depression and azimuth) so it keeps
-        // one size on screen: narrow across, long down toward the viewer, and
-        // its tail never reaches the deck under the camera.
-        float paveStreak( vec3 light, vec2 p ) {
+        // one size on screen and its tail never reaches the deck under the
+        // camera. x: the streak, narrow across and long down toward the
+        // viewer; y: a wide faint glow around it.
+        vec2 paveStreak( vec3 light, vec2 p ) {
           float h = light.y - paveY;
           float H = cameraPosition.y - paveY;
-          if ( h <= 0.0 || H <= 0.0 ) return 0.0;
+          if ( h <= 0.0 || H <= 0.0 ) return vec2( 0.0 );
           vec2 c = cameraPosition.xz;
           vec2 dir = light.xz - c;
           float dist = length( dir ) * H / ( H + h );
-          if ( dist < 0.001 ) return 0.0;
+          if ( dist < 0.001 ) return vec2( 0.0 );
           dir = normalize( dir );
           vec2 rel = p - c;
           float a = dot( rel, dir );
-          if ( a <= 0.0 ) return 0.0;
-          float drop = ( H / a - H / dist ) / ( H / a > H / dist ? 0.045 : 0.015 );
-          float side = dot( rel, vec2( -dir.y, dir.x ) ) / a / 0.006;
-          return exp( -drop * drop - side * side );
+          if ( a <= 0.0 ) return vec2( 0.0 );
+          float drop = H / a - H / dist;
+          float side = dot( rel, vec2( -dir.y, dir.x ) ) / a;
+          float u = drop / ( drop > 0.0 ? 0.045 : 0.015 );
+          float v = side / 0.006;
+          float gu = drop / ( drop > 0.0 ? 0.09 : 0.03 );
+          float gv = side / 0.02;
+          return vec2( exp( -u * u - v * v ), exp( -gu * gu - gv * gv ) );
         }`,
       )
       .replace(
@@ -176,13 +181,29 @@ export function addWetPaving(material, { map, tile, y }) {
         `#include <map_fragment>
         bool paveTop = vLampNormal.y > 0.5;
         float paveWet = 0.0;
+        float paveFine = 0.0;
+        float paveCoarse = 0.0;
+        float paveGloss = 1.0;
+        float paveBevel = 0.0;
         if ( paveTop ) {
           vec2 paveUv = vLampWorld.xz / paveTile;
           vec3 slab = texture2D( paveMap, paveUv ).rgb;
           vec3 average = textureLod( paveMap, paveUv, 12.0 ).rgb;
           float metresPerPixel = length( fwidth( vLampWorld.xz ) );
-          slab = mix( slab, average, smoothstep( 0.02, 0.07, metresPerPixel ) );
-          paveWet = 0.35 + 0.65 * smoothstep( 0.4, 0.75, paveNoise( vLampWorld.xz / 3.5 ) );
+          // Detail fades out as it shrinks toward a pixel, finest first.
+          paveFine = 1.0 - smoothstep( 0.015, 0.05, metresPerPixel );
+          paveCoarse = 1.0 - smoothstep( 0.05, 0.15, metresPerPixel );
+          slab = mix( average, slab, 1.0 - smoothstep( 0.02, 0.07, metresPerPixel ) );
+          // The map holds 3 × 3 slabs: each slab gets its own tone and gloss,
+          // and a bevel just inside its joints catches the lamps.
+          float slabSize = paveTile / 3.0;
+          float slabRandom = paveHash( floor( vLampWorld.xz / slabSize ) );
+          vec2 inSlab = fract( vLampWorld.xz / slabSize );
+          float toJoint = min( min( inSlab.x, 1.0 - inSlab.x ), min( inSlab.y, 1.0 - inSlab.y ) ) * slabSize;
+          paveBevel = smoothstep( 0.06, 0.015, toJoint ) * step( 0.012, toJoint ) * paveFine;
+          paveGloss = 0.75 + 0.5 * slabRandom;
+          slab *= mix( 1.0, 0.85 + 0.3 * slabRandom, paveCoarse );
+          paveWet = 0.35 + 0.65 * smoothstep( 0.4, 0.75, paveNoise( vLampWorld.xz / 3.5 ) + ( slabRandom - 0.5 ) * 0.15 );
           diffuseColor.rgb = slab * mix( 0.8, 0.4, paveWet );
         }`,
       )
@@ -190,11 +211,22 @@ export function addWetPaving(material, { map, tile, y }) {
         '#include <emissivemap_fragment>',
         `#include <emissivemap_fragment>
         if ( paveTop ) {
-          float shine = 0.0;
+          vec2 shine = vec2( 0.0 );
           for ( int i = 0; i < LAMP_COUNT; i ++ ) shine += lampPower[ i ] * paveStreak( lampPos[ i ].xyz, vLampWorld.xz );
           shine += paveFlood.w * paveStreak( paveFlood.xyz, vLampWorld.xz );
-          shine = 1.5 * ( 1.0 - exp( -shine / 1.5 ) );
-          totalEmissiveRadiance += lampColor * shine * paveWet * 0.85;
+          // Uneven wet stone breaks each streak into flecks: a coarse and a
+          // fine layer, each smoothed away before it would shimmer.
+          float coarse = smoothstep( 0.3, 0.75, paveNoise( vLampWorld.xz * 2.0 ) );
+          float fine = smoothstep( 0.25, 0.8, paveNoise( vLampWorld.xz * 7.0 ) );
+          float flecks = mix( 1.0, 0.15 + 1.7 * coarse, paveCoarse );
+          flecks *= mix( 1.0, 0.2 + 1.6 * fine, paveFine );
+          float streak = shine.x * flecks * paveGloss * ( 1.0 + 1.2 * paveBevel );
+          streak = 1.5 * ( 1.0 - exp( -streak / 1.5 ) );
+          totalEmissiveRadiance += lampColor * ( streak * paveWet * 0.9 + shine.y * flecks * paveWet * 0.04 );
+          // The dusk sky's sheen on wet stone, strongest at grazing angles.
+          vec3 toEye = cameraPosition - vLampWorld;
+          float grazing = pow( 1.0 - clamp( toEye.y / length( toEye ), 0.0, 1.0 ), 5.0 );
+          totalEmissiveRadiance += vec3( 0.14, 0.1, 0.32 ) * grazing * paveWet * 0.12;
         }`,
       );
   };
