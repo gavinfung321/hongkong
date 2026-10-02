@@ -58,6 +58,7 @@ function start(initGuard, header) {
     deck: makeFadeable(kowloon.decks),
     railing: (value) => foreground.setOpacity('railing', value),
     palms: (value) => foreground.setOpacity('palms', value),
+    bauhinia: (value) => foreground.setOpacity('bauhinia', value),
     bursts: (value) => foreground.setOpacity('bursts', value),
     petals: (value) => petals.setDensity(value),
   }, {

@@ -22,6 +22,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { WORLD } from '../data/world.js';
 import { aimCamera } from '../scroll/cameraRig.js';
 import { RAILING_BAY, addLampLight, glowMaterial, railingLayout } from './lamps.js';
+import { createBauhinia } from './bauhinia.js';
 import { createPalms } from './palms.js';
 import { promenadeGranite, railingPanel } from './surfaces.js';
 
@@ -261,12 +262,15 @@ export function createForeground() {
   const lamps = createLamps(WORLD.foreground.lamps);
   const palms = createPalms(WORLD.foreground.palms);
   palms.group.name = 'palms';
+  const bauhinia = createBauhinia(WORLD.foreground.bauhinia);
+  bauhinia.group.name = 'bauhinia';
   const bursts = createBursts(4);
   bursts.group.name = 'bursts';
 
   const groups = {
     railing: { object: railing.group, materials: railing.materials, glows: railing.glows },
     palms: { object: palms.group, materials: [palms.material] },
+    bauhinia: { object: bauhinia.group, materials: bauhinia.materials },
     bursts: { object: bursts.group, materials: bursts.items.map((b) => b.material) },
   };
 
@@ -302,7 +306,12 @@ export function createForeground() {
   }
 
   const group = new Group();
-  group.add(railing.group, edgeRailing.group, lamps, palms.group, bursts.group);
+  group.add(railing.group, edgeRailing.group, lamps, palms.group, bauhinia.group, bursts.group);
 
-  return { group, placeBursts, setOpacity, update: palms.update, setBreakpoint: palms.setBreakpoint };
+  function update(seconds) {
+    palms.update(seconds);
+    bauhinia.update(seconds);
+  }
+
+  return { group, placeBursts, setOpacity, update, setBreakpoint: palms.setBreakpoint };
 }

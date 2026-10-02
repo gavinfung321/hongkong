@@ -757,7 +757,8 @@ all six.
      petals (70 / 32). Both travel with the camera, so moving still gives
      parallax.
    - **Motion:** slow fall, sideways breeze, sway and flutter; scrolling adds
-     a short gust.
+     a short gust. The breeze blows toward screen left, away from the
+     bauhinia tree, whose own falling petals join it (2026-10-02).
    - **Density:** sparse and calm. Full in the hero and 01–04, 0.6 in 05 so
      the city lights lead, 0 in 06 so the fireworks take over (`petals` in
      each chapter's `visibility`). Off in reduced motion.
@@ -887,14 +888,43 @@ all six.
      while visible in the moves in and out of 02; all 12 frames as before;
      draw calls unchanged; with 1 cm camera steps hold 2 changes 16,802 px
      (more near leaflets moving), 8 px with the camera still.
-   - **Stop 4: bauhinia tree (user choice, 2026-10-02), next, before the
+   - **Stop 4: bauhinia tree (built 2026-10-02, user choice), before the
      water reflections.** One Hong Kong orchid tree built in code (no flat
      cutout: the user's AI images stay references, and a card would look
-     paper-thin under parallax), its canopy reaching into the empty
-     top-right corner of the hero and 01 as a foreground frame, clear of
-     the 香港 wordmark; the falling petals drift from it. Not in 02, which
-     the palms, lamps, tower and ferry already fill; mobile 01 only if a
-     small corner branch fits. Pulled forward from Milestone 3.
+     paper-thin under parallax). Pulled forward from Milestone 3.
+     - **Shape:** a seeded skeleton. A 5 m trunk leans out over the water
+       from the arrival promenade (x 1.2, z 100, just right of and behind
+       the 01 camera) and forks into five dark arching limbs, three more
+       levels of drooping branches and twigs, all as merged tubes.
+     - **Foliage:** about 2,700 instanced cards from one atlas drawn in
+       code: broad two-lobed leaves, leaf clumps, five-petal magenta
+       flowers with pale veins, and buds bunched on the outer twigs. The
+       flowers glow faintly so the magenta reads at night; the cards
+       flutter gently, as soft as the palms' edges.
+     - **Falling petals:** 18 petals leave the flowers, drift left on the
+       harbour wind and land on the water, then start again from another
+       flower. To match, the site-wide petals now drift toward screen
+       left too, away from the tree.
+     - **Framing:** in the hero the canopy fills the right edge (from about
+       86% of the width, y 8–60%) behind 東方明珠 and the side pager, which
+       stay legible. The IFC, moon, junk and 香港 stay uncovered. The 01
+       hold pushes the camera 5 m forward, so by the hold the canopy has
+       slid out of frame. Keeping it in the corner at the hold too would
+       need foliage hanging 15–20 m out over open water.
+     - **Breakpoints and chapters:** not on mobile, whose 01 camera stands
+       45 m to the left with no corner for a branch; hidden there, so it
+       costs nothing. Not in 02, which the palms, lamps, tower and ferry
+       already fill (`bauhinia` in each chapter's `visibility`, 1 only in
+       desktop 01). A depth-only twin for the leaves and one for the wood
+       keep the fade even.
+     - **Checks:** all 12 frames as before (only the four older misses);
+       all mouse corners pass, nearest clearance 1.91 m; desktop 01 draw
+       calls 170 (was 164). With 1 cm camera steps the hero changes
+       46,800 px (27,700 without the tree): the leaf cards shifting about
+       a pixel. With the camera still it changes 24 px, so nothing
+       flickers. Hold 1 is unchanged (20,140 px against 20,040).
+     - **Code:** `bauhinia.js`; the atlas is `bauhiniaAtlas` in `surfaces.js`;
+       placement is `WORLD.foreground.bauhinia`.
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -912,8 +942,8 @@ Measured with the `?fps` overlay on a production build, as in
 |---|---|---|
 | Average fps | ≥ 50 | ≥ 30 |
 | 1% low fps | ≥ 40 | ≥ 24 |
-| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. With the 3D palms: desktop 02 137. Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
-| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). The stone railing adds a 64 × 64 granite tile and a 64 × 96 post panel (24 textures; the lantern glows are drawn in their shader). The wet paving adds a 240 × 240 slab tile (25 textures). The palms add a 256 × 256 frond and bark atlas (26 textures). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
+| Draw calls | ≤ 100 (was ≤ 80). **Over budget in 01 and 02** (measured per hold, 2026-10-02): desktop 01 158, 02 136, 03 85, 04 58, 05 45, 06 40; mobile 01 108, 02 69. With the edge railings: desktop 01 164, 02 133, mobile 01 114, 02 75. With the 3D palms: desktop 02 137. With the bauhinia tree: desktop 01 170 (desktop only). Earlier notes gave "85 peak (03)", which missed 01 and 02. Biggest shares in 01: ferry 40, Clock Tower 32, junk 25, IFC 15, wheel 12, stone railing 9 (with its fade twins), promenade lamps 3. The rebuilt vessels and tower are the place to merge meshes; decided with the iPhone 11 measurement in step 6 | ≤ 100 |
+| New generated textures | ≤ 4 more, each ≤ 512 px, plus the wordmark (about 1400 × 700 px, so it stays sharp). **Over budget since 2b (2026-10-01):** 18 small code-drawn surface textures (the ferry reshape added four 512 × 64 deck textures and a foam strip; the junk rebuild swapped its two textures for two new ones and added two 512 × 64 deckhouse textures; the ferry rebuild swapped its four deck textures for four 512 × 56 upper-deck textures and added a 512 × 64 cabin texture). The Clock Tower rebuild swapped its three 256 × 1088 shaft maps for two 256 × 848 shaft maps, two 54 × 848 pilaster maps and two 128 × 96 crown maps: 21 textures, about 5.5 MB of GPU memory in all (was 6.6 MB). The wheel adds a 64 × 64 hub glow (22 textures; the IFC rebuild adds none). The stone railing adds a 64 × 64 granite tile and a 64 × 96 post panel (24 textures; the lantern glows are drawn in their shader). The wet paving adds a 240 × 240 slab tile (25 textures). The palms add a 256 × 256 frond and bark atlas (26 textures). The bauhinia tree adds a 512 × 512 leaf and flower atlas (27 textures; its falling petals reuse the petal texture). To be measured on the iPhone 11 in step 6, then the budget is either raised (user decision) or the shaft is tiled at a lower resolution | same |
 | Point lights | 3 (Clock Tower flood, ferry, junk sail light) since 2b; the promenade lanterns and lamps are faked in the materials (`lamps.js`) | same |
 | JS bundle (gzip) | ≤ 230 KB (was ≤ 200 KB) | same |
 
@@ -1038,9 +1068,18 @@ Stop for the user's review after each step, as in the grey-box.
   (user request, 2026-10-02). Then three desktop-only palms in
   `src/data/world.js`, and `palms.js` shows palms per breakpoint (user
   choice, 2026-10-02).
+- New: `src/scene/bauhinia.js` (the bauhinia tree: skeleton, wood tubes,
+  instanced leaf and flower cards with flutter and glow, falling petals,
+  fade twins); `src/scene/surfaces.js`: `bauhiniaAtlas`;
+  `src/scene/createForeground.js`: the tree as the `bauhinia` group;
+  `src/data/world.js`: `foreground.bauhinia`; `src/data/chapters.js`:
+  `bauhinia` in every visibility, 1 only in desktop 01; `src/main.js`: the
+  `bauhinia` gating target; `src/scene/createPetals.js`: the wind turned
+  toward screen left, shared petal texture, colours and wind (user choice,
+  2026-10-02).
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font; the
   stone railing and lamps built in code from the user's designs; the wet
-  paving; the palms.
+  paving; the palms; the bauhinia tree.
 
 ## 8. Acceptance checks
 
@@ -1054,7 +1093,9 @@ The milestone passes when:
    height and the ferry stays whole; no palm crosses the tower (user
    request, 2026-10-01), at the hold or while the camera moves in and out
    of 02, and the 3D palms sway gently with no flicker (user request,
-   2026-10-02); no promenade lamp crosses the tower or the ferry,
+   2026-10-02); the desktop hero's right edge is framed by the bauhinia
+   canopy, its petals drifting left, with the IFC, moon, junk and 香港
+   uncovered and 東方明珠 legible (user choice, 2026-10-02); no promenade lamp crosses the tower or the ferry,
    and a half-faded railing is an even veil with no rails showing through
    its posts (2026-10-02). The promenade reads as dark wet stone slabs with
    narrow, broken lamp reflections, quieter than the tower and copy, with
@@ -1076,7 +1117,8 @@ The milestone passes when:
   forced back; the footer's chapter links land on their holds (user
   requests, 2026-10-02).
 4. Reduced-motion mode shows no sinking, no parallax, no particles and no
-   cursor ring, the palms hold still (user request, 2026-10-02), and the
+   cursor ring, the palms and the bauhinia (leaves and its falling petals)
+   hold still (user request, 2026-10-02), and the
    Observation Wheel holds still (it turns slowly in
    continuous mode; user request, 2026-10-02), and still tells the whole story. In continuous mode the water
    does not blink or strobe while the mouse moves or during scroll
@@ -1110,6 +1152,6 @@ step.
 
 | Milestone | Content |
 |---|---|
-| 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk, Clock Tower, IFC and wheel are already rebuilt from reference photos, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals and tree, display fonts. Also the user's stone railing (built in code with lanterns and tall lamps, 2026-10-02), promenade palms, wet paving tiles (built in code, 2026-10-02) and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
+| 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk, Clock Tower, IFC and wheel are already rebuilt from reference photos, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals, display fonts (the bauhinia tree is built in code, 2026-10-02). Also the user's stone railing (built in code with lanterns and tall lamps, 2026-10-02), promenade palms, wet paving tiles (built in code, 2026-10-02) and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
 | 4. Atmosphere, all chapters | Clouds lit from below and searchlight beams from the Central towers (user reminders, 2026-10-01), the look-test layers rolled out to 02–06, extra particles alongside the petals (sea spray, city bokeh, firework embers in 06), real fireworks, a sparkle trail added to the cursor ring (3.10) |
 | 5. Copy and launch | Final copy, poster images, a full performance pass on both iPhones, deployment |

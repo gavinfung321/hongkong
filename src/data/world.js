@@ -62,6 +62,11 @@ export const WORLD = {
       [-69.5, 2.5, 17],
       [-66, 2.5, 21],
     ],
+    // The bauhinia tree on the arrival promenade, just right of and behind the
+    // 01 camera, leaning out over the water so its crown frames the top-right
+    // corner of the hero and 01 (its trunk stays out of frame). Yaw turns the
+    // lean, as for the palms.
+    bauhinia: { position: [1.2, 2.5, 100], yaw: 1.91, scale: 1, seed: 5 },
     // 3D palms around the Clock Tower (frame 02), in two shapes. Yaw turns the
     // trunk's lean: 0 leans toward +x, π/2 toward −z. None may cross the
     // tower in either chapter 02 framing. The row of five stands behind the
