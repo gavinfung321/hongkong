@@ -92,6 +92,8 @@ function start(initGuard, header) {
     city: (value) => island.setCityLevel(value),
     clouds: (value) => atmosphere.setLevel(value),
     mist: (value) => atmosphere.setMist(value),
+    // Default window: gone in the first 40% of the move to 03, before the camera nears them.
+    seaMist: (value) => atmosphere.setSeaMist(value),
   }, {
     // Clouds and mist change gently across the whole move.
     clouds: { in: [0, 1], out: [0, 1] },
