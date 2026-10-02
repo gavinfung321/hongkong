@@ -112,6 +112,29 @@ export const CLOUDS = {
   },
 };
 
+// Bow spray (ATMOSPHERE-EFFECTS-BRIEF.md 6.4; user choice, 2026-10-03): one
+// card of the generated spray artwork (docs/ASSET-LEDGER.md) at each boat's
+// bow, on the hull's side toward the camera, adding contact and speed to the
+// wakes. `bow`: metres forward of the boat's centre; `toward`: metres out
+// from the keel line toward the camera; `pull`: metres its depth is brought
+// nearer, to clear the hull's near side; `width` in metres (height follows
+// the art); `sink`: share of the card below the waterline (the art's empty
+// margin under the foam); `opacity`: calm
+// (at a hold) and under way (the boat moving at `fullSpeed` m/s or more).
+// `tint` dims the daylight-white art for the night; `pulse`: the swell's
+// size change, kept under 6% and built from two unrelated waves.
+export const SPRAY = {
+  url: 'atmosphere/harbour-spray.webp',
+  size: [1280, 428],
+  tint: [0.68, 0.74, 0.84], // under the glow threshold
+  sink: 0.12,
+  fullSpeed: 8,
+  pulse: { size: [0.035, 0.02], period: [4.3, 2.9] },
+  ferry: { bow: 9, toward: 5.5, pull: 14, width: 24, opacity: [0.62, 0.9] },
+  // Smaller and fainter: the junk sails slower (brief: optional, lower opacity).
+  junk: { bow: 6, toward: 4, pull: 10, width: 15, opacity: [0.5, 0.75] },
+};
+
 // Searchlights over Central (ATMOSPHERE-EFFECTS-BRIEF.md 6.5; user choice,
 // 2026-10-03): soft tapered beams from the landmark rooftops, not IFC's, so
 // IFC keeps the lead. `base`: the lamp, world metres; `lean`: the sweep's

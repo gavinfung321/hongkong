@@ -6,6 +6,16 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Bow spray** (user choice): white water at the ferry's and junk's
+  bows from the staged `harbour-spray.webp` (now in
+  `public/atmosphere/`), because the flat wakes read thin at wave
+  height. One camera-facing card per boat, dimmed for night and fogged;
+  its depth is pulled toward the camera so the hull's near side doesn't
+  hide it; calmer at holds, stronger while the boat moves, a slow swell
+  under 6%, still in reduced motion. One draw call per visible boat.
+  `?off=spray` hides it. Files: `src/scene/spray.js` (new),
+  `src/scene/createVessels.js`, `src/data/atmosphere.js`, `src/main.js`,
+  `public/atmosphere/harbour-spray.webp`.
 - **Searchlights** (user choice): four soft beams from the Central
   landmark rooftops (not IFC) sweep slowly over 13–17 s, each in its own
   range so they never cross; desktop 01 at 60%, 05 full, phones two beams
