@@ -46,7 +46,8 @@ water off 34, clouds, mist, palms and petals off 38, and pixel ratio 1.25
 after load), step once to 1.25, their floor; the glow no longer switches
 itself off first. Desktop keeps 45 fps, steps of 0.25, floor 1. Checked
 with a slowed browser: phone 1.5 → 1.25 after 4 s and holds; desktop
-2 → 1 in steps.
+2 → 1 in steps. On the iPhone 11 the user reports the frame rate fine
+now (2026-10-02). iPhone 13 not yet measured.
 
 ## 8. Acceptance checks
 
