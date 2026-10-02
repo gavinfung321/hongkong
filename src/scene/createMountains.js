@@ -25,9 +25,16 @@ const RIM = { width: 5, reach: 0.22, strength: 0.32, color: 0xf6c46a };
 const MIST = { color: 0x55445f, opacity: 0.6, fall: 1.2, drift: 0.004 };
 const LIGHTS = { size: 1.8, warm: 0xffc68c, cool: 0xdde6ff, coolShare: 0.25, spread: [32, 10], rise: 2.2, reach: 0.65, glow: [0.15, 0.25] };
 
+const smoothstep = (t) => {
+  const c = Math.min(Math.max(t, 0), 1);
+  return c * c * (3 - 2 * c);
+};
+
 // Ridge height at x: the long swells and peaks, plus jagged detail from four
-// octaves of ridged value noise (sharp crests, rounded hollows).
-function ridgeOf({ base, peaks, seed, rough = 1 }) {
+// octaves of ridged value noise (sharp crests, rounded hollows). Over `taper`
+// metres at each end the ridge eases down to the water like a headland
+// (user request, 2026-10-02: the cut ends read as cliffs).
+function ridgeOf({ x: [x0, x1], base, peaks, seed, rough = 1, taper }) {
   const random = seededRandom(seed);
   const phase = [random() * 6, random() * 6, random() * 6];
   const table = Float32Array.from({ length: 256 }, () => random());
@@ -47,7 +54,7 @@ function ridgeOf({ base, peaks, seed, rough = 1 }) {
     for (let o = 0, amp = 16, len = 90; o < 4; o++, amp /= 2, len /= 2) {
       detail += amp * (1 - Math.abs(2 * noise(px / len + o * 37.1) - 1));
     }
-    return h + rough * (detail - 15);
+    return (h + rough * (detail - 15)) * smoothstep((px - x0) / taper) * smoothstep((x1 - px) / taper);
   };
 }
 
@@ -132,7 +139,9 @@ function createRange(range) {
   return { mesh, ridge };
 }
 
-function createMist({ z, x, height }) {
+// `taper`: the near range's end slopes, which the mist fades out along.
+function createMist({ z, x, height }, taper) {
+  const ends = (taper / (x[1] - x[0])).toFixed(3);
   const material = new ShaderMaterial({
     uniforms: {
       uColor: { value: new Color(MIST.color) },
@@ -160,7 +169,7 @@ function createMist({ z, x, height }) {
         float s = vUv.x * ${((x[1] - x[0]) / 300).toFixed(1)} + uTime * ${MIST.drift};
         float patches = 0.6 + 0.4 * ( 0.65 * noise( s ) + 0.35 * noise( s * 2.3 + 5.0 ) );
         float fall = pow( 1.0 - vUv.y, ${MIST.fall.toFixed(1)} );
-        float ends = smoothstep( 0.0, 0.08, vUv.x ) * smoothstep( 1.0, 0.92, vUv.x );
+        float ends = smoothstep( 0.0, ${ends}, vUv.x ) * smoothstep( 1.0, 1.0 - ${ends}, vUv.x );
         gl_FragColor = vec4( uColor, uOpacity * fall * patches * ends );
         #include <colorspace_fragment>
       }`,
@@ -235,7 +244,7 @@ export function createMountains() {
   group.name = 'mountains';
   const built = ranges.map(createRange);
   for (const { mesh } of built) group.add(mesh);
-  const haze = createMist(mist);
+  const haze = createMist(mist, ranges[0].taper);
   // In front of the near range by 20 m, well clear of its depth.
   group.add(haze.mesh, createSlopeLights(lights, built[0].ridge, ranges[0].z + 20));
 
