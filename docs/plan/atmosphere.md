@@ -1,4 +1,4 @@
-# Sky, clouds, mist and fireworks
+# Sky, clouds, mist, searchlights and fireworks
 
 Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, item 5, stop 6, part 3g; the fireworks in 06.
 
@@ -173,6 +173,30 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
   - **The end of the skyline in 02:** stays dark between the last
     towers and the ferry, so the ferry's hull and lit windows stand
     out against the sky (user choice, 2026-10-02).
+
+- **Searchlights (user choice, 2026-10-03).** Following
+  `ATMOSPHERE-EFFECTS-BRIEF.md` §6.5, a little stronger than its "two
+  extremely faint" beams in 01, toward storyboard frame 01's beams.
+  New `src/scene/createSearchlights.js`; `SEARCHLIGHTS` in
+  `src/data/atmosphere.js`. Procedural, no artwork, no real light.
+  - **Beams:** four soft strips from the landmark rooftops: Central
+    Plaza, Bank of China, Cheung Kong and The Center (not IFC, so IFC
+    leads). Each turns about its own axis to face the camera, widens
+    from 6 m at the lamp to 240 m 1.5 km up, and fades from its core
+    to its sides and toward its far end; it adds light, so it
+    brightens the clouds it crosses, and towers in front hide its
+    foot. Pale blue-white, core 16% at full level.
+  - **Sweep:** each swings there and back over 13–17 s with its own
+    phase, within its own lean range; the ranges follow the beams'
+    left-to-right order, so two beams never cross into a bright knot.
+    Reduced motion holds one pose at 60%.
+  - **Per chapter** (`searchlights` in `src/data/chapters.js`, default
+    gate): desktop 01 60%, 05 full; phones 05 70% with two beams (Bank
+    of China, The Center), none in phone 01; none in 02–04 or 06, so
+    they are gone early in the move to 06, before the fireworks.
+  - **Checks:** draw calls one per visible beam (desktop 01 211, 05 83;
+    phone 05 73). No shaders built mid-scroll (04 → 05). JS 209.1 KB
+    gzip. `?off=beams` hides them.
 
 - **Fireworks in 06 (user choice, 2026-10-02).** Pulled forward from
   Milestone 4, following `ATMOSPHERE-EFFECTS-BRIEF.md` §6.7 in three

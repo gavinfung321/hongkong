@@ -112,6 +112,30 @@ export const CLOUDS = {
   },
 };
 
+// Searchlights over Central (ATMOSPHERE-EFFECTS-BRIEF.md 6.5; user choice,
+// 2026-10-03): soft tapered beams from the landmark rooftops, not IFC's, so
+// IFC keeps the lead. `base`: the lamp, world metres; `lean`: the sweep's
+// range in degrees from upright (+ leans right as seen from Kowloon). The
+// ranges are in the beams' left-to-right order, so two beams never cross
+// into a bright knot. `period`: one sweep there and back, in seconds;
+// `phase`: where in it the beam starts (0–1). `only`: one screen size.
+// How strongly they show per chapter is `searchlights` in chapters.js.
+export const SEARCHLIGHTS = {
+  color: 0xdce6ff,
+  length: 1500, // metres; they leave the top of the frame
+  width: [6, 240], // metres at the lamp and at the far end
+  opacity: 0.16, // at the beam's core, at full level
+  falloff: 1, // how fast the beam fades toward its far end
+  recede: 0.25, // how far each beam tilts away from Kowloon
+  still: { phase: 0.25, dim: 0.6 }, // reduced motion: one held, dimmer pose
+  beams: [
+    { base: [-250, 334, -1340], lean: [-34, -20], period: 16, phase: 0.1, only: 'desktop' },
+    { base: [130, 312, -1330], lean: [-16, -5], period: 13, phase: 0.55 },
+    { base: [235, 283, -1400], lean: [-2, 9], period: 17, phase: 0.8, only: 'desktop' },
+    { base: [800, 300, -1420], lean: [13, 28], period: 14, phase: 0.35 },
+  ],
+};
+
 // The generated harbour mist sheet (docs/ASSET-LEDGER.md): four bands, given
 // as pixel rows of the 1600 × 534 image, from broad and bumpy to thin and low.
 export const MIST_SHEET = {

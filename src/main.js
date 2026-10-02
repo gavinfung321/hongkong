@@ -12,6 +12,7 @@ import { createMoon } from './scene/createMoon.js';
 import { createPetals } from './scene/createPetals.js';
 import { createAtmosphere } from './scene/createAtmosphere.js';
 import { createFireworks } from './scene/createFireworks.js';
+import { createSearchlights } from './scene/createSearchlights.js';
 import { citySoft } from './scene/cityWindows.js';
 import { facadeBias } from './scene/facades.js';
 import { BLOOM } from './scene/bloom.js';
@@ -50,9 +51,9 @@ const MOBILE_FACADE_BIAS = 0.5;
 // ?bloom=0 turns the glow off, ?bloom=2 doubles it: for side-by-side checks.
 const BLOOM_SCALE = params.has('bloom') ? Math.max(0, Number(params.get('bloom')) || 0) : 1;
 // Phone measurement switches, live like ?fps: ?dpr=1.25 caps the pixel ratio,
-// ?aa=0 turns off edge smoothing, ?off=water,clouds,mist,palms,petals hides layers.
+// ?aa=0 turns off edge smoothing, ?off=water,clouds,mist,palms,petals,beams hides layers.
 const DPR_CAP = Number(params.get('dpr')) || 0;
-const OFF_LAYERS = { water: ['water'], clouds: ['cloud'], mist: ['mist', 'sea-mist'], palms: ['palms'], petals: ['petals'] };
+const OFF_LAYERS = { water: ['water'], clouds: ['cloud'], mist: ['mist', 'sea-mist'], palms: ['palms'], petals: ['petals'], beams: ['searchlights'] };
 const OFF = (params.get('off') ?? '').split(',').flatMap((key) => OFF_LAYERS[key.trim()] ?? []);
 
 function start(initGuard, header) {
@@ -86,7 +87,8 @@ function start(initGuard, header) {
       needsRender = true;
     },
   });
-  scene.add(moon.group, atmosphere.group, kowloon.group, island.group, vessels.group, foreground.group, fireworks.group, wordmark.mesh, petals.group);
+  const searchlights = createSearchlights();
+  scene.add(moon.group, atmosphere.group, searchlights.group, kowloon.group, island.group, vessels.group, foreground.group, fireworks.group, wordmark.mesh, petals.group);
   water.setSources(reflectionSources({
     tower: kowloon.clockTower,
     ferry: vessels.ferry,
@@ -112,6 +114,8 @@ function start(initGuard, header) {
     petals: (value) => petals.setDensity(value),
     city: (value) => island.setCityLevel(value),
     mist: (value) => atmosphere.setMist(value),
+    // Default window: gone early in the move to 06, before the fireworks lead.
+    searchlights: (value) => searchlights.setLevel(value),
     // Default window: gone in the first 40% of the move to 03, before the camera nears them.
     seaMist: (value) => atmosphere.setSeaMist(value),
   }, {
@@ -142,6 +146,7 @@ function start(initGuard, header) {
     root.dataset.motion = stepped ? 'stepped' : 'continuous';
     petals.setEnabled(!stepped);
     fireworks.setStill(stepped);
+    searchlights.setStill(stepped);
     shownKeyframe = -1;
     conductor.snap();
     needsRender = true;
@@ -184,6 +189,7 @@ function start(initGuard, header) {
     const openingFov = fovForAspect(opening.fov, width / height, breakpoint);
     wordmark.place({ ...opening, fov: openingFov }, width / height, HERO.wordmark[breakpoint]);
     atmosphere.place(breakpoint, width / height);
+    searchlights.setBreakpoint(breakpoint);
     needsRender = true;
   }
 
@@ -368,6 +374,7 @@ function start(initGuard, header) {
       island.update(time);
       foreground.update(time);
       atmosphere.update(time);
+      searchlights.update(time);
       fireworks.update(time);
       const speed = dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0;
       petals.update(dt, camera, speed);
