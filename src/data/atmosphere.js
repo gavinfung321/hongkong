@@ -27,6 +27,14 @@ export const CLOUDS = {
       { chapter: 0, band: 'tall', x: 47, y: 15, width: 36, opacity: 0.2 },
       // 01: a thinner trace high on the right, above IFC.
       { chapter: 0, band: 'thin', x: 88, y: 6, width: 38, opacity: 0.14 },
+      // 02, 04 and 05 each fill their own empty side of the sky (user
+      // choice, 2026-10-02); the opacities allow for the chapters' fade.
+      // 02: low over the right-hand ridge, below the copy, above the ferry.
+      { chapter: 1, band: 'low', x: 72, y: 52, width: 50, opacity: 0.18 },
+      // 04: above the low mountains on the left, below the copy.
+      { chapter: 3, band: 'thin', x: 22, y: 34, width: 40, opacity: 0.2 },
+      // 05: between the copy and Bank of China's mast.
+      { chapter: 4, band: 'thin', x: 22, y: 33, width: 40, opacity: 0.2 },
       // 06: a dim band beneath the fireworks, above the moon and ridge.
       { chapter: 5, band: 'low', x: 42, y: 60, width: 80, opacity: 0.15 },
     ],
