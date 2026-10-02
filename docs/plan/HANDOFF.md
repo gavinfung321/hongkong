@@ -15,6 +15,8 @@ Written 2026-10-02 to start a fresh chat. Read this file, then
 - Dev server: `npm run dev`, then <http://localhost:5173/hongkong/>.
   `?hold=N` opens chapter N at its hold; `?debug` adds `window.__vh`
   (scene, camera, world, solver tools); `?fps` shows the frame-rate overlay.
+  Phone measurement switches (live): `?dpr=1.25`, `?aa=0`, `?bloom=0`,
+  `?off=water,clouds,mist,palms,petals` (see `checks.md`).
 
 ## How the user likes to work
 
