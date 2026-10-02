@@ -246,20 +246,24 @@ export function createPalms(palms) {
     false,
   );
 
-  const m = new Matrix4();
   const q = new Quaternion();
   const up = new Vector3(0, 1, 0);
-  // Per mesh, the palms shown everywhere come first, so a breakpoint only
-  // trims the instance count.
   const sets = [];
   for (const shape of Object.keys(SHAPES)) {
-    const list = palms.filter((p) => p.shape === shape).sort((a, b) => Boolean(a.only) - Boolean(b.only));
+    const list = palms
+      .filter((p) => p.shape === shape)
+      .map(({ position, height, yaw = 0, only }) => ({
+        only,
+        matrix: new Matrix4().compose(
+          new Vector3(...position),
+          q.setFromAxisAngle(up, yaw).clone(),
+          new Vector3(height, height, height),
+        ),
+      }));
     if (!list.length) continue;
     const mesh = new InstancedMesh(palmGeometry(shape), material, list.length);
-    list.forEach(({ position, height, yaw = 0 }, i) => {
-      q.setFromAxisAngle(up, yaw);
-      mesh.setMatrixAt(i, m.compose(new Vector3(...position), q, new Vector3(height, height, height)));
-    });
+    list.forEach(({ matrix }, i) => mesh.setMatrixAt(i, matrix));
+    // Bounds cover every palm, whichever breakpoint shows.
     mesh.computeBoundingSphere();
     mesh.boundingSphere.radius += 1;
     mesh.renderOrder = 2;
@@ -277,8 +281,10 @@ export function createPalms(palms) {
     material,
     setBreakpoint(breakpoint) {
       for (const { meshes, list } of sets) {
-        const count = list.filter((p) => !p.only || p.only === breakpoint).length;
-        for (const mesh of meshes) mesh.count = count;
+        const shown = list.filter((p) => !p.only || p.only === breakpoint);
+        shown.forEach(({ matrix }, i) => meshes[1].setMatrixAt(i, matrix));
+        meshes[1].instanceMatrix.needsUpdate = true;
+        for (const mesh of meshes) mesh.count = shown.length;
       }
     },
     update(seconds) {

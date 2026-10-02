@@ -873,6 +873,28 @@ all six.
      1 cm camera steps hold 2 now changes 13,634 px (was 10,040): the
      near palm's leaflets moving about a pixel per step; with the camera
      still the palms change 7 px, so nothing flickers.
+   - **More palms on desktop (user choice, 2026-10-02).** The desktop
+     camera looks across the promontory, so it saw only about four palms
+     (three of the five in the row fall just off its left edge), against
+     seven on mobile. Three desktop-only palms: two make a grove left of
+     the tower (a 10 m coconut palm at x −75.4, z −7.4 and a 12.5 m palm
+     at x −70.4, z −25.6, both leaning away from the tower, crowns under
+     the moon), and a 10.5 m coconut palm at x −52, z 5 pairs with the
+     palm between the tower and the ferry, clear of the lamps. On mobile
+     they would stand beside the tower, so they are hidden there
+     (`only: 'desktop'`; a breakpoint change rewrites the instances).
+     Checked: none crosses the tower at the hold (also at 1156 × 766) or
+     while visible in the moves in and out of 02; all 12 frames as before;
+     draw calls unchanged; with 1 cm camera steps hold 2 changes 16,802 px
+     (more near leaflets moving), 8 px with the camera still.
+   - **Stop 4: bauhinia tree (user choice, 2026-10-02), next, before the
+     water reflections.** One Hong Kong orchid tree built in code (no flat
+     cutout: the user's AI images stay references, and a card would look
+     paper-thin under parallax), its canopy reaching into the empty
+     top-right corner of the hero and 01 as a foreground frame, clear of
+     the 香港 wordmark; the falling petals drift from it. Not in 02, which
+     the palms, lamps, tower and ferry already fill; mobile 01 only if a
+     small corner branch fits. Pulled forward from Milestone 3.
 6. **Colour pass.** Try film-style tone mapping. It changes every colour, so
    it is only kept if 01 clearly improves, and the palette is re-tuned for all
    frames in a later milestone.
@@ -1013,7 +1035,9 @@ Stop for the user's review after each step, as in the grey-box.
   `src/data/world.js`: nine palms with shapes, the water palm moved onto
   land; `src/scene/gating.js`: per-key fade windows; `src/main.js`: the
   palms' late fade-in and early fade-out, sway in continuous mode only
-  (user request, 2026-10-02).
+  (user request, 2026-10-02). Then three desktop-only palms in
+  `src/data/world.js`, and `palms.js` shows palms per breakpoint (user
+  choice, 2026-10-02).
 - `docs/ASSET-LEDGER.md`: entries for the railing art and any font; the
   stone railing and lamps built in code from the user's designs; the wet
   paving; the palms.
