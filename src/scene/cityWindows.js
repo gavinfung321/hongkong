@@ -23,6 +23,7 @@ export function addCityWindows(material, options = {}) {
     strength = 1,
     glass = 0.7, // unlit windows darken the wall by this factor
     glow = 0.35, // the faded wall's glow, per lit share
+    close = 1, // peak of windows drawn large (bays over ~10 px), so close-ups don't sparkle
   } = options;
   const uniforms = {
     uCityLit: { value: [lit, maxLit] },
@@ -33,7 +34,9 @@ export function addCityWindows(material, options = {}) {
     uCityStrength: { value: strength },
     uCityGlass: { value: glass },
     uCityGlow: { value: glow },
+    uCityClose: { value: close },
   };
+  material.userData.cityWindows = uniforms;
 
   material.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, uniforms);
@@ -66,6 +69,7 @@ export function addCityWindows(material, options = {}) {
         uniform float uCityStrength;
         uniform float uCityGlass;
         uniform float uCityGlow;
+        uniform float uCityClose;
         varying vec3 vCityPos;
         varying vec2 vCitySeed;
         float cityHash( vec2 p ) {
@@ -95,7 +99,8 @@ export function addCityWindows(material, options = {}) {
             float density = min( uCityLit.x * ( 0.35 + 1.3 * cityHash( seed * 0.013 ) ), uCityLit.y );
             float on = step( cityHash( cell + seed * 0.137 ), density );
             vec3 tint = mix( uCityWarm, uCityCool, step( 1.0 - uCityCoolShare, cityHash( cell.yx + seed ) ) );
-            vec3 detail = tint * on * ( 0.5 + 0.5 * cityHash( cell + 7.7 ) ) * shape;
+            float closeGain = mix( uCityClose, 1.0, smoothstep( 0.08, 0.25, w.x ) );
+            vec3 detail = tint * on * ( 0.5 + 0.5 * cityHash( cell + 7.7 ) ) * shape * closeGain;
             // Floor strips: the window band of each floor, lit in runs of RUN
             // bays, at the bays' average coverage across.
             float bandY = smoothstep( 0.28 - w.y, 0.28 + w.y, f.y ) - smoothstep( 0.78 - w.y, 0.78 + w.y, f.y );

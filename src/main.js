@@ -73,7 +73,10 @@ function start(initGuard, header) {
     bauhinia: (value) => foreground.setOpacity('bauhinia', value),
     bursts: (value) => foreground.setOpacity('bursts', value),
     petals: (value) => petals.setDensity(value),
+    city: (value) => island.setCityLevel(value),
   }, {
+    // The city dims across the whole move into 05, not in its first 40%.
+    city: { in: [0, 1], out: [0, 1] },
     // The palms pass in front of the Clock Tower early in the 01 → 02 move
     // and, on mobile, early in the 02 → 03 move.
     palms: { in: [0.62, 0.9], out: [0, 0.1] },

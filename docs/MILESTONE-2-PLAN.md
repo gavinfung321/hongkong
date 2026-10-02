@@ -1037,6 +1037,22 @@ all six.
        6.2% of pixels (6.7% before); the Clock Tower is unchanged. On
        mobile the distant skyline still reads as flat slabs; the depth haze
        (not chosen for now) or the mist band in part 2 could fix that.
+     - **Part 1b: quieter towers in 05 (user choices, 2026-10-02).** The user
+       still found the towers around IFC too bright in 05. Each was about half
+       as bright as IFC, but together they had 1.5× its bright pixels; at
+       ~500 m every window is drawn crisp at the same peak as IFC's, and warm
+       dots on near-black walls sparkle more than IFC's on blue-grey glass.
+       Two changes, IFC untouched:
+       - **05 only:** the skyline windows fade to 60% across the move into
+         05 and back on the way out (`city` in each chapter's visibility,
+         omitted = 1; `island.setCityLevel`).
+       - **Close-ups:** windows drawn large (bays over ~10 px) peak at 70%
+         (new `close` option in `cityWindows.js`), which only touches
+         04–06; in 01 the bays are ~3 px and unchanged.
+       - Measured in 05: the towers' bright pixels fall from 14,200 to 4,900
+         (IFC 9,100; much of the rest is the wheel and moon glow), the
+         towers right of IFC from 5,100 to 560. 01 unchanged; 1 cm camera
+         steps in 05 6,529 px (6,607 before).
      - **Part 2: mountains (built 2026-10-02).** The two flat one-colour
        cut-outs are rebuilt in `src/scene/createMountains.js`:
        - **Shape:** each range is an upright strip under a ridge line sampled
@@ -1242,7 +1258,10 @@ Stop for the user's review after each step, as in the grey-box.
   (user choices, 2026-10-02; reworked twice the same day, user requests).
 - Central buildings and mountains (step 5, stop 6; user choices,
   2026-10-02): `src/scene/cityWindows.js` gains a `maxLit` cap;
-  `src/scene/createIsland.js` dims the skyline windows (part 1). New
+  `src/scene/createIsland.js` dims the skyline windows (part 1);
+  `cityWindows.js` `close` option, `createIsland.js` `setCityLevel`,
+  `src/data/chapters.js` `city: 0.6` in 05, `src/main.js` the `city` gate
+  over the whole move (part 1b). New
   `src/scene/createMountains.js` (three shaded ranges with jagged ridges
   and a moonlit edge, the mist band, the slope lights), replacing the
   mountain code in `createIsland.js`; `src/data/world.js` (the Peak outline,
@@ -1281,8 +1300,9 @@ The milestone passes when:
    over a dim continuous shimmer from the skyline; no vertical rectangles,
    no glare or hot blobs under the boats, nothing strobing while the camera
    moves (user choices and requests, 2026-10-02). IFC is the brightest
-   tower in 01 and 05; no Central building is lit as much (user request,
-   2026-10-02). The mountains have rough ridges with the Peak's outline,
+   tower in 01 and 05; no Central building is lit as much, and in 05 the
+   towers around it are clearly quieter, together well under IFC's bright
+   pixels (user requests, 2026-10-02). The mountains have rough ridges with the Peak's outline,
    lighter upper slopes, a thin moonlit edge near the moon, a faint third
    range, mist at their foot and quiet slope lights; their ends slope down
    to the water, with no cliff-like cut in any frame or move (user request,
