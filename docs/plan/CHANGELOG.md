@@ -6,6 +6,12 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Searchlights** (user choice): four soft beams from the Central
+  landmark rooftops (not IFC) sweep slowly over 13–17 s, each in its own
+  range so they never cross; desktop 01 at 60%, 05 full, phones two beams
+  in 05 only; gone before the fireworks; held and dimmed in reduced motion.
+  `?off=beams` hides them. Files: `src/scene/createSearchlights.js` (new),
+  `src/data/atmosphere.js`, `src/data/chapters.js`, `src/main.js`.
 - **Less cloud in phone 06** (user request): three cloud cards → one lit
   bank between the bursts and IFC's crown, so the fireworks open on dark
   sky (mobile 06 58 draw calls). Files: `src/data/atmosphere.js`.
