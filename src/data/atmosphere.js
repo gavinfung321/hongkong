@@ -174,6 +174,42 @@ export const MIST = {
   ],
 };
 
+// Depth haze (atmospheric depth Stage 2, user request, 2026-10-03): two thin
+// bands of separate wisps cut from the mist sheet, so the view reads in
+// layers rather than as one flat wall. `harbour`: low wisps on the water
+// between the boats' lanes and the island, softening the waterfront's foot
+// seen from 03 and 04. `city`: lifted wisps among the towers, behind the
+// front row (IFC, the wheel, Bank of China, Central Plaza stay crisp) and in
+// front of the back row (Cheung Kong, The Center), whose middles they veil.
+// x / z: centre, `y` the foot, width in world metres; opacity at a chapter's
+// full `haze` level. Each wisp drifts on its own seeded period, the two
+// bands in opposite directions and at different paces; still in reduced
+// motion.
+export const HAZE = {
+  tint: { low: [1.25, 0.84, 0.66], high: [0.86, 0.76, 0.92] },
+  feather: 0.25,
+  bands: {
+    harbour: {
+      drift: { share: 0.012, period: [70, 95] },
+      cards: [
+        { x: -420, z: -780, y: 0, width: 300, band: 'low', u: [0.1, 0.7], opacity: 0.3 },
+        { x: -60, z: -820, y: 0, width: 260, band: 'flat', u: [0.2, 0.8], opacity: 0.26 },
+        { x: 270, z: -790, y: 0, width: 240, band: 'low', u: [0.35, 0.95], opacity: 0.3 },
+        { x: 640, z: -840, y: 0, width: 320, band: 'flat', u: [0.05, 0.6], opacity: 0.26 },
+      ],
+    },
+    city: {
+      drift: { share: -0.007, period: [110, 150] },
+      cards: [
+        { x: -520, z: -1370, y: 40, width: 420, band: 'broad', u: [0.1, 0.6], opacity: 0.3 },
+        { x: -40, z: -1355, y: 60, width: 360, band: 'flat', u: [0.3, 0.9], opacity: 0.26 },
+        { x: 330, z: -1385, y: 35, width: 360, band: 'billow', u: [0.2, 0.7], opacity: 0.24 },
+        { x: 760, z: -1365, y: 55, width: 440, band: 'broad', u: [0.4, 0.95], opacity: 0.3 },
+      ],
+    },
+  },
+};
+
 // Open-water mist (user choice, 2026-10-02): separate low wisps out on the
 // harbour, 420–650 m from the 01 camera, so in the hero and 01 the mist
 // spreads across the sea with dark water between the wisps (about half the
