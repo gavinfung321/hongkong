@@ -122,7 +122,9 @@ How it is built:
 - Desktop now shows the same "01 / 06" under "Scroll to cross" on the
   opening screen, so both breakpoints match (user choice, 2026-10-03).
 - Dimmed so the scene leads: hint at 50% and numbers at 40% opacity, full on
-  hover (user request, 2026-10-01).
+  hover (user request, 2026-10-01). The hint is now at 75%, because at 50%
+  the 11 px label measured only 3.26:1 against the paving on desktop
+  (user request, 2026-10-03, interface audit IS-09).
 - Chapter 01's body no longer ends with "Scroll to cross the water."; the
   hint already says it. The hint read "Let's cross the harbour" for a while
   (user request, 2026-10-01) and is back to "Scroll to cross", shorter and a
@@ -149,8 +151,10 @@ How it is built:
     Afterglow (chapter 01 is reached through the logo).
   - The current chapter's link is underlined in warm amber (`--color-warm`).
     Coral stays reserved for the junk's sails.
-  - On hover or keyboard focus, each English label rolls up and its Chinese
-    label (from 3.6) rolls in from below (user request, 2026-10-01).
+  - On hover, each English label rolls up and its Chinese label (from 3.6)
+    rolls in from below (user request, 2026-10-01). Keyboard focus no
+    longer swaps it, so the visible name matches the one announced (user
+    request, 2026-10-03, IS-08).
 - **Mobile:** logo plus a menu button. The menu opens a full-screen dark panel
   listing all six chapters, each with its Chinese label.
   - The button reports open/closed to screen readers, keyboard focus stays in
@@ -494,6 +498,43 @@ Serif TC 700). Copy regions widened for 03 desktop, 02 and 06 phones.
 - Built in `index.html` (`.site-footer`) and `styles.css`;
   `src/ui/siteFooter.js` publishes `--footer-in` (0 → 1) and `is-at-footer`.
   Also works in the poster-only fallback, where it is a plain footer.
+
+### 3.14 Interface states (user request, 2026-10-03)
+
+Fixes from the Interface State Polish audit (IS-01 to IS-13). The desktop
+and portrait phone layouts, scenes and timings are unchanged.
+
+- **Header after jumps (IS-01):** a scroll of more than one screen (nav,
+  menu, side pager, Return) no longer hides the header, so the menu button
+  is still there after choosing a chapter (`siteHeader.js`).
+- **Copy below the header (IS-02):** the copy's top is never higher than
+  the header plus 4 px. At the approved sizes the authored top is already
+  lower, so nothing moves; on short windows and at 200% zoom the copy no
+  longer runs under the logo.
+- **Phones turned sideways (IS-03, IS-04):** windows in landscape no more
+  than 500 px tall keep the desktop layout but use the 56 px phone header,
+  smaller copy (28 px titles, 14 px body), the phone vertical title and no
+  side pager. 香港 keeps 14 px clear below 01's copy there, moving its
+  feet down to 84% at most (the strokes reach a little below the feet) and
+  then shrinking (`desktopShort` in the
+  `HERO` block, `main.js`). The menu's rows are tighter so all six fit at
+  390 px tall, and a list taller than the window now scrolls from its
+  first item instead of being cut off at the top.
+- **Notch and home-bar insets (IS-05, IS-12):** the header, menu, copy,
+  counter, side pager, vertical text and footer keep clear of the left and
+  right safe areas; the header's height adds the top inset instead of
+  losing it from its 56/72 px.
+- **Return focus (IS-06):** after "Return to the harbour" focus goes to the
+  logo, so the next Tab reaches the nav instead of a hidden heading.
+- **Current chapter in the menu (IS-07):** its title is also underlined in
+  warm amber, not only its number coloured.
+- **Fallback (IS-10):** without the 3D story 東方明珠 scrolls away with the
+  first screen instead of staying fixed over the footer.
+- **Address bar (IS-11):** once you scroll on from a deep link, the address
+  follows the current chapter (and drops the hash in the hero), so a reload
+  or shared link opens where you are.
+- **Touch (IS-13):** hover colours and movements apply only where a pointer
+  can hover, so a tap on a tablet never leaves a link lit.
 
 ### 3.12 Loading screen (user choice, 2026-10-02)
 

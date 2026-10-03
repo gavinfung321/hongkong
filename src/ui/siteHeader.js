@@ -43,6 +43,12 @@ export function createSiteHeader() {
     const max = document.documentElement.scrollHeight - window.innerHeight;
     const y = Math.min(Math.max(window.scrollY, 0), max);
     if (Math.abs(y - lastY) < 6) return;
+    // A move of more than a screen is a jump (nav, menu, Return): the header stays.
+    if (Math.abs(y - lastY) > window.innerHeight) {
+      root.classList.remove('is-header-hidden');
+      lastY = y;
+      return;
+    }
     root.classList.toggle('is-header-hidden', y > lastY && y > header.offsetHeight);
     lastY = y;
   }

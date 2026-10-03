@@ -60,7 +60,11 @@ export const HERO = {
     // (transition review, 2026-10-03). Mobile clear: px kept free under 01's
     // copy on short screens, moving the feet down to maxFoot %, then shrinking
     // (user request, 2026-10-03).
+    // Short landscape (phones turned sideways, under 500 px tall): the desktop
+    // word keeps clear of 01's copy the same way, standing lower and smaller
+    // (interface audit IS-03, user request, 2026-10-03).
     desktop: { x: 50, foot: 74, width: 60 },
+    desktopShort: { clear: 14, maxFoot: 84 },
     mobile: { x: 50, foot: 42, width: 78, depth: 190, fadeEnd: 0.4, clear: 14, maxFoot: 48 },
   },
   sinkEnd: 0.2,
