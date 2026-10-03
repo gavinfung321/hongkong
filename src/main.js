@@ -54,6 +54,8 @@ const MOBILE_WINDOW_SOFT = 1.5;
 const MOBILE_FACADE_BIAS = 0.5;
 // ?bloom=0 turns the glow off, ?bloom=2 doubles it: for side-by-side checks.
 const BLOOM_SCALE = params.has('bloom') ? Math.max(0, Number(params.get('bloom')) || 0) : 1;
+// ?haze=2 doubles the depth haze: for tuning.
+const HAZE_SCALE = params.has('haze') ? Math.max(0, Number(params.get('haze')) || 0) : 1;
 // ?grade=0 turns the film grade off: for side-by-side checks.
 const GRADE = params.get('grade') !== '0';
 // Phone measurement switches, live like ?fps: ?dpr=1.25 caps the pixel ratio,
@@ -155,7 +157,7 @@ async function start(initGuard, header, loading) {
     searchlights: (value) => searchlights.setLevel(value),
     // Default window: gone in the first 40% of the move to 03, before the camera nears them.
     seaMist: (value) => atmosphere.setSeaMist(value),
-    haze: (value) => atmosphere.setHaze(value),
+    haze: (value) => atmosphere.setHaze(value * HAZE_SCALE),
     afterglow: (value) => world.sky.userData.setAfterglow(value),
   }, {
     // The afterglow warms and cools across the whole move.

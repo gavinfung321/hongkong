@@ -172,6 +172,12 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
     IFC and the landmarks still lead (05 share 27%, under a third).
     In 05 the water in front of the piers stays dark. The Clock
     Tower, ferry, junk sails, IFC crown and copy are untouched.
+  - **Depth haze (user request, 2026-10-03; atmospheric depth Stage
+    2):** a third mist layer, `HAZE` in `src/data/atmosphere.js`: four
+    tall wisps on the water about 200 m in front of the shore drifts,
+    unfogged and city-lit, softening the podiums in 01–04. Its own
+    level (`haze` in `chapters.js`) and switch (`?off=haze`). Details
+    and decisions in [atmospheric-depth-polish.md](atmospheric-depth-polish.md).
   - **The left of 04:** only the stronger coral band (stage 1). The
     waterline left of the skyline's end stays dark, with the
     skyline's own dim shimmer below it. No far shore lights (tried

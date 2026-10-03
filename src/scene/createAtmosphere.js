@@ -235,7 +235,7 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
   const haze = Object.values(HAZE.bands).flatMap((band) =>
     band.cards.map((spec) =>
       makeCard(spec, MIST_SHEET, mistSheet, {
-        fog: true,
+        fog: false,
         renderOrder: 0,
         drift: band.drift,
         name: 'haze',
