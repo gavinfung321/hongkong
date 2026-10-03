@@ -3,7 +3,10 @@
 //
 // camera:      position / target in world metres, vertical fov in degrees.
 //              Optional via: [[x, y, z], ...] waypoints the camera passes on
-//              the way to the next chapter (to route around the tower).
+//              the way to the next chapter (to route around the tower). The
+//              camera keeps an even pace by distance through them; the look
+//              turns with distance too, or by viaTurn: [f, ...], the share of
+//              the turn done at each waypoint.
 //              Chapter 01 only: holdDolly, the opening push. It starts half a
 //              vector back at the top of the page and passes the authored
 //              pose at the keyframe.
@@ -36,7 +39,9 @@ export const SCROLL = {
   copyFull: 0.2, // copy fully visible within this distance of a keyframe (= hold)
   copyFade: 0.05, // then fades out before the camera has moved far
   damping: 5,
-  jumpThreshold: 1,
+  // A jump of this many chapters or more snaps behind the veil; 0.9 so a jump
+  // to the next chapter (exactly 1) does too (transition review, 2026-10-03).
+  jumpThreshold: 0.9,
 };
 
 // The 香港 wordmark in the hero, authored on screen at chapter 01's opening pose.
@@ -51,11 +56,16 @@ export const HERO = {
     // 2026-10-02); its feet must stay below the horizon (57.5% at the opening
     // pose). Mobile floats in the empty sky between the copy and the moon,
     // 190 m ahead like the water placement it replaced (user request, 2026-10-02).
+    // Mobile fadeEnd: gone before it sinks across the moon and skyline
+    // (transition review, 2026-10-03). Mobile clear: px kept free under 01's
+    // copy on short screens, moving the feet down to maxFoot %, then shrinking
+    // (user request, 2026-10-03).
     desktop: { x: 50, foot: 74, width: 60 },
-    mobile: { x: 50, foot: 42, width: 78, depth: 190 },
+    mobile: { x: 50, foot: 42, width: 78, depth: 190, fadeEnd: 0.4, clear: 14, maxFoot: 48 },
   },
   sinkEnd: 0.2,
-  // Fraction of the sink by which the wordmark and chapter 01's copy have faded.
+  // Fraction of the sink by which the wordmark and chapter 01's copy have
+  // faded (a breakpoint's own fadeEnd wins).
   fadeEnd: 0.6,
 };
 
@@ -128,13 +138,17 @@ export const chapters = [
         target: [196.2, 137.9, -223],
         fov: 61.4,
         keepHeight: true,
-        via: [[-28, 7, 22], [5, 5, -90]],
+        // The first waypoint sits back from the tower and the look turns
+        // early, so the tower slides out instead of whipping past
+        // (transition review, 2026-10-03; viaTurn: cameraRig.js).
+        via: [[-28, 7, 37], [5, 5, -90]],
+        viaTurn: [0.4, 0.7],
       },
       mobile: {
         position: [-59.6, 4.8, 108.2],
         target: [-59.1, 82.8, -284.1],
         fov: 36.6,
-        via: [[-34, 8, 60], [-24, 6, -35]],
+        via: [[-44, 8, 90], [-24, 6, -35]],
       },
     },
     copy: {
@@ -207,7 +221,10 @@ export const chapters = [
       // Mobile: 34 m from the camera (was 53 m), so the ferry fills about a
       // fifth of the frame's height as in the storyboard, its stern off the
       // left edge (user choice, 2026-10-03).
-      mobile: { ferry: [-29, -252.3, 1], junk: [40, -390, 0.5], via: { ferry: [[8, -318, 1]] }, drift: { ferry: [1.5, 5] } },
+      // The junk (hidden here) waits right of the phone frame, so it comes
+      // in already shown rather than fading in on open water (transition
+      // review, 2026-10-03).
+      mobile: { ferry: [-29, -252.3, 1], junk: [160, -430, 0.5], via: { ferry: [[8, -318, 1]] }, drift: { ferry: [1.5, 5] } },
     },
     probes: {
       desktop: {
@@ -238,9 +255,11 @@ export const chapters = [
     // lens, desktop about 1.2 times larger, phones with the main sail just
     // under the copy. The eye stays at 3 m: lower, the move from 03 dips
     // under the 1.5 m clearance.
+    // via: the move to 05 swings about 80 m right of the junk instead of
+    // running through it (transition review, 2026-10-03).
     camera: {
-      desktop: { position: [153.4, 3, -419.8], target: [-21.8, 76.8, -773.4], fov: 66 },
-      mobile: { position: [153.4, 3, -386.1], target: [212.7, 56.6, -773.9], fov: 60 },
+      desktop: { position: [153.4, 3, -419.8], target: [-21.8, 76.8, -773.4], fov: 66, via: [[233.4, 8, -439.8]] },
+      mobile: { position: [153.4, 3, -386.1], target: [212.7, 56.6, -773.9], fov: 60, via: [[233.4, 8, -486.1]] },
     },
     copy: {
       desktop: { left: 5, top: 11, right: 34, bottom: 45 },
@@ -303,10 +322,12 @@ export const chapters = [
       mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, accents: 0.25, reflections: 2, mist: 0.4, seaMist: 0, searchlights: 0.7 },
     },
     fogDensity: 0.00045,
-    // The ferry is hidden from here on; it keeps behind the cameras.
+    // The ferry and junk are hidden from here on. The ferry keeps behind the
+    // cameras; the junk bears away left of the move from 04 and leaves the
+    // frame before it fades (transition review, 2026-10-03).
     vessels: {
-      desktop: { ferry: [120, -430, 1], junk: [230, -520, 0.24] },
-      mobile: { ferry: [40, -370, 1], junk: [230, -520, 0.24] },
+      desktop: { ferry: [120, -430, 1], junk: [80, -480, 0.24] },
+      mobile: { ferry: [40, -370, 1], junk: [80, -480, 0.24] },
     },
     // The PNG draws the wheel about 3.5× its true size relative to IFC; the
     // wheel stays true scale and the near camera makes up most of it: about

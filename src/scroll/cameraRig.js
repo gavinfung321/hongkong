@@ -3,6 +3,8 @@ import { CatmullRomCurve3, MathUtils, Vector3 } from 'three';
 const AUTHORED_DESKTOP_ASPECT = 1.6;
 const MAX_FOV_WIDENING = 15;
 const LOOK_DISTANCE = 400;
+// Arc-length samples per curve span; keyframes fall exactly on samples.
+const ARC_SAMPLES = 200;
 // Camera swing in metres at full mouse travel (pointerParallax.js). The camera
 // orbits a point LOOK_DISTANCE ahead, so the foreground slides one way and the
 // far skyline the other. Vertical stays small: raising or lowering the eye
@@ -69,6 +71,8 @@ export function createCameraRig(camera, chapters, { hold }) {
 
   // Curve index of each keyframe; `via` waypoints sit between keyframes.
   let keyIndex = [];
+  // Arc length along the camera path at each keyframe.
+  let keyLength = [];
 
   function setBreakpoint(next) {
     breakpoint = next;
@@ -86,17 +90,37 @@ export function createCameraRig(camera, chapters, { hold }) {
       const position = new Vector3().fromArray(pose.position);
       positions.push(position);
       targets.push(position.clone().addScaledVector(directions[i], LOOK_DISTANCE));
-      const via = pose.via ?? [];
-      via.forEach((point, j) => {
-        const f = (j + 1) / (via.length + 1);
+      const via = (pose.via ?? []).map((point) => new Vector3().fromArray(point));
+      if (!via.length) return;
+      // The look turns with distance travelled, matching the arc-length pacing.
+      const stops = [position, ...via, new Vector3().fromArray(poses[i + 1].position)];
+      const legs = stops.slice(1).map((stop, j) => stop.distanceTo(stops[j]));
+      const total = legs.reduce((sum, leg) => sum + leg, 0);
+      let travelled = 0;
+      via.forEach((viaPosition, j) => {
+        travelled += legs[j];
+        const f = pose.viaTurn?.[j] ?? travelled / total;
         const dir = directions[i].clone().lerp(directions[i + 1], f).normalize();
-        const viaPosition = new Vector3().fromArray(point);
         positions.push(viaPosition);
         targets.push(viaPosition.clone().addScaledVector(dir, LOOK_DISTANCE));
       });
     });
     positionCurve = new CatmullRomCurve3(positions, false, 'centripetal');
     targetCurve = new CatmullRomCurve3(targets, false, 'centripetal');
+    const spans = positions.length - 1;
+    positionCurve.arcLengthDivisions = spans * ARC_SAMPLES;
+    const lengths = positionCurve.getLengths();
+    keyLength = keyIndex.map((index) => lengths[index * ARC_SAMPLES]);
+  }
+
+  // Curve parameter at `eased` of the way from keyframe `from` to `to`, by
+  // distance, so the camera keeps an even pace through via waypoints.
+  function curveParam(segment) {
+    const a = keyLength[segment.from];
+    const b = keyLength[segment.to];
+    if (segment.eased <= 0) return keyIndex[segment.from] / (positionCurve.points.length - 1);
+    if (segment.eased >= 1) return keyIndex[segment.to] / (positionCurve.points.length - 1);
+    return positionCurve.getUtoTmapping(0, a + (b - a) * segment.eased);
   }
 
   function setAspect(value) {
@@ -144,9 +168,7 @@ export function createCameraRig(camera, chapters, { hold }) {
   // keyframe position (k + 0.5) and there is no hold dolly.
   function update(p, { stepped = false } = {}) {
     const segment = segmentAt(p, hold, count);
-    const a = keyIndex[segment.from];
-    const b = keyIndex[segment.to];
-    const t = MathUtils.clamp((a + (b - a) * segment.eased) / (positionCurve.points.length - 1), 0, 1);
+    const t = MathUtils.clamp(curveParam(segment), 0, 1);
     positionCurve.getPoint(t, camera.position);
     targetCurve.getPoint(t, target);
 

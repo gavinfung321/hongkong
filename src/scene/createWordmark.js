@@ -57,7 +57,7 @@ function drawText(text) {
 
   const texture = new CanvasTexture(canvas);
   texture.colorSpace = SRGBColorSpace;
-  return { texture, aspect: canvas.width / canvas.height, padBottom: (PAD + descent) / canvas.height };
+  return { texture, aspect: canvas.width / canvas.height, padBottom: (PAD + descent) / canvas.height, padTop: PAD / canvas.height };
 }
 
 const placementCamera = new PerspectiveCamera();
@@ -68,7 +68,7 @@ export function createWordmark(renderer, text, { onRepaint } = {}) {
   // The face's own status: Chromium's fonts.check() reports true while it is still loading.
   const face = document.fonts && [...document.fonts].find((f) => f.family.replace(/"/g, '') === FAMILY && f.weight === '700');
   const fontReady = face?.status === 'loaded';
-  let { texture, aspect, padBottom } = drawText(text);
+  let { texture, aspect, padBottom, padTop } = drawText(text);
   texture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
 
   // Drawn last and without depth testing, so it sits in front of the whole scene.
@@ -101,7 +101,7 @@ export function createWordmark(renderer, text, { onRepaint } = {}) {
         next.texture.anisotropy = texture.anisotropy;
         material.map = next.texture;
         texture.dispose();
-        ({ texture, aspect, padBottom } = next);
+        ({ texture, aspect, padBottom, padTop } = next);
         mesh.userData.fontRepaints = (mesh.userData.fontRepaints ?? 0) + 1;
         if (placed) {
           const sink = (restY - mesh.position.y) / (height * DROP);
@@ -123,8 +123,20 @@ export function createWordmark(renderer, text, { onRepaint } = {}) {
   // Fills spec.width % of the screen with its feet at (spec.x, spec.foot) %
   // as seen from chapter 01's opening pose: standing on the water, or, with
   // spec.depth (metres ahead of the camera), floating in the sky.
-  function place(pose, viewAspect, spec) {
-    placed = [pose, viewAspect, spec];
+  // clearTop (% of the screen height): the glyph tops stay below it, the feet
+  // moving down to spec.maxFoot at most, then the word shrinking instead.
+  function place(pose, viewAspect, spec, clearTop) {
+    placed = [pose, viewAspect, spec, clearTop];
+    let footPct = spec.foot;
+    let widthPct = spec.width;
+    if (clearTop !== undefined) {
+      const glyph = (spec.width * viewAspect / aspect) * (1 - padBottom - padTop);
+      footPct = Math.max(footPct, clearTop + glyph);
+      if (footPct > spec.maxFoot) {
+        widthPct *= Math.max(0, spec.maxFoot - clearTop) / glyph;
+        footPct = spec.maxFoot;
+      }
+    }
     const position = new Vector3().fromArray(pose.position);
     // The hold dolly starts half a vector back (see holdDollyOffset).
     if (pose.holdDolly) position.addScaledVector(new Vector3().fromArray(pose.holdDolly), -0.5);
@@ -135,7 +147,7 @@ export function createWordmark(renderer, text, { onRepaint } = {}) {
     aimCamera(placementCamera, position, new Vector3().fromArray(pose.target));
     placementCamera.updateMatrixWorld();
 
-    ndc.set((spec.x / 100) * 2 - 1, 1 - (spec.foot / 100) * 2, 0.5).unproject(placementCamera);
+    ndc.set((spec.x / 100) * 2 - 1, 1 - (footPct / 100) * 2, 0.5).unproject(placementCamera);
     const ray = ndc.sub(position).normalize();
     forward.fromArray(pose.target).sub(position).setY(0).normalize();
     let foot;
@@ -148,7 +160,7 @@ export function createWordmark(renderer, text, { onRepaint } = {}) {
 
     const depth = foot.clone().sub(position).dot(forward);
     const viewWidth = 2 * depth * Math.tan(MathUtils.degToRad(pose.fov / 2)) * viewAspect;
-    const width = (spec.width / 100) * viewWidth;
+    const width = (widthPct / 100) * viewWidth;
     height = width / aspect;
     restY = foot.y - height * padBottom;
 

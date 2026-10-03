@@ -6,6 +6,39 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Phone 香港 clear of 01's copy** (user request, 2026-10-03): on shorter
+  phone screens (414×715, 390×664, 375×667) the copy's body text covered the
+  top of 香港, because the word stood at a fixed 42% of the height while the
+  copy is sized in pixels. The word now keeps 14 px below the copy, moving
+  down to 48% at most, then shrinking; re-placed once fonts load. 390×844
+  unchanged. Files: `src/scene/createWordmark.js`, `src/main.js`,
+  `src/data/chapters.js` (`HERO.wordmark.mobile`); plan: `interface.md`.
+  Evidence: `review-shots/hero-mobile/`.
+- **Transition corrections 1 to 6** (user request, 2026-10-03): the six
+  fixes approved from the continuous journey review
+  (`review-shots/transitions/TRANSITION-REVIEW.md`), each the smallest
+  change, holds untouched (keyframes, hold length and chapter length
+  unchanged). (1) The camera paces each move by distance along its path,
+  not by waypoint count, so it no longer speeds up and slows down at
+  waypoints; the look turns with distance too. (2) 04 → 05: a waypoint
+  takes the camera round the junk instead of almost through its stern (now
+  about 11 m clear), the junk's hidden 05 mark moves out of the path, and
+  it fades only after it has left the frame. (3) 02 → 03: the Clock Tower
+  slides out steadily instead of holding and then whipping off (desktop
+  turn re-timed with `viaTurn`, both waypoints re-routed). (4) Phones: the
+  junk's hidden 03 mark is outside the frame, so it no longer appears
+  half-faded in 02 → 03 and 03 → 04, and the ferry is shown before it
+  enters the frame in 02 → 03. (5) Chapter copy waits for the damped
+  camera, so a quick scroll no longer shows the next chapter's text over
+  the previous view; a nav jump of one chapter now goes behind the veil
+  (`jumpThreshold` 0.9; at 1 a jump of exactly one chapter flew through). (6) Phones: 香港 and 01's copy are gone
+  by 40% of the sink (was 60%), before they cross the moon and skyline.
+  Files: `src/scroll/cameraRig.js`, `src/data/chapters.js` (camera `via`
+  and `viaTurn` for 02 and 04, junk marks in 03 phones and 05,
+  `jumpThreshold`, phone wordmark `fadeEnd`), `src/main.js` (junk and
+  ferry gate windows, damped copy, phone hero fade),
+  `src/ui/copyLayer.js`; plan: `README.md` ("Transitions"). Evidence in
+  `review-shots/transitions/fix/`.
 - **Global print texture: keep clean** (user choice, 2026-10-03): a
   temporary proof (`?texture=grain|print`, fixed CSS layer over the canvas
   with an original 128 px grain tile, soft vignette and fine halftone) was

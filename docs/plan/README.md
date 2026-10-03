@@ -206,6 +206,27 @@ clouds near them in their own colour ([atmosphere.md](atmosphere.md)).
 Then, because the left half read as empty (user request), smaller, fainter
 bursts, a smoke puff and a cloud tail were added on the left, below the copy.
 
+## Transitions (user request, 2026-10-03)
+
+A continuous review of the whole journey
+(`review-shots/transitions/TRANSITION-REVIEW.md`) found six transition
+issues; the user approved all six, fixed in order with the holds left
+as they were:
+
+1. The camera keeps an even pace by distance through each move, and its
+   look turns with distance; a move can set the share of the turn at each
+   waypoint (`viaTurn`) where the default turns too early.
+2. 04 → 05 passes round the junk (about 11 m clear), which fades only
+   once it has left the frame.
+3. 02 → 03: the Clock Tower slides out steadily as the ferry takes over.
+4. Phones: the hidden junk never shows half-faded in 02 → 03 or 03 → 04,
+   and the ferry is fully shown before it enters the frame.
+5. Copy follows the damped camera, so quick scrolling never puts the next
+   chapter's text over the previous view; any nav jump of one chapter or
+   more goes behind the veil.
+6. Phones: 香港 and 01's copy fade out by 40% of the sink, before they
+   cross the moon.
+
 **Not in the look test:** 3D models (GLBs; later dropped altogether, all 3D
 is built in code, user decision 2026-10-01), real fireworks, the sparkle cursor,
 particles in other chapters, sound, final copy and fonts.

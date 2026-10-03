@@ -148,6 +148,11 @@ function start(initGuard, header) {
     // The camera passes over the bush early in the 01 → 02 move: gone while
     // it is still 1.8 m clear of the crown.
     bush: { out: [0, 0.08] },
+    // The junk fades only once it has left the frame in the move to 05 (and,
+    // on phones, to 02); on desktop 01 → 02 it fades in the fastest part of the swing.
+    junk: { out: [0.4, 0.5] },
+    // Phones, 02 → 03: the ferry is shown before it enters the frame.
+    ferry: { in: [0, 0.1] },
   }, { afterglow: 0 });
 
   const rig = createCameraRig(camera, chapters, { hold: SCROLL.hold });
@@ -196,6 +201,16 @@ function start(initGuard, header) {
     world.setBloom({ ...look, strength: look.strength * BLOOM_SCALE });
   }
 
+  function placeWordmark() {
+    const spec = HERO.wordmark[breakpoint];
+    const opening = chapters[0].camera[breakpoint];
+    const openingFov = fovForAspect(opening.fov, width / height, breakpoint);
+    const intro = copy.copies[0];
+    const clearTop = spec.clear === undefined ? undefined : ((intro.offsetTop + intro.offsetHeight + spec.clear) / height) * 100;
+    wordmark.place({ ...opening, fov: openingFov }, width / height, spec, clearTop);
+    needsRender = true;
+  }
+
   function rebuild() {
     rig.setBreakpoint(breakpoint);
     rig.setAspect(width / height);
@@ -207,9 +222,7 @@ function start(initGuard, header) {
     foreground.setBreakpoint(breakpoint);
     copy.setBreakpoint(breakpoint);
     fireworks.place(breakpoint, width / height);
-    const opening = chapters[0].camera[breakpoint];
-    const openingFov = fovForAspect(opening.fov, width / height, breakpoint);
-    wordmark.place({ ...opening, fov: openingFov }, width / height, HERO.wordmark[breakpoint]);
+    placeWordmark();
     atmosphere.place(breakpoint, width / height);
     searchlights.setBreakpoint(breakpoint);
     world.sky.userData.setBreakpoint(breakpoint);
@@ -363,8 +376,9 @@ function start(initGuard, header) {
     state.breakpoint = breakpoint;
     state.motion = stepped ? 'stepped' : 'continuous';
     const hero = state.p < 0;
-    const heroFadeTo = state.pTop + (HERO.sinkEnd - state.pTop) * HERO.fadeEnd;
-    copy.update(state.p, { stepped, index: state.index, hero: { from: state.pTop, to: heroFadeTo } });
+    const heroFadeEnd = HERO.wordmark[breakpoint]?.fadeEnd ?? HERO.fadeEnd;
+    const heroFadeTo = state.pTop + (HERO.sinkEnd - state.pTop) * heroFadeEnd;
+    copy.update(state.p, { stepped, index: state.index, hero: { from: state.pTop, to: heroFadeTo }, rendered: state.pRendered });
     header.update(state.index, hero);
     // The fireworks soften into smoke over the first 60% of the footer's rise.
     const footerTop = footerElement.getBoundingClientRect().top;
@@ -395,7 +409,7 @@ function start(initGuard, header) {
       const parallaxOn = parallax.enabled && breakpoint === 'desktop';
       rig.setParallax(parallaxOn ? offset.x : 0, parallaxOn ? offset.y : 0);
       if (!control.free) applyPose(state.pRendered, false, time);
-      wordmark.sinkAt(state.pRendered, state.pTop, HERO.sinkEnd, HERO.fadeEnd);
+      wordmark.sinkAt(state.pRendered, state.pTop, HERO.sinkEnd, heroFadeEnd);
       water.update(dt);
       island.update(time);
       foreground.update(time);
@@ -457,6 +471,8 @@ function start(initGuard, header) {
   window.addEventListener('harbourfallback', pause);
   window.addEventListener('resize', resize);
   resize();
+  // 01's copy may grow once its fonts arrive; the phone wordmark keeps clear of it.
+  document.fonts?.ready.then(placeWordmark);
   applyMotionMode();
 
   // Deep links land on a chapter's hold pose rather than its section top.

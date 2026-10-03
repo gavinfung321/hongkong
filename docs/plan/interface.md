@@ -74,6 +74,11 @@ Agreed with the user:
   the same distance the water placement had, so its size, haze and the
   first-scroll sink and fade are unchanged (`depth` in the `HERO` block,
   `place()` in `createWordmark.js`). Desktop still stands on the water.
+  On shorter phone screens (a browser's toolbars showing, small phones)
+  01's copy reached down over the top of 香港 (user request, 2026-10-03):
+  the word now keeps 14 px clear below the copy, its feet moving down to
+  48% at most (over the top of the moon), then shrinking instead (`clear`
+  and `maxFoot` in the `HERO` block). At 390×844 it is as before.
 - **Exit:** from the first scroll it moves down out of the frame and fades,
   while the camera pushes in (chapter 01's `holdDolly`, which now starts at
   the top of the page instead of at the hold). Both start immediately, with no
