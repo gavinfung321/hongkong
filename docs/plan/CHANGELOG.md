@@ -6,6 +6,17 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Depth haze, atmospheric depth Stage 2** (user request, 2026-10-03):
+  four tall, separate mist wisps on the water about 200 m in front of the
+  waterfront soften the podiums and the towers' feet in 01–04, so the
+  skyline reads in layers. Unfogged, city-lit tint, slow seeded drift,
+  still in reduced motion; a gap keeps the wheel and IFC clear and lets
+  the camera pass into 05 without crossing a wisp. Levels: 01 0.5, 02 0.8,
+  03 1, 04 0.7, 05 and 06 0. `?off=haze` hides it, `?haze=` scales it. A
+  second band among the towers was tried and removed (hidden by the front
+  rows). Approved. Files: `src/data/atmosphere.js`,
+  `src/scene/createAtmosphere.js`, `src/data/chapters.js`, `src/main.js`;
+  plan: `atmospheric-depth-polish.md`.
 - **Screen vignette, atmospheric depth Stage 1** (user request, 2026-10-03;
   vignette only, no grain, user choice): one fixed CSS layer between the
   3D canvas and the copy darkens the corners by about 24% on desktop and

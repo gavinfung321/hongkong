@@ -90,7 +90,7 @@ than leaving its status ambiguous.
   (shortened, user choice: hold captures only, no scroll recordings)
 - [x] Stage 1 — Global vignette (grain **removed**, user choice 2026-10-03)
   — approved 2026-10-03
-- [ ] Stage 2 — Atmospheric occlusion and depth haze
+- [x] Stage 2 — Atmospheric occlusion and depth haze — approved 2026-10-03
 - [ ] Stage 3 — Localized light and reflection breathing
 - [ ] Stage 4 — Chapter 05 foreground prototype
 - [ ] Stage 5 — Chapter 03 near-atmosphere
@@ -319,6 +319,24 @@ Build on the existing mist system rather than adding a full-screen fog layer.
   subject.
 - No grey film, straight mist belt or washed-out water reflections.
 - Copy contrast remains at least 4.5:1.
+
+### Stage 2 record
+
+| Field | Record |
+|---|---|
+| Status | Approved |
+| Started | 2026-10-03 |
+| Completed | 2026-10-03 |
+| Implementation files | `src/data/atmosphere.js` (`HAZE`), `src/scene/createAtmosphere.js` (`setHaze`), `src/data/chapters.js` (`haze` levels), `src/main.js` (gating, `?off=haze`, `?haze=` scale) |
+| Feature switch | `?off=haze` hides it; `?haze=2` scales it for tuning. `?off=mist` unchanged |
+| What it is | One band of four tall mist wisps on the water about 200 m in front of the waterfront (z −890 to −930, 45–55 m tall), with a gap from x 230 to 510 that keeps the wheel and IFC clear and lets the camera cross that depth into and out of 05 without a wisp passing the lens. With the shore mist and the mountain-foot haze it gives three depth layers at the skyline's foot |
+| Look | Unfogged and tinted like humid air lit by the city (fogged at that range, it took the fog's dark colour and disappeared). Opacity 0.6–0.65 at full level; feathered edges, seeded slow drift against the shore mist's direction (70–95 s periods); held still in reduced motion |
+| Levels | 01 0.5 · 02 0.8 · 03 1 · 04 0.7 · 05 0 · 06 0 (both screen sizes), easing across each whole move |
+| Removed | A second band lifted among the towers (z ≈ −1370, y 110–150): the front rows hid nearly all of it, so it cost four draw calls for no visible gain |
+| Desktop holds checked | Hero (香港 clear), 02 (haze behind palms, tower face crisp), 03 (mist banks at the waterfront's foot, wheel and IFC crisp), 04 (softens the far shore left of the junk), 05 (no haze; IFC and wheel crisp) |
+| Mobile | 03 checked: barely present, composition unchanged |
+| Performance | Four extra transparent cards, one draw call each when on screen; shader shared with the existing mist (no new program) |
+| Decision | Keep (user approval, 2026-10-03) |
 
 ## 8. Stage 3 — Localized light and reflection breathing
 
@@ -561,5 +579,5 @@ For every approved stage:
 
 ## 16. Immediate next action
 
-Review the Stage 1 vignette (built 2026-10-03, vignette only). Do not begin
-haze, foreground, light breathing or drizzle until Stage 1 is approved.
+Implement **Stage 3 only: localized light and reflection breathing**. Do
+not begin foregrounds or drizzle until Stage 3 is approved.
