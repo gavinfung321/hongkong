@@ -215,9 +215,11 @@ export const chapters = [
       // city: the other towers and their LEDs at 40% so the ferry, IFC and
       // the wheel lead, as the storyboard asks (user choice, 2026-10-03).
       // petals 0.3: few petals out on the open water (atmospheric depth
-      // Priority F, user choice, 2026-10-04).
-      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 0.8, seaMist: 0, haze: 1, searchlights: 0 },
-      mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 0.8, seaMist: 0, haze: 1, searchlights: 0 },
+      // Priority F, user choice, 2026-10-04). buoy: the channel buoy
+      // (atmospheric depth Priority 2, user choice, 2026-10-04;
+      // createBuoy.js).
+      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 0.8, seaMist: 0, haze: 1, searchlights: 0, buoy: 1 },
+      mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 0.8, seaMist: 0, haze: 1, searchlights: 0, buoy: 1 },
     },
     fogDensity: 0.00045,
     // The ferry holds its place on the water through the hold (no drift on
@@ -332,9 +334,11 @@ export const chapters = [
       // city: the towers around IFC at 60%, so IFC leads (user choice, 2026-10-02).
       // accents: LED crowns, strips and the four landmarks down to a quarter
       // of that; reflections: IFC's and the wheel's columns twice as long and
-      // bright (user choices, 2026-10-03).
-      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, accents: 0.25, reflections: 2, mist: 0.4, seaMist: 0, searchlights: 1 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, accents: 0.25, reflections: 2, mist: 0.4, seaMist: 0, searchlights: 0.7 },
+      // bright (user choices, 2026-10-03). bollard: the harbour-edge
+      // bollard and chain (atmospheric depth Priority 2, user choice,
+      // 2026-10-04; createBollard.js).
+      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, accents: 0.25, reflections: 2, mist: 0.4, seaMist: 0, searchlights: 1, bollard: 1 },
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, accents: 0.25, reflections: 2, mist: 0.4, seaMist: 0, searchlights: 0.7, bollard: 1 },
     },
     fogDensity: 0.00045,
     // The ferry and junk are hidden from here on. The ferry keeps behind the

@@ -6,6 +6,32 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **Phone versions of the 05 bollard and 03 buoy** (user choice,
+  2026-10-04): mobile 05 gets the bollard in its lower right under IFC's
+  foot (3 m out, head below eye height); mobile 03 gets a smaller buoy
+  (0.45 scale) close in the lower left under the ferry, since IFC's and the
+  wheel's water columns cross the lower right. Both now reposition per
+  screen size. Awaiting approval. Files: `src/scene/createBollard.js`,
+  `src/scene/createBuoy.js`, `src/main.js`, `src/data/chapters.js`; plan:
+  `atmospheric-depth-polish.md`.
+- **Chapter 03 channel buoy** (user choice, 2026-10-04; the 05 bollard
+  kept): one dark red port-hand buoy on the open water 20 m out in the lower
+  right of the desktop 03 frame, right of the ferry, rocking slowly with the
+  swell (still in reduced motion). Fades in over the second half of the
+  move into 03. Desktop only. Bollards are not repeated in other chapters
+  (01 and 02 are already framed; 03, 04 and 06 are on the water or in the
+  air). Awaiting approval. Files: `src/scene/createBuoy.js` (new),
+  `src/main.js`, `src/data/chapters.js`; plan:
+  `atmospheric-depth-polish.md`.
+- **Chapter 05 harbour-edge bollard, atmospheric depth Priority 2** (user
+  choice, 2026-10-04; Priority F approved): one dark cast-iron mooring
+  bollard with a short sagging chain in the lower right of the desktop 05
+  frame, base cropped by the bottom edge. It follows 92% of the mouse
+  parallax, so it moves far more than the skyline, and fades in only as the
+  camera settles into 05. Desktop only. Awaiting approval. Files:
+  `src/scene/createBollard.js` (new), `src/main.js`,
+  `src/scroll/cameraRig.js`, `src/data/chapters.js`; plan:
+  `atmospheric-depth-polish.md`.
 - **Per-chapter withholding, atmospheric depth Priority F** (user choice,
   2026-10-04; Priority E approved): visibility gates only. 01: petals
   0.5, skyline 0.75; its searchlights stay at 0.6 (briefly removed, put

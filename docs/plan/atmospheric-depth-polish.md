@@ -219,6 +219,55 @@ view. The foreground supports the scene without becoming a second subject.
 If the first prototype looks pasted on or the improvement is not obvious,
 remove it and stop this task.
 
+### Built 2026-10-04, awaiting approval
+
+- The bollard and short chain (user choice, 2026-10-04), desktop only. A
+  cast-iron mooring bollard (flange, waisted body, lipped head, domed cap;
+  0.83 m) in the lower right of the 05 desktop frame, its base cropped by
+  the bottom edge, with a short chain of oval links sagging from its neck
+  toward the left and out of frame. Dark iron (0x26211d), lit only by the
+  scene's moon and sky light.
+- Placed from the 05 desktop pose: 1.9 m ahead, 1.4 m right, its head
+  0.2 m above eye height (the 05 camera looks steeply up, so only things
+  near eye height show at the bottom of the frame). Roughly 74–87% across
+  and the bottom 17% of a 1440 × 900 window.
+- Parallax: it follows 92% of the mouse parallax shift, so it moves about
+  ten times more than the skyline but never swings out of frame.
+- A `bollard` gate (0 everywhere, 1 in desktop 05) fades it in only in the
+  last 15% of the move into 05 and out in the first 10% of the move to 06.
+  Mobile 05 is unchanged.
+- `src/scene/createBollard.js` (`BOLLARD`), `rig.shift` in `cameraRig.js`,
+  gate in `main.js` and `chapters.js`.
+- Kept by the user, 2026-10-04. Not repeated elsewhere: 01 and 02 are
+  already framed by railing, tree, bush and palms, and the 03, 04 and 06
+  cameras are on the water or in the air, where a bollard would float.
+
+### 03 channel buoy (user choice, 2026-10-04), approved 2026-10-04
+
+- The one open-water equivalent: a dark red port-hand channel buoy
+  (fendered float, pillar, can topmark; 2.6 m above the water) 20 m ahead
+  and 5.8 m right of the 03 desktop camera, in the lower right (about 64–70%
+  across, 59–72% down), right of the ferry and clear of IFC's and the
+  wheel's water columns. It heaves 7 cm and rolls and pitches about 2° with
+  the swell; still in reduced motion. Lit only by the moon and sky.
+- A `buoy` gate (1 in desktop 03 only) fades it in over the second half of
+  the move into 03 and out between 20% and 50% of the move to 04. Mobile 03
+  and chapter 04 unchanged.
+- `src/scene/createBuoy.js` (`BUOY`), gate in `main.js` and `chapters.js`.
+
+### Phone versions (user choice, 2026-10-04), approved 2026-10-04
+
+- Mobile 05 bollard: 3 m ahead, 0.65 m right, its head 0.55 m below eye
+  height (the phone camera looks up less, so more shows): about 63–97%
+  across and the bottom 15% of the frame, under IFC's foot (IFC ends at
+  80% down).
+- Mobile 03 buoy: IFC's and the wheel's water columns cross the lower
+  right, so a smaller buoy (0.45 scale, about 1.2 m above the water) sits
+  4.6 m out in the lower left, about 76–96% down, just under the ferry's
+  hull.
+- Both are repositioned per screen size (`setBreakpoint`); the `bollard`
+  and `buoy` gates are now 1 in mobile 05 and mobile 03 too.
+
 ## Priority 3 — Final chapter balance
 
 Only after priorities 1 and 2:
@@ -258,10 +307,11 @@ disable or remove it rather than expanding it.
 - [x] Priority D: veiled moon — approved 2026-10-04
 - [x] Priority E: quieter sky and palette — approved 2026-10-04
 - [x] Priority F: per-chapter withholding — approved 2026-10-04
-- [ ] Priority 2: test one chapter 05 foreground object
+- [x] Priority 2: test one chapter 05 foreground object — 05 bollard, 03 buoy and their phone versions approved 2026-10-04
 - [ ] Priority 3: one desktop and one mobile sequence review
 - [ ] Update the changelog with only the final kept decisions
 
 ## Immediate next action
 
-Priority 2: test one chapter 05 foreground object.
+Priority 3: final chapter balance (no screenshots, user request,
+2026-10-04).
