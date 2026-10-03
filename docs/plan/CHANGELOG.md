@@ -6,6 +6,16 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Final copy** (user request): the approved `FINAL-NARRATIVE-COPY.md`
+  is live. Six chapter bodies, kickers 04 ("Junk with red sails") and 05
+  ("Two IFC"), page title, hidden H1, meta description and Open Graph
+  title and description; placeholder markers removed; menu and footer
+  return accessible names; footer landmarks with commas and without the
+  Observation Wheel. Copy fit: footer statement three lines on desktop and
+  four on phones (mark above it on phones), balanced footer headings.
+  Status in `FINAL-NARRATIVE-COPY.md` set to approved. No scene, camera,
+  animation or asset files changed. Files: `index.html`, `src/styles.css`,
+  `docs/FINAL-NARRATIVE-COPY.md`; plan: `interface.md`.
 - **Footer fireworks kept** (user request: too few fireworks behind the
   footer): instead of fading out, the bursts now dim to half strength and
   the smoke to 70% at the footer. Files: `src/scene/createFireworks.js`;

@@ -6,9 +6,15 @@
     <meta name="theme-color" content="#1e1b36" />
     <meta
       name="description"
-      content="A cinematic night crossing of Victoria Harbour, from the Kowloon waterfront to Hong Kong Island."
+      content="A cinematic journey across Victoria Harbour at night, from the Clock Tower and Star Ferry to Central, Two IFC and fading fireworks."
     />
-    <title>Victoria Harbour — A Night Crossing</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Victoria Harbour: A Night Crossing" />
+    <meta
+      property="og:description"
+      content="Cross Victoria Harbour through six cinematic chapters of water, vessels, landmarks and light."
+    />
+    <title>Victoria Harbour: A Night Crossing</title>
     <link rel="stylesheet" href="/src/styles.css" />
     <!-- While the 3D scene loads, only the night sky shows: no fallback poster
          art, no text in its plain layout. main.js lifts this on the first 3D
@@ -82,14 +88,14 @@
       </nav>
       <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-menu">
         <span class="menu-button__bars" aria-hidden="true"></span>
-        <span class="visually-hidden">Menu</span>
+        <span class="visually-hidden">Open chapter menu</span>
       </button>
     </header>
 
     <div class="site-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Chapters" hidden>
       <button class="site-menu__close" type="button">
         <span aria-hidden="true">✕</span>
-        <span class="visually-hidden">Close menu</span>
+        <span class="visually-hidden">Close chapter menu</span>
       </button>
       <ol class="site-menu__list">
         <li><a href="#chapter-01" data-nav-index="0"><span class="site-menu__index">01</span><span class="site-menu__title">Harbour at Dusk</span><span class="site-menu__label" lang="zh-Hant">維港</span></a></li>
@@ -134,17 +140,17 @@
 
     <main id="story" class="story">
       <section class="hero" id="top" aria-labelledby="site-title">
-        <h1 class="visually-hidden" id="site-title" tabindex="-1">Victoria Harbour — A Night Crossing</h1>
+        <h1 class="visually-hidden" id="site-title" tabindex="-1">Victoria Harbour: A Night Crossing</h1>
       </section>
 
-      <!-- PLACEHOLDER COPY: working text for layout testing only. Final copy is written in a later milestone. -->
       <section class="chapter" id="chapter-01" data-chapter="01" aria-labelledby="chapter-01-title">
         <div class="chapter__copy">
           <p class="chapter__index">01</p>
           <p class="chapter__kicker">Victoria Harbour</p>
           <h2 class="chapter__title" id="chapter-01-title">Harbour at Dusk</h2>
-          <p class="chapter__body" data-copy="placeholder">
-            Night settles on the water, and the island begins to glow.
+          <p class="chapter__body">
+            Night gathers on the water. Across the harbour, windows kindle beneath the Peak, and the night
+            crossing begins.
           </p>
         </div>
       </section>
@@ -154,8 +160,9 @@
           <p class="chapter__index">02</p>
           <p class="chapter__kicker">Clock Tower</p>
           <h2 class="chapter__title" id="chapter-02-title">The Kowloon Edge</h2>
-          <p class="chapter__body" data-copy="placeholder">
-            The old Clock Tower marks the point of departure.
+          <p class="chapter__body">
+            The old railway clock still faces the harbour. It marks the shore where the city’s railway
+            journeys north once began.
           </p>
         </div>
       </section>
@@ -165,8 +172,9 @@
           <p class="chapter__index">03</p>
           <p class="chapter__kicker">Star Ferry</p>
           <h2 class="chapter__title" id="chapter-03-title">Across the Water</h2>
-          <p class="chapter__body" data-copy="placeholder">
-            At wave height, the Star Ferry carries its lit windows toward Central.
+          <p class="chapter__body">
+            Low over the waves, the Star Ferry carries its warmly lit decks from Kowloon toward Central,
+            steady against the restless water.
           </p>
         </div>
       </section>
@@ -174,10 +182,11 @@
       <section class="chapter" id="chapter-04" data-chapter="04" aria-labelledby="chapter-04-title">
         <div class="chapter__copy">
           <p class="chapter__index">04</p>
-          <p class="chapter__kicker">The Junk</p>
+          <p class="chapter__kicker">Junk with red sails</p>
           <h2 class="chapter__title" id="chapter-04-title">Red Sails</h2>
-          <p class="chapter__body" data-copy="placeholder">
-            A junk slides alongside, its red sails catching the city light.
+          <p class="chapter__body">
+            A junk with red sails passes close enough to fill the night, its dark hull slipping through the
+            reflected city.
           </p>
         </div>
       </section>
@@ -185,10 +194,11 @@
       <section class="chapter" id="chapter-05" data-chapter="05" aria-labelledby="chapter-05-title">
         <div class="chapter__copy">
           <p class="chapter__index">05</p>
-          <p class="chapter__kicker">IFC</p>
+          <p class="chapter__kicker">Two IFC</p>
           <h2 class="chapter__title" id="chapter-05-title">City of Light</h2>
-          <p class="chapter__body" data-copy="placeholder">
-            IFC rises over Central, the Observation Wheel turning at its feet.
+          <p class="chapter__body">
+            Two IFC rises above Central, its bright crown drawing the crossing toward a wall of glass, steel
+            and harbour light.
           </p>
         </div>
       </section>
@@ -198,15 +208,20 @@
           <p class="chapter__index">06</p>
           <p class="chapter__kicker">Departure</p>
           <h2 class="chapter__title" id="chapter-06-title">Afterglow</h2>
-          <p class="chapter__body" data-copy="placeholder">
-            The last fireworks fade above the city. The crossing ends quietly here.
+          <p class="chapter__body">
+            The skyline falls away. Fireworks open above the harbour, then soften into smoke, leaving the city
+            to the dark.
           </p>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
-      <a class="pill-link site-footer__return" href="#top">
+      <a
+        class="pill-link site-footer__return"
+        href="#top"
+        aria-label="Return to the beginning of the harbour crossing"
+      >
         Return to the harbour
         <svg class="pill-link__arrow" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
           <path d="M6 11 V1.5 M1.75 5.75 L6 1.5 L10.25 5.75" />
@@ -240,11 +255,10 @@
         <section class="site-footer__column" aria-labelledby="footer-landmarks">
           <h2 class="site-footer__heading" id="footer-landmarks">Landmarks and vessels</h2>
           <ul>
-            <li>Clock Tower <span class="site-footer__year">completed 1915</span></li>
-            <li>Star Ferry <span class="site-footer__year">origins in 1880</span></li>
-            <li>Chinese junk <span class="site-footer__year">before the 1950s</span></li>
-            <li>Two IFC <span class="site-footer__year">completed 2003</span></li>
-            <li>Observation Wheel <span class="site-footer__year">opened 2014</span></li>
+            <li>Clock Tower, <span class="site-footer__year">completed 1915</span></li>
+            <li>Star Ferry, <span class="site-footer__year">origins in 1880</span></li>
+            <li>Chinese junk, <span class="site-footer__year">before the 1950s</span></li>
+            <li>Two IFC, <span class="site-footer__year">completed 2003</span></li>
           </ul>
         </section>
         <section class="site-footer__column" aria-labelledby="footer-colophon">
