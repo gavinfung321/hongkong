@@ -6,6 +6,13 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Global print texture: keep clean** (user choice, 2026-10-03): a
+  temporary proof (`?texture=grain|print`, fixed CSS layer over the canvas
+  with an original 128 px grain tile, soft vignette and fine halftone) was
+  compared at identical frames. At the brief's starting values the grain
+  moved pixels by only 1 to 3 levels, the halftone by at most 1, with no sky
+  gain, so the site stays clean. The proof code and tile were removed; no
+  site files changed.
 - **Desktop counter and author credit** (user choices): desktop shows
   "01 / 06" under "Scroll to cross" on the opening screen, as phones do;
   the footer bar reads "© 2026 Gavin Fung", the colophon opens with
@@ -13,7 +20,7 @@ lives in the dated notes inside each area file, and in `git log`.
   https://hkaiautomation.com/, and the head gains an author meta tag.
   Files: `index.html`, `src/styles.css`; docs: `FINAL-NARRATIVE-COPY.md`;
   plan: `interface.md`.
-- **Typography system** (user request; not committed, awaiting review):
+- **Typography system** (user request):
   self-hosted Cormorant Garamond 600, Inter variable 400 to 600, Noto Serif
   TC 600 and 700, Noto Sans TC 500 as WOFF2 subsets (101.2 KB total, all on
   first view) with OFL licences; four font tokens and the brief's roles and
