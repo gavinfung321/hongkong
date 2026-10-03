@@ -1,5 +1,7 @@
 // Places each chapter's copy inside its copy-safe region and fades it by the
-// un-damped scroll progress, so text never lags the scrollbar.
+// un-damped scroll progress, so text never lags the scrollbar, but no further
+// in than the damped camera allows: on a quick scroll a chapter's copy waits
+// for its scene instead of flashing over the previous one.
 import { smoothstep } from '../scroll/cameraRig.js';
 
 const RISE = 48; // px travelled while fading: in from below, out through the top
@@ -29,9 +31,10 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
   }
 
   // In stepped mode only the active chapter's copy is shown.
-  function update(p, { stepped = false, index = 0, hero } = {}) {
+  function update(p, { stepped = false, index = 0, hero, rendered = p } = {}) {
     copies.forEach((copy, i) => {
-      const value = stepped ? (i === index ? 1 : 0) : Math.round(opacityAt(p, i, hero) * 100) / 100;
+      const shown = i === 0 ? opacityAt(p, i, hero) : Math.min(opacityAt(p, i, hero), opacityAt(rendered, i, hero));
+      const value = stepped ? (i === index ? 1 : 0) : Math.round(shown * 100) / 100;
       if (value === opacities[i]) return;
       opacities[i] = value;
       const leaving = i === 0 || p > i + 0.5;
