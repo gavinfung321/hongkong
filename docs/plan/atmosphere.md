@@ -57,6 +57,8 @@ The site should feel like a humid, cinematic Victoria Harbour evening:
   violet-grey cloud streaks drifts slowly across it, so it is partly
   concealed; it holds still in reduced motion (user choice, 2026-10-04).
 - `VEIL` in `src/scene/createMoon.js`. Approved 2026-10-04 (user approval).
+- Per-chapter level (`moon` gate, user choice, 2026-10-04): 0.75 in 01, 0.5
+  in 06, 0.6 in phone 04; the disc, halo and water column dim together.
 
 ### Quieter sky
 

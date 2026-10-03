@@ -23,6 +23,7 @@ file (user choice, 2026-10-02).
 | [`scene-city.md`](scene-city.md) | Central towers, mountains, landmarks, window lights, painted facades, glow, film grade, wakes | 4.5 stop 6, parts 1–3f |
 | [`atmosphere.md`](atmosphere.md) | Clouds, shore mist, open-water wisps, searchlights, fireworks in 06 (no bow spray) | 4.5 stop 6, part 3g |
 | [`atmospheric-depth-polish.md`](atmospheric-depth-polish.md) | Step-by-step vignette, grain, depth haze, local light motion and selective foreground experiments | Post-Milestone 2 polish |
+| [`narrative-spine.md`](narrative-spine.md) | Hybrid 3D and editorial-story direction, six-chapter arc and scene 02 prototype gate | Post-Milestone 2 narrative test |
 | [`checks.md`](checks.md) | Performance budget and acceptance checks | 5, 8 |
 | [`CHANGELOG.md`](CHANGELOG.md) | Dated history of changes, newest first; the old files list | 7 |
 | [`HANDOFF.md`](HANDOFF.md) | Briefing for a fresh chat: how we work, standing rules, the next task | — |

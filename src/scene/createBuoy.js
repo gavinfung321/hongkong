@@ -8,6 +8,7 @@ import {
   Vector3,
 } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { rimLight } from './rimLight.js';
 
 // Chapter 03's open-water cue (atmospheric depth Priority 2, user choice,
 // 2026-10-04): one dark red port-hand channel buoy on the water. Placed from
@@ -23,6 +24,9 @@ const BUOY = {
   desktop: { ahead: 20, side: 5.8, scale: 1 },
   mobile: { ahead: 4.6, side: -0.9, scale: 0.45 },
   colour: 0x4a1f1c,
+  // A faint cool edge of city light [colour, strength] (Priority 3 balance,
+  // user choice, 2026-10-04).
+  rim: [0x8fa6d8, 0.25],
   heave: [0.07, 0.7],
   roll: [0.035, 0.55],
   pitch: [0.025, 0.8],
@@ -49,7 +53,7 @@ function buoyGeometry() {
 export function createBuoy(camera) {
   const group = new Group();
   group.name = 'buoy';
-  const material = new MeshLambertMaterial({ color: BUOY.colour, transparent: true });
+  const material = rimLight(new MeshLambertMaterial({ color: BUOY.colour, transparent: true }), ...BUOY.rim);
   const body = new Mesh(buoyGeometry(), material);
   group.add(body);
 

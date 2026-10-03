@@ -283,7 +283,7 @@ export function createMoon() {
 
   const disc = new Mesh(
     new PlaneGeometry(1, 1),
-    new MeshBasicMaterial({ map: drawDisc(seed), color: new Color(VEIL.disc, VEIL.disc, VEIL.disc), transparent: true, depthWrite: false, fog: false }),
+    new MeshBasicMaterial({ map: drawDisc(seed), color: new Color().setScalar(VEIL.disc), transparent: true, depthWrite: false, fog: false }),
   );
   disc.scale.setScalar(radius * 2);
 
@@ -304,5 +304,12 @@ export function createMoon() {
   function update(seconds) {
     streaks.offset.x = VEIL.start + seconds * VEIL.speed;
   }
-  return { group, update };
+
+  // Per-chapter brightness (the `moon` gate, user choice, 2026-10-04): the
+  // disc and halo dim together; the veil stays.
+  function setLevel(value) {
+    disc.material.color.setScalar(VEIL.disc * value);
+    halo.material.opacity = value;
+  }
+  return { group, update, setLevel };
 }

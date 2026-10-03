@@ -171,7 +171,15 @@ async function start(initGuard, header, loading) {
     afterglow: (value) => world.sky.userData.setAfterglow(value),
     bollard: (value) => bollard.setOpacity(value),
     buoy: (value) => buoy.setOpacity(value),
+    moon: (value) => {
+      moon.setLevel(value);
+      water.setFade('moon', value);
+    },
+    junkGlow: (value) => water.setFade('junkGlow', value),
   }, {
+    // The moon and the junk's sail reflection change gently across the whole move.
+    moon: { in: [0, 1], out: [0, 1] },
+    junkGlow: { in: [0, 1], out: [0, 1] },
     // The 03 buoy comes in over the second half of the move into 03 and is
     // gone early in the move to 04.
     buoy: { in: [0.5, 1], out: [0.2, 0.5] },

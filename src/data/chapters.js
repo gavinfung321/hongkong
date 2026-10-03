@@ -100,10 +100,12 @@ export const chapters = [
       // No shore mist on desktop: from here its drifts join the wisps into one band.
       // Withheld (atmospheric depth Priority F, user choice, 2026-10-04): half
       // the petals, skyline at 75%. Searchlights stay (01 and 05 only).
-      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 0, bauhinia: 1, bush: 1, bursts: 0, petals: 0.5, city: 0.75, mist: 0, seaMist: 1, haze: 0.5, searchlights: 0.6 },
+      // moon 0.75 and the junk's sail reflection at half, so the Clock Tower
+      // leads (Priority 3 balance, user choice, 2026-10-04).
+      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 0, bauhinia: 1, bush: 1, bursts: 0, petals: 0.5, city: 0.75, mist: 0, seaMist: 1, haze: 0.5, searchlights: 0.6, moon: 0.75, junkGlow: 0.5 },
       // No deck: the mobile storyboard has open water right to the bottom edge.
       // Palms at the tower's foot, as in the storyboard (user choice, 2026-10-03).
-      mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, deck: 0, railing: 0, palms: 1, bauhinia: 0, bush: 0, bursts: 0, petals: 0.5, city: 0.75, mist: 0.6, seaMist: 1, haze: 0.5, searchlights: 0 },
+      mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, deck: 0, railing: 0, palms: 1, bauhinia: 0, bush: 0, bursts: 0, petals: 0.5, city: 0.75, mist: 0.6, seaMist: 1, haze: 0.5, searchlights: 0, moon: 0.75, junkGlow: 0.5 },
     },
     fogDensity: 0.00045,
     vessels: {
@@ -286,9 +288,11 @@ export const chapters = [
     // city: the skyline behind the sails stays at 40%, as in 03, so the
     // sails lead and the full city waits for 05 (user choice, 2026-10-03).
     // petals 0.3, as in 03 (atmospheric depth Priority F, user choice, 2026-10-04).
+    // Phones: moon 0.6, as it sits right behind the copy's last line
+    // (Priority 3 balance, user choice, 2026-10-04).
     visibility: {
       desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 1, seaMist: 0, haze: 0.7, searchlights: 0 },
-      mobile: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 1, seaMist: 0, haze: 0.7, searchlights: 0 },
+      mobile: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 1, seaMist: 0, haze: 0.7, searchlights: 0, moon: 0.6 },
     },
     fogDensity: 0.00063,
     vessels: {
@@ -382,8 +386,9 @@ export const chapters = [
     visibility: {
       // city: the towers around IFC stay at 60%, as in 05 (user request, 2026-10-02);
       // accents stay at 05's quarter so IFC's crown leads (user choice, 2026-10-03).
-      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 1, petals: 0, city: 0.6, accents: 0.25, mist: 0.15, seaMist: 0, searchlights: 0 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 1, petals: 0, city: 0.6, accents: 0.25, mist: 0.15, seaMist: 0, searchlights: 0 },
+      // moon 0.5, so the fireworks lead (Priority 3 balance, user choice, 2026-10-04).
+      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 1, petals: 0, city: 0.6, accents: 0.25, mist: 0.15, seaMist: 0, searchlights: 0, moon: 0.5 },
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 1, petals: 0, city: 0.6, accents: 0.25, mist: 0.15, seaMist: 0, searchlights: 0, moon: 0.5 },
     },
     fogDensity: 0.00036,
     vessels: {
@@ -419,13 +424,15 @@ export const chapters = [
         { x: 22, y: 48, size: 13, color: 'coral', strength: 0.7, rotate: 170, squash: 0.93, at: 2.2 },
         { x: 36, y: 36, size: 10, color: 'warm', strength: 0.65, rotate: 290, mirror: true, at: 5.8 },
       ],
+      // Phones: the two warm heroes sit right of the copy's edge (66%), smaller
+      // (Priority 3 balance, user choice, 2026-10-04: they ran over its last words).
       mobile: [
-        { x: 84, y: 26, size: 46, color: 'warm', strength: 1, rotate: 20, at: 0 },
+        { x: 88, y: 27, size: 38, color: 'warm', strength: 1, rotate: 20, at: 0 },
         { x: 54, y: 42, size: 35, color: 'coral', strength: 1, rotate: 150, mirror: true, at: 1.4 },
         { x: 88, y: 44, size: 16, color: 'cyan', strength: 0.6, rotate: 260, squash: 0.9, at: 2.8 },
         { x: 90, y: 57, size: 24, color: 'coral', strength: 0.35, rotate: 75, mirror: true, squash: 0.92, at: 6 },
         { x: 62, y: 58, size: 24, color: 'coral', strength: 0.85, rotate: 200, squash: 0.94, at: 3.05 },
-        { x: 76, y: 28, size: 40, color: 'warm', strength: 1, rotate: 110, mirror: true, at: 4.6 },
+        { x: 84, y: 30, size: 34, color: 'warm', strength: 1, rotate: 110, mirror: true, at: 4.6 },
         { x: 26, y: 52, size: 22, color: 'coral', strength: 0.7, rotate: 170, squash: 0.93, at: 2 },
       ],
     },

@@ -6,6 +6,22 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **05 bollard parallax calmed** (user request, 2026-10-04): it read as
+  flying over the water. Its own movement against the skyline is cut to
+  about a third (it follows 97.5% of the camera's parallax shift, was
+  92%) and its chain drops more steeply out of frame. A stone quay ledge
+  under it was tried and removed (user request). Awaiting approval.
+  Files: `src/scene/createBollard.js`; plan: `atmospheric-depth-polish.md`.
+- **Final chapter balance, atmospheric depth Priority 3** (user choice,
+  2026-10-04): after a desktop and phone walkthrough, the moon dims per
+  chapter (new `moon` gate: 0.75 in 01, 0.5 in 06, 0.6 in phone 04, with
+  its water column), the junk's sail reflection is halved in 01 (new
+  `junkGlow` gate), phone 06's two warm bursts move clear of the copy, and
+  the bollard and buoy get a faint cool edge light. Awaiting approval.
+  Files: `src/scene/createMoon.js`, `waterReflections.js`, `createWater.js`,
+  `rimLight.js` (new), `createBollard.js`, `createBuoy.js`, `src/main.js`,
+  `src/data/chapters.js`; plan: `atmospheric-depth-polish.md`,
+  `atmosphere.md`.
 - **Phone versions of the 05 bollard and 03 buoy** (user choice,
   2026-10-04): mobile 05 gets the bollard in its lower right under IFC's
   foot (3 m out, head below eye height); mobile 03 gets a smaller buoy

@@ -467,7 +467,7 @@ export function createWater(renderer, glow) {
     const limit = REFLECT.max[breakpoint] ?? MAX;
     kept.length = 0;
     for (const s of sources) {
-      const fade = s.key ? (fades[s.key] ?? 1) : 1;
+      const fade = (s.key ? (fades[s.key] ?? 1) : 1) * (s.dim ? (fades[s.dim] ?? 1) : 1);
       if (fade <= 0.001) continue;
       let width = s.width;
       if (s.follow) {
