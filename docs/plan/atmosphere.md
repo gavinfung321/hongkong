@@ -336,3 +336,8 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
   a bank behind the ferry's mast); on phones a dim deck above and one lit
   bank over the moon with a trace on the left (was four full-width
   strips). `src/data/atmosphere.js`.
+- **04 clouds: one mass (user request, 2026-10-03).** Desktop 04 has
+  four cards: a tall back card and a low front card overlapping above
+  the junk's main sail and the moon, and a smaller pair at the left below
+  the copy. Phones have two: a dim deck at the top and one lit bank
+  above the moon. `src/data/atmosphere.js`.

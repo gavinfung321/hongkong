@@ -592,7 +592,8 @@ export function junkCloth() {
   const H = 128;
   const random = seededRandom(31);
   const [c, ctx] = canvas(W, H);
-  ctx.fillStyle = '#e8432a';
+  // Coral red, a little deeper than orange (user choice, 2026-10-03).
+  ctx.fillStyle = '#e23c34';
   ctx.fillRect(0, 0, W, H);
   for (let x = 9; x < W; x += 16) {
     ctx.fillStyle = 'rgba(90, 10, 5, 0.12)';
