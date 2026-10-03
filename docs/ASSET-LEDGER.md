@@ -102,7 +102,35 @@ Fit to the scene (the code-built ferry's numbers, so camera framings still hold)
 | `ifc-detail.webp` | Editorial plate | 05 | P2 | <250 KB | Original | Use only if the skyline needs additional illustrated depth |
 | `water-noise.webp` | Tileable texture | All | P1 | <120 KB | Original or clearly licensed | Prefer procedural generation if it is cheaper and visually stable |
 | `halftone.webp` | Overlay texture | All | P2 | <100 KB | Original | Must remain restrained and avoid reducing text contrast |
-| Local font files and licences | WOFF2 + text | All | P0 | TBD after font choice | Licensed for web embedding | Choose during typography study; never ship unverified font files |
+| Local font files and licences | WOFF2 + text | All | P0 | ≤300 KB first view, ≤450 KB total | SIL OFL 1.1 | Shipped 2026-10-03; see "Fonts" below |
+
+### Fonts (shipped 2026-10-03)
+
+Self-hosted in `public/fonts/` (served from `/fonts/`, or `/hongkong/fonts/`
+on GitHub Pages), with each family's licence beside the files. Upright styles
+only; no italics. Subsetting with HarfBuzz (`subset-font` 2.x run from a temp
+folder, not a project dependency), WOFF2 output, all OpenType layout features
+kept (tabular figures, vertical forms), name records 0 to 14 kept (copyright,
+version, licence and licence URL). Typography brief: `TYPOGRAPHY-INTERFACE-BRIEF.md`.
+
+| Runtime file | Family, weights | Source (version) | Subset | Size | Licence file |
+|---|---|---|---|---:|---|
+| `inter-latin-var.woff2` | Inter, variable 400 to 600 (opsz pinned to 14) | [rsms/inter v4.1 release](https://github.com/rsms/inter/releases/tag/v4.1), `InterVariable.ttf` (Version 4.001;git-9221beed3; sha256 4989b125…) | Latin: U+0020 to 007E, 00A0 to 00FF, typographic quotes, dashes, ·, …, €, ™, ↑, − (685 glyphs) | 41.0 KB | `OFL-Inter.txt` |
+| `cormorant-garamond-latin-600.woff2` | Cormorant Garamond 600 (static instance) | [google/fonts `ofl/cormorantgaramond`](https://github.com/google/fonts/tree/main/ofl/cormorantgaramond), `CormorantGaramond[wght].ttf` (Version 4.001; upstream CatharsisFonts/Cormorant commit 6d210fd; sha256 b20b7d96…) | Same Latin set (784 glyphs) | 36.7 KB | `OFL-CormorantGaramond.txt` |
+| `noto-serif-tc-700-subset.woff2` | Noto Serif TC 700 | [notofonts/noto-cjk](https://github.com/notofonts/noto-cjk) `Serif/SubsetOTF/TC/NotoSerifTC-Bold.otf` (Version 2.003; sha256 3ca2b329…) | The 21 site characters: 國夜天小帆方明星東樓港煙珠維船色花輪金鐘香 | 8.6 KB | `OFL-NotoSerifTC.txt` |
+| `noto-serif-tc-600-subset.woff2` | Noto Serif TC 600 | same repo, `NotoSerifTC-SemiBold.otf` (Version 2.003; sha256 e59aa64f…) | Same 21 characters | 8.6 KB | `OFL-NotoSerifTC.txt` |
+| `noto-sans-tc-500-subset.woff2` | Noto Sans TC 500 | same repo, `Sans/SubsetOTF/TC/NotoSansTC-Medium.otf` (Version 2.004; sha256 bf206dca…) | Same 21 characters | 6.3 KB | `OFL-NotoSansTC.txt` |
+
+- Total 101.2 KB; every file is used on first view (101.2 KB), within the
+  300 KB first view and 450 KB total budgets.
+- Variable versus static, measured on the same subset: Inter variable 41.0 KB
+  against 80.8 KB for static 400 + 500 + 600; Cormorant Garamond variable
+  600 to 700 is 56.3 KB against 36.7 KB for the one static 600 used.
+- Approved weights not shipped because no role uses them: Cormorant Garamond
+  700 and Noto Sans TC 400 and 600 (noto-cjk publishes no static 600). They
+  can be added from the same sources if a role needs them.
+- The Chinese subsets hold only the site's characters. If any Chinese text
+  changes, rebuild them and update `unicode-range` in `src/styles.css`.
 
 ## Phase D — layer candidates (not approved)
 

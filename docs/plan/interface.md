@@ -84,10 +84,11 @@ Agreed with the user:
 
 How it is built:
 
-- A flat plane in the scene with the two characters drawn onto it from a
-  system Traditional Chinese font (Microsoft JhengHei on Windows, PingFang TC
-  on iPhone). No font file is needed for the test; a licensed display font can
-  replace it in the assets milestone.
+- A flat plane in the scene with the two characters drawn onto it in Noto
+  Serif TC 700, self-hosted, so Windows and iPhone draw the same glyphs (user
+  request, 2026-10-03). Until the font is ready a system serif paints; when
+  it arrives the texture is repainted once and the old one disposed
+  (`createWordmark.js`). A blocked font keeps the fallback.
 - Colour: warm cream (`--color-cream`), slightly fogged so it sits in the
   scene rather than on the glass. The lower two thirds shade down into dusk
   violet, as if lit from above (user request, 2026-10-01, after Kage).
@@ -113,6 +114,8 @@ How it is built:
   never collides with copy. It stays, on the opening screen only, not in
   the chapters: each chapter's copy already starts with its number and the
   vertical label names it (user choices, 2026-10-02).
+- Desktop now shows the same "01 / 06" under "Scroll to cross" on the
+  opening screen, so both breakpoints match (user choice, 2026-10-03).
 - Dimmed so the scene leads: hint at 50% and numbers at 40% opacity, full on
   hover (user request, 2026-10-01).
 - Chapter 01's body no longer ends with "Scroll to cross the water."; the
@@ -408,8 +411,23 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   arrow lifts.
 - Mobile uses smaller type and tighter spacing so it stays on one line.
 - Built as `.pill-link` (`.site-footer__return`) in `index.html` and
-  `styles.css`; system fonts'
-  light weights (Segoe UI on Windows, SF on iPhone), no font file.
+  `styles.css`. Since the typography pass (2026-10-03) the label is Inter
+  500 in sentence case, as the typography brief asks, instead of thin
+  tracked capitals.
+
+### Typography system (user request, 2026-10-03)
+
+The approved `docs/TYPOGRAPHY-INTERFACE-BRIEF.md`, self-hosted (files in
+`ASSET-LEDGER.md`, "Fonts"): Cormorant Garamond 600 for chapter titles, the
+tagline, mobile menu titles and the footer statement; Inter 400 to 600 for
+body, kickers, nav, buttons and footer text; Noto Serif TC for 香港 (700),
+東方明珠 and 維港夜色 (600); Noto Sans TC 500 for the chapter labels. Tokens
+`--font-display-en`, `--font-text-en`, `--font-display-zh`, `--font-text-zh`
+in `styles.css`. Sizes from the brief: titles `clamp(2.5rem, 3.6vw,
+3.75rem)` (phones `clamp(2.25rem, 10vw, 3rem)`), body 16 px / 1.6 / 36ch
+(phones 15 px / 1.58 / 30ch), kickers 11 px Inter 600. Footer statement:
+two lines on desktop, four on phones. Three preloads (Inter, Cormorant, Noto
+Serif TC 700). Copy regions widened for 03 desktop, 02 and 06 phones.
 
 ### 3.13 Footer (user request, 2026-10-02)
 
@@ -436,7 +454,11 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
     **Colophon** (Built with Three.js
     and WebGL; Original 3D scene and illustrated atmosphere; Designed for
     desktop and mobile);
-  - a bottom bar: "© 2026 Victoria Harbour: A Night Crossing", 維港夜色
+  - credit (user choice, 2026-10-03): the colophon opens with "Created by
+    Gavin Fung at HKAAA" (HKAAA is the author's studio; "HKAAA" links to
+    <https://hkaiautomation.com/>, user request, 2026-10-03), and the page head
+    has `<meta name="author" content="Gavin Fung">`;
+  - a bottom bar: "© 2026 Gavin Fung" (was the project name), 維港夜色
     ("Victoria Harbour at night") in the centre, "Three.js · WebGL · Hong
     Kong" on the right.
 - **Approved copy** (user choice, 2026-10-03): the statement, landmark

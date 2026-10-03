@@ -1,3 +1,57 @@
+/* Self-hosted fonts (public/fonts, ASSET-LEDGER.md). Latin and Chinese files are
+   subsets; unicode-range keeps each one from downloading until its glyphs show. */
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter-latin-var.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2013-2014, U+2018-201A,
+    U+201C-201E, U+2022, U+2026, U+2039-203A, U+20AC, U+2122, U+2191, U+2212;
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/cormorant-garamond-latin-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: fallback;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2013-2014, U+2018-201A,
+    U+201C-201E, U+2022, U+2026, U+2039-203A, U+20AC, U+2122, U+2191, U+2212;
+}
+
+/* The Chinese subsets hold only the 21 characters on the site; rebuild them if
+   any Chinese text changes. */
+@font-face {
+  font-family: "Noto Serif TC";
+  src: url("/fonts/noto-serif-tc-600-subset.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: fallback;
+  unicode-range: U+570B, U+591C, U+5929, U+5C0F, U+5E06, U+65B9, U+660E, U+661F, U+6771, U+6A13, U+6E2F, U+7159,
+    U+73E0, U+7DAD, U+8239, U+8272, U+82B1, U+8F2A, U+91D1, U+9418, U+9999;
+}
+
+@font-face {
+  font-family: "Noto Serif TC";
+  src: url("/fonts/noto-serif-tc-700-subset.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: fallback;
+  unicode-range: U+570B, U+591C, U+5929, U+5C0F, U+5E06, U+65B9, U+660E, U+661F, U+6771, U+6A13, U+6E2F, U+7159,
+    U+73E0, U+7DAD, U+8239, U+8272, U+82B1, U+8F2A, U+91D1, U+9418, U+9999;
+}
+
+@font-face {
+  font-family: "Noto Sans TC";
+  src: url("/fonts/noto-sans-tc-500-subset.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+570B, U+591C, U+5929, U+5C0F, U+5E06, U+65B9, U+660E, U+661F, U+6771, U+6A13, U+6E2F, U+7159,
+    U+73E0, U+7DAD, U+8239, U+8272, U+82B1, U+8F2A, U+91D1, U+9418, U+9999;
+}
+
 :root {
   --color-fog: #1e1b36;
   --color-sky-top: #141833;
@@ -12,7 +66,10 @@
   --color-muted: #9b97ab; /* labels */
   --color-soft: #bdb8c8; /* body text */
 
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display-en: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-text-en: "Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-display-zh: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+  --font-text-zh: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
 
   --page-inset: 24px;
   --measure: 38ch;
@@ -30,7 +87,7 @@
 html {
   background: var(--color-fog);
   color: var(--color-cream);
-  font-family: var(--font-sans);
+  font-family: var(--font-text-en);
   font-size: 100%;
   line-height: 1.5;
   -webkit-text-size-adjust: 100%;
@@ -188,38 +245,41 @@ a:focus-visible {
   display: inline-block;
 }
 
+.chapter__index,
+.chapter__kicker {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.16em;
+}
+
 .chapter__index {
   color: var(--color-coral);
-  font-size: 0.8125rem;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.16em;
 }
 
 .chapter__kicker {
   margin-inline-start: 0.75rem;
   color: var(--color-muted);
-  font-size: 0.8125rem;
-  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
 .chapter__title {
   margin-top: 0.5rem;
   color: var(--color-ivory);
-  font-size: clamp(2rem, 4.5vw, 3.5rem);
-  font-weight: 300;
-  line-height: 1.05;
+  font-family: var(--font-display-en);
+  font-size: clamp(2.5rem, 3.6vw, 3.75rem);
+  font-weight: 600;
+  line-height: 1;
   letter-spacing: -0.01em;
 }
 
-#chapter-01 .chapter__title {
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-}
-
 .chapter__body {
+  max-width: 36ch;
   margin-top: 1rem;
   color: var(--color-soft);
-  font-size: 1.0625rem;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 /* A thin rounded button with a dim outline. */
@@ -232,11 +292,10 @@ a:focus-visible {
   border-radius: 999px;
   background: rgb(14 12 30 / 0.2);
   color: var(--color-cream);
-  font-size: 0.75rem;
-  font-weight: 300;
-  letter-spacing: 0.26em;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
   line-height: 1.2;
-  text-transform: uppercase;
   text-decoration: none;
   text-shadow: none;
   white-space: nowrap;
@@ -272,7 +331,6 @@ a:focus-visible {
   background: var(--color-fog);
   color: var(--color-soft);
   font-size: 0.8125rem;
-  font-weight: 300;
 }
 
 .site-footer__return {
@@ -294,12 +352,14 @@ a:focus-visible {
   margin-top: 2px;
 }
 
+/* Two lines on desktop, four on phones (typography brief 5.7). */
 .site-footer__statement p {
-  max-width: 62ch;
+  max-width: 44em;
   color: var(--color-ivory);
-  font-size: clamp(1.25rem, 1.9vw, 1.625rem);
-  font-weight: 300;
-  line-height: 1.4;
+  font-family: var(--font-display-en);
+  font-size: clamp(1.5rem, 2vw, 1.875rem);
+  font-weight: 600;
+  line-height: 1.3;
   text-wrap: pretty;
 }
 
@@ -321,9 +381,9 @@ a:focus-visible {
 .site-footer__heading {
   margin-bottom: 16px;
   color: var(--color-muted);
-  font-size: 0.625rem;
-  font-weight: 400;
-  letter-spacing: 0.24em;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   text-wrap: balance;
 }
@@ -343,7 +403,7 @@ a:focus-visible {
 }
 
 .site-footer__year {
-  margin-inline-start: 8px;
+  margin-inline-start: 2px;
   color: var(--color-muted);
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
@@ -357,9 +417,9 @@ a:focus-visible {
   padding-top: 20px;
   border-top: 1px solid rgb(243 233 210 / 0.12);
   color: var(--color-muted);
-  font-size: 0.625rem;
-  font-weight: 400;
-  letter-spacing: 0.2em;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
@@ -368,9 +428,11 @@ a:focus-visible {
 }
 
 .site-footer__zh {
-  font-family: "Microsoft JhengHei", "PingFang TC", "Heiti TC", "Noto Sans TC", sans-serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.4em;
+  color: var(--color-cream);
+  font-family: var(--font-display-zh);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: normal;
 }
 
 @media (max-aspect-ratio: 4/5), (max-width: 600px) {
@@ -389,15 +451,19 @@ a:focus-visible {
     padding: 16px 18px;
   }
 
+  .chapter__title {
+    font-size: clamp(2.25rem, 10vw, 3rem);
+  }
+
   .chapter__body {
-    font-size: 1rem;
+    max-width: 30ch;
+    font-size: 0.9375rem;
+    line-height: 1.58;
   }
 
   .pill-link {
     gap: 12px;
-    padding: 10px 16px 10px 18px;
-    font-size: 0.625rem;
-    letter-spacing: 0.16em;
+    padding: 14px 18px 14px 20px;
   }
 
   .site-footer__year {
@@ -426,7 +492,7 @@ a:focus-visible {
   }
 
   .site-footer__statement p {
-    font-size: 1.0625rem;
+    font-size: min(1.1875rem, 4.7vw);
   }
 
   /* Chapters and landmarks side by side, the colophon below. */
@@ -513,14 +579,16 @@ a:focus-visible {
 .brand__name {
   font-size: 0.6875rem;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
 .brand__tagline {
-  font-size: 0.625rem;
-  letter-spacing: 0.08em;
-  opacity: 0.45;
+  font-family: var(--font-display-en);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.1;
+  opacity: 0.6;
 }
 
 .brand:hover {
@@ -541,7 +609,8 @@ a:focus-visible {
   display: block;
   padding: 8px 0;
   font-size: 0.6875rem;
-  letter-spacing: 0.16em;
+  font-weight: 500;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   opacity: 0.8;
 }
@@ -565,8 +634,10 @@ a:focus-visible {
 }
 
 .swap__zh {
+  font-family: var(--font-text-zh);
   font-size: 0.875rem;
-  letter-spacing: 0.24em;
+  font-weight: 500;
+  letter-spacing: normal;
   line-height: 1.15;
   text-transform: none;
   transform: translateY(100%);
@@ -677,20 +748,24 @@ a:focus-visible {
 }
 
 .site-menu__index {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.16em;
   opacity: 0.7;
 }
 
 .site-menu__title {
-  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-family: var(--font-display-en);
+  font-size: 2rem;
   font-weight: 600;
+  line-height: 1;
 }
 
 .site-menu__label {
+  font-family: var(--font-text-zh);
   font-size: 1rem;
-  letter-spacing: 0.1em;
+  font-weight: 500;
   opacity: 0.7;
 }
 
@@ -722,7 +797,8 @@ a:focus-visible {
   align-items: center;
   gap: 12px;
   font-size: 0.6875rem;
-  letter-spacing: 0.2em;
+  font-weight: 500;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   opacity: 0;
   transition: opacity 400ms ease;
@@ -765,9 +841,9 @@ a:focus-visible {
 }
 
 .chapter-counter__compact {
-  display: none;
   margin-top: 10px;
   font-size: 0.875rem;
+  font-weight: 500;
   letter-spacing: 0.12em;
 }
 
@@ -787,12 +863,6 @@ html:not(.is-enhanced) .chapter-counter {
 @media (max-width: 959px) {
   .site-nav {
     display: none;
-  }
-}
-
-@media (max-aspect-ratio: 4/5), (max-width: 600px) {
-  .chapter-counter__compact {
-    display: block;
   }
 }
 
@@ -834,8 +904,9 @@ html:not(.is-enhanced) .chapter-counter {
 }
 
 .side-pager__label {
-  font-size: 0.625rem;
-  letter-spacing: 0.2em;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   white-space: nowrap;
   text-shadow: 0 1px 3px rgb(0 0 0 / 0.8);
@@ -877,8 +948,6 @@ html:not(.is-enhanced) .side-pager {
 /* Vertical Chinese text down the right edge */
 
 .vertical-text {
-  --font-zh: "Microsoft JhengHei", "PingFang TC", "Heiti TC", "Noto Sans TC", sans-serif;
-
   position: fixed;
   top: calc(env(safe-area-inset-top) + var(--header-height) + 16px);
   right: var(--page-inset);
@@ -888,7 +957,7 @@ html:not(.is-enhanced) .side-pager {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  font-family: var(--font-zh);
+  font-family: var(--font-text-zh);
   text-shadow: 0 1px 3px rgb(0 0 0 / 0.8), 0 0 18px rgb(10 9 24 / 0.7);
   pointer-events: none;
 }
@@ -901,7 +970,9 @@ html:not(.is-enhanced) .side-pager {
 .vertical-text__title {
   position: relative;
   color: var(--color-ivory);
+  font-family: var(--font-display-zh);
   font-size: 1.75rem;
+  font-weight: 600;
   letter-spacing: 0.3em;
   opacity: 0.92;
 }
@@ -946,6 +1017,7 @@ html:not(.is-enhanced) .side-pager {
   grid-column: 1;
   color: var(--color-cream);
   font-size: 1rem;
+  font-weight: 500;
   letter-spacing: 0.35em;
   opacity: 0;
   transform: translateY(24px);
@@ -1112,29 +1184,24 @@ html:not(.is-enhanced) .vertical-text__labels {
   transition: opacity 150ms linear;
 }
 
-/* Shrinks below 1440 px wide so titles stay on one line in their regions. */
+/* Typography brief 5.2 and 5.4; titles shrink with the window so they stay on one line in their regions. */
 .is-enhanced .chapter__title {
-  font-size: clamp(2rem, 2.9vw, 2.5rem);
-}
-
-.is-enhanced #chapter-01 .chapter__title {
-  font-size: clamp(2rem, 3vw, 2.625rem);
+  font-size: clamp(2.5rem, 3.6vw, 3.75rem);
 }
 
 .is-enhanced .chapter__body {
-  max-width: var(--measure);
-  margin-top: 0.5rem;
-  font-size: 0.875rem;
-  line-height: 1.6;
+  margin-top: 0.625rem;
 }
 
 [data-breakpoint="mobile"].is-enhanced .chapter__title {
-  margin-top: 0.25rem;
-  font-size: 1.75rem;
+  margin-top: 0.375rem;
+  font-size: clamp(2.25rem, 10vw, 3rem);
 }
 
-[data-breakpoint="mobile"].is-enhanced #chapter-01 .chapter__title {
-  font-size: 2.25rem;
+[data-breakpoint="mobile"].is-enhanced .chapter__body {
+  max-width: 30ch;
+  font-size: 0.9375rem;
+  line-height: 1.58;
 }
 
 [data-breakpoint="mobile"].is-enhanced {

@@ -12,8 +12,10 @@ import { PALETTE } from './palette.js';
 import { OVERLAY } from './bloom.js';
 import { aimCamera, smoothstep } from '../scroll/cameraRig.js';
 
-// System Traditional Chinese fonts: Windows, then iOS / macOS, then Android.
-const FONT = '"Microsoft JhengHei", "PingFang TC", "Heiti TC", "Noto Sans TC", sans-serif';
+// Self-hosted Noto Serif TC 700 (styles.css), so Windows and iPhone draw the
+// same glyphs; the system serifs only paint until it arrives.
+const FAMILY = 'Noto Serif TC';
+const FONT = `"${FAMILY}", "Songti TC", "PMingLiU", serif`;
 const FONT_SIZE = 640;
 const GAP = 0.14; // extra space between characters, as a fraction of the font size
 const PAD = 16;
@@ -62,8 +64,11 @@ const placementCamera = new PerspectiveCamera();
 const ndc = new Vector3();
 const forward = new Vector3();
 
-export function createWordmark(renderer, text) {
-  const { texture, aspect, padBottom } = drawText(text);
+export function createWordmark(renderer, text, { onRepaint } = {}) {
+  // The face's own status: Chromium's fonts.check() reports true while it is still loading.
+  const face = document.fonts && [...document.fonts].find((f) => f.family.replace(/"/g, '') === FAMILY && f.weight === '700');
+  const fontReady = face?.status === 'loaded';
+  let { texture, aspect, padBottom } = drawText(text);
   texture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
 
   // Drawn last and without depth testing, so it sits in front of the whole scene.
@@ -84,6 +89,29 @@ export function createWordmark(renderer, text) {
   let restY = 0;
   let height = 1;
   let opacity = 1;
+  let placed = null; // last place() arguments, reused after the repaint
+
+  // If the web font was not ready for the first paint, repaint once when it
+  // is. A failed or blocked font keeps the fallback; nothing waits on it.
+  if (face && !fontReady) {
+    face
+      .load()
+      .then(() => {
+        const next = drawText(text);
+        next.texture.anisotropy = texture.anisotropy;
+        material.map = next.texture;
+        texture.dispose();
+        ({ texture, aspect, padBottom } = next);
+        mesh.userData.fontRepaints = (mesh.userData.fontRepaints ?? 0) + 1;
+        if (placed) {
+          const sink = (restY - mesh.position.y) / (height * DROP);
+          place(...placed);
+          apply(sink, opacity);
+        }
+        onRepaint?.();
+      })
+      .catch(() => {});
+  }
 
   function apply(sink, value) {
     opacity = value;
@@ -96,6 +124,7 @@ export function createWordmark(renderer, text) {
   // as seen from chapter 01's opening pose: standing on the water, or, with
   // spec.depth (metres ahead of the camera), floating in the sky.
   function place(pose, viewAspect, spec) {
+    placed = [pose, viewAspect, spec];
     const position = new Vector3().fromArray(pose.position);
     // The hold dolly starts half a vector back (see holdDollyOffset).
     if (pose.holdDolly) position.addScaledVector(new Vector3().fromArray(pose.holdDolly), -0.5);

@@ -6,6 +6,25 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Desktop counter and author credit** (user choices): desktop shows
+  "01 / 06" under "Scroll to cross" on the opening screen, as phones do;
+  the footer bar reads "© 2026 Gavin Fung", the colophon opens with
+  "Created by Gavin Fung at HKAAA" with "HKAAA" linking to
+  https://hkaiautomation.com/, and the head gains an author meta tag.
+  Files: `index.html`, `src/styles.css`; docs: `FINAL-NARRATIVE-COPY.md`;
+  plan: `interface.md`.
+- **Typography system** (user request; not committed, awaiting review):
+  self-hosted Cormorant Garamond 600, Inter variable 400 to 600, Noto Serif
+  TC 600 and 700, Noto Sans TC 500 as WOFF2 subsets (101.2 KB total, all on
+  first view) with OFL licences; four font tokens and the brief's roles and
+  sizes; the canvas 香港 now Noto Serif TC 700 with one repaint when the font
+  arrives; footer statement two lines on desktop, four on phones; copy
+  regions widened for 03 desktop (bottom 32%), 02 phones (top 7.5%) and 06
+  phones (right 66%) so the larger type fits. Layout shift 0 at all four
+  reference sizes; JS bundle +0.4 kB. Files: `index.html`,
+  `src/styles.css`, `src/scene/createWordmark.js`, `src/main.js`,
+  `src/data/chapters.js` (copy regions only), `public/fonts/`; docs:
+  `ASSET-LEDGER.md`, `TYPOGRAPHY-INTERFACE-BRIEF.md`; plan: `interface.md`.
 - **Final copy** (user request): the approved `FINAL-NARRATIVE-COPY.md`
   is live. Six chapter bodies, kickers 04 ("Junk with red sails") and 05
   ("Two IFC"), page title, hidden H1, meta description and Open Graph
