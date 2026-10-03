@@ -319,6 +319,13 @@ all six.
        cloth bellying between them; vivid red, uplit from the deck so each
        sail is brightest at the foot and each panel darker under the batten
        above.
+     - **04 polish (user request, 2026-10-03).** The sails read as one flat
+       colour, so the cloth is now coral red (`#e23c34`) and the vertex
+       shading is stronger: the head about a third as bright as the foot,
+       each panel darker under its batten and lighter in its belly. The
+       hull's own glow is halved (0.09) so it sits darker under the sails.
+       The junk's wake is longer and brighter (trail 45 m, strength 1.3,
+       a cool grey glow) so a narrow streak shows behind the stern.
      - **Rig:** foremast raked forward, rope fans from the batten ends,
        shrouds and a forestay as thin lines. No pennants: the small gold and
        rose masthead flags were removed (user request, 2026-10-01). String
@@ -339,6 +346,24 @@ all six.
        of the water, under the 1.5 m clearance rule, so it was rejected. The
        probe skips the thin rigging, whose bounding box would span the whole
        boat.
+     - **Bigger in 04 (user choice, 2026-10-03: "still a bit small, not
+       impressive enough").** The junk spanned about 50% of the desktop
+       width against the storyboard's 55–65%, and on phones its main sail
+       topped out 41% down the screen under a wide empty sky. The model is
+       unchanged (scaling it would change 01 and its size beside the
+       ferry); the 04 camera uses a longer lens instead. Desktop: field of
+       view 66° (was 74.7°), about 1.2 times larger, the junk across
+       35–95% of the width with the main sail's tip 6% from the top, its
+       bow turned 2° toward the camera. Phones: field of view 60° (was
+       79.9°), the camera turned right so IFC stays a cropped sliver at the
+       right edge, the junk moved 6.7 m to stay centred and turned 11°
+       further away (bow right), so the hull is foreshortened and the sails
+       gain height without the hull leaving the frame: hull 11–85% of the
+       width, main sail tip 28% down (just under the copy). The eye stays
+       at 3 m: a 2.2 m eye looked grander but the move from 03 then dipped
+       to 1.0 m above the water, under the 1.5 m clearance. Clearance
+       passes at the four mouse corners; the 03→04 and 04→05 moves were
+       checked frame by frame. `src/data/chapters.js`.
      - **Checked:** 01 and 04 within ±3% on desktop and mobile; framing at the
        four mouse corners and camera clearance as before. With 1 cm camera
        steps no surface flickers, including where the fore and main sails

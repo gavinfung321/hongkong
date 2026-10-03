@@ -167,6 +167,21 @@ with its stern off the left edge, as in the storyboard (`vessels` in
 `src/data/chapters.js`; the move to 04 still slides it off left and
 uncovers the junk).
 
+## 04 polish (user request, 2026-10-03)
+
+A review of 04 against its storyboard (the user asked for the fixes to go
+in without a stop): the sails coral red with billowing panels, a darker
+head and a glowing foot instead of one flat colour; the hull darker; a
+visible narrow wake behind the junk ([scene-models.md](scene-models.md));
+the skyline behind the sails held at 40% as in 03, so the full city
+waits for 05 ([scene-city.md](scene-city.md)); the clouds regrouped
+([atmosphere.md](atmosphere.md)). The moon stays, as in 03.
+
+Then the junk was made more impressive (user choice, 2026-10-03): a
+longer lens on the 04 camera, not a bigger model, so it fills about 60%
+of the desktop width (was 50%) and on phones its main sail rises to just
+under the copy (was 41% down the screen) ([scene-models.md](scene-models.md)).
+
 **Not in the look test:** 3D models (GLBs; later dropped altogether, all 3D
 is built in code, user decision 2026-10-01), real fireworks, the sparkle cursor,
 particles in other chapters, sound, final copy and fonts.

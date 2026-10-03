@@ -56,13 +56,13 @@ export const CLOUDS = {
       { chapter: 2, layer: 'back', band: 'tall', u: [0.3, 0.9], x: 82, y: 17, width: 46, opacity: 0.5 },
       { chapter: 2, layer: 'front', band: 'thin', u: [0, 0.7], x: 58, y: 21, width: 30, opacity: 0.55 },
       { chapter: 2, layer: 'front', band: 'low', u: [0.3, 1], x: 90, y: 6, width: 26, opacity: 0.6 },
-      // 04: a roof over the sails, banks left above the low mountains, above
-      // the copy and between the masts.
-      { chapter: 3, layer: 'back', band: 'tall', x: 55, y: 7, width: 90, opacity: 0.55 },
-      { chapter: 3, layer: 'back', band: 'tall', u: [0.4, 1], x: 18, y: 40, width: 36, opacity: 0.5 },
-      { chapter: 3, layer: 'front', band: 'thin', x: 22, y: 32, width: 46, opacity: 0.65 },
-      { chapter: 3, layer: 'front', band: 'low', u: [0, 0.55], x: 70, y: 8, width: 30, opacity: 0.6 },
-      { chapter: 3, layer: 'front', band: 'low', u: [1, 0.5], x: 22, y: 4, width: 30, opacity: 0.55 },
+      // 04: one mass across the top over the sails, thinning down to the
+      // left above the low mountains, under the copy (user choice,
+      // 2026-10-03: the banks on the left read as stacked rows).
+      { chapter: 3, layer: 'back', band: 'tall', x: 58, y: 7, width: 90, opacity: 0.55 },
+      { chapter: 3, layer: 'front', band: 'low', u: [0, 0.55], x: 72, y: 9, width: 34, opacity: 0.6 },
+      { chapter: 3, layer: 'back', band: 'tall', u: [0.4, 1], x: 20, y: 38, width: 40, opacity: 0.5 },
+      { chapter: 3, layer: 'front', band: 'thin', x: 26, y: 42, width: 34, opacity: 0.5 },
       // 05: dimmer, so IFC leads: a roof either side of its crown, banks
       // between the copy and Bank of China's mast and among the towers.
       { chapter: 4, layer: 'back', band: 'tall', x: 30, y: 8, width: 64, opacity: 0.4 },
@@ -97,10 +97,10 @@ export const CLOUDS = {
       { chapter: 2, layer: 'back', band: 'tall', x: 50, y: 8, width: 200, opacity: 0.45 },
       { chapter: 2, layer: 'front', band: 'low', u: [0.4, 1], x: 68, y: 31, width: 130, opacity: 0.55 },
       { chapter: 2, layer: 'front', band: 'thin', u: [0, 0.5], x: 30, y: 37, width: 90, opacity: 0.45 },
-      { chapter: 3, layer: 'back', band: 'low', u: [1, 0], x: 50, y: 5, width: 200, opacity: 0.45 },
-      { chapter: 3, layer: 'back', band: 'tall', u: [0.9, 0.2], x: 50, y: 30, width: 170, opacity: 0.5 },
-      { chapter: 3, layer: 'front', band: 'low', u: [0.5, 1], x: 75, y: 26, width: 90, opacity: 0.55 },
-      { chapter: 3, layer: 'front', band: 'thin', x: 40, y: 36, width: 140, opacity: 0.55 },
+      // 04: a dim deck above, one lit bank above the moon on the right
+      // (user choice, 2026-10-03: four full-width strips read as rows).
+      { chapter: 3, layer: 'back', band: 'tall', x: 50, y: 8, width: 200, opacity: 0.45 },
+      { chapter: 3, layer: 'front', band: 'low', u: [0.5, 1], x: 72, y: 32, width: 120, opacity: 0.55 },
       // 05: dimmer, so IFC leads.
       { chapter: 4, layer: 'back', band: 'low', x: 50, y: 5, width: 200, opacity: 0.4 },
       { chapter: 4, layer: 'back', band: 'tall', x: 40, y: 32, width: 180, opacity: 0.4 },

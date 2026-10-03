@@ -542,8 +542,10 @@ function hullStrip(u0, u1, edge, thickness = 0) {
 // +X): a tall luff leaning back, a yard climbing steeply aft to a pointed
 // peak just behind the mast, a leech that sweeps out below the peak and is
 // widest low down, scalloped between the batten ends, and cloth bellying
-// between battens. Uplit from the deck: vertex colours brightest at the foot,
-// each panel darker just under the batten above.
+// between battens. Uplit from the deck: vertex colours brightest at the foot
+// and darkening toward the head, each panel darker just under the batten
+// above and fuller in its belly than at the luff and leech (user choice,
+// 2026-10-03: the sails read as one flat colour).
 function junkSail(w, h, panels) {
   const tack = [0.26 * w, 0];
   const throat = [0.15 * w, 0.75 * h];
@@ -569,16 +571,17 @@ function junkSail(w, h, panels) {
     const [lx, ly] = luff(t);
     const [rx, ry] = leech(t);
     const scallop = 0.05 * w * Math.sin(Math.PI * pocket);
-    const light = (0.5 + 0.5 * (1 - t) ** 1.3) * (1 - 0.3 * pocket);
+    const light = (0.32 + 0.73 * (1 - t) ** 1.6) * (1 - 0.42 * pocket);
     for (let c = 0; c <= COLS; c++) {
       const s = c / COLS;
+      const belly = 0.78 + 0.22 * Math.sin(Math.PI * s) * Math.sin(Math.PI * Math.max(pocket, 0.25));
       positions.push(
         lerp(lx, rx + scallop, s),
         lerp(ly, ry, s),
         0.07 * w * Math.sin(Math.PI * s) * Math.sin(Math.PI * pocket),
       );
       uvs.push(s, t);
-      colors.push(light, light, light);
+      colors.push(light * belly, light * belly, light * belly);
     }
   }
   for (let r = 0; r < rows; r++) {
@@ -615,11 +618,13 @@ function createJunk() {
   junk.name = 'junk';
   const wood = lambert(0x3a2416);
 
-  // Lit by its own deck lights at night: a faint glow of the varnish.
+  // Lit by its own deck lights at night: a faint glow of the varnish, kept
+  // low so the hull reads dark under the sails (user choice, 2026-10-03;
+  // was 0.18).
   const hullMap = junkHull();
   const hull = new Mesh(
     junkHullGeometry(),
-    new MeshStandardMaterial({ map: hullMap, emissive: 0xffffff, emissiveMap: hullMap, emissiveIntensity: 0.18, roughness: 0.55, side: DoubleSide }),
+    new MeshStandardMaterial({ map: hullMap, emissive: 0xffffff, emissiveMap: hullMap, emissiveIntensity: 0.09, roughness: 0.55, side: DoubleSide }),
   );
   const deck = new Mesh(
     hullStrip(0, 1, (u) => [halfWidthBelowSheer(u, BULWARK), junkSheer(u) - BULWARK]),
@@ -750,16 +755,19 @@ function createJunk() {
   const sailLight = new PointLight(0xff6a3c, 180, 50, 2);
   sailLight.position.set(4.5, 6, 0);
 
-  // The junk sails slower than the ferry: a shorter, fainter wake.
+  // The junk sails slower than the ferry: a shorter, narrower wake, its foam
+  // glowing faintly so it reads at night (user choice, 2026-10-03: it
+  // barely showed; was 32 m at 0.9).
   const wake = createWake({
     halfWidthAt: (x) => {
       const u = junkU(x);
       return u <= 0 || u >= 1 || junkKeel(u) >= 0 ? 0 : halfWidthBelowSheer(u, junkSheer(u));
     },
     span: [-JUNK_LENGTH / 2, JUNK_LENGTH / 2],
-    trail: 32,
+    trail: 45,
     speed: 1.8,
-    strength: 0.9,
+    strength: 1.3,
+    glow: 0x4a5262,
     seed: 67,
   });
 

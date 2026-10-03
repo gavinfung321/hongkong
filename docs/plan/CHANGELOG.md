@@ -6,6 +6,23 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **04 junk bigger** (user choice: the camera, not the model): the junk
+  read small for the hero reveal. The 04 camera's lens narrows (desktop
+  66°, was 74.7°; phones 60°, was 79.9°), so on desktop the junk spans
+  about 60% of the width (was 50%) and on phones the main sail rises to
+  28% down the screen (was 41%), the junk turned further from the camera
+  so the hull stays in frame and IFC a sliver at the right edge. The eye
+  stays at 3 m for the 1.5 m camera clearance. Probe targets updated.
+  Files: `src/data/chapters.js`; plan: README, `scene-models.md`.
+- **04 polish** (user request; fixes made without a stop for approval):
+  the junk's sails coral red (`#e23c34`) with stronger shading (darker
+  head, glowing foot, a lighter belly in each panel) instead of one flat
+  colour; the hull's own glow halved so it sits darker; a longer,
+  brighter junk wake so a streak shows behind the stern; the skyline at
+  40% in 04 as in 03; 04's clouds regrouped into one mass. Files:
+  `src/scene/createVessels.js`, `src/scene/surfaces.js`,
+  `src/data/chapters.js`, `src/data/atmosphere.js`; plan: README,
+  `scene-models.md`, `scene-city.md`, `atmosphere.md`.
 - **03 polish** (user choices, five of six items from the 03 review; the
   moon stays): the ferry's reflection kept under the hull and drawn as
   thin slivers near the camera (they scattered over the foreground as

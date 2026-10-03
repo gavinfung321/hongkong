@@ -459,15 +459,18 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
          wider V (spread 0.45, was 0.34), so in 03 the bow wave's near
          arm runs toward the camera on the right and foam trails off the
          stern on the left; the white is 1.6× and glows faintly
-         (`glow`, emissive 0x5a6274) so it reads at night. The junk's is
-         unchanged.
+         (`glow`, emissive 0x5a6274) so it reads at night. The junk's runs
+         45 m at 1.3× with a dimmer glow (0x4a5262; 04 polish, user
+         request, 2026-10-03).
 
 - **03 calmer skyline (user choice, 2026-10-03).** The storyboard keeps
   the ferry, IFC and the wheel as the only strong hierarchy; Bank of
   China, Central Plaza and the LED strips competed. 03 sets `city` to
   40% (towers, crowns, LED strips, landmarks; IFC and the wheel are
   separate and stay full), easing across the moves in and out.
-  `src/data/chapters.js`.
+  04 keeps the same 40% (user request, 2026-10-03), so the towers
+  between the junk's sails stay behind the red and the full city
+  arrives in 05. `src/data/chapters.js`.
 
 - **02 far shore and quieter phone background (user choices,
   2026-10-03).**

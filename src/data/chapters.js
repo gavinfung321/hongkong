@@ -232,9 +232,13 @@ export const chapters = [
       desktop: `${SB}/frame-04-red-sails-rough.png`,
       mobile: `${SB}/frame-04-red-sails-mobile-rough.png`,
     },
+    // The junk fills more of the frame (user choice, 2026-10-03): a longer
+    // lens, desktop about 1.2 times larger, phones with the main sail just
+    // under the copy. The eye stays at 3 m: lower, the move from 03 dips
+    // under the 1.5 m clearance.
     camera: {
-      desktop: { position: [153.4, 3, -419.8], target: [-21.8, 68, -773.4], fov: 74.7 },
-      mobile: { position: [153.4, 3, -386.1], target: [176.8, 97.9, -773.9], fov: 79.9 },
+      desktop: { position: [153.4, 3, -419.8], target: [-21.8, 76.8, -773.4], fov: 66 },
+      mobile: { position: [153.4, 3, -386.1], target: [212.7, 56.6, -773.9], fov: 60 },
     },
     copy: {
       desktop: { left: 5, top: 11, right: 34, bottom: 45 },
@@ -242,24 +246,26 @@ export const chapters = [
     },
     // The wheel is gated here: framing alone leaves it peeking past the junk's
     // stern, and it is small and distant while it fades.
+    // city: the skyline behind the sails stays at 40%, as in 03, so the
+    // sails lead and the full city waits for 05 (user choice, 2026-10-03).
     visibility: {
-      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, mist: 1, seaMist: 0, searchlights: 0 },
-      mobile: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, mist: 1, seaMist: 0, searchlights: 0 },
+      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, city: 0.4, mist: 1, seaMist: 0, searchlights: 0 },
+      mobile: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, city: 0.4, mist: 1, seaMist: 0, searchlights: 0 },
     },
     fogDensity: 0.00063,
     vessels: {
-      desktop: { ferry: [106, -397, 1.05], junk: [149.5, -444.6, 0.46] },
-      mobile: { ferry: [26, -345, 1], junk: [156.2, -430.5, 0.65] },
+      desktop: { ferry: [106, -397, 1.05], junk: [149.5, -444.6, 0.42] },
+      mobile: { ferry: [26, -345, 1], junk: [162.9, -430.5, 0.85] },
     },
     probes: {
       desktop: {
-        junk: { left: 37, right: 93, top: 10, bottom: 72 },
+        junk: { left: 35, right: 95, top: 6, bottom: 71 },
         ifc: { left: 96 },
         ferry: { offscreen: true },
         horizon: 63,
       },
       mobile: {
-        junk: { left: 6, right: 84, top: 40, bottom: 70 },
+        junk: { left: 11, right: 85, top: 28, bottom: 68 },
         // IFC is a right-edge cue cropped by the frame (the PNG's thin far IFC
         // needs a camera ~2 km out in the shared world).
         ifc: { left: 91 },
