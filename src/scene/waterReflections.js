@@ -3,7 +3,8 @@ import { seededRandom } from './random.js';
 import { WORLD } from '../data/world.js';
 
 // What the harbour reflects (user choices, 2026-10-02): IFC, the Clock Tower,
-// the ferry's windows, the junk's sails and the moon, each as a glittering
+// the Observation Wheel (2026-10-03), the ferry's windows, the junk's sails
+// and the moon, each as a glittering
 // glow; and a dim shimmer under the whole skyline (`cityStrip`), with no
 // columns. The water draws them as glints (createWater.js).
 // Each light is an upright strip: ground position x / z, lit from height h0
@@ -38,6 +39,11 @@ export function reflectionSources({ tower, ferry, junk }) {
   box.setFromObject(tower).getSize(size);
   box.getCenter(centre);
   list.push(source(centre.x, centre.z, box.min.y + 2, box.min.y + size.y * 0.6, size.x * 0.35, 0xffa860, 0.6, { taper: 0.6 }));
+
+  // The Observation Wheel's red-pink rim and violet gondolas (user request,
+  // 2026-10-03): from the rim's foot to its top, about the rim's width.
+  const { position: [wx, wy, wz], radius: wr, hub } = WORLD.wheel;
+  list.push(source(wx, wz, wy + hub - wr, wy + hub + wr, wr * 0.7, 0xff4a7c, 0.35, { key: 'wheel', tail: 0.3, taper: 0.4 }));
 
   // A glitter path from the horizon to the moon's mirror image.
   const { position: [mx, my, mz], radius } = WORLD.moon;

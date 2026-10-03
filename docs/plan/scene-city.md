@@ -406,3 +406,16 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
          a bow spray card was tried and removed as too forceful, so the
          wake stays the only white water (see "No bow spray" in
          [atmosphere.md](atmosphere.md), user choice, 2026-10-03).
+       - **Churned water behind the stern (user request, 2026-10-03:
+         "restrained white highlights and disturbed water").** The mask
+         now has two parts. The white water adds a propeller wash, broken
+         patches of foam over the first 22 m behind the stern (half the
+         trail on short wakes). Round the whole wake, wider than the white
+         and with soft sides, lies disturbed water: there the surface goes
+         a little darker and bluer and the glints dim and break up, so the
+         trail reads as water stirred by the hull, not paint on the
+         surface. A second foam layer at a different scale streams at a
+         different pace through the first, so the foam keeps changing
+         shape instead of sliding as one pattern. The white stays
+         restrained: the same brightness as before, lit only by the scene.
+         Still a single plane per boat; draw calls unchanged.

@@ -1,4 +1,4 @@
-import { CanvasTexture, Euler, MeshLambertMaterial, Mesh, PlaneGeometry, Quaternion, RepeatWrapping, SRGBColorSpace } from 'three';
+import { CanvasTexture, Color, Euler, MeshLambertMaterial, Mesh, PlaneGeometry, Quaternion, RepeatWrapping, SRGBColorSpace } from 'three';
 import { seededRandom } from './random.js';
 
 // White water round a boat under way, lying on the harbour (user choice,
@@ -8,10 +8,20 @@ import { seededRandom } from './random.js';
 // wake. A fixed mask shapes it while foam streams through it from bow to
 // stern, so the boat reads as sailing even when the scroll stops. Lit by
 // the scene, so the cabin lights warm it near the hull.
+//
+// Behind the stern (user request, 2026-10-03): the mask's second channel is
+// disturbed water, a darker, rippled patch where the propellers break the
+// mirror, so the reflections behind the boat break up; in it, restrained
+// white highlights in broken patches. A second, slower foam layer crosses
+// the first, so the white water churns instead of only sliding.
 
 const PX = 4; // mask texels per metre
 const FOAM_TILE = [16, 8]; // metres per foam tile, along and across
 const SURFACE = 0.12; // height above the water
+// The second foam layer: its scale against the first and its speed as a
+// share of the first's. Disturbed water: its colour, opacity at the stern,
+// and the sparkle of its ripples.
+const CHURN = { scale: [0.62, 1.37], speed: 0.55, water: 0x0d1226, opacity: 0.55, sparkle: 0.3 };
 
 function canvas(width, height) {
   const c = document.createElement('canvas');
@@ -63,12 +73,14 @@ export function createWake({ halfWidthAt, span, trail, spread = 0.34, speed, str
   const [x0, x1] = [stern - trail, bow + ahead];
   const half = beam + (bow - x0) * spread + 2;
   const [W, H] = [Math.ceil((x1 - x0) * PX), Math.ceil(2 * half * PX)];
-  const [c, ctx] = canvas(W, H);
   const px = (x) => (x - x0) * PX;
   const pz = (z) => (z + half) * PX;
+  const random = seededRandom(seed + 1);
+
+  // ---- White water (red channel) ----
+  const [white, ctx] = canvas(W, H);
   ctx.fillStyle = '#000';
   ctx.fillRect(0, 0, W, H);
-  ctx.fillStyle = '#fff';
 
   // Trail: churned water widening and fading behind the stern, in soft layers.
   const sternHalf = Math.max(halfWidthAt(stern + 1), beam * 0.6);
@@ -85,6 +97,19 @@ export function createWake({ halfWidthAt, span, trail, spread = 0.34, speed, str
     ctx.lineTo(px(x0), pz(sternHalf * 1.4 * grow));
     ctx.lineTo(px(stern + 2), pz(sternHalf * (0.7 + 0.1 * k)));
     ctx.closePath();
+    ctx.fill();
+  }
+
+  // Propeller wash: broken white patches close behind the stern, thinning
+  // and spreading aft.
+  const wash = Math.min(trail * 0.5, 22);
+  for (let i = 0; i < 70; i++) {
+    const a = random() ** 1.6; // more of them near the stern
+    const x = stern + 1 - a * wash;
+    const z = (random() * 2 - 1) * sternHalf * (0.45 + 0.6 * a);
+    ctx.fillStyle = `rgba(255, 255, 255, ${(0.18 + random() * 0.3) * (1 - a) * strength})`;
+    ctx.beginPath();
+    ctx.ellipse(px(x), pz(z), (1.2 + random() * 2.5) * PX, (0.3 + random() * 0.6) * PX, 0, 0, Math.PI * 2);
     ctx.fill();
   }
 
@@ -124,7 +149,36 @@ export function createWake({ halfWidthAt, span, trail, spread = 0.34, speed, str
   ctx.fillStyle = bowWave;
   ctx.fillRect(px(bow - 8), pz(-8), 16 * PX, 16 * PX);
 
-  const mask = new CanvasTexture(c);
+  // ---- Disturbed water (green channel) ----
+  const [rough, rctx] = canvas(W, H);
+  rctx.fillStyle = '#000';
+  rctx.fillRect(0, 0, W, H);
+  // Nested layers from wide to narrow, so the patch has soft sides.
+  for (let k = 0; k < 6; k++) {
+    const narrow = 1 - k * 0.14;
+    const g = rctx.createLinearGradient(px(stern + 1), 0, px(x0), 0);
+    g.addColorStop(0, 'rgba(255, 255, 255, 0.24)');
+    g.addColorStop(0.4, 'rgba(255, 255, 255, 0.14)');
+    g.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    rctx.fillStyle = g;
+    rctx.beginPath();
+    rctx.moveTo(px(stern + 1), pz(-sternHalf * 1.2 * narrow));
+    rctx.lineTo(px(x0), pz(-(sternHalf * 1.2 + trail * spread * 0.7) * narrow));
+    rctx.lineTo(px(x0), pz((sternHalf * 1.2 + trail * spread * 0.7) * narrow));
+    rctx.lineTo(px(stern + 1), pz(sternHalf * 1.2 * narrow));
+    rctx.closePath();
+    rctx.fill();
+  }
+
+  const merged = ctx.getImageData(0, 0, W, H);
+  const roughData = rctx.getImageData(0, 0, W, H).data;
+  for (let i = 0; i < merged.data.length; i += 4) {
+    merged.data[i + 1] = roughData[i];
+    merged.data[i + 2] = 0;
+  }
+  ctx.putImageData(merged, 0, 0);
+
+  const mask = new CanvasTexture(white);
   mask.anisotropy = 4;
   const foam = foamTexture(seed);
   foam.repeat.set((x1 - x0) / FOAM_TILE[0], (2 * half) / FOAM_TILE[1]);
@@ -141,6 +195,43 @@ export function createWake({ halfWidthAt, span, trail, spread = 0.34, speed, str
     polygonOffsetFactor: -2,
     polygonOffsetUnits: -2,
   });
+  const churn = {
+    wakeChurn: { value: 0 }, // the second layer's offset along the flow
+    wakeRepeat: { value: foam.repeat },
+    wakeWater: { value: new Color(CHURN.water) },
+  };
+  material.onBeforeCompile = (shader) => {
+    Object.assign(shader.uniforms, churn);
+    shader.fragmentShader = shader.fragmentShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+        uniform float wakeChurn;
+        uniform vec2 wakeRepeat;
+        uniform vec3 wakeWater;`,
+      )
+      .replace(
+        '#include <map_fragment>',
+        `float foamA = texture2D( map, vMapUv ).a;
+        float foamB = texture2D( map, vAlphaMapUv * wakeRepeat * vec2( ${CHURN.scale[0]}, ${CHURN.scale[1]} ) + vec2( wakeChurn, 0.37 ) ).a;
+        float foam = foamA * ( 0.45 + 0.75 * foamB );`,
+      )
+      .replace(
+        '#include <alphamap_fragment>',
+        `vec2 wakeMask = texture2D( alphaMap, vAlphaMapUv ).rg;
+        float sparkle = smoothstep( 0.78, 1.0, foamB ) * ${CHURN.sparkle.toFixed(2)};
+        float whiteWater = clamp( wakeMask.r * foam + wakeMask.g * sparkle, 0.0, 1.0 );
+        float disturbed = wakeMask.g * ${CHURN.opacity.toFixed(2)} * ( 0.7 + 0.3 * foamB );
+        float wakeShare = whiteWater / max( whiteWater + disturbed * ( 1.0 - whiteWater ), 1e-4 );
+        diffuseColor.rgb = mix( wakeWater * ( 0.85 + 0.4 * foamB ), diffuseColor.rgb, wakeShare );
+        diffuseColor.a *= whiteWater + disturbed * ( 1.0 - whiteWater );`,
+      )
+      .replace(
+        '#include <emissivemap_fragment>',
+        `#include <emissivemap_fragment>
+        totalEmissiveRadiance *= wakeShare;`,
+      );
+  };
   const mesh = new Mesh(geometry, material);
   mesh.name = 'wake';
   // White water lies outside the hull; the composition probe frames the boat.
@@ -155,7 +246,10 @@ export function createWake({ halfWidthAt, span, trail, spread = 0.34, speed, str
     undo.setFromEuler(tilt).invert();
     mesh.quaternion.copy(undo);
     mesh.position.set(0, SURFACE - boat.position.y, 0).applyQuaternion(undo);
-    if (animate) foam.offset.x = ((time * speed) / FOAM_TILE[0]) % 1;
+    if (!animate) return;
+    const flow = (time * speed) / FOAM_TILE[0];
+    foam.offset.x = flow % 1;
+    churn.wakeChurn.value = (CHURN.speed * CHURN.scale[0] * flow) % 1;
   }
 
   return { mesh, update };
