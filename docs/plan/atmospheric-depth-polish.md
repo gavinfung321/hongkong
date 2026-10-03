@@ -161,7 +161,7 @@ six directions below (user choice, 2026-10-04), in this order, one pass each.
   fading out at its edges, drifting sideways at 0.004 tiles a second (a
   streak takes about a minute to cross the disc). In reduced motion it holds
   still. Unfogged like the moon. The moon's water column is unchanged
-  (`VEIL` in `createMoon.js`).
+  (`VEIL` in `createMoon.js`). Approved 2026-10-04 (user approval).
 
 ### Priority E — Quieter sky and palette
 
@@ -170,6 +170,14 @@ six directions below (user choice, 2026-10-04), in this order, one pass each.
   muted, leaving one warm accent per frame.
 - Success: the palette feels restrained, and the landmarks' own colours
   stand out.
+- **Built 2026-10-04, awaiting approval.** Zenith `skyTop` 0x0a0d1e (was
+  0x141833); the horizon glow band over the lowest 0.24 of the dome (was
+  0.3; the aerial fog follows). Clouds keep 0.65 of their brightness, back
+  to full where the moon lights them (`CLOUD_QUIET`, mist unchanged). LED
+  crowns and strips at 0.6 (`LED.level`). Central Plaza's bars and The
+  Center's lines desaturated (0.35 / 0.3, was 0.6 / 0.55), the bars at 0.7
+  and The Center's neon 0.5 (was 0.8). IFC, the wheel, the Clock Tower and
+  the 02 afterglow unchanged.
 
 ### Priority F — Per-chapter withholding
 
@@ -234,8 +242,8 @@ disable or remove it rather than expanding it.
 - [x] Priority A: aerial perspective — approved 2026-10-04
 - [x] Priority B: calm water — approved 2026-10-04
 - [x] Priority C: foreground silhouettes — approved 2026-10-04
-- [ ] Priority D: veiled moon — built 2026-10-04, awaiting approval
-- [ ] Priority E: quieter sky and palette
+- [x] Priority D: veiled moon — approved 2026-10-04
+- [ ] Priority E: quieter sky and palette — built 2026-10-04, awaiting approval
 - [ ] Priority F: per-chapter withholding
 - [ ] Priority 2: test one chapter 05 foreground object
 - [ ] Priority 3: one desktop and one mobile sequence review
@@ -243,5 +251,6 @@ disable or remove it rather than expanding it.
 
 ## Immediate next action
 
-Review **Priority D: veiled moon** in the browser (no screenshots, user
-request, 2026-10-04), then Priority E: quieter sky and palette.
+Review **Priority E: quieter sky and palette** in the browser (no
+screenshots, user request, 2026-10-04), then Priority F: per-chapter
+withholding.

@@ -56,7 +56,13 @@ The site should feel like a humid, cinematic Victoria Harbour evening:
 - The moon is slightly dimmer (disc 0.86, corona 0.22) and a thin veil of
   violet-grey cloud streaks drifts slowly across it, so it is partly
   concealed; it holds still in reduced motion (user choice, 2026-10-04).
-- `VEIL` in `src/scene/createMoon.js`. Awaiting approval.
+- `VEIL` in `src/scene/createMoon.js`. Approved 2026-10-04 (user approval).
+
+### Quieter sky
+
+- Near-black navy zenith (0x0a0d1e) with the plum glow in a lower band
+  (0.24 of the dome); clouds at 0.65 brightness except where the moon
+  lights them (user choice, 2026-10-04). Awaiting approval.
 
 ### Searchlights
 

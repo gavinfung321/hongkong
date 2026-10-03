@@ -1,7 +1,9 @@
 import { Color, MeshBasicMaterial, MeshLambertMaterial } from 'three';
 
 export const PALETTE = {
-  skyTop: 0x141833,
+  // Near-black navy (was 0x141833; atmospheric depth Priority E, user
+  // choice, 2026-10-04).
+  skyTop: 0x0a0d1e,
   skyHorizon: 0x3a2342,
   fog: 0x1e1b36,
   proxyDark: 0x2a2d3a,
