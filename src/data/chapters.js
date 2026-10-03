@@ -17,8 +17,13 @@
 // visibility:  1 = shown, 0 = gated (faded out) at this chapter's hold pose.
 //              petals is a density (omitted = 1); city is the skyline
 //              windows' level (omitted = 1).
-// vessels:     [x, z] world position of each vessel at this chapter's hold pose,
-//              per breakpoint (mobile is re-authored, not cropped).
+// vessels:     [x, z, heading] world position of each vessel at this chapter's
+//              hold pose, per breakpoint (mobile is re-authored, not cropped).
+//              Optional via: { ferry: [[x, z, heading], ...] }, points a vessel
+//              passes on the way to the next chapter. Optional drift:
+//              { ferry: [before, after] }, the metres it sails along its
+//              heading through this hold, up to and on from the keyframe
+//              (vesselRoutes.js).
 // probes:      composition targets (% of viewport) checked by the debug probe.
 
 const SB = '/docs/storyboards';
@@ -182,9 +187,16 @@ export const chapters = [
       mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, mist: 0.8, seaMist: 0, searchlights: 0 },
     },
     fogDensity: 0.00045,
+    // The ferry sails on toward Central through the hold (drift; little
+    // before the keyframe, where its mast would near the copy), then slowly
+    // enough that the camera overtakes it on the way to 04: its cabin
+    // slides out past the left edge (at least 16 m off on desktop, about
+    // 27 m on phones) and its bow uncovers the junk, which comes up from
+    // beyond it (user request, 2026-10-03: a natural occlusion, no wipe).
+    // It waits behind the 04 camera, out of frame.
     vessels: {
-      desktop: { ferry: [69.3, -359.1, 1.26], junk: [30, -310, 0.3] },
-      mobile: { ferry: [-23.4, -270.9, 1], junk: [-60, -240, 0.3] },
+      desktop: { ferry: [69.3, -359.1, 1.26], junk: [59.5, -400.6, 0.46], via: { ferry: [[93, -383, 1.12]] }, drift: { ferry: [1.5, 6] } },
+      mobile: { ferry: [-23.4, -270.9, 1], junk: [40, -390, 0.5], via: { ferry: [[8, -318, 1]] }, drift: { ferry: [1.5, 5] } },
     },
     probes: {
       desktop: {
@@ -227,8 +239,8 @@ export const chapters = [
     },
     fogDensity: 0.00063,
     vessels: {
-      desktop: { ferry: [400, -700, 1.2], junk: [149.5, -444.6, 0.46] },
-      mobile: { ferry: [400, -700, 1.2], junk: [156.2, -430.5, 0.65] },
+      desktop: { ferry: [106, -397, 1.05], junk: [149.5, -444.6, 0.46] },
+      mobile: { ferry: [26, -345, 1], junk: [156.2, -430.5, 0.65] },
     },
     probes: {
       desktop: {
@@ -269,9 +281,10 @@ export const chapters = [
       mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, mist: 0.4, seaMist: 0, searchlights: 0.7 },
     },
     fogDensity: 0.00045,
+    // The ferry is hidden from here on; it keeps behind the cameras.
     vessels: {
-      desktop: { ferry: [700, -850, 1.2], junk: [230, -520, 0.24] },
-      mobile: { ferry: [700, -850, 1.2], junk: [230, -520, 0.24] },
+      desktop: { ferry: [120, -430, 1], junk: [230, -520, 0.24] },
+      mobile: { ferry: [40, -370, 1], junk: [230, -520, 0.24] },
     },
     // Deviation: the PNG draws the wheel about 3.5× its true size relative to
     // IFC (frames 01 and 03 do not), so the wheel keeps its placement left of
@@ -311,8 +324,8 @@ export const chapters = [
     },
     fogDensity: 0.00036,
     vessels: {
-      desktop: { ferry: [720, -860, 1.2], junk: [240, -530, 0.24] },
-      mobile: { ferry: [720, -860, 1.2], junk: [240, -530, 0.24] },
+      desktop: { ferry: [135, -450, 1], junk: [240, -530, 0.24] },
+      mobile: { ferry: [50, -390, 1], junk: [240, -530, 0.24] },
     },
     // Firework bursts (createFireworks.js): x / y, the burst's centre in % of
     // the viewport; size, its spark spread in % of the viewport width;

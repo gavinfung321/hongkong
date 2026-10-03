@@ -1,7 +1,6 @@
 import {
   BoxGeometry,
   BufferGeometry,
-  CatmullRomCurve3,
   Color,
   CylinderGeometry,
   DoubleSide,
@@ -34,6 +33,7 @@ import {
   junkCloth,
   junkHull,
 } from './surfaces.js';
+import { vesselPose, vesselRoute } from './vesselRoutes.js';
 import { createWake } from './wakes.js';
 
 // Both vessels are built with their bow pointing along local +X.
@@ -763,13 +763,20 @@ function createJunk() {
   return junk;
 }
 
-const tangent = new Vector3();
+// Riding the swell, each as [amplitude, angular speed (rad/s)] pairs summed
+// with the vessel's phase, so the motion never repeats exactly. heave in
+// metres; roll (about the keel, local X) and pitch (local Z) in radians.
+// The ferry (user request, 2026-10-03): a visible bob and a very small roll,
+// at most about 0.2 m and 0.9°. The junk keeps its first, gentler motion.
+const SWELL = {
+  ferry: { phase: 0, heave: [[0.15, 0.8], [0.06, 1.7]], roll: [[0.011, 0.55], [0.004, 1.3]], pitch: [[0.004, 0.65]] },
+  junk: { phase: 1.7, heave: [[0.12, 0.9]], roll: [[0.0105, 0.7]], pitch: [[0.007, 0.6]] },
+};
 
-function headingFrom(vector) {
-  return Math.atan2(-vector.z, vector.x);
-}
+const swing = (waves, time, phase) =>
+  waves.reduce((sum, [amplitude, speed], i) => sum + amplitude * Math.sin(time * speed + phase + i * 2.1), 0);
 
-export function createVessels() {
+export function createVessels({ hold }) {
   const group = new Group();
   const ferry = createFerry();
   const junk = createJunk();
@@ -778,44 +785,24 @@ export function createVessels() {
   group.add(ferry, junk);
 
   const vessels = [
-    { key: 'ferry', object: ferry, curve: null, phase: 0, heading: 0 },
-    { key: 'junk', object: junk, curve: null, phase: 1.7, heading: 0 },
+    { key: 'ferry', object: ferry, route: null, swell: SWELL.ferry },
+    { key: 'junk', object: junk, route: null, swell: SWELL.junk },
   ];
 
   function setPaths(chapters, breakpoint) {
-    for (const vessel of vessels) {
-      const keys = chapters.map((c) => c.vessels[breakpoint][vessel.key]);
-      vessel.curve = new CatmullRomCurve3(
-        keys.map(([x, z]) => new Vector3(x, 0, z)),
-        false,
-        'centripetal',
-      );
-      // Optional third value: authored heading in radians (bow along local +X).
-      vessel.headings = keys.map((key) => key[2]);
-    }
+    for (const vessel of vessels) vessel.route = vesselRoute(chapters, breakpoint, vessel.key);
   }
 
-  function lerpAngle(a, b, t) {
-    const d = Math.atan2(Math.sin(b - a), Math.cos(b - a));
-    return a + d * t;
-  }
-
-  // Vessels share the camera's held segment easing, so each hold composition
-  // stays put wherever the scroll pauses inside the hold window.
+  const pose = { position: new Vector3(), heading: 0 };
   function update(segment, time, animate) {
-    const t = Math.min(1, Math.max(0, (segment.from + segment.eased) / 5));
-    for (const vessel of vessels) {
-      const { object, curve, headings } = vessel;
-      curve.getPoint(t, object.position);
-      curve.getTangent(Math.min(0.999, Math.max(0.001, t)), tangent);
-      if (tangent.lengthSq() > 1e-6) vessel.heading = headingFrom(tangent);
-      const from = headings[segment.from] ?? vessel.heading;
-      const to = headings[segment.to] ?? vessel.heading;
-      object.rotation.y = lerpAngle(from, to, segment.eased);
+    for (const { object, route, swell } of vessels) {
+      vesselPose(route, segment, hold, pose);
+      object.position.copy(pose.position);
+      object.rotation.y = pose.heading;
       if (animate) {
-        object.position.y = 0.12 * Math.sin(time * 0.9 + vessel.phase);
-        object.rotation.x = 0.0105 * Math.sin(time * 0.7 + vessel.phase);
-        object.rotation.z = 0.007 * Math.sin(time * 0.6 + vessel.phase + 1);
+        object.position.y = swing(swell.heave, time, swell.phase);
+        object.rotation.x = swing(swell.roll, time, swell.phase);
+        object.rotation.z = swing(swell.pitch, time, swell.phase + 1);
       } else {
         object.position.y = 0;
         object.rotation.x = 0;

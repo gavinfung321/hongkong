@@ -228,10 +228,7 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
        the tree costs 2 fewer draw calls. Recipe: `docs/ASSET-LEDGER.md`.
    - **Stop 4b: bauhinia bush (built 2026-10-03, user request:** "one more
      bauhinia bush on the left bottom corner … a realistic one, similar to
-     the existing tree but a bush this time to feel different").** Replaces
-     the 2.5D foreground-card test (railing and flower cutouts on planes at
-     the lens), which the user found "very weird" and asked to remove; it was
-     never committed.
+     the existing tree but a bush this time to feel different").**
      - **Shape:** a low, dense mound 7 m long, 2.3 m tall and 2.6 m deep,
        its long side along railing A on the arrival promenade (x −19.6,
        z 88.7, 2.2 m inside the railing). Nine thin stems fan out from a
@@ -288,8 +285,17 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
          the ferry, 0.25 for IFC, 0.15 for the moon), dimming along it.
        - **Lights:** IFC (cool white, lower two thirds of the tower), the
          Clock Tower's floodlit lower part (warm), the ferry's window decks,
-         the junk's sails (red) and deckhouse, and a soft gold glitter path
-         under the moon.
+         the junk's sails (red) and deckhouse, a soft gold glitter path
+         under the moon, and the Observation Wheel (a soft coral-pink
+         glow from its rim, 0.7 of its width, since 2026-10-03).
+       - **Swell (user request, 2026-10-03: animate the reflections of the
+         ferry, wheel and skyline):** slow crests roll down the water
+         toward the viewer (one every few seconds). As one passes, each
+         wavelet row sways sideways by 0.3 of the glow's half width and
+         brightens by up to 15%, so the reflection columns ripple and
+         shimmer instead of only twinkling in place. The skyline shimmer
+         sways with them. Frozen in reduced motion. (`SWELL` in
+         `createWater.js`.)
        - **Skyline shimmer:** the skyline is summarised once as a strip
          along the island front (lit-window colour, brightness and height
          per 9 m, blurred so neighbouring towers merge). Each water pixel
@@ -297,7 +303,7 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
          water under the city carries a dim, continuous glitter in the
          buildings' warm and cool colours, with no columns. One texture
          read per pixel.
-       - **Not reflected:** the Observation Wheel and the promenade lamps.
+       - **Not reflected:** the promenade lamps.
      - **No glare:** the water ignores the rim light and the boats' point
        lights (they made hot blobs under the ferry in 03 and the junk in
        04); the glints draw all reflections.
@@ -307,9 +313,10 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
        is behind every camera. Brightness follows the water's Fresnel
        sheen and is soft-clipped, so glints stay below the subjects and
        copy.
-     - **Limits:** at most 8 lights per frame (6 in the scene). Lights
-       behind the camera or off screen are skipped; a faded subject (ferry,
-       junk, IFC) fades its reflection too.
+     - **Limits:** at most 9 lights per frame on desktop (desktop 01 sees
+       all nine since the wheel joined), 8 on phones. Lights behind the
+       camera or off screen are skipped; a faded subject (ferry, junk, IFC,
+       wheel) fades its reflection too.
      - **Flicker fix (kept):** the water plane is cut into 64 × 64 squares.
        As two 8 km triangles, the world positions across it were too
        imprecise and the reflections shivered at 1 cm camera steps.

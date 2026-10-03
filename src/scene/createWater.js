@@ -30,7 +30,8 @@ const BLUR = 5;
 // ragged. Sizes are view-angle tangents. The boats' hulls lay dark mirror
 // images that hide the other lights behind them (2026-10-02).
 const REFLECT = {
-  max: { desktop: 8, mobile: 8 },
+  // Desktop 01 sees all nine sources since the wheel joined (2026-10-03).
+  max: { desktop: 9, mobile: 8 },
   head: 0.012, // longest fade beyond the mirror image, toward the horizon
   minPixels: 3, // shortest fade either way and narrowest half width
   spread: 1.5,
@@ -45,6 +46,11 @@ const REFLECT = {
 // (1 / `grow` of the depression tangent), slivers `aspect` times as long.
 // maxDensity keeps dark gaps between glints even in the brightest core.
 const GLINT = { rowPixels: 2, grow: 30, aspect: 4, density: 2, maxDensity: 0.72, drift: 0.9 };
+// A slow swell rolling in toward the viewer (user request, 2026-10-03): as
+// a crest passes, each wavelet row sways sideways (`sway`, in half widths)
+// and brightens (`pulse`), so the reflection columns ripple down the water.
+// `rows`: radians per wavelet row; `speed`: radians per second.
+const SWELL = { rows: 0.45, speed: 1.7, sway: 0.3, pulse: 0.15 };
 // The skyline shimmer: brightness of the strip read along the island front.
 const CITY = { power: 0.08, lit: 0.6, tail: 0.25 };
 // Plane segments per side. Positions interpolated across one 8 km triangle
@@ -273,6 +279,9 @@ export function createWater(renderer) {
           vec2 g = vec2( azimuth / ( rowTan * ${GLINT.aspect.toFixed(1)} ), row );
           float drift = waterTime * ${GLINT.drift.toFixed(2)};
           float wobble = ( waterNoise( vec2( 3.7, floor( row ) * 0.61 + drift * 0.3 ) ) - 0.5 ) * ${(REFLECT.wobble * 2).toFixed(2)};
+          float swellPhase = floor( row ) * ${SWELL.rows.toFixed(2)} - waterTime * ${SWELL.speed.toFixed(2)};
+          wobble += sin( swellPhase ) * ${SWELL.sway.toFixed(2)};
+          float crest = 1.0 + ${SWELL.pulse.toFixed(2)} * sin( swellPhase * 0.5 + 0.8 );
 
           // Hulls (kind 2 in waterRefC.w) first: what they hide, and their colour.
           float hullMask = 0.0;
@@ -313,7 +322,7 @@ export function createWater(renderer) {
           // Water mirrors more at grazing angles.
           vec3 toEye = normalize( cameraPosition - vWaterWorld );
           float fresnel = 0.02 + 0.98 * pow( 1.0 - clamp( toEye.y, 0.0, 1.0 ), 5.0 );
-          shine *= fresnel * ${REFLECT.gain.toFixed(2)} * ( 0.7 + 0.6 * smoothstep( -0.2, 0.4, waterRipple.y ) );
+          shine *= crest * fresnel * ${REFLECT.gain.toFixed(2)} * ( 0.7 + 0.6 * smoothstep( -0.2, 0.4, waterRipple.y ) );
 
           // Glints: a sliver noise thresholded by the local brightness, so the
           // core is nearly solid and the edges break into sparse slivers.

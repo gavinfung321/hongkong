@@ -6,6 +6,33 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Chapter 03 ferry pass and foreground direction** (user request and
+  choice): no foreground cutouts, spray or camera-facing mist in 03;
+  depth and motion come from the existing ferry and harbour instead. The
+  ferry sails on toward Central through the 03 hold (1.5 m up to the
+  keyframe, 6 m on; phones 5 m), bobs, rolls and pitches slightly, and on
+  the way to 04 sails slowly (about 50 m instead of 475 m) so the camera
+  overtakes it: its cabin slides out past the left edge and its bow
+  uncovers the junk, which now comes up from beyond it. A natural
+  occlusion, no wipe; built on desktop and phones. The wake gains a
+  propeller wash and a band of darker, disturbed water with a second foam
+  layer. The water reflections gain the Observation Wheel and a slow swell
+  that ripples the columns of the ferry, wheel and skyline (desktop now
+  reflects up to 9 lights). Haze unchanged: in 03 it is only the far shore
+  mist behind the ferry. Foreground direction recorded: no rule of two
+  cards per chapter, a 3D or built foreground per chapter, one optional
+  pier canopy, bollard or chain test reserved for 05 (not started), no
+  large cutouts on phones. The rejected card test's notes are cleared from
+  the area files; its generated artwork is kept, unused, with a status per
+  piece. Probe: only the four older misses. Draw calls desktop 04 94 (was
+  93), others unchanged; JS 210.9 KB gzip. Files: `src/scene/vesselRoutes.js`
+  (new), `src/scene/createVessels.js`, `src/data/chapters.js`,
+  `src/scene/wakes.js`, `src/scene/waterReflections.js`,
+  `src/scene/createWater.js`, `src/main.js`,
+  `docs/references/foreground-pass-candidates/MANIFEST.md`,
+  `docs/plan/README.md`, `docs/plan/scene-models.md`,
+  `docs/plan/scene-city.md`, `docs/plan/scene-promenade.md`,
+  `docs/plan/checks.md`, `docs/ASSET-LEDGER.md`.
 - **Bauhinia bush and realistic foliage** (user requests): the 2.5D
   foreground-card test (railing and flower cutouts on planes at the lens,
   Hero and 01) read "very weird" and was removed before it was committed.

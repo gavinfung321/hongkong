@@ -75,7 +75,7 @@ function start(initGuard, header) {
   scene.add(water.mesh);
   const kowloon = createKowloonEdge();
   const island = createIsland();
-  const vessels = createVessels();
+  const vessels = createVessels({ hold: SCROLL.hold });
   const foreground = createForeground();
   const wordmark = createWordmark(renderer, HERO.wordmark.text);
   const moon = createMoon();
@@ -108,7 +108,7 @@ function start(initGuard, header) {
     ferry: reflected('ferry', makeFadeable(vessels.ferry)),
     junk: reflected('junk', makeFadeable(vessels.junk)),
     ifc: reflected('ifc', makeFadeable(island.ifc)),
-    wheel: makeFadeable(island.wheel),
+    wheel: reflected('wheel', makeFadeable(island.wheel)),
     deck: makeFadeable(kowloon.decks),
     railing: (value) => foreground.setOpacity('railing', value),
     palms: (value) => foreground.setOpacity('palms', value),

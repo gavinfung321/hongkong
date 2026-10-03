@@ -125,6 +125,44 @@ all six.
        18,881 after the reshape; 01 9,747.
      - **Rights:** the photos are looked at only, never stored (ledger,
        "Reference material"); no boat names, star emblem or watermark.
+   - **Star Ferry in 03: motion, wake and the pass to 04 (user request,
+     2026-10-03: "improve depth and motion using the existing Star Ferry
+     and harbour", no cutouts, spray or camera-facing mist).**
+     - **Sailing through the hold:** the ferry no longer stops while the
+       copy holds. It sails 1.5 m up to the keyframe and 6 m on from it
+       along its heading toward Central (phones 1.5 m and 5 m), so it
+       slides from left toward the right and draws away a little; the
+       keyframe framing is unchanged. Little before the keyframe, so its
+       mast keeps clear of the copy. The pace blends into the moves, so it
+       never stops dead (`drift` in `chapters.js`, `vesselRoutes.js`).
+       The movement follows the scroll, so the composition still holds
+       wherever the reader pauses; at rest the streaming wake, the bob and
+       the moving reflections keep it alive.
+     - **Riding the swell:** a bob of up to about 0.2 m from two slow
+       waves, a roll of up to about 0.9° and a slight pitch (`SWELL` in
+       `createVessels.js`; the junk keeps its gentler first motion).
+     - **The pass to 04 (built, desktop and phones):** the ferry now sails
+       slowly on toward Central through the move, about 50 m, instead of
+       racing 475 m to the piers. The camera overtakes it on its starboard
+       side, so its cabin slides out past the left edge while its bow
+       first hides and then uncovers the junk, which now comes up from
+       beyond it. Desktop: the ferry is never nearer than 16.7 m and covers
+       at most about 19% of the frame, and only the left side (it never
+       crosses IFC or the wheel); it has left the frame by 70% of the move.
+       Phones: the same beat, farther off (about 27 m), gone by 45% of the
+       move. No wipe: the frame is never covered. It waits behind the 04
+       camera (desktop x 106, z −397), out of frame and too far for its
+       cabin light to reach the junk; it stays hidden in 05 and 06.
+       Vessel routes can now pass `via` points between chapters, as the
+       camera's do (`vessels.*.via` in `chapters.js`).
+     - **Haze:** unchanged. The only haze in 03 is the shore mist on the
+       island waterfront about 800 m out, behind the ferry and round the
+       skyline; none sits near the camera.
+     - **Checked:** composition probe and copy overflow at 1440 × 900,
+       1156 × 766 and phone: only the four older misses; IFC and the wheel
+       stay clear through the hold and the pass. Draw calls: 03 unchanged
+       (desktop 120, phone 116), 04 desktop 94 (was 93). Review shots in
+       `review-shots/ferry-pass/` (not committed).
    - **Clock Tower, rebuilt from photos and bigger in 02 (user request,
      2026-10-01).** "In 02, make the clock tower bigger … the tree is
      blocking the clock tower." Measured against the user's photos, the old
@@ -331,8 +369,9 @@ all six.
      petals); no surface flickers. 01 is unchanged (8,966 against 8,744
      changing pixels); 03 is up from 16,154 to 18,881, from the extra window
      edges.
-   - **Not yet:** soft shadows, glow (step 3), photo-like foreground
-     cutouts (user artwork). Reflections of the lit city in the water are
+   - **Not yet:** soft shadows, glow (step 3). Foreground cutouts only
+     where one improves a specific composition (see "Foreground direction"
+     in [README.md](README.md)). Reflections of the lit city in the water are
      built (step 5, stop 5, 2026-10-02). On mobile the skyline windows mostly blend into
      their average glow; the iPhone check is in step 6.
 3. **Glow.** Two options, tested side by side:

@@ -66,7 +66,9 @@ The milestone has two halves:
 - **Models:** everything built in code, no GLB files: Star Ferry, junk,
   Clock Tower, IFC with its podium, Observation Wheel, Central Ferry Piers,
   four landmarks; lit windows and a soft glow; a film grade over the
-  whole frame.
+  whole frame. In 03 the ferry sails on toward Central through the hold,
+  bobbing and rolling, with churned water behind it; the camera overtakes
+  it on the way to 04, so its cabin uncovers the junk.
 - **Promenade:** bauhinia petals, stone railing with lanterns and three tall
   lamps (spread apart in every view), wet paving, palms, bauhinia tree,
   glittering water reflections.
@@ -89,6 +91,26 @@ Build step 6 (measure and review) is done and Milestone 2 is closed
 [`../milestone-2-review/REVIEW.md`](../milestone-2-review/REVIEW.md)).
 Carried forward: the phone frame-rate re-measure (Milestone 5) and the
 paper grain from the atmosphere brief (offered, not built).
+
+## Foreground direction (user choice, 2026-10-03)
+
+Foreground elements go in only where they improve a specific composition;
+there is no rule of two foreground cards per chapter. The first 2.5D card
+test (Hero and 01) was removed before it was committed; its generated
+artwork stays in `docs/references/foreground-pass-candidates/` for later,
+selective use (status per piece in its `MANIFEST.md`).
+
+| Chapter | Foreground |
+|---|---|
+| Hero and 01 | Existing 3D foreground only |
+| 02 | Existing palms, lamps, paving and Clock Tower only |
+| 03 | Ferry, wake and reflections only: no cutouts, water spray or camera-facing mist; haze only behind the ferry and round the far skyline |
+| 04 | The junk and its rigging |
+| 05 | One optional test, reserved: a Central pier canopy, bollard or chain (not started) |
+| 06 | Smoke and illuminated sky haze only |
+
+On phones, no large physical foreground cutouts unless a later comparison
+proves they improve the frame.
 
 **Not in the look test:** 3D models (GLBs; later dropped altogether, all 3D
 is built in code, user decision 2026-10-01), real fireworks, the sparkle cursor,
