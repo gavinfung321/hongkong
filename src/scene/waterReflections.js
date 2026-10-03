@@ -31,8 +31,10 @@ function source(x, z, h0, h1, width, colour, power, extra = {}) {
 export function reflectionSources({ tower, ferry, junk }) {
   const list = [];
 
+  // Longer tails on IFC, the wheel and the moon (Priority B, user choice,
+  // 2026-10-04: was 0.25, 0.3, 0.15) so each lays one long column.
   const [ix, iy, iz] = WORLD.ifc.position;
-  list.push(source(ix, iz, iy + 4, iy + 300, 22, 0xd8e0f2, 0.4, { key: 'ifc', tail: 0.25, taper: 0.7 }));
+  list.push(source(ix, iz, iy + 4, iy + 300, 22, 0xd8e0f2, 0.4, { key: 'ifc', tail: 0.4, taper: 0.7 }));
 
   // The floodlit lower part (the floodlight fades up the shaft).
   tower.updateMatrixWorld(true);
@@ -43,11 +45,11 @@ export function reflectionSources({ tower, ferry, junk }) {
   // The Observation Wheel's red-pink rim and violet gondolas (user request,
   // 2026-10-03): from the rim's foot to its top, about the rim's width.
   const { position: [wx, wy, wz], radius: wr, hub } = WORLD.wheel;
-  list.push(source(wx, wz, wy + hub - wr, wy + hub + wr, wr * 0.7, 0xff4a7c, 0.35, { key: 'wheel', tail: 0.3, taper: 0.4 }));
+  list.push(source(wx, wz, wy + hub - wr, wy + hub + wr, wr * 0.7, 0xff4a7c, 0.35, { key: 'wheel', tail: 0.45, taper: 0.4 }));
 
   // A glitter path from the horizon to the moon's mirror image.
   const { position: [mx, my, mz], radius } = WORLD.moon;
-  list.push(source(mx, mz, my * 0.08, my, radius * 0.45, 0xf6c46a, 0.3, { taper: 0.6, tail: 0.15 }));
+  list.push(source(mx, mz, my * 0.08, my, radius * 0.45, 0xf6c46a, 0.3, { taper: 0.6, tail: 0.3 }));
 
   // Moving: heights and half extents (along the hull, across it) in the boat's frame.
   // The ferry's windows: kept to the hull's length and close under it, a

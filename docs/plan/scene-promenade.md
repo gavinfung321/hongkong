@@ -358,6 +358,18 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
          surface (about RGB 10–20, 5–9, 30–40 where it was 2, 0, 14),
          and the glints still stand out. Skyline shimmer 0.11 (was 0.08).
          (`SKY`, `CITY` in `createWater.js`.)
+       - **Calm water (user choice, 2026-10-04; atmospheric depth
+         Priority B):** quieter, darker water with a few long, narrow
+         columns: skyline shimmer 0.045, sky sheen 0.18 with softer bands
+         (contrast 0.9), columns narrower and straighter (spread 1.1, row
+         wobble 0.4, swell sway 0.2), and longer tails under IFC (0.4),
+         the wheel (0.45) and the moon (0.3). Boats unchanged.
+       - **Foreground silhouettes (user choice, 2026-10-04; atmospheric
+         depth Priority C):** railing A–D, the bauhinia tree and the
+         bauhinia bush keep only 0.35 / 0.3 / 0.3 of the moon and sky
+         fill, so they read as dark shapes; the lantern pools still light
+         them, giving warm edges (`SILHOUETTE` in `createForeground.js`,
+         `silhouette()` in `lamps.js`).
        - **Not reflected:** the promenade lamps and railing lanterns
          (their mirror images fall behind the sea wall).
      - **No glare:** the water ignores the rim light and the boats' point
