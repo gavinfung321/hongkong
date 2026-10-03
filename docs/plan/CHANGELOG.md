@@ -6,6 +6,17 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Wakes as broken foam** (user request, 2026-10-03): the V arms, trail,
+  propeller wash and disturbed water in the wake mask are now seeded,
+  feathered foam patches with gaps instead of gradient strokes and
+  polygons. The foam is strongest at the hull, then fragments, widens and
+  fades aft. Streaming, the second churn layer and reduced motion are
+  unchanged. With the foam broken up, the white is eased slightly: ferry
+  strength 1.45 / glow 0x464e60 (was 1.6 / 0x5a6274), junk 1.15 /
+  0x3a4252 (was 1.3 / 0x4a5262). Still one mesh per wake; draw calls
+  unchanged. Files: `src/scene/wakes.js`, `src/scene/createVessels.js`;
+  plan: `scene-city.md`, `scene-models.md`. Evidence:
+  `review-shots/wakes/`.
 - **Shorter holds around every keyframe** (user request, 2026-10-03):
   `SCROLL.hold` and `copyFull` 0.2 → 0.14, so the camera starts moving
   sooner after each composition instead of after a long still gap. The

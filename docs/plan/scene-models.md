@@ -331,8 +331,9 @@ all six.
        shading is stronger: the head about a third as bright as the foot,
        each panel darker under its batten and lighter in its belly. The
        hull's own glow is halved (0.09) so it sits darker under the sails.
-       The junk's wake is longer and brighter (trail 45 m, strength 1.3,
-       a cool grey glow) so a narrow streak shows behind the stern.
+       The junk's wake is longer and brighter (trail 45 m, strength 1.15,
+       a dim cool grey glow) so a narrow streak of broken foam shows
+       behind the stern (see wakes in [scene-city.md](scene-city.md)).
      - **Rig:** foremast raked forward, rope fans from the batten ends,
        shrouds and a forestay as thin lines. No pennants: the small gold and
        rose masthead flags were removed (user request, 2026-10-01). String

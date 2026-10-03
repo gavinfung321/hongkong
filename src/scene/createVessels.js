@@ -387,12 +387,13 @@ function createFerry() {
     halfWidthAt: (x) => (Math.abs(x) < FERRY_HALF ? ferrySectionAt(x, 0)[2] : 0),
     span: [-FERRY_HALF, FERRY_HALF],
     // Longer and whiter (user choices, 2026-10-03: the wake barely showed
-    // in 02 and 03), its foam glowing faintly so it reads at night.
+    // in 02 and 03), its foam glowing faintly so it reads at night. Eased
+    // a touch once the foam broke into patches (user request, 2026-10-03).
     trail: 90,
     spread: 0.45,
     speed: 3,
-    strength: 1.6,
-    glow: 0x5a6274,
+    strength: 1.45,
+    glow: 0x464e60,
     seed: 61,
   });
 
@@ -766,8 +767,8 @@ function createJunk() {
     span: [-JUNK_LENGTH / 2, JUNK_LENGTH / 2],
     trail: 45,
     speed: 1.8,
-    strength: 1.3,
-    glow: 0x4a5262,
+    strength: 1.15,
+    glow: 0x3a4252,
     seed: 67,
   });
 

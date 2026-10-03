@@ -458,10 +458,27 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
          barely showed):** the ferry's trail runs 90 m (was 45) with a
          wider V (spread 0.45, was 0.34), so in 03 the bow wave's near
          arm runs toward the camera on the right and foam trails off the
-         stern on the left; the white is 1.6× and glows faintly
-         (`glow`, emissive 0x5a6274) so it reads at night. The junk's runs
-         45 m at 1.3× with a dimmer glow (0x4a5262; 04 polish, user
-         request, 2026-10-03).
+         stern on the left; the white glows faintly (`glow`) so it reads
+         at night. The junk's runs 45 m with a dimmer glow (04 polish,
+         user request, 2026-10-03).
+       - **Broken foam, not painted lines (user request, 2026-10-03).**
+         The mask is now painted from soft, seeded foam patches (radial
+         gradients with feathered edges), so nothing reads as a solid
+         line, triangle or rectangle. Each V arm is a run of foam clusters
+         of random length, offset, width and opacity with seeded gaps
+         (never more than three clusters in a row), each bound by a faint
+         wider film: dense and bright at the bow, sparser, wider and
+         fainter aft. The trail and propeller wash are overlapping
+         patches, densest at the stern, widening and fading behind it
+         (trail patches scale with trail length, so the short junk wake
+         isn't packed brighter). The disturbed water is soft patches too.
+         The hull wash and bow wave, the streaming foam, the second churn
+         layer and reduced motion are unchanged; all deterministic from
+         the seed, so nothing flickers. With the foam broken up the white
+         is eased a touch: ferry 1.45× (was 1.6) with glow 0x464e60 (was
+         0x5a6274); junk 1.15× (was 1.3) with glow 0x3a4252 (was
+         0x4a5262). Still one plane per boat; draw calls unchanged; about
+         400 gradient patches per wake, painted once at load.
 
 - **03 calmer skyline (user choice, 2026-10-03).** The storyboard keeps
   the ferry, IFC and the wheel as the only strong hierarchy; Bank of
