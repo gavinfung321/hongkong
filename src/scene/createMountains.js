@@ -9,6 +9,7 @@ import {
   PlaneGeometry,
   Points,
   ShaderMaterial,
+  Vector2,
   Vector3,
 } from 'three';
 import { WORLD } from '../data/world.js';
@@ -23,7 +24,23 @@ const SHADE = { foot: 0.6, ridge: 1.9, power: 1.3 };
 // moon's centre as seen from the camera.
 const RIM = { width: 5, reach: 0.22, strength: 0.32, color: 0xf6c46a };
 const MIST = { color: 0x55445f, opacity: 0.6, fall: 1.2, drift: 0.004 };
-const LIGHTS = { size: 1.8, warm: 0xffc68c, cool: 0xdde6ff, coolShare: 0.25, spread: [32, 10], rise: 2.2, reach: 0.65, glow: [0.15, 0.25] };
+// Point sprites of a fixed pixel size. Towers: width and height ranges in
+// metres, window spacing [across, floor], lit share, how high up the slope
+// they reach (share of the ridge) and how strongly they gather low (`rise`).
+const LIGHTS = {
+  size: 1.7,
+  crowd: 1.7,
+  warm: 0xffc68c,
+  cool: 0xdde6ff,
+  coolShare: 0.3,
+  glow: [0.17, 0.26],
+  tower: { width: [14, 36], height: [45, 140], spacing: [4.5, 3.6], lit: [0.35, 0.75], reach: 0.72, rise: 1.6 },
+  road: { color: 0xffa65a, spacing: 7, gap: 0.2, glow: 0.24 },
+  peak: { color: 0xfff0d8, count: 34, spread: [44, 14], glow: 0.55, size: 1.5 },
+};
+// Gullies and vegetation on the slopes: brightness varies by ± `amount`, in
+// cells `cell` metres across and tall (taller than wide, like ravines).
+const TEXTURE = { amount: 0.28, cell: [[45, 160], [18, 50]] };
 
 const smoothstep = (t) => {
   const c = Math.min(Math.max(t, 0), 1);
@@ -88,13 +105,26 @@ function rangeMaterial(color) {
         uniform vec3 uMoon;
         uniform vec3 uRim;
         varying float vRidge;
-        varying vec3 vMtnPos;`,
+        varying vec3 vMtnPos;
+        float mtnHash( vec2 p ) {
+          return fract( sin( dot( p, vec2( 127.1, 311.7 ) ) ) * 43758.5453 );
+        }
+        float mtnNoise( vec2 p ) {
+          vec2 i = floor( p );
+          vec2 f = fract( p );
+          f = f * f * ( 3.0 - 2.0 * f );
+          return mix( mix( mtnHash( i ), mtnHash( i + vec2( 1.0, 0.0 ) ), f.x ),
+                      mix( mtnHash( i + vec2( 0.0, 1.0 ) ), mtnHash( i + 1.0 ), f.x ), f.y );
+        }`,
       )
       .replace(
         '#include <color_fragment>',
         `#include <color_fragment>
         float mtnT = clamp( vMtnPos.y / max( vRidge, 1.0 ), 0.0, 1.0 );
-        diffuseColor.rgb *= mix( ${SHADE.foot.toFixed(2)}, ${SHADE.ridge.toFixed(2)}, pow( mtnT, ${SHADE.power.toFixed(2)} ) );`,
+        diffuseColor.rgb *= mix( ${SHADE.foot.toFixed(2)}, ${SHADE.ridge.toFixed(2)}, pow( mtnT, ${SHADE.power.toFixed(2)} ) );
+        float mtnTexture = 0.6 * mtnNoise( vMtnPos.xy / vec2( ${TEXTURE.cell[0].map((n) => n.toFixed(1)).join(', ')} ) )
+          + 0.4 * mtnNoise( vMtnPos.xy / vec2( ${TEXTURE.cell[1].map((n) => n.toFixed(1)).join(', ')} ) + 17.0 );
+        diffuseColor.rgb *= 1.0 + ${(TEXTURE.amount * 2).toFixed(2)} * ( mtnTexture - 0.5 );`,
       )
       .replace(
         '#include <fog_fragment>',
@@ -184,40 +214,83 @@ function createMist({ z, x, height }, taper) {
 }
 
 // Soft dots of a fixed pixel size: they stay put and never twinkle as the
-// camera moves.
-function createSlopeLights({ x, clusters, perCluster, seed }, ridge, z) {
+// camera moves. All in one draw call.
+function createSlopeLights({ x, towers, roads, peak, seed }, ridge, z) {
   const random = seededRandom(seed);
   const position = [];
   const color = [];
+  const scale = [];
   const warm = new Color(LIGHTS.warm);
   const cool = new Color(LIGHTS.cool);
   const c = new Color();
-  for (let i = 0; i < clusters; i++) {
-    const cx = x[0] + random() * (x[1] - x[0]);
-    // Homes stop well below the ridge: up to `reach` of its height.
-    const top = Math.min(ridge(cx) - 70, ridge(cx) * LIGHTS.reach);
-    const cy = 30 + (top - 30) * Math.pow(random(), LIGHTS.rise);
-    for (let j = 0; j < perCluster; j++) {
-      const px = cx + (random() - 0.5) * LIGHTS.spread[0];
-      const py = Math.min(cy + (random() - 0.5) * LIGHTS.spread[1], ridge(px) - 50);
-      position.push(px, py, z);
-      c.copy(random() < LIGHTS.coolShare ? cool : warm).multiplyScalar(LIGHTS.glow[0] + LIGHTS.glow[1] * random());
-      color.push(c.r, c.g, c.b);
+  const add = (px, py, colour, glow, size = 1) => {
+    position.push(px, py, z);
+    c.copy(colour).multiplyScalar(glow);
+    color.push(c.r, c.g, c.b);
+    scale.push(size);
+  };
+  const between = ([a, b]) => a + (b - a) * random();
+
+  // Residential towers: a grid of windows, some lit, in one tone per tower.
+  const { tower } = LIGHTS;
+  for (let i = 0; i < towers; i++) {
+    const cx = between(x);
+    const ceiling = Math.min(ridge(cx) - 40, ridge(cx) * tower.reach);
+    const height = between(tower.height);
+    const base = 30 + Math.max(0, ceiling - height - 30) * Math.pow(random(), tower.rise);
+    const top = Math.min(base + height, ceiling);
+    const width = between(tower.width);
+    const columns = Math.max(2, Math.round(width / tower.spacing[0]));
+    const lit = between(tower.lit);
+    const tone = random() < LIGHTS.coolShare ? cool : warm;
+    for (let y = base; y <= top; y += tower.spacing[1]) {
+      for (let k = 0; k < columns; k++) {
+        if (random() > lit) continue;
+        add(cx - width / 2 + (k * width) / (columns - 1), y, tone, between(LIGHTS.glow));
+      }
     }
   }
+
+  // Roads: evenly spaced street lights with a few gaps, wiggling up the slope.
+  const roadColour = new Color(LIGHTS.road.color);
+  for (const [[xa, sa], [xb, sb], wiggle] of roads) {
+    const phase = random() * Math.PI * 2;
+    for (let px = xa; px <= xb; px += LIGHTS.road.spacing) {
+      if (random() < LIGHTS.road.gap) continue;
+      const t = (px - xa) / (xb - xa);
+      const py = ridge(px) * (sa + (sb - sa) * t) + wiggle * Math.sin(px / 60 + phase);
+      add(px, Math.min(py, ridge(px) - 12), roadColour, LIGHTS.road.glow * (0.8 + 0.4 * random()));
+    }
+  }
+
+  // The Peak Tower and its terrace at Victoria Gap: a brighter patch just
+  // under the ridge.
+  const peakColour = new Color(LIGHTS.peak.color);
+  for (let i = 0; i < LIGHTS.peak.count; i++) {
+    const px = peak + (random() - 0.5) * LIGHTS.peak.spread[0];
+    const py = ridge(px) - 6 - random() * LIGHTS.peak.spread[1];
+    add(px, py, peakColour, LIGHTS.peak.glow * (0.6 + 0.4 * random()), LIGHTS.peak.size);
+  }
+
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new Float32BufferAttribute(position, 3));
   geometry.setAttribute('color', new Float32BufferAttribute(color, 3));
+  geometry.setAttribute('scale', new Float32BufferAttribute(scale, 1));
+  // Where a window floor shrinks to under `crowd` point widths on screen (phones,
+  // narrow windows), the dots dim, so the towers don't merge into solid bars.
   const material = new ShaderMaterial({
-    uniforms: { uSize: { value: LIGHTS.size } },
+    uniforms: { uSize: { value: LIGHTS.size }, uHeight: { value: 900 } },
     vertexShader: `
       uniform float uSize;
+      uniform float uHeight;
       attribute vec3 color;
+      attribute float scale;
       varying vec3 vColor;
       void main() {
-        vColor = color;
-        gl_PointSize = uSize;
+        gl_PointSize = uSize * scale;
         gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        float floorPixels = ${LIGHTS.tower.spacing[1].toFixed(1)} * projectionMatrix[ 1 ][ 1 ] * 0.5 * uHeight / gl_Position.w;
+        vColor = color * clamp( floorPixels / ( ${LIGHTS.crowd.toFixed(1)} * gl_PointSize ), 0.3, 1.0 );
       }`,
     fragmentShader: `
       varying vec3 vColor;
@@ -232,8 +305,10 @@ function createSlopeLights({ x, clusters, perCluster, seed }, ridge, z) {
   });
   const points = new Points(geometry, material);
   points.renderOrder = -0.6;
+  const buffer = new Vector2();
   points.onBeforeRender = (renderer) => {
     material.uniforms.uSize.value = LIGHTS.size * renderer.getPixelRatio();
+    material.uniforms.uHeight.value = renderer.getDrawingBufferSize(buffer).y;
   };
   return points;
 }

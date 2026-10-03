@@ -16,7 +16,9 @@ import {
   Mesh,
   MeshBasicMaterial,
   MeshLambertMaterial,
+  Points,
   Quaternion,
+  ShaderMaterial,
   Shape,
   TorusGeometry,
   Vector2,
@@ -121,9 +123,24 @@ const TOPS = {
   pyramid: { minHeight: 110, share: 0.1, rise: 0.5 },
   mast: { minHeight: 140, share: 0.3, height: [15, 25] },
 };
+// LED colour on the skyline, as on the real harbour front (user request,
+// 2026-10-03: the storyboard's towers glow magenta, cyan and red; ours were
+// dark with sparse windows). A share of the crowns turn a restrained LED
+// colour and grow taller; a share of the tall towers get vertical strips up
+// their two harbour-facing corners, from `from` of their height to the roof.
+// All dimmer than IFC's lit glass (glow ≤ 0.7 against its 0.85–1), so IFC
+// still leads. Drawn from their own random sequence, so no tower changes.
+const LED = {
+  colours: [0xff3d8b, 0x38d6ff, 0xff5a3c, 0xb06bff, 0xffb347],
+  crown: { share: 0.5, height: 6, glow: [0.5, 0.2] },
+  strip: { minHeight: 120, share: 0.2, width: 2.4, from: [0.3, 0.3], glow: [0.38, 0.2] },
+};
 
 function createTops(buildings, windowMaterial, seed) {
   const random = seededRandom(seed);
+  const ledRandom = seededRandom(seed + 7);
+  const ledColour = (glow) =>
+    new Color(LED.colours[Math.floor(ledRandom() * LED.colours.length)]).multiplyScalar(glow[0] + glow[1] * ledRandom());
   const setbacks = [];
   const crowns = [];
   const pyramids = [];
@@ -144,9 +161,20 @@ function createTops(buildings, windowMaterial, seed) {
       setbacks.push({ ...b, y: roof, w, h: rise, depth });
       roof += rise;
     }
+    if (b.h > LED.strip.minHeight && ledRandom() < LED.strip.share) {
+      const color = ledColour(LED.strip.glow);
+      const from = b.h * (LED.strip.from[0] + LED.strip.from[1] * ledRandom());
+      for (const side of [-1, 1]) {
+        crowns.push({ x: b.x + (side * b.w) / 2, z: b.z + b.depth / 2, y: from, w: LED.strip.width, h: b.h - from, depth: LED.strip.width, color });
+      }
+    }
     if (b.h > TOPS.crown.minHeight && rolls[3] < TOPS.crown.share) {
-      const tint = (rolls[4] < 0.3 ? cool : warm).clone().multiplyScalar(TOPS.crown.glow[0] + TOPS.crown.glow[1] * rolls[5]);
-      crowns.push({ x: b.x, z: b.z, y: roof, w: w * TOPS.crown.inset, h: TOPS.crown.height, depth: depth * TOPS.crown.inset, color: tint });
+      const led = ledRandom() < LED.crown.share;
+      const tint = led
+        ? ledColour(LED.crown.glow)
+        : (rolls[4] < 0.3 ? cool : warm).clone().multiplyScalar(TOPS.crown.glow[0] + TOPS.crown.glow[1] * rolls[5]);
+      const h = led ? LED.crown.height : TOPS.crown.height;
+      crowns.push({ x: b.x, z: b.z, y: roof, w: w * TOPS.crown.inset, h, depth: depth * TOPS.crown.inset, color: tint });
     } else if (b.h > TOPS.pyramid.minHeight && rolls[3] < TOPS.crown.share + TOPS.pyramid.share) {
       pyramids.push({ x: b.x, z: b.z, y: roof, w, h: w * TOPS.pyramid.rise, depth, color: b.color });
       continue;
@@ -179,6 +207,74 @@ function createTops(buildings, windowMaterial, seed) {
   );
   const beacons = masts.map(([[x, y, z], height]) => [x, y + height + 1, z]);
   return { group, masts, beacons, crownMaterial };
+}
+
+// ---- Waterfront lights ---------------------------------------------------------
+
+// A line of lamps along Central's harbour front (user request, 2026-10-03:
+// the storyboard has a bright band where the city meets the water; ours was
+// a thin dim line). Dots of a fixed pixel size, `spacing` metres apart with
+// a few gaps, warm with every `brightEvery`th a brighter cool white, fogged
+// like the skyline. Piers and podium in front hide them.
+const WATERFRONT = { height: 7, spacing: 6, gap: 0.12, size: 3, warm: 0xffd2a0, cool: 0xe8f0ff, glow: [0.8, 1.15], brightEvery: 5, setback: 2 };
+
+function createWaterfront(seed) {
+  const [x0, x1, , front] = WORLD.island.slab;
+  const random = seededRandom(seed);
+  const warm = new Color(WATERFRONT.warm);
+  const cool = new Color(WATERFRONT.cool);
+  const position = [];
+  const color = [];
+  let i = 0;
+  for (let x = x0; x <= x1; x += WATERFRONT.spacing, i++) {
+    if (random() < WATERFRONT.gap) continue;
+    const bright = i % WATERFRONT.brightEvery === 0;
+    position.push(x + (random() - 0.5) * 2, 3 + WATERFRONT.height, front - WATERFRONT.setback);
+    const c = (bright ? cool : warm).clone().multiplyScalar(WATERFRONT.glow[bright ? 1 : 0] * (0.85 + 0.3 * random()));
+    color.push(c.r, c.g, c.b);
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new Float32BufferAttribute(position, 3));
+  geometry.setAttribute('color', new Float32BufferAttribute(color, 3));
+  const material = new ShaderMaterial({
+    uniforms: { uSize: { value: WATERFRONT.size }, uFog: { value: 0 }, uLevel: { value: 1 } },
+    vertexShader: `
+      uniform float uSize;
+      uniform float uFog;
+      attribute vec3 color;
+      varying vec3 vColor;
+      void main() {
+        vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+        float depth = -mvPosition.z;
+        vColor = color * exp( -uFog * uFog * depth * depth );
+        gl_PointSize = uSize;
+        gl_Position = projectionMatrix * mvPosition;
+      }`,
+    fragmentShader: `
+      uniform float uLevel;
+      varying vec3 vColor;
+      void main() {
+        float d = length( gl_PointCoord - 0.5 ) * 2.0;
+        gl_FragColor = vec4( vColor * uLevel * smoothstep( 1.0, 0.0, d ), 1.0 );
+        #include <colorspace_fragment>
+      }`,
+    transparent: true,
+    depthWrite: false,
+    blending: AdditiveBlending,
+  });
+  const points = new Points(geometry, material);
+  points.name = 'waterfrontLights';
+  points.userData.noProbe = true;
+  points.onBeforeRender = (renderer, scene) => {
+    material.uniforms.uSize.value = WATERFRONT.size * renderer.getPixelRatio();
+    material.uniforms.uFog.value = scene.fog?.density ?? 0;
+  };
+  return {
+    points,
+    setLevel(value) {
+      material.uniforms.uLevel.value = value;
+    },
+  };
 }
 
 // ---- Two IFC ------------------------------------------------------------------
@@ -468,7 +564,8 @@ export function createIsland() {
   const beacons = createBeacons([...tops.beacons, ...landmarks.beacons]);
   const masts = mastMesh([...tops.masts, ...landmarks.masts]);
   const dots = createCityDots(buildings, SKYLINE_WINDOWS, WORLD.island.skyline.seed + 202);
-  group.add(createSlab(), skyline, tops.group, landmarks.group, masts, beacons.points, dots.points);
+  const waterfront = createWaterfront(WORLD.island.skyline.seed + 303);
+  group.add(createSlab(), skyline, tops.group, landmarks.group, masts, beacons.points, dots.points, waterfront.points);
   const mountains = createMountains();
   group.add(mountains.group);
 
@@ -492,6 +589,7 @@ export function createIsland() {
     skylineWindows.uCityStrength.value = SKYLINE_STRENGTH * value;
     tops.crownMaterial.color.setScalar(value);
     dots.setLevel(value);
+    waterfront.setLevel(value);
     landmarks.setLevel(value);
   }
 
