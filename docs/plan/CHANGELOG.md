@@ -6,6 +6,13 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **Veiled moon, atmospheric depth Priority D** (user choice, 2026-10-04;
+  Priority C approved): the disc is slightly dimmer (0.86) with a softer
+  corona (0.22, was 0.26), and a thin, seeded veil of violet-grey cloud
+  streaks drifts slowly across it (about a minute per streak; still in
+  reduced motion), so the moon is partly concealed. Awaiting approval.
+  Files: `src/scene/createMoon.js`, `src/main.js`; plan:
+  `atmospheric-depth-polish.md`, `atmosphere.md`.
 - **Foreground silhouettes, atmospheric depth Priority C** (user choice,
   2026-10-04; Priority B approved): the nearest layer is now the darkest.
   A new `silhouette()` shader patch keeps only part of the moon and sky

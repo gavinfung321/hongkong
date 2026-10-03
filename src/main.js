@@ -482,6 +482,7 @@ async function start(initGuard, header, loading) {
       atmosphere.update(time);
       searchlights.update(time);
       fireworks.update(time);
+      moon.update(time);
       updateBreathing(time);
       const speed = dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0;
       petals.update(dt, camera, speed);
