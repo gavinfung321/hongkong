@@ -11,7 +11,7 @@ lives in the dated notes inside each area file, and in `git log`.
   foot (3 m out, head below eye height); mobile 03 gets a smaller buoy
   (0.45 scale) close in the lower left under the ferry, since IFC's and the
   wheel's water columns cross the lower right. Both now reposition per
-  screen size. Awaiting approval. Files: `src/scene/createBollard.js`,
+  screen size. Approved 2026-10-04. Files: `src/scene/createBollard.js`,
   `src/scene/createBuoy.js`, `src/main.js`, `src/data/chapters.js`; plan:
   `atmospheric-depth-polish.md`.
 - **Chapter 03 channel buoy** (user choice, 2026-10-04; the 05 bollard
@@ -20,7 +20,7 @@ lives in the dated notes inside each area file, and in `git log`.
   swell (still in reduced motion). Fades in over the second half of the
   move into 03. Desktop only. Bollards are not repeated in other chapters
   (01 and 02 are already framed; 03, 04 and 06 are on the water or in the
-  air). Awaiting approval. Files: `src/scene/createBuoy.js` (new),
+  air). Approved 2026-10-04. Files: `src/scene/createBuoy.js` (new),
   `src/main.js`, `src/data/chapters.js`; plan:
   `atmospheric-depth-polish.md`.
 - **Chapter 05 harbour-edge bollard, atmospheric depth Priority 2** (user
@@ -28,7 +28,7 @@ lives in the dated notes inside each area file, and in `git log`.
   bollard with a short sagging chain in the lower right of the desktop 05
   frame, base cropped by the bottom edge. It follows 92% of the mouse
   parallax, so it moves far more than the skyline, and fades in only as the
-  camera settles into 05. Desktop only. Awaiting approval. Files:
+  camera settles into 05. Desktop only. Approved 2026-10-04. Files:
   `src/scene/createBollard.js` (new), `src/main.js`,
   `src/scroll/cameraRig.js`, `src/data/chapters.js`; plan:
   `atmospheric-depth-polish.md`.
@@ -46,14 +46,14 @@ lives in the dated notes inside each area file, and in `git log`.
   except near the moon; LED crowns and strips at 0.6; Central Plaza and The
   Center's neon desaturated and dimmed (Center neon 0.5, was 0.8; plaza
   bars 0.7). Landmarks' own colours, IFC, wheel and Clock Tower unchanged.
-  Awaiting approval. Files: `src/scene/palette.js`, `createScene.js`,
+  Approved 2026-10-04. Files: `src/scene/palette.js`, `createScene.js`,
   `createAtmosphere.js`, `createIsland.js`, `landmarks.js`; plan:
   `atmospheric-depth-polish.md`, `atmosphere.md`, `scene-city.md`.
 - **Veiled moon, atmospheric depth Priority D** (user choice, 2026-10-04;
   Priority C approved): the disc is slightly dimmer (0.86) with a softer
   corona (0.22, was 0.26), and a thin, seeded veil of violet-grey cloud
   streaks drifts slowly across it (about a minute per streak; still in
-  reduced motion), so the moon is partly concealed. Awaiting approval.
+  reduced motion), so the moon is partly concealed. Approved 2026-10-04.
   Files: `src/scene/createMoon.js`, `src/main.js`; plan:
   `atmospheric-depth-polish.md`, `atmosphere.md`.
 - **Foreground silhouettes, atmospheric depth Priority C** (user choice,
@@ -61,7 +61,7 @@ lives in the dated notes inside each area file, and in `git log`.
   A new `silhouette()` shader patch keeps only part of the moon and sky
   fill (railing A–D 0.35, bauhinia tree 0.3, bauhinia bush 0.3), while the
   lantern pools stay full and catch the edges warm. Lanterns, promontory
-  railings, palms and tall lamps unchanged. Awaiting approval. Files:
+  railings, palms and tall lamps unchanged. Approved 2026-10-04. Files:
   `src/scene/lamps.js`, `src/scene/createForeground.js`; plan:
   `atmospheric-depth-polish.md`, `scene-promenade.md`.
 - **Calm water, atmospheric depth Priority B** (user choice, 2026-10-04;
@@ -70,7 +70,7 @@ lives in the dated notes inside each area file, and in `git log`.
   shimmer 0.045 (was 0.11), sky sheen 0.18 (was 0.28), band contrast 0.9
   (was 1.3), column spread 1.1 (was 1.5), row wobble 0.4 (was 0.6), swell
   sway 0.2 (was 0.3); longer tails under IFC (0.4), the wheel (0.45) and
-  the moon (0.3). Boats and the 05 boost unchanged. Awaiting approval.
+  the moon (0.3). Boats and the 05 boost unchanged. Approved 2026-10-04.
   Files: `src/scene/createWater.js`, `src/scene/waterReflections.js`;
   plan: `atmospheric-depth-polish.md`, `scene-promenade.md`.
 - **Atmosphere diagnosis and aerial perspective** (user request and choice,
@@ -86,7 +86,7 @@ lives in the dated notes inside each area file, and in `git log`.
     unchanged; `?off=aerial` compares. Then strengthened so the skyline
     recedes too (user request): a depth fade behind Central's front row,
     0 at 1220 m north to 55% at 1920 m, a third less on tower tops; IFC
-    stays crisp. Awaiting approval.
+    stays crisp. Approved 2026-10-04.
   - Files: `src/scene/aerialFog.js` (new), `src/scene/createScene.js`
     (`SKY_GLOW` exported), `src/main.js`. Evidence:
     `review-shots/aerial/`.
