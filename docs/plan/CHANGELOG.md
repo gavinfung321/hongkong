@@ -6,6 +6,40 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Shorter holds around every keyframe** (user request, 2026-10-03):
+  `SCROLL.hold` and `copyFull` 0.2 → 0.14, so the camera starts moving
+  sooner after each composition instead of after a long still gap. The
+  moves stretch over more scroll, so their top speed drops by about a
+  sixth; copy is fully shown for the whole hold and gone before the
+  camera has moved 2% of the way; two chapters' copy never show at once
+  (checked on a continuous scroll through all six chapters, desktop and
+  phones). The 03 ferry still holds still and the camera starts
+  overtaking it at p 2.64 (was 2.70). Files: `src/data/chapters.js`;
+  plan: `README.md` (Transitions). Evidence: `review-shots/hold-014/`.
+- **Ferry holds still through the whole 03 hold** (user request,
+  2026-10-03): its drift before the keyframe is now 0 too (was 1.5 m,
+  desktop and phones), so it no longer edges right as the reader scrolls
+  into 03. The bob, wake and reflections still move; the arrival from 02
+  and the move to 04 are unchanged. Files: `src/data/chapters.js`; plan:
+  `scene-models.md`. Evidence: `review-shots/ferry-overtake/drift00/`.
+- **Ferry holds still after the 03 keyframe** (user request, 2026-10-03):
+  its drift after the keyframe is now 0 on desktop and phones (was 3 m and
+  2.5 m), so it no longer sails on right and away while the reader scrolls
+  through the rest of the 03 hold. The bob, wake and reflections still
+  move. The move to 04 starts it from rest; the camera overtakes it and it
+  slides out left, uncovering the junk. Files: `src/data/chapters.js`;
+  plan: `scene-models.md`. Evidence: `review-shots/ferry-overtake/drift0/`.
+- **Ferry overtake into 04 starts sooner** (user request, 2026-10-03): late
+  in 03 the ferry kept sliding right and shrinking, so scrolling down felt
+  like going the wrong way. Its drift after the 03 keyframe is halved
+  (desktop 6 → 3 m, phones 5 → 2.5 m) and the desktop via point moved a
+  little back along the route (93, −383 → 91.5, −381.5; heading 1.12 →
+  1.125). Desktop: the rightward creep through the hold is 2.3% of the
+  width (was 4.2%) and turns left about 8% into the move (was 21%);
+  phones: 4.3% (was 8.1%), turning left as the move begins. The ferry still sails forward, the junk still comes out from
+  behind its bow with no fade or wipe, and the 03 and 04 hold frames are
+  unchanged. Files: `src/data/chapters.js`; plan: `scene-models.md`.
+  Evidence: `review-shots/ferry-overtake/`.
 - **No menu button beside the desktop nav** (user choice, 2026-10-03): from
   960 px wide the nav links, logo and side pager reach every chapter, so
   the menu button is hidden there; the links now end on the page margin.

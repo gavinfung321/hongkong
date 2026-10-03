@@ -129,15 +129,15 @@ all six.
      2026-10-03: "improve depth and motion using the existing Star Ferry
      and harbour", no cutouts, spray or camera-facing mist).**
      - **Sailing through the hold:** the ferry no longer stops while the
-       copy holds. It sails 1.5 m up to the keyframe and 6 m on from it
-       along its heading toward Central (phones 1.5 m and 5 m), so it
-       slides from left toward the right and draws away a little; the
-       keyframe framing is unchanged. Little before the keyframe, so its
-       mast keeps clear of the copy. The pace blends into the moves, so it
-       never stops dead (`drift` in `chapters.js`, `vesselRoutes.js`).
-       The movement follows the scroll, so the composition still holds
-       wherever the reader pauses; at rest the streaming wake, the bob and
-       the moving reflections keep it alive.
+       copy holds. It holds its place on the water through the whole 03
+       hold, on both sides of the keyframe (desktop and phones), so
+       scrolling through the composition never carries it right and away,
+       which read as the scroll going the wrong way (user request,
+       2026-10-03; it used to sail 1.5 m up to the keyframe and 6 m on
+       from it, phones 5 m). The keyframe framing is unchanged. The
+       streaming wake, the bob and the moving reflections keep it alive;
+       the move to 04 starts it from rest (`drift` in `chapters.js`,
+       `vesselRoutes.js`).
      - **Riding the swell:** a bob of up to about 0.2 m from two slow
        waves, a roll of up to about 0.9° and a slight pitch (`SWELL` in
        `createVessels.js`; the junk keeps its gentler first motion).
@@ -154,7 +154,14 @@ all six.
        camera (desktop x 106, z −397), out of frame and too far for its
        cabin light to reach the junk; it stays hidden in 05 and 06.
        Vessel routes can now pass `via` points between chapters, as the
-       camera's do (`vessels.*.via` in `chapters.js`).
+       camera's do (`vessels.*.via` in `chapters.js`). The desktop via
+       point sits a little back along the route (x 91.5, z −381.5,
+       heading 1.125; was 93, −383, 1.12), so the ferry covers less water
+       early in the move and the camera starts overtaking it as the move
+       begins rather than a fifth of the way in: its screen-right creep
+       stops and turns into a gentle leftward slide (user request,
+       2026-10-03). It still sails forward the whole time; the leftward
+       slide is the camera passing it.
      - **Haze:** unchanged. The only haze in 03 is the shore mist on the
        island waterfront about 800 m out, behind the ferry and round the
        skyline; none sits near the camera.
