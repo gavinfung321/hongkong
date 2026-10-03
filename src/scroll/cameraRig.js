@@ -198,6 +198,10 @@ export function createCameraRig(camera, chapters, { hold }) {
     setStart,
     update,
     lookDirection,
+    // The mouse parallax offset applied this frame.
+    get shift() {
+      return shift;
+    },
     get breakpoint() {
       return breakpoint;
     },

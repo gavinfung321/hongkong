@@ -10,6 +10,8 @@ import { createVessels } from './scene/createVessels.js';
 import { createForeground } from './scene/createForeground.js';
 import { createWordmark } from './scene/createWordmark.js';
 import { createMoon } from './scene/createMoon.js';
+import { createBollard } from './scene/createBollard.js';
+import { createBuoy } from './scene/createBuoy.js';
 import { createPetals } from './scene/createPetals.js';
 import { burstLights, createAtmosphere } from './scene/createAtmosphere.js';
 import { createFireworks } from './scene/createFireworks.js';
@@ -127,6 +129,9 @@ async function start(initGuard, header, loading) {
     lights: burstLights,
   });
   const searchlights = createSearchlights();
+  const bollard = createBollard(chapters.find((chapter) => chapter.id === '05').camera);
+  const buoy = createBuoy(chapters.find((chapter) => chapter.id === '03').camera);
+  scene.add(bollard.group, buoy.group);
   scene.add(moon.group, atmosphere.group, searchlights.group, kowloon.group, island.group, vessels.group, foreground.group, fireworks.group, wordmark.mesh, petals.group);
   await stage('foreground');
   water.setSources(reflectionSources({
@@ -164,7 +169,15 @@ async function start(initGuard, header, loading) {
     seaMist: (value) => atmosphere.setSeaMist(value),
     haze: (value) => atmosphere.setHaze(value * HAZE_SCALE),
     afterglow: (value) => world.sky.userData.setAfterglow(value),
+    bollard: (value) => bollard.setOpacity(value),
+    buoy: (value) => buoy.setOpacity(value),
   }, {
+    // The 03 buoy comes in over the second half of the move into 03 and is
+    // gone early in the move to 04.
+    buoy: { in: [0.5, 1], out: [0.2, 0.5] },
+    // The 05 bollard sits by the 05 camera: in only as the camera settles, out
+    // as it leaves.
+    bollard: { in: [0.85, 1], out: [0, 0.1] },
     // The afterglow warms and cools across the whole move.
     afterglow: { in: [0, 1], out: [0, 1] },
     // Mist and haze change gently across the whole move.
@@ -186,7 +199,7 @@ async function start(initGuard, header, loading) {
     junk: { out: [0.4, 0.5] },
     // Phones, 02 → 03: the ferry is shown before it enters the frame.
     ferry: { in: [0, 0.1] },
-  }, { afterglow: 0, haze: 0 });
+  }, { afterglow: 0, haze: 0, bollard: 0, buoy: 0 });
 
   const rig = createCameraRig(camera, chapters, { hold: SCROLL.hold });
   const parallax = createPointerParallax();
@@ -258,6 +271,8 @@ async function start(initGuard, header, loading) {
     vessels.setPaths(chapters, breakpoint);
     petals.setBreakpoint(breakpoint);
     foreground.setBreakpoint(breakpoint);
+    bollard.setBreakpoint(breakpoint);
+    buoy.setBreakpoint(breakpoint);
     copy.setBreakpoint(breakpoint);
     fireworks.place(breakpoint, width / height);
     placeWordmark();
@@ -375,6 +390,7 @@ async function start(initGuard, header, loading) {
 
   function applyPose(p, isStepped, time) {
     const segment = rig.update(p, { stepped: isStepped });
+    bollard.follow(isStepped ? null : rig.shift);
     vessels.update(segment, time, !isStepped);
     gating.update(segment, breakpoint, isStepped);
     atmosphere.setSegment(segment, isStepped);
@@ -483,6 +499,7 @@ async function start(initGuard, header, loading) {
       searchlights.update(time);
       fireworks.update(time);
       moon.update(time);
+      buoy.update(time);
       updateBreathing(time);
       const speed = dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0;
       petals.update(dt, camera, speed);
