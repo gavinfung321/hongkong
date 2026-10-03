@@ -6,6 +6,25 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **01 polish: moon, water and bush** (user request): the first three of
+  six improvements from a review of the hero and 01; mountains, railing
+  and paving wait (listed in README, "01 polish"). Moon: eleven seas laid
+  out like the real near side, faint and joined (the two seas above the
+  ridge read as eyes), an evenly lit face instead of lit-ball shading, a
+  soft corona and wide faint haze ("subtle mist around it"), and clouds
+  near the moon catch its light at their edges; the yellow stays. Water:
+  a dim violet-navy sky mirrored between the glints with soft drifting
+  wave bands (it was pure black), glints capped at 6 px near the camera
+  (they grew into flat blobs), skyline shimmer 0.08 → 0.11. Bush: moved
+  2 m on along the railing so it ends left of 香 in the hero and the
+  railing lantern it hid shows, still framing the 01 hold's corner;
+  flowers in 16 clusters, a few sprigs past the crown, eleven lumps.
+  Probe: only the four older misses. No new draw calls, textures or
+  shaders; JS 211.8 KB gzip. Files: `src/scene/createMoon.js`,
+  `src/scene/createAtmosphere.js`, `src/scene/createWater.js`,
+  `src/scene/bauhinia.js`, `src/data/world.js`, `docs/plan/README.md`,
+  `docs/plan/interface.md`, `docs/plan/atmosphere.md`,
+  `docs/plan/scene-promenade.md`.
 - **Chapter 03 ferry pass and foreground direction** (user request and
   choice): no foreground cutouts, spray or camera-facing mist in 03;
   depth and motion come from the existing ferry and harbour instead. The

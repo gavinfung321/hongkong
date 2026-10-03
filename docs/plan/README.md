@@ -112,6 +112,28 @@ selective use (status per piece in its `MANIFEST.md`).
 On phones, no large physical foreground cutouts unless a later comparison
 proves they improve the frame.
 
+## 01 polish (user request, 2026-10-03)
+
+A review of the hero and 01 against the storyboard ranked six improvements.
+The user asked for the first three now and to revisit the rest after:
+
+1. **Moon** (done): real near-side seas instead of two "eyes", an even
+   face, a soft corona and haze, moonlit cloud edges.
+2. **Water** (done): the night sky mirrored between the glints, finer
+   glints near the camera, a stronger skyline shimmer.
+3. **Bush** (done): clear of 香 in the hero, the hidden railing lantern
+   showing, clustered flowers and stray sprigs.
+4. **Mountains** (later): a darker body against the sky, a stronger
+   city-lit haze at the foot, more visible slope lights; possibly a warm
+   city-glow band along the skyline base.
+5. **Railing** (later): bigger and closer, like the storyboard, with 3–4
+   lanterns set into the posts (the biggest job; it runs into 02).
+6. **Paving** (later): varied slab tones, a puddle or two, lantern light
+   pools.
+
+Also noted, not scheduled: the hero copy sits over the Clock Tower's top,
+and the right-hand tree's flowers sit behind the vertical 東方明珠.
+
 **Not in the look test:** 3D models (GLBs; later dropped altogether, all 3D
 is built in code, user decision 2026-10-01), real fireworks, the sparkle cursor,
 particles in other chapters, sound, final copy and fonts.

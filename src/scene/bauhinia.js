@@ -180,11 +180,16 @@ function foliage(skeleton, random) {
 }
 
 // A low, dense mound: an ellipsoid crown of semi-axes [a, b, c] whose centre
-// stands `lift` above the ground, cut flat near the ground, with a few
-// lumps so its outline is uneven. Cards sit on and just under its surface;
-// flowers only on the upper outer surface, many more of them than on the
-// tree.
-const BUSH_FOLIAGE = { clump: 700, leaf: 880, flower: 260, buds: 80, inset: 0.45, ground: 0.3, lumps: 7, lump: 0.22 };
+// stands `lift` above the ground, cut flat near the ground, with lumps so its
+// outline is uneven. Cards sit on and just under its surface; flowers only
+// on the upper outer surface, many more of them than on the tree, gathered
+// in `clusters` (user request, 2026-10-03: less even, more like a real bush).
+// A `stray` share of leaves and flowers sits on sprigs poking out past the
+// surface by up to `strayReach` of the crown.
+const BUSH_FOLIAGE = {
+  clump: 700, leaf: 880, flower: 260, buds: 80, inset: 0.45, ground: 0.3,
+  lumps: 11, lump: 0.3, clusters: 16, clusterSpread: 0.32, stray: 0.06, strayReach: 0.28,
+};
 
 function bushFoliage([a, b, c], lift, random) {
   const cards = [];
@@ -193,19 +198,29 @@ function bushFoliage([a, b, c], lift, random) {
     new Vector3(random() - 0.5, random() * 0.8, random() - 0.5).normalize(),
     BUSH_FOLIAGE.lump * (0.5 + random()),
   ]);
-  const swell = (dir) => lumps.reduce((sum, [axis, amount]) => sum + amount * Math.max(0, dir.dot(axis)) ** 6, 0.92);
+  const swell = (dir) => lumps.reduce((sum, [axis, amount]) => sum + amount * Math.max(0, dir.dot(axis)) ** 5, 0.9);
+  const clusters = Array.from({ length: BUSH_FOLIAGE.clusters }, () =>
+    new Vector3(random() - 0.5, 0.15 + random() * 0.6, random() - 0.5).normalize(),
+  );
   const direction = new Vector3();
   for (const kind of ['clump', 'leaf', 'flower', 'buds']) {
     for (let i = 0; i < BUSH_FOLIAGE[kind]; i++) {
-      // Uniform on the sphere, then stretched onto the ellipsoid.
-      const z = random() * 2 - 1;
-      const phi = random() * Math.PI * 2;
-      const r = Math.sqrt(1 - z * z);
-      direction.set(r * Math.cos(phi), z, r * Math.sin(phi));
       const outer = kind === 'flower' || kind === 'buds';
+      if (outer) {
+        // Near one of the cluster centres.
+        const centre = clusters[Math.floor(random() * clusters.length)];
+        direction.copy(centre).addScaledVector(jitter(), BUSH_FOLIAGE.clusterSpread * 2).normalize();
+      } else {
+        // Uniform on the sphere, then stretched onto the ellipsoid.
+        const z = random() * 2 - 1;
+        const phi = random() * Math.PI * 2;
+        const r = Math.sqrt(1 - z * z);
+        direction.set(r * Math.cos(phi), z, r * Math.sin(phi));
+      }
       if (outer && direction.y < -0.25) direction.y = -direction.y * 0.6;
       const depth = outer ? random() * 0.25 : Math.pow(random(), 1.5);
-      const scale = swell(direction) - (depth * BUSH_FOLIAGE.inset) / Math.min(a, b, c);
+      const stray = kind !== 'clump' && random() < BUSH_FOLIAGE.stray ? random() * BUSH_FOLIAGE.strayReach : 0;
+      const scale = swell(direction) + stray - (depth * BUSH_FOLIAGE.inset) / Math.min(a, b, c);
       const position = new Vector3(direction.x * a * scale, direction.y * b * scale + lift, direction.z * c * scale);
       if (position.y < BUSH_FOLIAGE.ground) position.y = BUSH_FOLIAGE.ground + random() * 0.15;
       const normal = new Vector3(direction.x / a, direction.y / b, direction.z / c).normalize();

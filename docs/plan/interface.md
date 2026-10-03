@@ -318,23 +318,37 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
 - A big yellow moon behind the far mountain range, upper right of the opening
   frame, with the ridge hiding its lower edge. Kage's red moon was the
   reference, but its artwork can't be reused, so ours is original.
-- Drawn in code (`src/scene/createMoon.js`), no image file, plus a faint
-  additive halo. The surface (more dark spots for realism and depth, then
-  changed to fewer spots and larger seas like Kage's, user requests,
-  2026-10-01):
-  - three large dark "seas" (maria), each built from big overlapping blobs
-    so they merge into broad patches, in the `MARIA` list (x, y, spread,
-    blob count, darkness, blob size);
+- Drawn in code (`src/scene/createMoon.js`), no image file, plus an
+  additive glow. The surface (more dark spots for realism and depth, then
+  fewer spots and larger seas like Kage's, user requests, 2026-10-01;
+  redrawn 2026-10-03, user request, because the two seas left above the
+  ridge read as a pair of eyes):
+  - eleven seas (maria) laid out like the real moon's near side
+    (Procellarum down the left, Imbrium, Serenitatis, Tranquillitatis,
+    Crisium near the right rim, Nubium and others lower down), each built
+    from many faint overlapping blobs, so the seas join with ragged edges
+    in a muted grey-brown (the `MARIA` list: x, y, radii, blob count,
+    darkness);
+  - pale and dark specks over the highlands between them;
   - only 6 small craters, with a shadowed upper-left wall and a bright
     lower-right rim;
   - spots squashed toward the rim, as on a sphere;
-  - fine grain, then sphere shading: lit from the upper left, darker rim.
+  - fine grain, then an even face with only a slight darker rim (a full
+    moon is lit face on; the old lit-ball shading from the upper left made
+    it look like a cartoon sphere).
+- The glow (2026-10-03, user request: "subtle mist around it"): a soft
+  corona falling off just beyond the rim and a wide faint haze out to five
+  moon diameters, as if seen through thin mist (`CORONA`, `HAZE`). The
+  rim stays clean. Clouds near the moon pick up its light (see "Moonlit
+  clouds" in [atmosphere.md](atmosphere.md)). The warm yellow stays: it
+  is part of the look (section 2), and the grade was chosen partly to
+  avoid a pale moon.
 - A fixed object in the world (`WORLD.moon` in `world.js`: position, radius,
   seed), so it stays put as the camera travels: it peeks between towers in 05
   and sits low behind IFC in 06.
 - Far larger than life on purpose (about 9° across) and unaffected by fog.
 - Tweak later: seas in `MARIA`, crater count in `CRATERS`, colours in
-  `drawDisc`, halo strength in `drawHalo`, and size or place in `WORLD.moon`
+  `drawDisc`, glow in `CORONA` and `HAZE`, and size or place in `WORLD.moon`
   (changing its `seed` reshuffles the spots). A painted moon can replace the disc in the assets
   milestone.
 

@@ -1,5 +1,6 @@
 import {
   CanvasTexture,
+  Color,
   DataTexture,
   LinearFilter,
   MathUtils,
@@ -43,16 +44,23 @@ const REFLECT = {
 // out in view angles around the camera, so they keep their size on screen
 // and moving the camera can't make them strobe; they drift and twinkle.
 // Rows are `rowPixels` CSS px tall in the distance and grow toward the viewer
-// (1 / `grow` of the depression tangent), slivers `aspect` times as long.
-// maxDensity keeps dark gaps between glints even in the brightest core.
-const GLINT = { rowPixels: 2, grow: 30, aspect: 4, density: 2, maxDensity: 0.72, drift: 0.9 };
+// (1 / `grow` of the depression tangent) up to `rowMaxPixels`, so the glints
+// near the camera stay fine slivers rather than flat blobs (user request,
+// 2026-10-03); slivers are `aspect` times as long as tall. maxDensity keeps
+// dark gaps between glints even in the brightest core.
+const GLINT = { rowPixels: 2, rowMaxPixels: 6, grow: 30, aspect: 4, density: 2, maxDensity: 0.72, drift: 0.9 };
+// The night sky mirrored between the glints (user request, 2026-10-03): a dim
+// violet-navy times the water's Fresnel sheen (plus a small `floor` near the
+// camera), broken into soft bands by the wavelets, so the dark water has a
+// surface instead of reading as flat black.
+const SKY = { color: 0x2c2448, strength: 0.28, floor: 0.04, bands: [0.18, 0.55], contrast: 1.3 };
 // A slow swell rolling in toward the viewer (user request, 2026-10-03): as
 // a crest passes, each wavelet row sways sideways (`sway`, in half widths)
 // and brightens (`pulse`), so the reflection columns ripple down the water.
 // `rows`: radians per wavelet row; `speed`: radians per second.
 const SWELL = { rows: 0.45, speed: 1.7, sway: 0.3, pulse: 0.15 };
 // The skyline shimmer: brightness of the strip read along the island front.
-const CITY = { power: 0.08, lit: 0.6, tail: 0.25 };
+const CITY = { power: 0.11, lit: 0.6, tail: 0.25 };
 // Plane segments per side. Positions interpolated across one 8 km triangle
 // lose enough float precision to make the streaks shiver as the camera moves.
 const SEGMENTS = 64;
@@ -137,6 +145,7 @@ export function createWater(renderer) {
     waterPixelTan: { value: 0.001 }, // view tangent per CSS pixel
     waterCity: { value: null }, // skyline strip: rgb brightness, a height
     waterCityRange: { value: new Vector4(0, 1, 0, 0) }, // x0, x1, front z, full height
+    waterSky: { value: new Color(SKY.color).multiplyScalar(SKY.strength) },
   };
 
   // Samples the ripples at least BLUR mip levels down; where the texture is
@@ -169,6 +178,7 @@ export function createWater(renderer) {
         uniform float waterPixelTan;
         uniform sampler2D waterCity;
         uniform vec4 waterCityRange;
+        uniform vec3 waterSky;
         varying vec3 vWaterWorld;
         float waterHash( vec2 p ) {
           return fract( sin( dot( p, vec2( 127.1, 311.7 ) ) ) * 43758.5453 );
@@ -272,9 +282,13 @@ export function createWater(renderer) {
           // toward the viewer. Azimuth is measured from −z (toward the
           // island), so its seam lies behind every camera.
           float rowMin = waterPixelTan * ${GLINT.rowPixels.toFixed(2)};
+          float rowMax = waterPixelTan * ${GLINT.rowMaxPixels.toFixed(2)};
           float t0 = rowMin * ${GLINT.grow.toFixed(1)};
-          float row = t < t0 ? t / rowMin : ${GLINT.grow.toFixed(1)} * ( 1.0 + log( t / t0 ) );
-          float rowTan = max( rowMin, t / ${GLINT.grow.toFixed(1)} );
+          float t1 = rowMax * ${GLINT.grow.toFixed(1)};
+          float row = t < t0 ? t / rowMin
+            : t < t1 ? ${GLINT.grow.toFixed(1)} * ( 1.0 + log( t / t0 ) )
+            : ${GLINT.grow.toFixed(1)} * ( 1.0 + log( t1 / t0 ) ) + ( t - t1 ) / rowMax;
+          float rowTan = clamp( t / ${GLINT.grow.toFixed(1)}, rowMin, rowMax );
           float azimuth = atan( fromEye.x, -fromEye.y );
           vec2 g = vec2( azimuth / ( rowTan * ${GLINT.aspect.toFixed(1)} ), row );
           float drift = waterTime * ${GLINT.drift.toFixed(2)};
@@ -323,6 +337,9 @@ export function createWater(renderer) {
           vec3 toEye = normalize( cameraPosition - vWaterWorld );
           float fresnel = 0.02 + 0.98 * pow( 1.0 - clamp( toEye.y, 0.0, 1.0 ), 5.0 );
           shine *= crest * fresnel * ${REFLECT.gain.toFixed(2)} * ( 0.7 + 0.6 * smoothstep( -0.2, 0.4, waterRipple.y ) );
+
+          float skyBand = waterNoise( g * vec2( ${SKY.bands[0].toFixed(2)}, ${SKY.bands[1].toFixed(2)} ) + vec2( drift * 0.15, -drift * 0.25 ) );
+          totalEmissiveRadiance += waterSky * ( fresnel + ${SKY.floor.toFixed(2)} ) * ( 1.0 + ${SKY.contrast.toFixed(2)} * ( skyBand - 0.5 ) ) * crest * ( 1.0 - 0.6 * hullMask );
 
           // Glints: a sliver noise thresholded by the local brightness, so the
           // core is nearly solid and the edges break into sparse slivers.
