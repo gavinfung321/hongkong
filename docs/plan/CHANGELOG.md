@@ -6,6 +6,15 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **Quieter sky and palette, atmospheric depth Priority E** (user choice,
+  2026-10-04; Priority D approved): near-black navy zenith (0x0a0d1e, was
+  0x141833) with the glow in a lower band (0.24, was 0.3); clouds at 0.65
+  except near the moon; LED crowns and strips at 0.6; Central Plaza and The
+  Center's neon desaturated and dimmed (Center neon 0.5, was 0.8; plaza
+  bars 0.7). Landmarks' own colours, IFC, wheel and Clock Tower unchanged.
+  Awaiting approval. Files: `src/scene/palette.js`, `createScene.js`,
+  `createAtmosphere.js`, `createIsland.js`, `landmarks.js`; plan:
+  `atmospheric-depth-polish.md`, `atmosphere.md`, `scene-city.md`.
 - **Veiled moon, atmospheric depth Priority D** (user choice, 2026-10-04;
   Priority C approved): the disc is slightly dimmer (0.86) with a softer
   corona (0.22, was 0.26), and a thin, seeded veil of violet-grey cloud

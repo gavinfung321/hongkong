@@ -16,8 +16,9 @@ import { createBloom, OVERLAY } from './bloom.js';
 
 const SKY_RADIUS = 4000;
 // Share of the dome's height over which the horizon glow fades (aerialFog.js
-// matches it).
-export const SKY_GLOW = 0.3;
+// matches it). 0.24 (was 0.3; atmospheric depth Priority E, user choice,
+// 2026-10-04): the glow sits in a lower band behind the skyline.
+export const SKY_GLOW = 0.24;
 
 // The 02 afterglow (user choice, 2026-10-03: the storyboard's sky burns red
 // and orange low on the right; ours was an even navy). A warm glow on the
@@ -48,7 +49,7 @@ function createSky() {
 
   for (let i = 0; i < position.count; i++) {
     const t = position.getY(i) / SKY_RADIUS;
-    // The glow band reaches ~17° so the mountain ridges silhouette against it.
+    // The glow band reaches ~14° so the mountain ridges silhouette against it.
     if (t <= 0) c.copy(below);
     else if (t < SKY_GLOW) c.copy(horizon).lerp(mid, t / SKY_GLOW);
     else c.copy(mid).lerp(top, Math.min(1, (t - SKY_GLOW) / 0.5));

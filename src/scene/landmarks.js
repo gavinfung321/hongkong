@@ -237,7 +237,7 @@ function createCentralPlaza({ position, radius, height, pyramid, mastTip }) {
 
 // A chamfered square shaft of dark glass with a stepped crown and a spire,
 // ringed by colour-changing neon lines every two floors.
-const CENTER = { glow: 0.5, floors: 80, linesEvery: 2, duty: 0.2, neon: 0.8 };
+const CENTER = { glow: 0.5, floors: 80, linesEvery: 2, duty: 0.2, neon: 0.5 }; // neon 0.5, was 0.8 (Priority E, 2026-10-04)
 
 function createCenter({ position, half, height, crown, spireTip }) {
   const corners = (r) => chamfered(4, r * Math.SQRT2, 0.16, Math.PI / 4);
@@ -336,7 +336,11 @@ export function createBeacons(positions) {
 // ---- All four ------------------------------------------------------------------------
 
 // Colour cycles: seconds per turn of the hue wheel, saturation, lightness.
-const CYCLE = { plaza: [90, 0.6, 0.55], center: [60, 0.55, 0.6] };
+// Saturation 0.35 / 0.3 (was 0.6 / 0.55) and the plaza's bars at
+// `PLAZA_BANDS` (atmospheric depth Priority E, user choice, 2026-10-04): the
+// supporting towers' neon is muted so the landmarks' own colours lead.
+const CYCLE = { plaza: [90, 0.35, 0.55], center: [60, 0.3, 0.6] };
+const PLAZA_BANDS = 0.7;
 
 export function createLandmarks() {
   const { boc, cheungKong, centralPlaza, center } = WORLD.landmarks;
@@ -359,7 +363,7 @@ export function createLandmarks() {
   let level = 1;
 
   function apply() {
-    for (const material of bands) material.color.copy(plaza).multiplyScalar(level);
+    for (const material of bands) material.color.copy(plaza).multiplyScalar(PLAZA_BANDS * level);
     hue.copy(tower).multiplyScalar(CENTER.neon * level);
   }
 

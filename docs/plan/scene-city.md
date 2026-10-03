@@ -139,7 +139,10 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
          harbour-facing corners, from 30–60% of their height to the roof.
          All stay dimmer than IFC's lit glass, so IFC still leads. They
          share the roof bands' draw call and fade with the `city` level
-         (`LED` in `createIsland.js`).
+         (`LED` in `createIsland.js`). Muted to 0.6, and Central Plaza's
+         and The Center's colour cycles desaturated and dimmed, so the
+         frame keeps one warm accent (user choice, 2026-10-04; atmospheric
+         depth Priority E).
        - **Waterfront lamps (2026-10-03, user request: the storyboard has
          a bright line where the city meets the water).** Warm lamps along
          Central's harbour front in small clusters, not a row (user

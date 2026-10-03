@@ -43,6 +43,9 @@ const FEATHER = [0.06, 0.18]; // edge fade, as a share of the card's width / hei
 // warm up, their thin edges most, falling off with the angle from the moon's
 // rim as seen from the camera (`reach`, radians). Clouds only, not the mist.
 const MOONLIT = { color: 0xf6c46a, strength: 0.55, reach: 0.1, edge: 0.8 };
+// Quieter sky (atmospheric depth Priority E, user choice, 2026-10-04): clouds
+// keep `quiet` of their brightness, back to full where the moon lights them.
+const CLOUD_QUIET = 0.65;
 // Firework light on the clouds (user choice, 2026-10-03): the brightest live
 // bursts (written each frame by createFireworks.js) tint the clouds near
 // them in their own colour, thin edges most, falling off with the angle from
@@ -95,6 +98,7 @@ const fragmentShader = `
     float angle = acos( clamp( dot( normalize( vWorld - cameraPosition ), normalize( toMoon ) ), -1.0, 1.0 ) );
     float lit = exp( -max( angle - rim, 0.0 ) / ${MOONLIT.reach.toFixed(3)} );
     float thin = 1.0 - smoothstep( 0.15, 0.85, c.a );
+    colour *= mix( 1.0, mix( ${CLOUD_QUIET.toFixed(2)}, 1.0, lit ), uSkyLit );
     colour += uMoonLight * lit * ( 1.0 - ${MOONLIT.edge.toFixed(2)} + ${MOONLIT.edge.toFixed(2)} * thin );
     vec3 view = normalize( vWorld - cameraPosition );
     vec3 flash = vec3( 0.0 );

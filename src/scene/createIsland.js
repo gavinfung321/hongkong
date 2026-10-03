@@ -135,6 +135,9 @@ const LED = {
   colours: [0xff3d8b, 0x38d6ff, 0xff5a3c, 0xb06bff, 0xffb347],
   crown: { share: 0.5, height: 6, glow: [0.5, 0.2] },
   strip: { minHeight: 120, share: 0.2, width: 2.4, from: [0.3, 0.3], glow: [0.38, 0.2] },
+  // Muted to 0.6 (atmospheric depth Priority E, user choice, 2026-10-04), so
+  // the frame keeps one warm accent.
+  level: 0.6,
 };
 
 function createTops(buildings, windowMaterial, seed) {
@@ -680,7 +683,7 @@ export function createIsland() {
   let accentLevel = 1;
   function applyLevels() {
     skylineWindows.uCityStrength.value = SKYLINE_STRENGTH * cityLevel;
-    tops.crownMaterial.color.setScalar(cityLevel * accentLevel);
+    tops.crownMaterial.color.setScalar(LED.level * cityLevel * accentLevel);
     dots.setLevel(cityLevel);
     waterfront.setLevel(cityLevel);
     farShore.setLevel(cityLevel);
