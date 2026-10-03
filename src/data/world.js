@@ -61,7 +61,9 @@ export const WORLD = {
       { from: [-60, 61.7], to: [-48, 61.7], y: 2.5, skipFirst: true, skipLast: true }, // D: inlet, north side
     ],
     edgeRailings: [
-      { from: [-50, 40], to: [-50, -60], y: 2.5 }, // B: promontory's harbour edge
+      // B: promontory's harbour edge, the desktop 02 foreground. Chunky with
+      // a lantern on every post, like A (user choice, 2026-10-03).
+      { from: [-50, 40], to: [-50, -60], y: 2.5, scale: 1.3, lanternEvery: 1 },
       { from: [-50, -60], to: [-110, -60], y: 2.5, skipFirst: true }, // promontory's south tip
       { from: [-50, 40], to: [-60, 40], y: 2.5, skipFirst: true }, // inlet, south side
       // Inlet, west side. No lanterns: in mobile 02 this run points straight
@@ -96,6 +98,21 @@ export const WORLD = {
     // Desktop only (mobile 01 has no deck).
     // size: [length, height, depth] in metres.
     bauhiniaBush: { position: [-21.1, 2.5, 87.4], yaw: -0.7, size: [7, 2.3, 2.6], seed: 11, viewer: [-13, 5.9, 102] },
+    // People standing near the Clock Tower (user choices, 2026-10-03; see
+    // people.js): at railing B watching the sea in desktop 02 (a couple, a
+    // single, a pair turned to each other), and one looking up at the
+    // tower. face: radians, 0 toward +x (the sea).
+    people: {
+      seed: 8,
+      list: [
+        { position: [-51.3, 23.6], face: 0.1 },
+        { position: [-51.3, 24.3], face: -0.1 },
+        { position: [-51.3, 30.5], face: 0.3 },
+        { position: [-51.4, 12.6], face: 0.6 },
+        { position: [-52.1, 13.2], face: -0.9 },
+        { position: [-66.5, -9], face: -1.1 },
+      ],
+    },
     // 3D palms around the Clock Tower (frame 02), in two shapes. Yaw turns the
     // trunk's lean: 0 leans toward +x, π/2 toward −z. None may cross the
     // tower in either chapter 02 framing. The row of five stands behind the

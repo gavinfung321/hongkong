@@ -6,6 +6,45 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **03 polish** (user choices, five of six items from the 03 review; the
+  moon stays): the ferry's reflection kept under the hull and drawn as
+  thin slivers near the camera (they scattered over the foreground as
+  flat blobs); a longer, wider, faintly glowing ferry wake; the other
+  towers and LEDs at 40% in 03 so IFC and the wheel lead; 03's clouds as
+  one mass with the copy's corner calm; on phones the ferry moved closer
+  (34 m, was 53 m) to fill about a fifth of the frame, as in the
+  storyboard. Files: `src/scene/waterReflections.js`,
+  `src/scene/createWater.js`, `src/scene/wakes.js`,
+  `src/scene/createVessels.js`, `src/data/chapters.js`,
+  `src/data/atmosphere.js`, `docs/plan/README.md`,
+  `docs/plan/atmosphere.md`, `docs/plan/scene-city.md`,
+  `docs/plan/scene-promenade.md`.
+- **02 polish, follow-up** (user requests): the afterglow toned down to
+  a soft dusky rose (was a bright red-orange that matched no other
+  scene); the far-shore lights cut back to a short sparse run under the
+  ridge, none on the open sea; the people stand still, mostly at railing
+  B watching the sea, instead of walking. Files:
+  `src/scene/createScene.js`, `src/scene/createIsland.js`,
+  `src/scene/people.js`, `src/scene/createForeground.js`,
+  `src/data/world.js`, `docs/plan/atmosphere.md`,
+  `docs/plan/scene-city.md`, `docs/plan/scene-promenade.md`.
+- **02 polish** (user choices, all seven items from the 02 review): a
+  red-orange afterglow on the sky low on the right (desktop and phones,
+  02 only) with the clouds as one overlapping mass instead of three rows;
+  the water mirrors the afterglow in drifting bands; the ferry's wake
+  longer and whiter; far-shore low-rise lights with dark land strips
+  behind the ferry; railing B 1.3× with a lantern on every post; three
+  puddles on desktop 02's empty paving, and every puddle now mirrors the
+  Clock Tower; six people strolling on the promontory; on phones the
+  city (35%) and Mid-Levels lights (50%) dimmed behind the tower. Files:
+  `src/scene/createScene.js`, `src/scene/gating.js`, `src/main.js`,
+  `src/scene/createWater.js`, `src/scene/createVessels.js`,
+  `src/scene/createIsland.js`, `src/scene/createMountains.js`,
+  `src/scene/lamps.js`, `src/scene/people.js` (new),
+  `src/scene/createForeground.js`, `src/data/world.js`,
+  `src/data/chapters.js`, `src/data/atmosphere.js`,
+  `docs/plan/README.md`, `docs/plan/atmosphere.md`,
+  `docs/plan/scene-city.md`, `docs/plan/scene-promenade.md`.
 - **Palms on mobile 01** (user choice): after previewing the lower scene
   on phones, the palms at the Clock Tower's foot now show in the mobile
   hero and 01, as in the mobile storyboard; deck and railing stay hidden

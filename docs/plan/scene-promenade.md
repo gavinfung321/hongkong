@@ -381,3 +381,37 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
      - **Code:** `waterReflections.js` (the lights and `cityStrip`),
        `createWater.js` (the glint shader, culling, fades, `setCity`),
        `main.js` (lights, skyline strip, fades, per-frame `water.reflect`).
+     - **03: a column under the ferry, in slivers (user choice,
+       2026-10-03: the ferry's glints scattered over the whole
+       foreground as flat camouflage blobs).** The ferry's window
+       reflection keeps to the hull's length (half extents 9 × 3 m, was
+       14 × 4) and close under it (tail 0.15, was 0.45), a little
+       brighter (0.45). Near the camera, where the wavelet rows reach
+       full size, the glints stretch to 9× as long as tall (4× far off)
+       and a dark gap at each row's edges (40%) cuts them into thin
+       slivers; the hero and other far-off water are unchanged.
+       `waterReflections.js`, `GLINT` in `createWater.js`.
+     - **The 02 afterglow on the water (user choice, 2026-10-03: the
+       right-hand water read flat):** under the sky's afterglow
+       ([atmosphere.md](atmosphere.md)) the water adds its red-orange,
+       times the Fresnel sheen, in soft bands that drift with the
+       wavelets; the same uniforms as the sky, so it follows the 02 gate.
+       `AFTERGLOW_MIRROR` in `createWater.js`.
+
+6. **02 promenade (user choices, 2026-10-03).**
+   - **Railing B** (the promontory's harbour edge, desktop 02's
+     foreground) is built 1.3× with a lantern on every big post, like
+     railing A. Railing C (mobile 02's foreground) is unchanged.
+   - **Puddles in 02:** three more puddles on the promontory fill the
+     empty paving at the bottom left of desktop 02, on the camera's line
+     to the Clock Tower. Inside any puddle the water now also mirrors the
+     tower, traced as an upright slab: its floodlit foot warm yellow,
+     brick red above. Fallen petals stay near the tree and bush (at 02's
+     distance they would be under a pixel).
+   - **People:** six simple figures (about 1.7 m: tapered body, head,
+     legs, muted clothes warmed by the lamp pools) standing still on the
+     promontory (user request, 2026-10-03: walking figures were too
+     much): a couple, a single and a pair turned to each other at
+     railing B watching the sea, and one looking up at the tower.
+     Positions in `WORLD.foreground.people`; code `src/scene/people.js`,
+     added in `createForeground.js`.

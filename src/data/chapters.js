@@ -140,9 +140,12 @@ export const chapters = [
       mobile: { left: 8, top: 9, right: 92, bottom: 23 },
     },
     visibility: {
-      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bush: 0, bursts: 0, mist: 0.5, seaMist: 0, searchlights: 0 },
+      // afterglow: the red-orange sky low on the right (02 only; createScene.js).
+      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bush: 0, bursts: 0, mist: 0.5, seaMist: 0, searchlights: 0, afterglow: 1 },
       // Fainter shore mist: the phone looks straight at the tower's foot.
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bush: 0, bursts: 0, mist: 0.2, seaMist: 0, searchlights: 0 },
+      // city, slopeLights: Central Plaza, BOC and the Mid-Levels lights
+      // behind the tower dimmed, so the tower leads (user choice, 2026-10-03).
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bush: 0, bursts: 0, city: 0.35, slopeLights: 0.5, mist: 0.2, seaMist: 0, searchlights: 0, afterglow: 1 },
     },
     fogDensity: 0.00045,
     vessels: {
@@ -184,8 +187,10 @@ export const chapters = [
       mobile: { left: 8, top: 9, right: 92, bottom: 37 },
     },
     visibility: {
-      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, mist: 0.8, seaMist: 0, searchlights: 0 },
-      mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, mist: 0.8, seaMist: 0, searchlights: 0 },
+      // city: the other towers and their LEDs at 40% so the ferry, IFC and
+      // the wheel lead, as the storyboard asks (user choice, 2026-10-03).
+      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, city: 0.4, mist: 0.8, seaMist: 0, searchlights: 0 },
+      mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, city: 0.4, mist: 0.8, seaMist: 0, searchlights: 0 },
     },
     fogDensity: 0.00045,
     // The ferry sails on toward Central through the hold (drift; little
@@ -197,7 +202,10 @@ export const chapters = [
     // It waits behind the 04 camera, out of frame.
     vessels: {
       desktop: { ferry: [69.3, -359.1, 1.26], junk: [59.5, -400.6, 0.46], via: { ferry: [[93, -383, 1.12]] }, drift: { ferry: [1.5, 6] } },
-      mobile: { ferry: [-23.4, -270.9, 1], junk: [40, -390, 0.5], via: { ferry: [[8, -318, 1]] }, drift: { ferry: [1.5, 5] } },
+      // Mobile: 34 m from the camera (was 53 m), so the ferry fills about a
+      // fifth of the frame's height as in the storyboard, its stern off the
+      // left edge (user choice, 2026-10-03).
+      mobile: { ferry: [-29, -252.3, 1], junk: [40, -390, 0.5], via: { ferry: [[8, -318, 1]] }, drift: { ferry: [1.5, 5] } },
     },
     probes: {
       desktop: {

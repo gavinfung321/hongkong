@@ -18,6 +18,7 @@ import { WORLD } from '../data/world.js';
 import { RAILING_BAY, addLampLight, glowMaterial, railingLayout } from './lamps.js';
 import { createBauhinia, createBauhiniaBush } from './bauhinia.js';
 import { createPalms } from './palms.js';
+import { createPeople } from './people.js';
 import { promenadeGranite, railingPanel } from './surfaces.js';
 
 // ---- Promenade railing --------------------------------------------------------
@@ -255,8 +256,9 @@ export function createForeground() {
     for (const glow of entry.glows ?? []) glow.uniforms.opacity.value = value;
   }
 
+  const people = createPeople();
   const group = new Group();
-  group.add(railing.group, edgeRailing.group, lamps, palms.group, bauhinia.group, bush.group);
+  group.add(railing.group, edgeRailing.group, lamps, palms.group, bauhinia.group, bush.group, people.group);
 
   function update(seconds) {
     palms.update(seconds);

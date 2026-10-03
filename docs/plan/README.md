@@ -140,6 +140,33 @@ Third round (user choices, 2026-10-03): slope lights carried west of the
 Clock Tower, thinning out; soft dark pools behind 01's copy and
 東方明珠; the bauhinia tree's crown lowered clear of 東方明珠.
 
+## 02 polish (user choices, 2026-10-03)
+
+After 01 was signed off, a review of 02 against the storyboard found seven
+improvements; the user chose all of them, and all are done: a red-orange
+afterglow low on the right with one cloud mass instead of stacked rows
+([atmosphere.md](atmosphere.md)); far-shore city lights behind the ferry
+and a quieter background behind the tower on phones
+([scene-city.md](scene-city.md)); the afterglow mirrored on the water and a
+stronger ferry wake; railing B built chunky with a lantern on every post;
+puddles mirroring the tower on the empty paving; people strolling near the
+tower ([scene-promenade.md](scene-promenade.md)).
+
+## 03 polish (user choices, 2026-10-03)
+
+A review of 03 against its storyboard found six improvements; the user
+chose five (the moon stays, for consistency with 01 and 02): the ferry's
+reflection as a column of slivers under the hull instead of blobs over
+the whole foreground, and a visible wake
+([scene-promenade.md](scene-promenade.md),
+[scene-city.md](scene-city.md)); the other towers dimmed so the ferry,
+IFC and the wheel lead ([scene-city.md](scene-city.md)); the clouds as
+one mass ([atmosphere.md](atmosphere.md)); and on phones the ferry 34 m
+from the camera (was 53 m), filling about a fifth of the frame's height
+with its stern off the left edge, as in the storyboard (`vessels` in
+`src/data/chapters.js`; the move to 04 still slides it off left and
+uncovers the junk).
+
 **Not in the look test:** 3D models (GLBs; later dropped altogether, all 3D
 is built in code, user decision 2026-10-01), real fireworks, the sparkle cursor,
 particles in other chapters, sound, final copy and fonts.
