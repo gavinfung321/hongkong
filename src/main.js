@@ -78,7 +78,11 @@ function start(initGuard, header) {
   const island = createIsland();
   const vessels = createVessels({ hold: SCROLL.hold });
   const foreground = createForeground();
-  const wordmark = createWordmark(renderer, HERO.wordmark.text);
+  const wordmark = createWordmark(renderer, HERO.wordmark.text, {
+    onRepaint: () => {
+      needsRender = true;
+    },
+  });
   const moon = createMoon();
   const petals = createPetals();
   const atmosphere = createAtmosphere(chapters, {

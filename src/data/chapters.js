@@ -139,7 +139,7 @@ export const chapters = [
     },
     copy: {
       desktop: { left: 50, top: 11, right: 92, bottom: 39 },
-      mobile: { left: 8, top: 9, right: 92, bottom: 23 },
+      mobile: { left: 8, top: 7.5, right: 92, bottom: 23 },
     },
     visibility: {
       // afterglow: the red-orange sky low on the right (02 only; createScene.js).
@@ -185,7 +185,7 @@ export const chapters = [
       mobile: { position: [-31.2, 1.8, -218.1], target: [41.8, 112.7, -595.4], fov: 80.1, via: [[60, 3, -300]] },
     },
     copy: {
-      desktop: { left: 5, top: 11, right: 42, bottom: 27 },
+      desktop: { left: 5, top: 11, right: 42, bottom: 32 },
       mobile: { left: 8, top: 9, right: 92, bottom: 37 },
     },
     visibility: {
@@ -337,7 +337,7 @@ export const chapters = [
     },
     copy: {
       desktop: { left: 5, top: 12, right: 38, bottom: 62 },
-      mobile: { left: 6, top: 9, right: 60, bottom: 35 },
+      mobile: { left: 6, top: 9, right: 66, bottom: 35 },
     },
     visibility: {
       // city: the towers around IFC stay at 60%, as in 05 (user request, 2026-10-02);

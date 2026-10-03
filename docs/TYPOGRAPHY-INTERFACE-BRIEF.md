@@ -1,7 +1,22 @@
 # Typography and Interface Brief
 
-**Status:** Direction approved 2026-10-02. Planning document only; implementation
-waits until the current Cursor build step is complete.
+**Status:** Direction approved 2026-10-02. Implemented 2026-10-03, awaiting the
+user's typography review (not committed). Fonts, roles, sizes and the canvas
+`香港` repaint are live; files and sizes are in `ASSET-LEDGER.md` ("Fonts").
+Deviations and open items:
+
+- Shipped weights are the ones a role uses: Cormorant Garamond 600 (700
+  unused), Inter 400 to 600 variable, Noto Serif TC 600 and 700, Noto Sans
+  TC 500 (400 and 600 unused).
+- Chapter 01's title uses the standard title size rather than the optional
+  `4.25rem`.
+- Chinese labels inside the vertical column keep their existing spacing;
+  horizontal Chinese (nav rollover, menu labels, 維港夜色) has none.
+- Copy regions widened where the new type needed room: 03 desktop (bottom 27
+  to 32%), 02 phones (top 9 to 7.5%), 06 phones (right 60 to 66%).
+- Open: chapter 02 on phones still runs about 40 px past its region, over
+  the tip of the Clock Tower's spire; the iPhone 11 frame-rate check (item
+  11.11) is not yet run.
 
 This brief turns the existing page shell into the final bilingual editorial
 system for the Victoria Harbour experience. It preserves the interface already

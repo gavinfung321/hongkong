@@ -224,6 +224,8 @@ details, not claims of unbroken physical or corporate continuity.
 
 ### Colophon column
 
+- Created by Gavin Fung at HKAAA (added 2026-10-03, user choice: HKAAA is
+  the author's studio; "HKAAA" links to https://hkaiautomation.com/)
 - Built with Three.js and WebGL
 - Original 3D scene and illustrated atmosphere
 - Designed for desktop and mobile
@@ -235,7 +237,7 @@ atmosphere and font files make that statement inaccurate.
 
 | Position | Final copy |
 |---|---|
-| Left | © 2026 Victoria Harbour: A Night Crossing |
+| Left | © 2026 Gavin Fung (was "© 2026 Victoria Harbour: A Night Crossing"; user choice, 2026-10-03) |
 | Centre | 維港夜色 |
 | Right | Three.js · WebGL · Hong Kong |
 
