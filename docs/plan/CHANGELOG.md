@@ -6,6 +6,19 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Interface state fixes IS-01 to IS-13** (user request, 2026-10-03): all
+  thirteen findings of the Interface State Polish audit. The header stays
+  after long jumps; copy stays below the header; short landscape windows
+  get the phone header, smaller copy, the phone vertical title, no side
+  pager, a fitting menu and a 香港 clear of the copy; safe-area insets on
+  every fixed edge and in the header height; Return focuses the logo; the
+  menu's current chapter is underlined; keyboard focus no longer swaps nav
+  labels to Chinese; the hero hint is at 75% (was 50%); the fallback's
+  vertical title scrolls away; the address hash follows the chapter; hover
+  styles only on hover-capable pointers. Desktop and portrait layouts,
+  scenes and timings unchanged. Files: `src/styles.css`, `src/main.js`,
+  `src/ui/siteHeader.js`, `src/data/chapters.js`; plan: `interface.md`
+  (3.3, 3.4, 3.14). Evidence: `review-shots/interface-fixes/`.
 - **Entrance and loading sequence** (user request, 2026-10-03; centred
   direction, user choice, 2026-10-03): a near-black title card replaces
   the sky-only loading state. One small centred group in the middle of

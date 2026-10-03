@@ -35,6 +35,8 @@ const INIT_TIMEOUT = 8000;
 const VEIL_IN = 150;
 const VEIL_OUT = 200;
 const MOBILE_ASPECT = 0.8;
+// Phones turned sideways; the same query sizes the interface in styles.css.
+const SHORT_LANDSCAPE = '(orientation: landscape) and (max-height: 500px)';
 // Pixel ratio steps down when the 2 s average fps is under target. Phones aim
 // high: on the iPhone 11 pixel count was the only cost that mattered (1.25 gave
 // 02 +9 fps; glow, edge smoothing and water gave none; user choice, 2026-10-02).
@@ -218,12 +220,17 @@ async function start(initGuard, header, loading) {
     world.setBloom({ ...look, strength: look.strength * BLOOM_SCALE });
   }
 
+  const shortLandscape = window.matchMedia(SHORT_LANDSCAPE);
+
   function placeWordmark() {
-    const spec = HERO.wordmark[breakpoint];
+    const short = breakpoint === 'desktop' && shortLandscape.matches;
+    const spec = short ? { ...HERO.wordmark.desktop, ...HERO.wordmark.desktopShort } : HERO.wordmark[breakpoint];
     const opening = chapters[0].camera[breakpoint];
     const openingFov = fovForAspect(opening.fov, width / height, breakpoint);
     const intro = copy.copies[0];
-    const clearTop = spec.clear === undefined ? undefined : ((intro.offsetTop + intro.offsetHeight + spec.clear) / height) * 100;
+    // Short screens can overflow the copy region, so clear the text itself there.
+    const introHeight = short ? Math.max(intro.offsetHeight, intro.scrollHeight) : intro.offsetHeight;
+    const clearTop = spec.clear === undefined ? undefined : ((intro.offsetTop + introHeight + spec.clear) / height) * 100;
     wordmark.place({ ...opening, fov: openingFov }, width / height, spec, clearTop);
     needsRender = true;
   }
@@ -327,7 +334,8 @@ async function start(initGuard, header, loading) {
     let title;
     if (href === '#top') {
       window.scrollTo({ top: 0, behavior: 'auto' });
-      title = document.getElementById('site-title');
+      // The logo, not the hero's hidden title, so the next Tab reaches the nav.
+      title = document.querySelector('.brand');
     } else {
       const index = sections.findIndex((s) => `#${s.id}` === href);
       if (index < 0) return;
@@ -418,6 +426,12 @@ async function start(initGuard, header, loading) {
     const heroFadeTo = state.pTop + (HERO.sinkEnd - state.pTop) * heroFadeEnd;
     copy.update(state.p, { stepped, index: state.index, hero: { from: state.pTop, to: heroFadeTo }, rendered: state.pRendered });
     header.update(state.index, hero);
+    // A chapter address follows the crossing, so a reload or a shared link lands
+    // where the visitor is; pages opened without one never get one.
+    if (location.hash) {
+      const address = hero ? '' : `#${sections[state.index].id}`;
+      if (location.hash !== address) history.replaceState(null, '', address || location.pathname + location.search);
+    }
     // The fireworks soften into smoke over the first 60% of the footer's rise.
     const footerTop = footerElement.getBoundingClientRect().top;
     if (fireworks.setFooter(Math.min(Math.max((innerHeight - footerTop) / (innerHeight * 0.6), 0), 1))) needsRender = true;

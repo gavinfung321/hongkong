@@ -127,8 +127,11 @@ a {
   text-underline-offset: 0.2em;
 }
 
-a:hover {
-  color: var(--color-warm);
+/* Hover only where a pointer can hover, so a tap never leaves a hover state on. */
+@media (hover: hover) {
+  a:hover {
+    color: var(--color-warm);
+  }
 }
 
 a:focus-visible {
@@ -449,10 +452,12 @@ a:focus-visible {
     color 250ms ease;
 }
 
-.pill-link:hover {
-  border-color: rgb(243 233 210 / 0.5);
-  background: rgb(243 233 210 / 0.06);
-  color: var(--color-ivory);
+@media (hover: hover) {
+  .pill-link:hover {
+    border-color: rgb(243 233 210 / 0.5);
+    background: rgb(243 233 210 / 0.06);
+    color: var(--color-ivory);
+  }
 }
 
 .pill-link__arrow {
@@ -465,13 +470,16 @@ a:focus-visible {
   transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.pill-link:hover .pill-link__arrow {
-  transform: translateY(-3px);
+@media (hover: hover) {
+  .pill-link:hover .pill-link__arrow {
+    transform: translateY(-3px);
+  }
 }
 
 /* Footer: a statement, three columns and a bottom bar. */
 .site-footer {
-  padding: 96px var(--page-inset) max(24px, env(safe-area-inset-bottom));
+  padding: 96px max(var(--page-inset), env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom))
+    max(var(--page-inset), env(safe-area-inset-left));
   background: var(--color-fog);
   color: var(--color-soft);
   font-size: 0.8125rem;
@@ -542,8 +550,10 @@ a:focus-visible {
   transition: color 200ms ease;
 }
 
-.site-footer__column a:hover {
-  color: var(--color-warm);
+@media (hover: hover) {
+  .site-footer__column a:hover {
+    color: var(--color-warm);
+  }
 }
 
 .site-footer__year {
@@ -675,9 +685,9 @@ a:focus-visible {
   display: flex;
   align-items: center;
   gap: 32px;
-  height: var(--header-height);
-  padding: 0 var(--page-inset);
-  padding-top: env(safe-area-inset-top);
+  height: calc(var(--header-height) + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) max(var(--page-inset), env(safe-area-inset-right)) 0
+    max(var(--page-inset), env(safe-area-inset-left));
   background: linear-gradient(to bottom, rgb(14 12 30 / 0.75), rgb(14 12 30 / 0));
   transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -735,8 +745,10 @@ a:focus-visible {
   opacity: 0.6;
 }
 
-.brand:hover {
-  color: var(--color-cream);
+@media (hover: hover) {
+  .brand:hover {
+    color: var(--color-cream);
+  }
 }
 
 .site-nav__links {
@@ -759,10 +771,16 @@ a:focus-visible {
   opacity: 0.8;
 }
 
-.site-nav a:hover,
 .site-nav a[aria-current] {
   color: var(--color-cream);
   opacity: 1;
+}
+
+@media (hover: hover) {
+  .site-nav a:hover {
+    color: var(--color-cream);
+    opacity: 1;
+  }
 }
 
 /* English rolls up and out; the Chinese label rolls in from below. */
@@ -788,16 +806,17 @@ a:focus-visible {
   opacity: 0;
 }
 
-.site-nav a:hover .swap__en,
-.site-nav a:focus-visible .swap__en {
-  transform: translateY(-100%);
-  opacity: 0;
-}
+/* Hover only: a keyboard-focused link keeps its English name, matching what is announced. */
+@media (hover: hover) {
+  .site-nav a:hover .swap__en {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
 
-.site-nav a:hover .swap__zh,
-.site-nav a:focus-visible .swap__zh {
-  transform: none;
-  opacity: 1;
+  .site-nav a:hover .swap__zh {
+    transform: none;
+    opacity: 1;
+  }
 }
 
 .site-nav a[aria-current]::after {
@@ -858,8 +877,8 @@ a:focus-visible {
   z-index: 10;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: var(--header-height) var(--page-inset);
+  padding: calc(var(--header-height) + env(safe-area-inset-top)) max(var(--page-inset), env(safe-area-inset-right))
+    calc(var(--header-height) + env(safe-area-inset-bottom)) max(var(--page-inset), env(safe-area-inset-left));
   background: rgb(14 12 30 / 0.96);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -872,13 +891,15 @@ a:focus-visible {
 .site-menu__close {
   position: absolute;
   top: calc(env(safe-area-inset-top) + (var(--header-height) - 44px) / 2);
-  right: var(--page-inset);
+  right: max(var(--page-inset), env(safe-area-inset-right));
   font-size: 1.25rem;
 }
 
+/* Auto margins centre the list but, unlike justify-content, let a list taller
+   than the window scroll from its first item. */
 .site-menu__list {
   width: min(100%, 640px);
-  margin: 0 auto;
+  margin: auto;
 }
 
 .site-menu__list a {
@@ -918,9 +939,15 @@ a:focus-visible {
   opacity: 1;
 }
 
+/* The current chapter is marked by more than colour. */
+.site-menu__list a[aria-current] .site-menu__title {
+  text-decoration: underline 2px var(--color-warm);
+  text-underline-offset: 6px;
+}
+
 .chapter-counter {
   position: fixed;
-  left: var(--page-inset);
+  left: max(var(--page-inset), env(safe-area-inset-left));
   bottom: max(20px, env(safe-area-inset-bottom));
   z-index: 3;
   font-variant-numeric: tabular-nums;
@@ -981,7 +1008,7 @@ a:focus-visible {
 }
 
 [data-hero="true"] .chapter-counter__hint {
-  opacity: 0.5;
+  opacity: 0.75;
 }
 
 .chapter-counter__compact {
@@ -1015,7 +1042,7 @@ html:not(.is-enhanced) .chapter-counter {
 .side-pager {
   position: fixed;
   top: 50%;
-  right: var(--page-inset);
+  right: max(var(--page-inset), env(safe-area-inset-right));
   z-index: 3;
   transform: translateY(-50%);
 }
@@ -1094,7 +1121,7 @@ html:not(.is-enhanced) .side-pager {
 .vertical-text {
   position: fixed;
   top: calc(env(safe-area-inset-top) + var(--header-height) + 16px);
-  right: var(--page-inset);
+  right: max(var(--page-inset), env(safe-area-inset-right));
   bottom: max(24px, env(safe-area-inset-bottom));
   z-index: 3;
   display: flex;
@@ -1183,6 +1210,11 @@ html:not(.is-enhanced) .side-pager {
 /* The label tracks scroll progress, which only exists in the 3D story. */
 html:not(.is-enhanced) .vertical-text__labels {
   display: none;
+}
+
+/* Without the story the title belongs to the hero, so it scrolls away with it. */
+html:not(.is-enhanced) .vertical-text {
+  position: absolute;
 }
 
 @media (max-aspect-ratio: 4/5), (max-width: 600px) {
@@ -1292,14 +1324,17 @@ html:not(.is-enhanced) .vertical-text__labels {
 }
 
 /* --copy-left/top/right/bottom are unitless % of the viewport (chapters.js). */
+/* --copy-floor keeps the copy below the header on short windows; at the
+   approved sizes --copy-top is already lower, so nothing moves there. */
 .is-enhanced .chapter__copy {
+  --copy-floor: max(calc(var(--copy-top) * 1lvh), calc(var(--header-height) + env(safe-area-inset-top) + 4px));
   position: fixed;
-  left: max(var(--page-inset), calc(var(--copy-left) * 1vw));
-  right: max(var(--page-inset), calc((100 - var(--copy-right)) * 1vw));
-  top: calc(var(--copy-top) * 1lvh);
+  left: max(var(--page-inset), env(safe-area-inset-left), calc(var(--copy-left) * 1vw));
+  right: max(var(--page-inset), env(safe-area-inset-right), calc((100 - var(--copy-right)) * 1vw));
+  top: var(--copy-floor);
   width: auto;
   max-width: none;
-  max-height: calc((var(--copy-bottom) - var(--copy-top)) * 1lvh);
+  max-height: calc(var(--copy-bottom) * 1lvh - var(--copy-floor));
   padding: 0;
   border-radius: 0;
   background: none;
@@ -1351,6 +1386,54 @@ html:not(.is-enhanced) .vertical-text__labels {
 [data-breakpoint="mobile"].is-enhanced {
   --page-inset: 16px;
   --measure: 30ch;
+}
+
+/* Phones turned sideways keep the desktop layout but use the phone header,
+   smaller copy and the phone vertical title; main.js uses the same query. */
+@media (orientation: landscape) and (max-height: 500px) {
+  :root {
+    --header-height: 56px;
+  }
+
+  .is-enhanced .chapter__title {
+    font-size: 1.75rem;
+  }
+
+  .is-enhanced .chapter__body {
+    margin-top: 0.375rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .side-pager {
+    display: none;
+  }
+
+  .vertical-text__title {
+    font-size: 1.125rem;
+    letter-spacing: 0.25em;
+  }
+
+  .vertical-text__labels span {
+    font-size: 0.8125rem;
+  }
+
+  .vertical-text__labels::before {
+    height: 28px;
+    margin-bottom: 10px;
+  }
+
+  .site-menu {
+    padding-block: calc(var(--header-height) + env(safe-area-inset-top)) max(16px, env(safe-area-inset-bottom));
+  }
+
+  .site-menu__list a {
+    padding: 9px 0;
+  }
+
+  .site-menu__title {
+    font-size: 1.5rem;
+  }
 }
 
 /* ?fps overlay (works in production builds) */
