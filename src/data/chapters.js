@@ -35,8 +35,8 @@ const SB = '/docs/storyboards';
 
 export const SCROLL = {
   chapterLength: 150, // svh per chapter
-  hold: 0.2, // fraction of a segment held still on each side of a keyframe
-  copyFull: 0.2, // copy fully visible within this distance of a keyframe (= hold)
+  hold: 0.14, // fraction of a segment held still on each side of a keyframe
+  copyFull: 0.14, // copy fully visible within this distance of a keyframe (= hold)
   copyFade: 0.05, // then fades out before the camera has moved far
   damping: 5,
   // A jump of this many chapters or more snaps behind the veil; 0.9 so a jump
@@ -48,7 +48,7 @@ export const SCROLL = {
 // x / foot: % of the viewport where the characters stand on the water.
 // width: % of the viewport width. It is drawn in front of everything and moves
 // down out of frame from the first scroll until progress sinkEnd (the hero is
-// p < 0; chapter 01's hold starts at 0.3), while chapter 01's holdDolly pushes in.
+// p < 0; chapter 01's hold starts at 0.36), while chapter 01's holdDolly pushes in.
 export const HERO = {
   wordmark: {
     text: '香港',
@@ -213,22 +213,25 @@ export const chapters = [
       mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, city: 0.4, mist: 0.8, seaMist: 0, searchlights: 0 },
     },
     fogDensity: 0.00045,
-    // The ferry sails on toward Central through the hold (drift; little
-    // before the keyframe, where its mast would near the copy), then slowly
-    // enough that the camera overtakes it on the way to 04: its cabin
+    // The ferry holds its place on the water through the hold (no drift on
+    // either side of the keyframe; user request, 2026-10-03), then sails
+    // on toward Central slowly enough that the camera overtakes it on the
+    // way to 04: its cabin
     // slides out past the left edge (at least 16 m off on desktop, about
     // 27 m on phones) and its bow uncovers the junk, which comes up from
     // beyond it (user request, 2026-10-03: a natural occlusion, no wipe).
-    // It waits behind the 04 camera, out of frame.
+    // It waits behind the 04 camera, out of frame. The desktop via point
+    // sits a little back along the route, so the camera starts overtaking
+    // it as the move begins (user request, 2026-10-03).
     vessels: {
-      desktop: { ferry: [69.3, -359.1, 1.26], junk: [59.5, -400.6, 0.46], via: { ferry: [[93, -383, 1.12]] }, drift: { ferry: [1.5, 6] } },
+      desktop: { ferry: [69.3, -359.1, 1.26], junk: [59.5, -400.6, 0.46], via: { ferry: [[91.5, -381.5, 1.125]] }, drift: { ferry: [0, 0] } },
       // Mobile: 34 m from the camera (was 53 m), so the ferry fills about a
       // fifth of the frame's height as in the storyboard, its stern off the
       // left edge (user choice, 2026-10-03).
       // The junk (hidden here) waits right of the phone frame, so it comes
       // in already shown rather than fading in on open water (transition
       // review, 2026-10-03).
-      mobile: { ferry: [-29, -252.3, 1], junk: [160, -430, 0.5], via: { ferry: [[8, -318, 1]] }, drift: { ferry: [1.5, 5] } },
+      mobile: { ferry: [-29, -252.3, 1], junk: [160, -430, 0.5], via: { ferry: [[8, -318, 1]] }, drift: { ferry: [0, 0] } },
     },
     probes: {
       desktop: {

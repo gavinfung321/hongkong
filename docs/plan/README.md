@@ -227,6 +227,14 @@ as they were:
 6. Phones: 香港 and 01's copy fade out by 40% of the sink, before they
    cross the moon.
 
+Shorter holds (user request, 2026-10-03): each composition now holds
+for 14% of a chapter's scroll on each side of its keyframe (was 20%),
+and the copy stays fully shown for exactly the hold, then fades over
+the next 5% (`SCROLL.hold` and `copyFull` in `chapters.js`). The camera
+starts moving sooner after a composition, and with the move spread over
+72% of the scroll instead of 60% its top speed is about a sixth lower.
+Chapter lengths, camera keyframes and vessel routes are unchanged.
+
 **Not in the look test:** 3D models (GLBs; later dropped altogether, all 3D
 is built in code, user decision 2026-10-01), real fireworks, the sparkle cursor,
 particles in other chapters, sound, final copy and fonts.
