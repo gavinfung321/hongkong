@@ -1253,6 +1253,7 @@ html:not(.is-enhanced) .vertical-text {
 /* Enhanced mode: fixed WebGL canvas behind scroll-driven copy */
 
 .world,
+.vignette,
 .veil {
   display: none;
 }
@@ -1262,6 +1263,7 @@ html:not(.is-enhanced) .vertical-text {
 }
 
 .is-enhanced .world,
+.is-enhanced .vignette,
 .is-enhanced .veil {
   display: block;
   position: fixed;
@@ -1276,6 +1278,41 @@ html:not(.is-enhanced) .vertical-text {
   z-index: 0;
   opacity: 0;
   transition: opacity 400ms ease;
+}
+
+/* Darkens the corners over the finished 3D image, under the copy: about 24%
+   at the desktop corners and 16% on phones, open across the centre
+   (atmospheric depth Stage 1, user request, 2026-10-03; doubled after the
+   first 9% read as no change). */
+.is-enhanced .vignette {
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 400ms ease;
+  background: radial-gradient(
+    ellipse farthest-corner at 50% 48%,
+    transparent 38%,
+    rgb(6 5 16 / 0.1) 65%,
+    rgb(6 5 16 / 0.24) 100%
+  );
+}
+
+@media (max-aspect-ratio: 4/5), (max-width: 600px) {
+  .is-enhanced .vignette {
+    background: radial-gradient(
+      ellipse farthest-corner at 50% 48%,
+      transparent 42%,
+      rgb(6 5 16 / 0.07) 68%,
+      rgb(6 5 16 / 0.16) 100%
+    );
+  }
+}
+
+.is-ready .vignette {
+  opacity: 1;
+}
+
+.is-stepped .vignette {
+  transition: none;
 }
 
 .is-enhanced .veil {

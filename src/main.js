@@ -59,8 +59,12 @@ const GRADE = params.get('grade') !== '0';
 // Phone measurement switches, live like ?fps: ?dpr=1.25 caps the pixel ratio,
 // ?aa=0 turns off edge smoothing, ?off=water,clouds,mist,palms,petals,beams hides layers.
 const DPR_CAP = Number(params.get('dpr')) || 0;
-const OFF_LAYERS = { water: ['water'], clouds: ['cloud'], mist: ['mist', 'sea-mist'], palms: ['palms'], petals: ['petals'], beams: ['searchlights'] };
+const OFF_LAYERS = { water: ['water'], clouds: ['cloud'], mist: ['mist', 'sea-mist'], haze: ['haze'], palms: ['palms'], petals: ['petals'], beams: ['searchlights'] };
 const OFF = (params.get('off') ?? '').split(',').flatMap((key) => OFF_LAYERS[key.trim()] ?? []);
+// ?off=texture removes the screen vignette, for A/B checks.
+if ((params.get('off') ?? '').split(',').some((key) => key.trim() === 'texture')) {
+  document.querySelector('.vignette')?.remove();
+}
 // ?entrance=slow|hold|fail: entrance test switches (loadingScreen.js).
 const ENTRANCE = params.get('entrance') ?? '';
 
@@ -151,12 +155,14 @@ async function start(initGuard, header, loading) {
     searchlights: (value) => searchlights.setLevel(value),
     // Default window: gone in the first 40% of the move to 03, before the camera nears them.
     seaMist: (value) => atmosphere.setSeaMist(value),
+    haze: (value) => atmosphere.setHaze(value),
     afterglow: (value) => world.sky.userData.setAfterglow(value),
   }, {
     // The afterglow warms and cools across the whole move.
     afterglow: { in: [0, 1], out: [0, 1] },
-    // Mist changes gently across the whole move.
+    // Mist and haze change gently across the whole move.
     mist: { in: [0, 1], out: [0, 1] },
+    haze: { in: [0, 1], out: [0, 1] },
     // The city dims across the whole move into 05 (and stays dim in 06), not in its first 40%.
     city: { in: [0, 1], out: [0, 1] },
     slopeLights: { in: [0, 1], out: [0, 1] },
@@ -173,7 +179,7 @@ async function start(initGuard, header, loading) {
     junk: { out: [0.4, 0.5] },
     // Phones, 02 → 03: the ferry is shown before it enters the frame.
     ferry: { in: [0, 0.1] },
-  }, { afterglow: 0 });
+  }, { afterglow: 0, haze: 0 });
 
   const rig = createCameraRig(camera, chapters, { hold: SCROLL.hold });
   const parallax = createPointerParallax();

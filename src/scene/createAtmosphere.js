@@ -13,7 +13,7 @@ import {
   Vector3,
   Vector4,
 } from 'three';
-import { CLOUD_SHEET, CLOUDS, MIST, MIST_SHEET, SEA_MIST } from '../data/atmosphere.js';
+import { CLOUD_SHEET, CLOUDS, HAZE, MIST, MIST_SHEET, SEA_MIST } from '../data/atmosphere.js';
 import { WORLD } from '../data/world.js';
 import { aimCamera, poseFov } from '../scroll/cameraRig.js';
 import { seededRandom } from './random.js';
@@ -231,11 +231,25 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
       feather: SEA_MIST.feather,
     }),
   );
+  // Depth haze: two bands of wisps, each band drifting its own way and pace.
+  const haze = Object.values(HAZE.bands).flatMap((band) =>
+    band.cards.map((spec) =>
+      makeCard(spec, MIST_SHEET, mistSheet, {
+        fog: true,
+        renderOrder: 0,
+        drift: band.drift,
+        name: 'haze',
+        tint: HAZE.tint,
+        feather: HAZE.feather,
+      }),
+    ),
+  );
   const [faceX, faceZ] = SEA_MIST.face;
-  for (const card of [...mist, ...seaMist]) {
+  for (const card of [...mist, ...seaMist, ...haze]) {
     const { spec, mesh } = card;
     mesh.scale.set(spec.width, spec.width / card.aspect, 1);
-    card.base.set(spec.x, (mist.includes(card) ? MIST.y : 0) + mesh.scale.y / 2, spec.z);
+    const foot = mist.includes(card) ? MIST.y : (spec.y ?? 0);
+    card.base.set(spec.x, foot + mesh.scale.y / 2, spec.z);
     mesh.position.copy(card.base);
     if (seaMist.includes(card)) mesh.lookAt(faceX, card.base.y, faceZ);
     card.right.set(1, 0, 0).applyQuaternion(mesh.quaternion);
@@ -245,6 +259,7 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
   const chapterWeight = chapters.map(() => 0);
   let mistLevel = 0;
   let seaLevel = 0;
+  let hazeLevel = 0;
 
   function show(card, level) {
     const opacity = card.spec.opacity * level;
@@ -258,6 +273,7 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
     }
     for (const card of mist) show(card, mistLevel);
     for (const card of seaMist) show(card, seaLevel);
+    for (const card of haze) show(card, hazeLevel);
   }
 
   // Frames each cloud card at its chapter's hold pose for this screen.
@@ -307,6 +323,12 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
     apply();
   }
 
+  function setHaze(value) {
+    if (value === hazeLevel) return;
+    hazeLevel = value;
+    apply();
+  }
+
   function sway(card, time) {
     const [period, phase, share] = card.sway;
     const offset = Math.sin((time / period) * Math.PI * 2 + phase) * share * card.mesh.scale.x;
@@ -317,7 +339,8 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
     for (const card of active) card.mesh.material.uniforms.uScroll.value = card.phase - time * card.wind;
     for (const card of mist) sway(card, time);
     for (const card of seaMist) sway(card, time);
+    for (const card of haze) sway(card, time);
   }
 
-  return { group, place, setSegment, setMist, setSeaMist, update };
+  return { group, place, setSegment, setMist, setSeaMist, setHaze, update };
 }

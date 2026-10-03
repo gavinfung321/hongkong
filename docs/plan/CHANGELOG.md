@@ -6,6 +6,15 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Screen vignette, atmospheric depth Stage 1** (user request, 2026-10-03;
+  vignette only, no grain, user choice): one fixed CSS layer between the
+  3D canvas and the copy darkens the corners by about 24% on desktop and
+  16% on phones, open across the centre (first tried at 9% / 6%, which
+  read as no change, user request). Static, fades in with the canvas,
+  absent in fallback; `?off=texture` removes it for A/B checks. No draw
+  calls added. Awaiting visual approval. Files: `index.html`,
+  `src/styles.css`, `src/main.js`; plan: `atmospheric-depth-polish.md`.
+  Evidence: `review-shots/depth-stage1/`.
 - **Wakes as broken foam** (user request, 2026-10-03): the V arms, trail,
   propeller wash and disturbed water in the wake mask are now seeded,
   feathered foam patches with gaps instead of gradient strokes and
