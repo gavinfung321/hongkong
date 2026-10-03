@@ -231,8 +231,11 @@ remove it and stop this task.
   0.2 m above eye height (the 05 camera looks steeply up, so only things
   near eye height show at the bottom of the frame). Roughly 74–87% across
   and the bottom 17% of a 1440 × 900 window.
-- Parallax: it follows 92% of the mouse parallax shift, so it moves about
-  ten times more than the skyline but never swings out of frame.
+- Parallax: it follows 97.5% of the mouse parallax shift (user request,
+  2026-10-04; was 92%, when it read as flying over the water), so it moves
+  only a little against the skyline and never swings out of frame. A stone
+  quay ledge under it was tried and removed the same day (user request).
+  The chain drops steeply down and out of frame.
 - A `bollard` gate (0 everywhere, 1 in desktop 05) fades it in only in the
   last 15% of the move into 05 and out in the first 10% of the move to 06.
   Mobile 05 is unchanged.
@@ -278,6 +281,30 @@ Only after priorities 1 and 2:
 - Prefer reducing or removing elements over adding new ones.
 - Stop when every chapter has one clear subject and the transitions feel calm.
 
+### Review and fixes, 2026-10-04 (user choice)
+
+Walked through 01–06 at 1440 × 900 and 390 × 844 (hold frames, reduced
+motion; captures in `review-shots/p3/`). 02, 03, 04 and 05 on desktop and
+02, 03 and 05 on phones were clean. Fixed:
+
+- **Moon too strong in 01 and 06** (it competed with the Clock Tower and
+  the fireworks): a new `moon` gate dims the disc, halo and its water
+  column together: 0.75 in 01, 0.5 in 06, and 0.6 in phone 04, where it
+  sits right behind the copy's last line (the camera, copy and moon
+  positions are approved, so it is dimmed rather than moved). Measured in
+  desktop 01: about 18% dimmer.
+- **The junk's reflection led the water in 01**: a new `junkGlow` gate
+  halves its sail and cabin columns in 01 only (its hull image unchanged).
+- **Phone 06 warm bursts ran over the copy's last words**: the two warm
+  heroes moved right of the copy's edge and made smaller (x 88 / y 27 /
+  size 38, was 84 / 26 / 46; x 84 / y 30 / size 34, was 76 / 28 / 40).
+- **The 05 bollard read as a flat black blob**: a faint cool edge of city
+  light (`rimLight.js`, 0x8fa6d8 at 0.35; the 03 buoy at 0.25).
+
+Files: `createMoon.js`, `waterReflections.js` (`dim` key), `createWater.js`,
+`rimLight.js` (new), `createBollard.js`, `createBuoy.js`, `main.js`,
+`chapters.js`. Awaiting approval.
+
 ## Do not pursue
 
 These ideas are removed from the active plan because their likely visual gain
@@ -308,10 +335,13 @@ disable or remove it rather than expanding it.
 - [x] Priority E: quieter sky and palette — approved 2026-10-04
 - [x] Priority F: per-chapter withholding — approved 2026-10-04
 - [x] Priority 2: test one chapter 05 foreground object — 05 bollard, 03 buoy and their phone versions approved 2026-10-04
-- [ ] Priority 3: one desktop and one mobile sequence review
+- [ ] Priority 3: one desktop and one mobile sequence review — reviewed and fixed 2026-10-04, awaiting approval
 - [ ] Update the changelog with only the final kept decisions
 
 ## Immediate next action
 
-Priority 3: final chapter balance (no screenshots, user request,
-2026-10-04).
+Pause new atmosphere work while the narrative direction is tested. Follow
+[`narrative-spine.md`](narrative-spine.md): draft the six-chapter story, build
+scene 02 only and decide whether the hybrid direction is a clear improvement.
+Return to the remaining atmosphere decisions afterward. No screenshot set is
+required.

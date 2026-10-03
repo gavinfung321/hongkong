@@ -11,6 +11,7 @@ import {
   Vector2,
   Vector3,
 } from 'three';
+import { rimLight } from './rimLight.js';
 
 // Chapter 05's harbour edge (atmospheric depth Priority 2, user choice,
 // 2026-10-04): one dark mooring bollard with a short sagging chain in the
@@ -19,13 +20,18 @@ import {
 // `side` metres right of it, its head `rise` above eye height. On phones
 // (user choice, 2026-10-04) it sits lower, under IFC's foot (the phone
 // camera looks up less). It follows `follow` of the desktop mouse parallax
-// shift, so it moves more than the skyline without swinging out of frame.
+// shift, so it moves a little against the skyline without swinging out of
+// frame (user request, 2026-10-04: at 92% it read as flying).
 const BOLLARD = {
   desktop: { ahead: 1.9, side: 1.4, rise: 0.2 },
   mobile: { ahead: 3, side: 0.65, rise: -0.55 },
-  follow: 0.92,
+  follow: 0.975,
   colour: 0x26211d,
-  chain: { link: 0.075, reach: 0.9, drop: 0.7, sag: 0.25 },
+  // A faint cool edge of city light [colour, strength] (Priority 3 balance,
+  // user choice, 2026-10-04: it read as a flat black blob).
+  rim: [0x8fa6d8, 0.35],
+  // Chain points (x, y, z) from the neck, out and down.
+  chain: { link: 0.075, via: [-0.5, 0.05, -0.75], end: [-0.7, -1.2, -1.2] },
 };
 
 // Profile (radius, height) of a cast-iron bollard: flange, waisted body,
@@ -40,16 +46,14 @@ const NECK = 0.55;
 export function createBollard(camera) {
   const group = new Group();
   group.name = 'bollard';
-  const material = new MeshLambertMaterial({ color: BOLLARD.colour, transparent: true });
+  const material = rimLight(new MeshLambertMaterial({ color: BOLLARD.colour, transparent: true }), ...BOLLARD.rim);
 
   const body = new Mesh(new LatheGeometry(PROFILE.map(([r, y]) => new Vector2(r, y)), 24), material);
   const height = PROFILE.at(-1)[1];
 
   // The chain leaves the neck toward the camera's left and drops out of frame.
-  const { link, reach, drop, sag } = BOLLARD.chain;
-  const start = new Vector3(-0.18, NECK, 0);
-  const end = new Vector3(-reach, NECK - drop, -0.15);
-  const curve = new QuadraticBezierCurve3(start, start.clone().lerp(end, 0.5).setY(end.y - sag), end);
+  const { link, via, end } = BOLLARD.chain;
+  const curve = new QuadraticBezierCurve3(new Vector3(-0.18, NECK, 0), new Vector3(...via), new Vector3(...end));
   const count = Math.floor(curve.getLength() / link);
   const links = new InstancedMesh(new TorusGeometry(0.035, 0.011, 6, 12).scale(1.5, 1, 1), material, count);
   const m = new Matrix4();
