@@ -12,17 +12,30 @@ export function createSiteHeader() {
   const background = ['.site-header', '#story', '.chapter-counter', '.side-pager', '.site-footer'].map((s) =>
     document.querySelector(s),
   );
+  const card = buildCard(menu, closeButton);
   let current = null;
   let hero = null;
+  let hideTimer = 0;
 
   function setOpen(open, { restoreFocus = true } = {}) {
-    if (open === !menu.hidden) return;
-    menu.hidden = !open;
+    if (open === root.classList.contains('is-menu-open')) return;
+    clearTimeout(hideTimer);
+    if (open) {
+      menu.hidden = false;
+      // Commits the closed state first, so the card's opening transition runs.
+      void menu.offsetWidth;
+    }
     button.setAttribute('aria-expanded', String(open));
     root.classList.toggle('is-menu-open', open);
     for (const element of background) element.inert = open;
     if (open) closeButton.focus();
-    else if (restoreFocus) button.focus();
+    else {
+      // The phone card fades out before it is hidden; the desktop panel hides at once.
+      const ms = parseFloat(getComputedStyle(menu).transitionDuration) * 1000;
+      if (ms > 0) hideTimer = setTimeout(() => (menu.hidden = true), ms);
+      else menu.hidden = true;
+      if (restoreFocus) button.focus();
+    }
   }
 
   button.addEventListener('click', () => setOpen(true));
@@ -30,9 +43,12 @@ export function createSiteHeader() {
   // Runs before the document-level jump handler, which then moves focus to the chapter.
   menu.addEventListener('click', (event) => {
     if (event.target.closest('a')) setOpen(false, { restoreFocus: false });
+    // On phones the card floats over a backdrop, and a tap on the backdrop
+    // closes it; on desktop the card has no box and the panel stays open.
+    else if (event.target === menu && card.getBoundingClientRect().width) setOpen(false);
   });
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && !menu.hidden) setOpen(false);
+    if (event.key === 'Escape' && root.classList.contains('is-menu-open')) setOpen(false);
   });
 
   // Slides away while scrolling down and comes back on any scroll up.
@@ -78,4 +94,27 @@ export function createSiteHeader() {
   }
 
   return { update, close: () => setOpen(false) };
+}
+
+// The close button and list move into a card with a small header; styles.css
+// draws it as a floating card on phones and as the full-screen panel on desktop.
+function buildCard(menu, closeButton) {
+  const root = document.documentElement;
+  if (!CSS.supports('backdrop-filter', 'blur(1px)') && !CSS.supports('-webkit-backdrop-filter', 'blur(1px)')) {
+    root.classList.add('no-backdrop-blur');
+  }
+  const mark = document.querySelector('.brand__mark').cloneNode(true);
+  mark.classList.add('site-menu__mark');
+  const heading = document.createElement('p');
+  heading.className = 'site-menu__heading';
+  heading.setAttribute('aria-hidden', 'true');
+  heading.textContent = 'Chapters';
+  const head = document.createElement('div');
+  head.className = 'site-menu__head';
+  head.append(mark, heading, closeButton);
+  const body = document.createElement('div');
+  body.className = 'site-menu__card';
+  body.append(head, menu.querySelector('.site-menu__list'));
+  menu.append(body);
+  return body;
 }

@@ -1037,6 +1037,14 @@ html:not(.is-enhanced) .chapter-counter {
   }
 }
 
+/* Where the nav bar shows, it, the logo and the side pager already reach
+   every chapter, so the menu button is left out (user choice, 2026-10-03). */
+@media (min-width: 960px) {
+  .menu-button {
+    display: none;
+  }
+}
+
 /* Side pager: one dash per chapter, centred on the right edge */
 
 .side-pager {
@@ -1433,6 +1441,219 @@ html:not(.is-enhanced) .vertical-text {
 
   .site-menu__title {
     font-size: 1.5rem;
+  }
+}
+
+/* Phone chapter menu: a floating card (user request, 2026-10-03).
+   siteHeader.js wraps the close button and list in .site-menu__card. Outside
+   phones the wrappers are see-through, so desktop keeps the full-screen panel. */
+.site-menu__card,
+.site-menu__head {
+  display: contents;
+}
+
+.site-menu__mark,
+.site-menu__heading {
+  display: none;
+}
+
+@media (max-aspect-ratio: 4/5), (max-width: 600px), (orientation: landscape) and (max-height: 500px) {
+  .site-menu {
+    align-items: center;
+    justify-content: center;
+    padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+      max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    background: rgb(8 7 20 / 0.5);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    opacity: 0;
+    transition: opacity 240ms ease;
+  }
+
+  .is-menu-open .site-menu {
+    opacity: 1;
+    transition: opacity 200ms ease;
+  }
+
+  /* Without backdrop blur the scene behind is darkened further instead. */
+  .no-backdrop-blur .site-menu {
+    background: rgb(8 7 20 / 0.86);
+  }
+
+  .site-menu__card {
+    display: flex;
+    flex-direction: column;
+    width: min(88vw, 420px);
+    max-height: min(76svh, 620px);
+    border: 1px solid rgb(243 233 210 / 0.12);
+    border-radius: 22px;
+    background: rgb(11 10 20 / 0.96);
+    box-shadow: 0 24px 60px rgb(0 0 0 / 0.45);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+    transition:
+      opacity 200ms ease,
+      transform 200ms ease;
+  }
+
+  /* The backdrop leads; the card follows 60 ms later. */
+  .is-menu-open .site-menu__card {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 340ms ease 60ms,
+      transform 340ms cubic-bezier(0.22, 1, 0.36, 1) 60ms;
+  }
+
+  .site-menu__head {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 10px;
+    min-height: 56px;
+    padding: 4px 4px 4px 20px;
+    border-bottom: 1px solid rgb(243 233 210 / 0.08);
+  }
+
+  .site-menu__mark {
+    display: block;
+    width: 14px;
+    height: 17px;
+  }
+
+  .site-menu__heading {
+    display: block;
+    margin: 0;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  .site-menu__close {
+    position: static;
+    width: 48px;
+    height: 48px;
+    margin: 0 0 0 auto;
+    border-radius: 14px;
+    font-size: 1rem;
+  }
+
+  /* Scrolls inside the card when six rows don't fit. */
+  .site-menu__list {
+    flex: 1 1 auto;
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 6px 8px 8px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .site-menu__list li + li {
+    border-top: 1px solid rgb(243 233 210 / 0.07);
+  }
+
+  .site-menu__list a {
+    grid-template-columns: 1.75rem 1fr auto;
+    align-items: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 6px 12px 6px 18px;
+    border-bottom: 0;
+    border-radius: 12px;
+  }
+
+  /* Inside the scrolling list, so the ring is drawn inward and never clipped. */
+  .site-menu__list a:focus-visible {
+    outline-offset: -2px;
+  }
+
+  .site-menu__index {
+    position: relative;
+    font-size: 0.6875rem;
+    opacity: 0.5;
+  }
+
+  .site-menu__title {
+    font-size: 1.25rem;
+    line-height: 1.15;
+    opacity: 0.78;
+  }
+
+  .site-menu__label {
+    font-size: 0.8125rem;
+    opacity: 0.55;
+  }
+
+  .site-menu__list a[aria-current] .site-menu__index {
+    color: var(--color-ivory);
+    opacity: 1;
+  }
+
+  .site-menu__list a[aria-current] .site-menu__index::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -11px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-coral);
+    transform: translateY(-50%);
+  }
+
+  .site-menu__list a[aria-current] .site-menu__title {
+    color: var(--color-ivory);
+    text-decoration: none;
+    opacity: 1;
+  }
+
+  .site-menu__list a[aria-current] .site-menu__label {
+    opacity: 0.9;
+  }
+
+  @media (hover: hover) {
+    .site-menu__list a:hover {
+      background: rgb(243 233 210 / 0.05);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-menu,
+    .site-menu__card {
+      transition: opacity 200ms ease !important;
+    }
+
+    .site-menu__card {
+      transform: none;
+    }
+  }
+}
+
+/* Phone landscape: two columns (01–03, 04–06), so all six fit without
+   scrolling; the card widens to hold them. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .site-menu__card {
+    width: min(88vw, 640px);
+  }
+
+  .site-menu__list {
+    display: grid;
+    grid-template-rows: repeat(3, auto);
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    column-gap: 8px;
+  }
+
+  .site-menu__list li + li {
+    border-top: 0;
+  }
+
+  .site-menu__list li:not(:nth-child(3n + 1)) {
+    border-top: 1px solid rgb(243 233 210 / 0.07);
   }
 }
 
