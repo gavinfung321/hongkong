@@ -141,8 +141,23 @@ export const WORLD = {
     ],
     // Haze lit by the city, between the skyline and the near range.
     mist: { z: -1650, x: [-3200, 3800], height: 340 },
-    // Homes and roads on the near range's lower slopes (Mid-Levels).
-    lights: { x: [-700, 1400], clusters: 80, perCluster: 12, seed: 21 },
+    // Mid-Levels on the near range (user request, 2026-10-03: the old
+    // scattered dots read as floating specks): residential towers as columns
+    // of lit windows on the lower slopes, road lights climbing the hill, and
+    // the lights round the Peak Tower at Victoria Gap. Roads run from
+    // [x, share of the ridge's height] to [x, share], with a wiggle in metres.
+    lights: {
+      x: [-700, 1400],
+      towers: 210,
+      roads: [
+        [[-560, 0.3], [420, 0.36], 14],
+        [[-300, 0.46], [700, 0.5], 10],
+        [[150, 0.24], [1300, 0.3], 12],
+        [[380, 0.42], [745, 0.93], 18],
+      ],
+      peak: 760,
+      seed: 21,
+    },
   },
 
   // Behind the far range, upper right of the opening frame; its lower edge dips

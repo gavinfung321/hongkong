@@ -70,10 +70,25 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
        - **Mist band:** a 340 m band of city-lit haze between the skyline
          and the near range (z −1650), fading upward, in soft patches that
          drift slowly in continuous mode and hold still in reduced motion.
-       - **Slope lights:** 80 clusters of 12 soft warm and cool dots on the
-         near range's lower slopes behind Central (Mid-Levels homes), up to
-         65% of the ridge height and dim (well below the skyline windows).
-         Fixed 1.8 px dots, so they don't twinkle as the camera moves.
+       - **Slope lights (redrawn 2026-10-03, user request: the scattered
+         dots read as floating specks).** Now built like the real
+         Mid-Levels at night (`WORLD.mountains.lights`, `LIGHTS` in
+         `createMountains.js`):
+         - 210 residential towers on the near range's lower slopes, each a
+           grid of lit windows (14–36 m wide, 45–140 m tall, 35–75% lit,
+           warm with 30% cool), gathered low and thinning out up to 72% of
+           the ridge height;
+         - four strings of orange road lamps crossing the slopes, one
+           climbing to the Peak, with gaps;
+         - a small brighter cluster at the Peak (the Peak Tower and
+           Galleria), behind IFC in 01.
+         Fixed-size dots (1.7 px), so they don't twinkle as the camera
+         moves. Where a tower's dots would crowd closer than their own size
+         (on phones and far away) they dim, so the windows never merge into
+         bright bars. Still well below the skyline windows; one draw call.
+       - **Slope texture (2026-10-03, user request):** the slopes' shading
+         varies by ±28% in tall soft patches, like gullies and vegetation,
+         so the body no longer reads as one flat tone (`TEXTURE`).
        - **Order:** the moon now draws first of the see-through layers, then
          the slope lights, then the mist, so nothing nearer is painted over.
        - **Checks:** the composition probe shows only the four older misses;
@@ -111,6 +126,21 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
          those over 100 m, a pyramid roof on 10%, and dark masts on 30% of
          those over 140 m. Skyline towers step aside from the landmark
          footprints.
+       - **LED colour (2026-10-03, user request: the storyboard's towers
+         glow magenta, cyan and red; ours were dark with sparse windows).**
+         Half the lit roof bands are now a restrained LED colour (magenta,
+         cyan, coral red, violet or amber) and 6 m deep; a fifth of the
+         towers over 120 m get vertical LED strips up their two
+         harbour-facing corners, from 30–60% of their height to the roof.
+         All stay dimmer than IFC's lit glass, so IFC still leads. They
+         share the roof bands' draw call and fade with the `city` level
+         (`LED` in `createIsland.js`).
+       - **Waterfront lamps (2026-10-03, user request: the storyboard has
+         a bright line where the city meets the water).** A row of warm
+         lamps every 6 m along Central's harbour front, every fifth a
+         brighter cool white, with a few gaps; fixed 3 px dots, fogged like
+         the skyline, hidden behind the piers and podium, following the
+         `city` level (`WATERFRONT` in `createIsland.js`). One draw call.
        - **Masts and warning lights:** masts are dark and low-contrast (one
          or two pixels wide; on phones, without antialiasing, a bright one
          would crawl). Each carries a red light, a fixed 2.6 px dot that

@@ -6,6 +6,24 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **01 polish: mountains, skyline colour and railing** (user choices
+  after a second review of 01; paving, the big railing and the copy/tree
+  notes not chosen for now). Mountains: the scattered slope dots read as
+  floating specks; now 210 Mid-Levels towers drawn as lit window grids,
+  four road-lamp strings (one up to the Peak), a Peak cluster, dimmed
+  where windows would crowd into bars on phones; slopes get soft tonal
+  patches. Skyline: half the lit roof bands turn a restrained LED colour,
+  a fifth of the tall towers get LED corner strips, and a lamp line runs
+  along Central's waterfront; IFC still the brightest. Railing: rails and
+  slim posts shaded darker and cooler to match the posts (they read as
+  rust-brown pipes), lantern pools reach 4.5 m (was 3.2) onto the rails
+  and paving. Probe: only the four older misses. One more draw call in
+  every hold (the waterfront lamps): desktop 01 214, mobile 01 149. Files:
+  `src/scene/createMountains.js`, `src/scene/createIsland.js`,
+  `src/scene/createForeground.js`, `src/scene/lamps.js`,
+  `src/data/world.js`, `docs/plan/README.md`, `docs/plan/scene-city.md`,
+  `docs/plan/scene-promenade.md`, `docs/plan/checks.md`,
+  `docs/ASSET-LEDGER.md`.
 - **01 polish: moon, water and bush** (user request): the first three of
   six improvements from a review of the hero and 01; mountains, railing
   and paving wait (listed in README, "01 polish"). Moon: eleven seas laid

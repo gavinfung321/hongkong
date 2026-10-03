@@ -34,7 +34,9 @@ export function railingLayout({ from, to, y, skipFirst = false, skipLast = false
 export const LAMPS = [];
 for (const segment of [...WORLD.foreground.railings, ...WORLD.foreground.edgeRailings]) {
   for (const post of railingLayout(segment).posts) {
-    if (post.lantern) LAMPS.push({ position: post.position.clone().setY(segment.y + LANTERN_LIGHT_Y), range: 3.2, power: 1 });
+    // Range 4.5 m (was 3.2; user request, 2026-10-03): the pool reaches the
+    // rails either side and the paving at the post's foot.
+    if (post.lantern) LAMPS.push({ position: post.position.clone().setY(segment.y + LANTERN_LIGHT_Y), range: 4.5, power: 1 });
   }
 }
 for (const [x, y, z] of WORLD.foreground.lamps) {

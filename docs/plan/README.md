@@ -123,13 +123,18 @@ The user asked for the first three now and to revisit the rest after:
    glints near the camera, a stronger skyline shimmer.
 3. **Bush** (done): clear of 香 in the hero, the hidden railing lantern
    showing, clustered flowers and stray sprigs.
-4. **Mountains** (later): a darker body against the sky, a stronger
-   city-lit haze at the foot, more visible slope lights; possibly a warm
-   city-glow band along the skyline base.
-5. **Railing** (later): bigger and closer, like the storyboard, with 3–4
-   lanterns set into the posts (the biggest job; it runs into 02).
-6. **Paving** (later): varied slab tones, a puddle or two, lantern light
-   pools.
+4. **Mountains** (done, user choice): Mid-Levels tower windows and road
+   lamps instead of scattered specks, a Peak light, tonal texture on the
+   slopes ([scene-city.md](scene-city.md)).
+5. **Railing** (quick pass done, user choice): rails and slim posts
+   matched to the posts, wider lantern pools on rails and paving. Still
+   open: bigger and closer, like the storyboard, with 3–4 lanterns set
+   into the posts (the biggest job; it runs into 02).
+6. **Paving** (not chosen for now): varied slab tones, a puddle or two.
+
+Added on the second review (user choice, 2026-10-03): **skyline colour**,
+LED crowns and corner strips on some towers and a lamp line along
+Central's waterfront, IFC still leading ([scene-city.md](scene-city.md)).
 
 Also noted, not scheduled: the hero copy sits over the Clock Tower's top,
 and the right-hand tree's flowers sit behind the vertical 東方明珠.

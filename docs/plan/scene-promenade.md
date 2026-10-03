@@ -80,6 +80,14 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
      in front of its lit base. The seawall strip is now as deep as the
      plinth (0.5 m), so strips crossing at a corner never show a shared top.
      36 lanterns in all.
+   - **Rails and lantern light (2026-10-03, user request).** The round
+     rails caught the sky and read as rust-brown pipes against the slate
+     posts; the rails and slim posts are now shaded darker and cooler to
+     match the big posts' carved panels (`RAIL_SHADE`, `SLIM_POST_SHADE` in
+     `createForeground.js`). Each railing lantern's warm pool reaches
+     4.5 m (was 3.2), so it lights the rails either side and the paving at
+     the post's foot. Size and placement are unchanged: a bigger,
+     storyboard-like railing remains a later option (README, "01 polish").
    - **Kept:** railing lines A, B (x = −50) and C, seawall strip tops 5 cm
      below the deck, the depth-twin fade for 02 → 03 (the twins are now
      nudged back by a constant depth offset so the railing always passes;

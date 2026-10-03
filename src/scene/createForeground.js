@@ -30,9 +30,11 @@ const IRON = 0x2b2621;
 const GLASS = 0xffd08a;
 const GLOW = 0xffb060;
 
+// `shade`: one grey level, or an [r, g, b] tint.
 function shadeGeometry(geometry, shade) {
   const count = geometry.attributes.position.count;
-  geometry.setAttribute('color', new Float32BufferAttribute(new Array(count * 3).fill(shade), 3));
+  const rgb = Array.isArray(shade) ? shade : [shade, shade, shade];
+  geometry.setAttribute('color', new Float32BufferAttribute(new Array(count).fill(rgb).flat(), 3));
   return geometry;
 }
 
@@ -50,6 +52,12 @@ function stoneBox([x0, x1], [y0, y1], [z0, z1], shade = 1) {
   return shadeGeometry(geometry, shade);
 }
 
+// The rails and slim posts are shaded down and cooled to the big posts'
+// carved panels (user request, 2026-10-03: the thin tubes caught the sky and
+// read as rust-brown pipes against slate posts).
+const RAIL_SHADE = [0.36, 0.4, 0.5];
+const SLIM_POST_SHADE = [0.5, 0.55, 0.66];
+
 // A round rail along local x, open-ended (its ends sit inside the posts).
 function rail(radius, y, x0, x1, segments) {
   const length = x1 - x0;
@@ -57,7 +65,7 @@ function rail(radius, y, x0, x1, segments) {
   const uv = geometry.attributes.uv;
   for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * Math.PI * 2 * radius, uv.getY(i) * length);
   geometry.rotateZ(Math.PI / 2).translate((x0 + x1) / 2, y, 0);
-  return shadeGeometry(geometry, 1);
+  return shadeGeometry(geometry, RAIL_SHADE);
 }
 
 // One bay, local x from 0 to RAILING_BAY along the run, y = 0 at the deck,
@@ -71,8 +79,8 @@ function bayGeometry() {
     // Seawall strip: top 5 cm below the deck, so the two never z-fight, and
     // inside the plinth, so strips crossing at a corner never show a shared top.
     stoneBox([0, L], [-6.05, -0.05], [-0.25, 0.25], 0.45),
-    stoneBox([mid - 0.11, mid + 0.11], [0.26, 0.96], [-0.11, 0.11]),
-    stoneBox([mid - 0.135, mid + 0.135], [0.95, 1.01], [-0.135, 0.135]),
+    stoneBox([mid - 0.11, mid + 0.11], [0.26, 0.96], [-0.11, 0.11], SLIM_POST_SHADE),
+    stoneBox([mid - 0.135, mid + 0.135], [0.95, 1.01], [-0.135, 0.135], SLIM_POST_SHADE),
     rail(0.065, 0.87, 0, L, 10),
     rail(0.035, 0.58, 0, L, 6),
     rail(0.035, 0.4, 0, L, 6),
