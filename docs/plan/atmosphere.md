@@ -62,7 +62,7 @@ The site should feel like a humid, cinematic Victoria Harbour evening:
 
 - Near-black navy zenith (0x0a0d1e) with the plum glow in a lower band
   (0.24 of the dome); clouds at 0.65 brightness except where the moon
-  lights them (user choice, 2026-10-04). Awaiting approval.
+  lights them (user choice, 2026-10-04). Approved 2026-10-04 (user approval).
 
 ### Searchlights
 
