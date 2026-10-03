@@ -6,6 +6,29 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Palms on mobile 01** (user choice): after previewing the lower scene
+  on phones, the palms at the Clock Tower's foot now show in the mobile
+  hero and 01, as in the mobile storyboard; deck and railing stay hidden
+  so the junk's reflection and glints keep the lower third. Files:
+  `src/data/chapters.js`, `docs/plan/scene-promenade.md`.
+- **Realistic puddles** (user request: too many, and they read as flat
+  shapes on the paving): two placed puddles on the hero's deck instead
+  of noise-scattered ones; ragged edges, soaked rims; inside, a traced
+  mirror image of railing A with its lit lantern, a cloudy sky reflection
+  and a slight ripple. Files: `src/scene/lamps.js`,
+  `docs/plan/scene-promenade.md`.
+- **01 polish, third round** (user choices): slope lights continue west
+  of the Clock Tower, thinning and staying low (they stopped in a hard
+  edge behind the tower); soft dark gradients behind 01's copy (over the
+  tower's top at 16:10) and 東方明珠; the bauhinia tree set 1.5 m lower so
+  its crown clears 東方明珠; railing A built 1.3× with a lantern on every
+  big post (storyboard foreground; a camera move was left out because it
+  would lift the railing behind 香); paving with weathered patches,
+  mirror-like puddles and fallen petals. Files: `src/data/world.js`,
+  `src/scene/createMountains.js`, `src/scene/createForeground.js`,
+  `src/scene/lamps.js`, `src/styles.css`, `docs/plan/README.md`,
+  `docs/plan/interface.md`, `docs/plan/scene-city.md`,
+  `docs/plan/scene-promenade.md`.
 - **01 polish: mountains, skyline colour and railing** (user choices
   after a second review of 01; paving, the big railing and the copy/tree
   notes not chosen for now). Mountains: the scattered slope dots read as

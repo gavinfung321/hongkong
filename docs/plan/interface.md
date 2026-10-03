@@ -160,6 +160,12 @@ How it is built:
   edge below the nav. It replaced 維港之夜. Large and bright so it reads as
   a second title: 1.75rem on desktop, 1.125rem on mobile, near-full ivory
   (user requests, 2026-10-01).
+- A soft dark pool (radial gradient) sits behind it, and another behind
+  chapter 01's copy, which on 16:10 and narrower windows lies over the
+  Clock Tower's lit top (user choice, 2026-10-03). Both move and fade with
+  their text (`styles.css`). Nudging the camera to clear the tower was
+  ruled out: it would need about 15% of the width and push 香 onto the
+  tower and IFC off its mark.
 - It leaves together with chapter 01's copy ("Harbour at Dusk"): the same
   scroll-linked fade and 48 px rise, at the same speed, and comes back with
   it when you scroll to the top (user request, 2026-10-01: "they should

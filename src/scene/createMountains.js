@@ -215,7 +215,7 @@ function createMist({ z, x, height }, taper) {
 
 // Soft dots of a fixed pixel size: they stay put and never twinkle as the
 // camera moves. All in one draw call.
-function createSlopeLights({ x, towers, roads, peak, seed }, ridge, z) {
+function createSlopeLights({ x, towers, west, roads, peak, seed }, ridge, z) {
   const random = seededRandom(seed);
   const position = [];
   const color = [];
@@ -232,10 +232,13 @@ function createSlopeLights({ x, towers, roads, peak, seed }, ridge, z) {
   const between = ([a, b]) => a + (b - a) * random();
 
   // Residential towers: a grid of windows, some lit, in one tone per tower.
+  // The west towers gather toward `x[0]` and reach less high further out.
   const { tower } = LIGHTS;
-  for (let i = 0; i < towers; i++) {
-    const cx = between(x);
-    const ceiling = Math.min(ridge(cx) - 40, ridge(cx) * tower.reach);
+  for (let i = 0; i < towers + west.towers; i++) {
+    const out = i < towers ? 0 : Math.pow(random(), 1.8);
+    const cx = out > 0 ? x[0] - out * west.reachOut : between(x);
+    const reach = out > 0 ? west.reach * (1 - 0.5 * out) : tower.reach;
+    const ceiling = Math.min(ridge(cx) - 40, ridge(cx) * reach);
     const height = between(tower.height);
     const base = 30 + Math.max(0, ceiling - height - 30) * Math.pow(random(), tower.rise);
     const top = Math.min(base + height, ceiling);

@@ -53,7 +53,10 @@ export const WORLD = {
     // `edgeRailings` follow the promontory and always show. Runs meeting at a
     // corner share one post: skipFirst / skipLast drop the duplicate.
     railings: [
-      { from: [-5.6, 97.4], to: [-48, 61.7], y: 2.5 }, // A: arrival promenade edge
+      // A: arrival promenade edge, the hero's foreground frame. Chunkier, with
+      // a lantern on every big post, like the storyboard (user choice,
+      // 2026-10-03).
+      { from: [-5.6, 97.4], to: [-48, 61.7], y: 2.5, scale: 1.3, lanternEvery: 1 },
       { from: [-74, 92.2], to: [-50, 92.3], y: 2.5 }, // C: waterfront (mobile 02)
       { from: [-60, 61.7], to: [-48, 61.7], y: 2.5, skipFirst: true, skipLast: true }, // D: inlet, north side
     ],
@@ -79,7 +82,10 @@ export const WORLD = {
     // corner of the hero and 01 (its trunk stays out of frame). Yaw turns the
     // lean, as for the palms.
     // `viewer`: the hero / 01 desktop camera, which the flowers turn toward.
-    bauhinia: { position: [1.2, 2.5, 100], yaw: 1.91, scale: 1, seed: 5, viewer: [-13, 5.9, 102] },
+    // Set 1.5 m into the deck (user choice, 2026-10-03) so the crown sits
+    // below 東方明珠 in the hero instead of behind it; the trunk's foot is
+    // never in frame.
+    bauhinia: { position: [1.2, 1, 100], yaw: 1.91, scale: 1, seed: 5, viewer: [-13, 5.9, 102] },
     // A low bauhinia bush on the arrival promenade just inside railing A
     // (user request, 2026-10-03), its long side along the railing: it fills
     // the bottom-left corner of the hero under the Clock Tower and slides
@@ -146,10 +152,16 @@ export const WORLD = {
     // of lit windows on the lower slopes, road lights climbing the hill, and
     // the lights round the Peak Tower at Victoria Gap. Roads run from
     // [x, share of the ridge's height] to [x, share], with a wiggle in metres.
+    // `west`: Sheung Wan to Kennedy Town, left of the Clock Tower in the hero
+    // (user choice, 2026-10-03: the lights stopped in a hard edge behind the
+    // tower). From `x[0]` the towers thin out and stay lower over the next
+    // `reachOut` metres, so High West's top stays dark behind the tower.
     lights: {
       x: [-700, 1400],
       towers: 210,
+      west: { towers: 55, reachOut: 500, reach: 0.42 },
       roads: [
+        [[-1000, 0.18], [-560, 0.26], 8],
         [[-560, 0.3], [420, 0.36], 14],
         [[-300, 0.46], [700, 0.5], 10],
         [[150, 0.24], [1300, 0.3], 12],

@@ -86,8 +86,29 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
      match the big posts' carved panels (`RAIL_SHADE`, `SLIM_POST_SHADE` in
      `createForeground.js`). Each railing lantern's warm pool reaches
      4.5 m (was 3.2), so it lights the rails either side and the paving at
-     the post's foot. Size and placement are unchanged: a bigger,
-     storyboard-like railing remains a later option (README, "01 polish").
+     the post's foot.
+   - **Storyboard railing on the arrival promenade (user choice,
+     2026-10-03).** Railing A, the hero's foreground frame, is built 1.3×
+     (posts 0.57 m, 1.46 m tall, spacing 5.2 m) with a lantern on every big
+     post, so three or four big lanterns run along the bottom of the hero
+     and two frame the 01 hold's corner, as in the storyboard (`scale`,
+     `lanternEvery` per run in `WORLD.foreground.railings`). Its lantern
+     pools scale with it. The other runs keep their size. Moving the
+     camera lower or closer was tried in planning and left out: the near
+     lantern already reaches the foot of 香, and either move would lift
+     the railing behind the characters.
+   - **Paving variation (user choice, 2026-10-03).** In `addWetPaving`
+     (`PAVING` in `lamps.js`): soft lighter and darker weathered patches
+     about 5 m across and a wider spread of slab tones; two puddles on the
+     hero's visible deck under the bush (noise-scattered ones were too many
+     and read as flat shapes, user request, 2026-10-03), with ragged edges
+     and a soaked rim. Each mirrors what lies beyond it: railing A, traced
+     per pixel along the reflected view ray (posts, rails, iron and the lit
+     lantern glass as a sharp image), and above it the sky with soft
+     clouds, slightly rippled, over stone gone nearly black under the
+     water. The 01 hold sees no deck. Fallen bauhinia petals
+     lying on the stone, thickest within 7 m of the tree and the bush,
+     fading out before they shrink to a few pixels. No new objects.
    - **Kept:** railing lines A, B (x = −50) and C, seawall strip tops 5 cm
      below the deck, the depth-twin fade for 02 → 03 (the twins are now
      nudged back by a constant depth offset so the railing always passes;
@@ -147,7 +168,11 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
      No crown crosses the tower at the 02 hold, and none crosses it
      mid-move: the palms fade in late in the 01 → 02 move (62–90% of it,
      after they pass the tower) and out early in 02 → 03 (first 10%), set
-     per key in `createGating` (`windows`). One instanced mesh per shape
+     per key in `createGating` (`windows`). On mobile they also show in the
+     hero and 01, small outlines at the tower's foot as in the mobile
+     storyboard, with the open water kept (user choice, 2026-10-03; the
+     deck and railing were tried there too but hid the junk's reflection).
+     One instanced mesh per shape
      plus a depth-only twin for the fade: 4 draw calls. Code: `palms.js`;
      positions and shapes in `WORLD.foreground.palms`. Checked: all 12
      frames as before (only the four older misses), all mouse corners pass,
@@ -198,9 +223,10 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
        harbour wind and land on the water, then start again from another
        flower. To match, the site-wide petals now drift toward screen
        left too, away from the tree.
-     - **Framing:** in the hero the canopy fills the right edge (from about
-       86% of the width, y 8–60%) behind 東方明珠 and the side pager, which
-       stay legible. The IFC, moon, junk and 香港 stay uncovered. The 01
+     - **Framing:** in the hero the canopy fills the right edge from about
+       86% of the width. Set 1.5 m into the deck (user choice, 2026-10-03)
+       so the crown starts below 東方明珠 instead of behind it (y about
+       28–70%); the trunk's foot is never in frame. The IFC, moon, junk and 香港 stay uncovered. The 01
        hold pushes the camera 5 m forward, so by the hold the canopy has
        slid out of frame. Keeping it in the corner at the hold too would
        need foliage hanging 15–20 m out over open water.
