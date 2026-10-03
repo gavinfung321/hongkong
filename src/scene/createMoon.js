@@ -13,16 +13,34 @@ import { seededRandom } from './random.js';
 // Original procedural moon: a warm disc with soft maria, plus an additive halo.
 // Both sit beyond the far mountain range, so the ridge hides the lower edge.
 const SIZE = 512;
-const HALO_SCALE = 3.2; // halo diameter in moon diameters
+const HALO_SCALE = 5; // halo diameter in moon diameters
 
-// Maria in disc units (-1..1, y down): [x, y, spread, blobs, strength, size].
-// A few large dark seas rather than many spots (user request, 2026-10-01).
+// Maria in disc units (-1..1, y down), laid out like the real near side so the
+// joined, ragged seas read as the moon rather than two dark "eyes" (user
+// request, 2026-10-03): [x, y, radius x, radius y, blobs, strength].
 const MARIA = [
-  [-0.3, -0.28, 0.45, 10, 0.6, 0.22],
-  [0.32, -0.08, 0.35, 8, 0.55, 0.2],
-  [-0.05, 0.22, 0.3, 6, 0.5, 0.17],
+  [-0.62, -0.02, 0.2, 0.42, 22, 0.13], // Oceanus Procellarum
+  [-0.3, -0.4, 0.27, 0.22, 18, 0.15], // Imbrium
+  [0.02, -0.72, 0.32, 0.06, 10, 0.1], // Frigoris
+  [-0.02, -0.18, 0.09, 0.07, 5, 0.1], // Vaporis
+  [0.2, -0.36, 0.15, 0.14, 10, 0.15], // Serenitatis
+  [0.36, -0.04, 0.2, 0.17, 14, 0.14], // Tranquillitatis
+  [0.68, -0.26, 0.09, 0.07, 6, 0.15], // Crisium
+  [0.56, 0.22, 0.11, 0.14, 8, 0.11], // Fecunditatis
+  [0.36, 0.34, 0.07, 0.07, 4, 0.1], // Nectaris
+  [-0.16, 0.38, 0.17, 0.13, 10, 0.11], // Nubium
+  [-0.5, 0.42, 0.09, 0.08, 5, 0.12], // Humorum
 ];
 const CRATERS = 6;
+// The glow round the disc, in moon radii from its centre: a soft corona
+// close in and a wide faint haze, as if seen through thin mist.
+const CORONA = { strength: 0.26, fall: 2.2 };
+const HAZE = { strength: 0.1, fall: 0.6 };
+
+const smoothstep = (a, b, t) => {
+  const c = Math.min(Math.max((t - a) / (b - a), 0), 1);
+  return c * c * (3 - 2 * c);
+};
 
 // Places a disc-space point (-1..1) on the canvas, squashed toward the rim as
 // on a sphere, and runs draw(radius) in that frame.
@@ -107,13 +125,25 @@ function drawDisc(seed) {
   ctx.fillRect(0, 0, SIZE, SIZE);
   const random = seededRandom(seed);
 
-  // Maria: clusters of overlapping soft blobs, the moon's dark "seas".
-  for (const [cx, cy, spread, count, strength, size] of MARIA) {
+  // Maria: many faint overlapping blobs per sea, so the seas join and their
+  // edges stay ragged, in a muted grey-brown.
+  for (const [cx, cy, rx, ry, count, strength] of MARIA) {
     for (let i = 0; i < count; i++) {
-      const x = cx + (random() - 0.5) * spread;
-      const y = cy + (random() - 0.5) * spread;
-      blob(ctx, r, x, y, size * (0.6 + random() * 0.6) * r, `rgba(160, 90, 28, ${strength * (0.6 + random() * 0.4)})`);
+      const angle = random() * Math.PI * 2;
+      const distance = Math.sqrt(random()) * 0.8;
+      const x = cx + Math.cos(angle) * distance * rx;
+      const y = cy + Math.sin(angle) * distance * ry;
+      const size = (0.35 + random() * 0.45) * Math.min(rx, ry) * 1.6 * r;
+      blob(ctx, r, x, y, size, `rgba(150, 108, 74, ${strength * 0.8 * (0.6 + random() * 0.8)})`);
     }
+  }
+  // Highland mottling: small pale and dark specks between the seas.
+  for (let i = 0; i < 90; i++) {
+    const angle = random() * Math.PI * 2;
+    const distance = Math.sqrt(random()) * 0.95;
+    const pale = random() < 0.5;
+    blob(ctx, r, Math.cos(angle) * distance, Math.sin(angle) * distance, (0.015 + random() * 0.04) * r,
+      pale ? 'rgba(255, 238, 190, 0.14)' : 'rgba(150, 108, 74, 0.08)');
   }
 
   // Craters: a dark bowl, shadowed on the lit (upper-left) side, with a bright
@@ -129,19 +159,14 @@ function drawDisc(seed) {
 
   grain(ctx, random);
 
-  // Sphere shading: light from the upper left, a darker rim all round.
+  // A full moon is lit face on, so it stays evenly bright with only a slight
+  // darkening at the rim (no lit-ball shading).
   ctx.globalCompositeOperation = 'multiply';
-  const shade = ctx.createRadialGradient(r * 0.72, r * 0.68, r * 0.05, r, r, r);
+  const shade = ctx.createRadialGradient(r, r, r * 0.05, r, r, r);
   shade.addColorStop(0, '#ffffff');
-  shade.addColorStop(0.6, '#f8ead2');
-  shade.addColorStop(1, '#c98a4c');
+  shade.addColorStop(0.75, '#fbf1de');
+  shade.addColorStop(1, '#e2b37c');
   ctx.fillStyle = shade;
-  ctx.fillRect(0, 0, SIZE, SIZE);
-  ctx.globalCompositeOperation = 'screen';
-  const shine = ctx.createRadialGradient(r * 0.7, r * 0.64, 0, r * 0.7, r * 0.64, r * 0.7);
-  shine.addColorStop(0, 'rgba(255, 244, 210, 0.35)');
-  shine.addColorStop(1, 'rgba(255, 244, 210, 0)');
-  ctx.fillStyle = shine;
   ctx.fillRect(0, 0, SIZE, SIZE);
   ctx.globalCompositeOperation = 'source-over';
 
@@ -155,9 +180,14 @@ function drawHalo() {
   canvas.width = canvas.height = 256;
   const ctx = canvas.getContext('2d');
   const glow = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
-  // Eased falloff; a straight ramp to zero leaves a visible rim.
-  for (const [stop, alpha] of [[0, 0.5], [0.15, 0.3], [0.35, 0.12], [0.6, 0.04], [0.85, 0.01], [1, 0]]) {
-    glow.addColorStop(stop, `rgba(246, 196, 106, ${alpha})`);
+  // Exponential falloffs from the rim, eased to zero at the card's edge (a
+  // straight cut leaves a visible ring).
+  for (let i = 0; i <= 32; i++) {
+    const stop = i / 32;
+    const beyond = Math.max(0, stop * HALO_SCALE - 1);
+    const edge = 1 - smoothstep(0.7, 1, stop);
+    const alpha = (CORONA.strength * Math.exp(-beyond * CORONA.fall) + HAZE.strength * Math.exp(-beyond * HAZE.fall)) * edge;
+    glow.addColorStop(stop, `rgba(246, 196, 106, ${alpha.toFixed(4)})`);
   }
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, 256, 256);

@@ -11,8 +11,10 @@ import {
   UniformsLib,
   UniformsUtils,
   Vector3,
+  Vector4,
 } from 'three';
 import { CLOUD_SHEET, CLOUDS, MIST, MIST_SHEET, SEA_MIST } from '../data/atmosphere.js';
+import { WORLD } from '../data/world.js';
 import { aimCamera, poseFov } from '../scroll/cameraRig.js';
 import { seededRandom } from './random.js';
 
@@ -37,12 +39,18 @@ import { seededRandom } from './random.js';
 // it and depth tested, so everything in front of it stays crisp. Open-water
 // wisps farther out on the harbour, for the hero and 01, face the 01 camera.
 const FEATHER = [0.06, 0.18]; // edge fade, as a share of the card's width / height
+// Moonlight on the clouds (user request, 2026-10-03): clouds near the moon
+// warm up, their thin edges most, falling off with the angle from the moon's
+// rim as seen from the camera (`reach`, radians). Clouds only, not the mist.
+const MOONLIT = { color: 0xf6c46a, strength: 0.55, reach: 0.1, edge: 0.8 };
 
 const vertexShader = `
   #include <fog_pars_vertex>
   varying vec2 vUv;
+  varying vec3 vWorld;
   void main() {
     vUv = uv;
+    vWorld = ( modelMatrix * vec4( position, 1.0 ) ).xyz;
     vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
     gl_Position = projectionMatrix * mvPosition;
     #include <fog_vertex>
@@ -57,7 +65,10 @@ const fragmentShader = `
   uniform float uOpacity;
   uniform vec3 uTintLow; // colour at the card's foot
   uniform vec3 uTintHigh; // and at its top
+  uniform vec4 uMoon; // world position, radius
+  uniform vec3 uMoonLight; // colour × strength; black for the mist
   varying vec2 vUv;
+  varying vec3 vWorld;
   void main() {
     // The band's ends are clear, so the wrap shows no seam; the gradients of the
     // unwrapped coordinate keep the wrap from dropping to the smallest mip.
@@ -66,11 +77,20 @@ const fragmentShader = `
     vec2 edge = min( vUv, 1.0 - vUv );
     float feather = smoothstep( 0.0, uBand.z, edge.x ) * smoothstep( 0.0, uBand.w, edge.y );
     vec3 tint = mix( uTintLow, uTintHigh, smoothstep( 0.0, 0.8, vUv.y ) );
-    gl_FragColor = vec4( c.rgb * tint, c.a * feather * uOpacity );
+    vec3 colour = c.rgb * tint;
+    vec3 toMoon = uMoon.xyz - cameraPosition;
+    float rim = asin( clamp( uMoon.w / length( toMoon ), 0.0, 1.0 ) );
+    float angle = acos( clamp( dot( normalize( vWorld - cameraPosition ), normalize( toMoon ) ), -1.0, 1.0 ) );
+    float lit = exp( -max( angle - rim, 0.0 ) / ${MOONLIT.reach.toFixed(3)} );
+    float thin = 1.0 - smoothstep( 0.15, 0.85, c.a );
+    colour += uMoonLight * lit * ( 1.0 - ${MOONLIT.edge.toFixed(2)} + ${MOONLIT.edge.toFixed(2)} * thin );
+    gl_FragColor = vec4( colour, c.a * feather * uOpacity );
     #include <colorspace_fragment>
     #include <fog_fragment>
   }`;
 
+const moon = new Vector4(...WORLD.moon.position, WORLD.moon.radius);
+const moonLight = new Color(MOONLIT.color).multiplyScalar(MOONLIT.strength);
 const placement = new PerspectiveCamera();
 const position = new Vector3();
 const target = new Vector3();
@@ -104,6 +124,7 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
     name,
     tint = { low: [1, 1, 1], high: [1, 1, 1] },
     feather = FEATHER[0],
+    moonlit = false,
   }) {
     const [r0, r1] = sheet.bands[spec.band];
     const [u0, u1] = spec.u ?? [0, 1];
@@ -120,6 +141,8 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
         uOpacity: { value: 0 },
         uTintLow: { value: new Color(...tint.low) },
         uTintHigh: { value: new Color(...tint.high) },
+        uMoon: { value: moon },
+        uMoonLight: { value: moonlit ? moonLight : new Color(0) },
       },
       transparent: true,
       depthWrite: false,
@@ -153,6 +176,7 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
         name: 'cloud',
         tint: layer.tint,
         feather: CLOUDS.feather,
+        moonlit: true,
       });
       const [u0, u1] = spec.u ?? [0, 1];
       card.layer = layer;

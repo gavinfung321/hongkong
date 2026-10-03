@@ -73,6 +73,12 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
       the frame's width per second (about 40 px in 10 s at 1440 px),
       back half that. Wide side feathers (20%) let clouds drift in
       and out softly. Still in reduced motion.
+    - **Moonlit clouds (user request, 2026-10-03):** clouds near the
+      moon warm up with its light, their thin edges most (a silver
+      lining), fading with the angle from the moon's rim as the camera
+      sees it (`MOONLIT` in `createAtmosphere.js`). Clouds only; the
+      harbour mist is unchanged. Most visible on phones in 01, where a
+      lit bank sits just above the moon.
     - **Checks:** 香港 is drawn over the clouds, so nothing covers it.
       No lit front bank sits behind the copy; the dim back layer
       reaches behind some copy and keeps it legible. IFC still leads

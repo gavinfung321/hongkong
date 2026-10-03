@@ -230,21 +230,28 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
      bauhinia bush on the left bottom corner … a realistic one, similar to
      the existing tree but a bush this time to feel different").**
      - **Shape:** a low, dense mound 7 m long, 2.3 m tall and 2.6 m deep,
-       its long side along railing A on the arrival promenade (x −19.6,
-       z 88.7, 2.2 m inside the railing). Nine thin stems fan out from a
-       tight base under an ellipsoid crown with seven lumps, so the outline
-       is uneven. About 1,900 cards from the same atlas: clumps and leaves
-       through the crown's outer half metre, and 260 flowers and 80 bud
-       sprays on its upper surface (far more flowers than the tree), turned
-       toward the camera. 26 fallen petals (the petals' artwork) lie on the
+       its long side along railing A on the arrival promenade (x −21.1,
+       z 87.4, 2.4 m inside the railing). Nine thin stems fan out from a
+       tight base under an ellipsoid crown with eleven lumps, so the
+       outline is uneven. About 1,900 cards from the same atlas: clumps and
+       leaves through the crown's outer half metre, and 260 flowers and 80
+       bud sprays on its upper surface (far more flowers than the tree),
+       turned toward the camera. Since 2026-10-03 (user request: less even,
+       more like a real bush) the flowers gather in 16 clusters instead of
+       an even sprinkle, and 6% of the leaves and flowers sit on sprigs
+       poking out past the crown. 26 fallen petals (the petals' artwork) lie on the
        paving around it, 3 cm up so they never fight the slabs. The
        lanterns' warm pools light its leaves and stems (`addLampLight`).
-     - **Framing:** in the hero it runs from the left edge to about 26% of
-       the width, 65–85% of the height, below the Clock Tower's lit base
-       (clear by about 4%) and the copy, beside the lantern on railing A.
-       The 01 hold's push brings it into the bottom-left corner (0–16%,
-       68–100%). The bottom-left paving below it in the hero stays open:
-       anything nearer would leave the frame by the hold.
+     - **Framing:** moved 2 m on along the railing (user request,
+       2026-10-03: its crown sat under the foot of 香, and it hid a
+       railing lantern). In the hero it now runs from the left edge to
+       about 20% of the width (香 starts at 22.5%), 62–82% of the height,
+       below the Clock Tower's lit base and the copy, with the railing
+       lantern beside it showing. The 01 hold's push brings it into the
+       bottom-left corner (to about 9%, its leaf tips to about 20%). Any
+       position farther left would leave the hold frame: the push moves it
+       about 11% left between the hero and the hold. The bottom-left paving
+       below it in the hero stays open.
      - **Chapters and breakpoints:** desktop 01 and the hero only (`bush` in
        each chapter's `visibility`). Not on phones: mobile 01 has no deck.
        The 01 → 02 camera passes over it, so it is gone by 8% of that move
@@ -274,8 +281,9 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
      - **Now (user choices: glitter shader, skyline shimmer, moon glitter
        path, moderate chop):**
        - **Glints:** thin slivers where a wavelet faces the light, about
-         2 px tall in the distance and growing toward the viewer, 4× as
-         long as tall. Dense in a light's bright core (but always with
+         2 px tall in the distance and growing toward the viewer up to
+         6 px (since 2026-10-03, user request: near the railing they grew
+         into flat two-tone blobs), 4× as long as tall. Dense in a light's bright core (but always with
          gaps) and sparse at its edges, they drift and twinkle slowly
          (frozen in reduced motion, where the water does not animate).
        - **Shape:** each glow is Gaussian across, 1.5× the light's width,
@@ -303,7 +311,16 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
          water under the city carries a dim, continuous glitter in the
          buildings' warm and cool colours, with no columns. One texture
          read per pixel.
-       - **Not reflected:** the promenade lamps.
+       - **Sky between the glints (user request, 2026-10-03: the water
+         was pure black between them):** the water mirrors a dim
+         violet-navy sky, strongest toward the horizon (the Fresnel
+         sheen) and faint near the camera, broken into soft wave bands
+         that drift with the glints. The dark water now reads as a
+         surface (about RGB 10–20, 5–9, 30–40 where it was 2, 0, 14),
+         and the glints still stand out. Skyline shimmer 0.11 (was 0.08).
+         (`SKY`, `CITY` in `createWater.js`.)
+       - **Not reflected:** the promenade lamps and railing lanterns
+         (their mirror images fall behind the sea wall).
      - **No glare:** the water ignores the rim light and the boats' point
        lights (they made hot blobs under the ferry in 03 and the junk in
        04); the glints draw all reflections.

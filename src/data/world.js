@@ -83,9 +83,13 @@ export const WORLD = {
     // A low bauhinia bush on the arrival promenade just inside railing A
     // (user request, 2026-10-03), its long side along the railing: it fills
     // the bottom-left corner of the hero under the Clock Tower and slides
-    // into the corner by the 01 hold. Desktop only (mobile 01 has no deck).
+    // into the corner by the 01 hold. Moved 2 m on along the railing (user
+    // request, 2026-10-03) so its crown ends left of 香 in the hero (right
+    // edge at 20% of the width, 香 starts at 22.5%) and the railing lantern
+    // it hid shows; it still fills the corner at the 01 hold (to 8.5%).
+    // Desktop only (mobile 01 has no deck).
     // size: [length, height, depth] in metres.
-    bauhiniaBush: { position: [-19.6, 2.5, 88.7], yaw: -0.7, size: [7, 2.3, 2.6], seed: 11, viewer: [-13, 5.9, 102] },
+    bauhiniaBush: { position: [-21.1, 2.5, 87.4], yaw: -0.7, size: [7, 2.3, 2.6], seed: 11, viewer: [-13, 5.9, 102] },
     // 3D palms around the Clock Tower (frame 02), in two shapes. Yaw turns the
     // trunk's lean: 0 leans toward +x, π/2 toward −z. None may cross the
     // tower in either chapter 02 framing. The row of five stands behind the
