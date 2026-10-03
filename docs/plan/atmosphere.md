@@ -39,6 +39,18 @@ The site should feel like a humid, cinematic Victoria Harbour evening:
 - Haze is absent from scenes 05–06 so the arrival and fireworks remain clear.
 - Do not add more haze layers; the existing system is sufficient.
 
+### Aerial perspective
+
+- The fog takes the sky dome's colour along each view ray, so distant ridges
+  and towers pale into the plum horizon glow instead of going dark; below
+  the horizon it keeps the old fog colour, so the water is unchanged
+  (user choice, 2026-10-04).
+- A depth fade behind Central's front row makes the skyline recede in
+  planes: 0 at 1220 m north (IFC stays crisp) to 55% at 1920 m, a third
+  less on tower tops (user request, 2026-10-04).
+- `src/scene/aerialFog.js`; `?off=aerial` restores the old fog.
+- Approved 2026-10-04 (user approval).
+
 ### Searchlights
 
 - Searchlights support scenes 01 and 05 only.

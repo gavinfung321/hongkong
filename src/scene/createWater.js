@@ -30,13 +30,17 @@ const BLUR = 5;
 // its width, its rows shifted sideways by the wavelets so the edges are
 // ragged. Sizes are view-angle tangents. The boats' hulls lay dark mirror
 // images that hide the other lights behind them (2026-10-02).
+// Calm water (atmospheric depth Priority B, user choice, 2026-10-04): the
+// harbour reads as dark depth with a few narrow columns of light, not
+// sequins across its width. Spread 1.1 (was 1.5), wobble 0.4 (was 0.6);
+// with the skyline shimmer, sky sheen and swell sway below turned down.
 const REFLECT = {
   // Desktop 01 sees all nine sources since the wheel joined (2026-10-03).
   max: { desktop: 9, mobile: 8 },
   head: 0.012, // longest fade beyond the mirror image, toward the horizon
   minPixels: 3, // shortest fade either way and narrowest half width
-  spread: 1.5,
-  wobble: 0.6, // sideways shift of each wavelet row, in half widths
+  spread: 1.1,
+  wobble: 0.4, // sideways shift of each wavelet row, in half widths
   gain: 0.8,
 };
 // The glow is drawn as glints: thin horizontal slivers where a wavelet faces
@@ -55,19 +59,23 @@ const GLINT = { rowPixels: 2, rowMaxPixels: 6, grow: 30, aspect: 4, nearAspect: 
 // The night sky mirrored between the glints (user request, 2026-10-03): a dim
 // violet-navy times the water's Fresnel sheen (plus a small `floor` near the
 // camera), broken into soft bands by the wavelets, so the dark water has a
-// surface instead of reading as flat black.
-const SKY = { color: 0x2c2448, strength: 0.28, floor: 0.04, bands: [0.18, 0.55], contrast: 1.3 };
+// surface instead of reading as flat black. Calmer since 2026-10-04
+// (Priority B): strength 0.18 (was 0.28), contrast 0.9 (was 1.3).
+const SKY = { color: 0x2c2448, strength: 0.18, floor: 0.04, bands: [0.18, 0.55], contrast: 0.9 };
 // A slow swell rolling in toward the viewer (user request, 2026-10-03): as
 // a crest passes, each wavelet row sways sideways (`sway`, in half widths)
 // and brightens (`pulse`), so the reflection columns ripple down the water.
-// `rows`: radians per wavelet row; `speed`: radians per second.
-const SWELL = { rows: 0.45, speed: 1.7, sway: 0.3, pulse: 0.15 };
+// `rows`: radians per wavelet row; `speed`: radians per second. Sway 0.2
+// (was 0.3; Priority B, 2026-10-04) keeps the columns straighter.
+const SWELL = { rows: 0.45, speed: 1.7, sway: 0.2, pulse: 0.15 };
 // The 02 afterglow on the water (user choice, 2026-10-03: the right-hand
 // water read flat): the sky's glow (createScene.js) times the Fresnel sheen,
 // `width` times as wide squared, in drifting bands.
 const AFTERGLOW_MIRROR = { strength: 1.1, width: 0.6 };
 // The skyline shimmer: brightness of the strip read along the island front.
-const CITY = { power: 0.11, lit: 0.6, tail: 0.25 };
+// Power 0.045 (was 0.11; Priority B, 2026-10-04): a faint glow under the
+// skyline rather than a full-width band of glints.
+const CITY = { power: 0.045, lit: 0.6, tail: 0.25 };
 // Plane segments per side. Positions interpolated across one 8 km triangle
 // lose enough float precision to make the streaks shiver as the camera moves.
 const SEGMENTS = 64;

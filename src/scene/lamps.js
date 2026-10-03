@@ -115,6 +115,28 @@ export function addLampLight(material, strength = 1) {
   return material;
 }
 
+// Keeps `fill` of the scene's moon and sky light on a Lambert material, so
+// the nearest layer reads as a dark shape; the lamp pools (emitted light)
+// are untouched and catch its edges warm. Patch before the first compile.
+export function silhouette(material, fill) {
+  const previous = material.onBeforeCompile;
+  const key = `${material.customProgramCacheKey()}|silhouette`;
+  material.customProgramCacheKey = () => key;
+  material.onBeforeCompile = (shader, renderer) => {
+    previous?.(shader, renderer);
+    shader.uniforms.silhouetteFill = { value: fill };
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>', '#include <common>\nuniform float silhouetteFill;')
+      .replace(
+        '#include <aomap_fragment>',
+        `#include <aomap_fragment>
+        reflectedLight.directDiffuse *= silhouetteFill;
+        reflectedLight.indirectDiffuse *= silhouetteFill;`,
+      );
+  };
+  return material;
+}
+
 // The Clock Tower's floodlight (a real light), relative to the tower.
 export const TOWER_FLOOD = [0, 1.5, 9];
 

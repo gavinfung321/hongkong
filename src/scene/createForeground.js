@@ -15,7 +15,7 @@ import {
 } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { WORLD } from '../data/world.js';
-import { RAILING_BAY, addLampLight, glowMaterial, railingLayout } from './lamps.js';
+import { RAILING_BAY, addLampLight, glowMaterial, railingLayout, silhouette } from './lamps.js';
 import { createBauhinia, createBauhiniaBush } from './bauhinia.js';
 import { createPalms } from './palms.js';
 import { createPeople } from './people.js';
@@ -27,6 +27,12 @@ import { promenadeGranite, railingPanel } from './surfaces.js';
 // top rail and two thin rails, a lantern on every second big post.
 
 const STONE_LAMP = 2.5;
+
+// Foreground silhouettes (atmospheric depth Priority C, user choice,
+// 2026-10-04): the share of moon and sky fill kept by the nearest layer, so
+// it frames the scene as dark shapes with lantern-warm edges. The promontory
+// railings are mid-ground and keep their full fill.
+const SILHOUETTE = { railing: 0.35, tree: 0.3, bush: 0.3 };
 const IRON = 0x2b2621;
 const GLASS = 0xffd08a;
 const GLOW = 0xffb060;
@@ -111,7 +117,7 @@ const textures = {};
 
 // `fade`: the run fades with the chapters, so its materials are transparent
 // and it gets depth-only twins for a clean half-faded veil.
-function createRailing(segments, { fade }) {
+function createRailing(segments, { fade, fill = 1 }) {
   const group = new Group();
   textures.granite ??= promenadeGranite();
   textures.panel ??= railingPanel();
@@ -184,6 +190,8 @@ function createRailing(segments, { fade }) {
   glows.renderOrder = 3;
   glows.userData.noProbe = true;
 
+  if (fill < 1) for (const material of [stone, panel, iron]) silhouette(material, fill);
+
   group.add(bays, posts, panels, lanterns, lights, glows);
   return { group, materials: [stone, panel, iron, glass], glows: [glow] };
 }
@@ -232,7 +240,7 @@ function createLamps(positions) {
 }
 
 export function createForeground() {
-  const railing = createRailing(WORLD.foreground.railings, { fade: true });
+  const railing = createRailing(WORLD.foreground.railings, { fade: true, fill: SILHOUETTE.railing });
   railing.group.name = 'railing';
   const edgeRailing = createRailing(WORLD.foreground.edgeRailings, { fade: false });
   edgeRailing.group.name = 'edgeRailing';
@@ -243,6 +251,8 @@ export function createForeground() {
   bauhinia.group.name = 'bauhinia';
   const bush = createBauhiniaBush(WORLD.foreground.bauhiniaBush);
   bush.group.name = 'bauhiniaBush';
+  for (const material of bauhinia.materials.slice(0, 2)) silhouette(material, SILHOUETTE.tree);
+  for (const material of bush.materials.slice(0, 2)) silhouette(material, SILHOUETTE.bush);
 
   const groups = {
     railing: { object: railing.group, materials: railing.materials, glows: railing.glows },

@@ -1,5 +1,6 @@
 import { chapters, HERO, SCROLL } from './data/chapters.js';
-import { createScene } from './scene/createScene.js';
+import { createScene, SKY_GLOW } from './scene/createScene.js';
+import { useAerialFog } from './scene/aerialFog.js';
 import { createLighting } from './scene/createLighting.js';
 import { createWater } from './scene/createWater.js';
 import { cityStrip, reflectionSources } from './scene/waterReflections.js';
@@ -69,6 +70,8 @@ const OFF_KEYS = (params.get('off') ?? '').split(',').map((key) => key.trim());
 if (OFF_KEYS.includes('texture')) document.querySelector('.vignette')?.remove();
 // ?off=light-motion holds the practical lights at their base brightness.
 const LIGHT_MOTION = !OFF_KEYS.includes('light-motion');
+// ?off=aerial keeps the old single-colour fog, for A/B checks.
+if (!OFF_KEYS.includes('aerial')) useAerialFog({ glow: SKY_GLOW });
 // ?entrance=slow|hold|fail: entrance test switches (loadingScreen.js).
 const ENTRANCE = params.get('entrance') ?? '';
 

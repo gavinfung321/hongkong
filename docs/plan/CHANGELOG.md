@@ -6,6 +6,40 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **Foreground silhouettes, atmospheric depth Priority C** (user choice,
+  2026-10-04; Priority B approved): the nearest layer is now the darkest.
+  A new `silhouette()` shader patch keeps only part of the moon and sky
+  fill (railing A–D 0.35, bauhinia tree 0.3, bauhinia bush 0.3), while the
+  lantern pools stay full and catch the edges warm. Lanterns, promontory
+  railings, palms and tall lamps unchanged. Awaiting approval. Files:
+  `src/scene/lamps.js`, `src/scene/createForeground.js`; plan:
+  `atmospheric-depth-polish.md`, `scene-promenade.md`.
+- **Calm water, atmospheric depth Priority B** (user choice, 2026-10-04;
+  Priority A approved): the harbour reads as dark depth with a few long,
+  narrow columns of light instead of glitter across its width. Skyline
+  shimmer 0.045 (was 0.11), sky sheen 0.18 (was 0.28), band contrast 0.9
+  (was 1.3), column spread 1.1 (was 1.5), row wobble 0.4 (was 0.6), swell
+  sway 0.2 (was 0.3); longer tails under IFC (0.4), the wheel (0.45) and
+  the moon (0.3). Boats and the 05 boost unchanged. Awaiting approval.
+  Files: `src/scene/createWater.js`, `src/scene/waterReflections.js`;
+  plan: `atmospheric-depth-polish.md`, `scene-promenade.md`.
+- **Atmosphere diagnosis and aerial perspective** (user request and choice,
+  2026-10-04):
+  - `atmospheric-depth-polish.md` gains a diagnosis (frames are equally
+    bright and detailed front to back, so they lack recession and mystery)
+    and six chosen priorities, A–F: aerial perspective, calm water,
+    foreground silhouettes, veiled moon, quieter sky and palette,
+    per-chapter withholding.
+  - Priority A is built: fog takes the sky's colour along each view ray
+    instead of one dark colour, so far ridges and towers pale into the
+    horizon glow rather than going dark. Water and fog density are
+    unchanged; `?off=aerial` compares. Then strengthened so the skyline
+    recedes too (user request): a depth fade behind Central's front row,
+    0 at 1220 m north to 55% at 1920 m, a third less on tower tops; IFC
+    stays crisp. Awaiting approval.
+  - Files: `src/scene/aerialFog.js` (new), `src/scene/createScene.js`
+    (`SKY_GLOW` exported), `src/main.js`. Evidence:
+    `review-shots/aerial/`.
 - **Waterfront lamps clustered, far shore thinned, railing A strictly
   alternating** (user request, 2026-10-04):
   - Central's waterfront lamps read as a fake straight line of dots, and
