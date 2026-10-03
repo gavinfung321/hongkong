@@ -136,7 +136,8 @@ How it is built:
 - **Final copy** (user request, 2026-10-03): all six chapters, the hidden
   H1, page title, meta description and Open Graph tags now follow the
   approved `docs/FINAL-NARRATIVE-COPY.md` word for word. Kickers 04 and 05
-  read "Junk with red sails" and "Two IFC"; the `data-copy="placeholder"`
+  read "Junk with red sails" and "Two IFC"; 06's kicker is "Fireworks"
+  (was "Departure"; user request, 2026-10-03); the `data-copy="placeholder"`
   markers are gone. Menu buttons are named "Open chapter menu" and "Close
   chapter menu"; the footer return is named "Return to the beginning of the
   harbour crossing". No loading, fallback or social image UI was added.
@@ -144,7 +145,10 @@ How it is built:
 ### 3.4 Nav bar and mobile menu
 
 - **Desktop:** a thin bar across the top. Left: logo. Right: chapter links and
-  a menu button.
+  a menu button. From 960 px wide, where the links show, the menu button is
+  left out: the links, the logo and the side pager already reach every
+  chapter (user choice, 2026-10-03). Narrower windows and phones turned
+  sideways keep it, since they have no links.
 - **Both:** the bar slides away while scrolling down and returns on any scroll
   up, or when it receives keyboard focus (user request, 2026-10-01).
   - Proposed links: Clock Tower · Star Ferry · Red Sails · City of Light ·
@@ -159,6 +163,21 @@ How it is built:
   listing all six chapters, each with its Chinese label.
   - The button reports open/closed to screen readers, keyboard focus stays in
     the panel while it is open, and Escape closes it.
+- **Phone card menu** (user request, 2026-10-03; approved and made the
+  default the same day, replacing the full-screen panel on phones; it was
+  first shown behind `?menu=card`): on phones the menu is a centred floating
+  card (`min(88vw, 420px)` wide, at most `min(76svh, 620px)` tall, near
+  black, 22 px corners) over the harbour blurred and darkened; without
+  backdrop blur the backdrop is simply darker. A small header (sail mark,
+  "Chapters", close) sits above six 52 px rows: number, Cormorant title,
+  Noto Sans TC label. The current chapter gets a small coral dot and
+  brighter text instead of the underline. The list scrolls inside the card
+  when it doesn't fit; phone landscape shows two columns (01–03, 04–06) in
+  a card up to 640 px wide. Opening fades the backdrop in 200 ms, then the
+  card rises 10 px and scales 0.98 → 1 over 340 ms; closing takes 240 ms;
+  reduced motion fades only. A tap on the backdrop closes it. Focus,
+  Escape, inert background and focus return are unchanged. Desktop keeps
+  the full-screen panel (`siteHeader.js` `buildCard`, `styles.css`).
 - Links reuse the existing jump-to-chapter behaviour, including the short fade
   to dark for long jumps.
 - The bar stays transparent over the scene, with a faint dark gradient behind

@@ -137,7 +137,7 @@ subjects.
 
 ### 06
 
-**Kicker:** Departure  
+**Kicker:** Fireworks (was "Departure"; user request, 2026-10-03)  
 **Title:** Afterglow  
 **Traditional Chinese label:** 煙花  
 **Body, 19 words:**

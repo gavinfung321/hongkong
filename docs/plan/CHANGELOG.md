@@ -6,6 +6,20 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **No menu button beside the desktop nav** (user choice, 2026-10-03): from
+  960 px wide the nav links, logo and side pager reach every chapter, so
+  the menu button is hidden there; the links now end on the page margin.
+  Below 960 px and on phones it stays. Files: `src/styles.css`; plan:
+  `interface.md` (3.4). Evidence: `review-shots/desktop-menu-button/`.
+- **Chapter 06 kicker and phone card menu** (user request, 2026-10-03): 06's
+  kicker reads "Fireworks" (was "Departure"); title and 煙花 unchanged. On
+  phones (portrait and landscape) the chapter menu is now a floating card
+  over the blurred harbour, first reviewed behind `?menu=card` and then
+  approved as the default (user choice, 2026-10-03); the switch is gone.
+  The desktop menu is unchanged (pixel-identical). Files: `index.html`,
+  `src/ui/siteHeader.js`, `src/styles.css`; docs:
+  `FINAL-NARRATIVE-COPY.md`; plan: `interface.md` (3.3, 3.4). Evidence:
+  `review-shots/mobile-menu-card/`.
 - **Interface state fixes IS-01 to IS-13** (user request, 2026-10-03): all
   thirteen findings of the Interface State Polish audit. The header stays
   after long jumps; copy stays below the header; short landscape windows
