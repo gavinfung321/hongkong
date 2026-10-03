@@ -6,6 +6,14 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **Per-chapter withholding, atmospheric depth Priority F** (user choice,
+  2026-10-04; Priority E approved): visibility gates only. 01: petals
+  0.5, skyline 0.75; its searchlights stay at 0.6 (briefly removed, put
+  back by user request, 2026-10-04: they belong to 01 and 05). 02 desktop:
+  skyline 0.6 and Mid-Levels lights 0.7, as on mobile. 03 and 04: petals
+  0.3. 05 and 06 unchanged; cameras, vessel routes and copy unchanged.
+  Approved 2026-10-04. Files: `src/data/chapters.js`; plan:
+  `atmospheric-depth-polish.md`.
 - **Quieter sky and palette, atmospheric depth Priority E** (user choice,
   2026-10-04; Priority D approved): near-black navy zenith (0x0a0d1e, was
   0x141833) with the glow in a lower band (0.24, was 0.3); clouds at 0.65

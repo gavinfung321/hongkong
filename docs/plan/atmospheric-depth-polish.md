@@ -177,7 +177,7 @@ six directions below (user choice, 2026-10-04), in this order, one pass each.
   crowns and strips at 0.6 (`LED.level`). Central Plaza's bars and The
   Center's lines desaturated (0.35 / 0.3, was 0.6 / 0.55), the bars at 0.7
   and The Center's neon 0.5 (was 0.8). IFC, the wheel, the Clock Tower and
-  the 02 afterglow unchanged.
+  the 02 afterglow unchanged. Approved 2026-10-04 (user approval).
 
 ### Priority F — Per-chapter withholding
 
@@ -185,6 +185,19 @@ six directions below (user choice, 2026-10-04), in this order, one pass each.
   the ferry, junk, tower, skyline, moon, searchlights, bush, tree and
   petals at once).
 - Success: every chapter has one subject and visible rest areas.
+- **Built 2026-10-04, awaiting approval.** Visibility gates only; cameras,
+  vessel routes and copy unchanged (`chapters.js`):
+  - 01 (subject: the harbour at dusk, framed by railing, tree and bush):
+    petals 0.5, skyline 0.75. The searchlights stay at 0.6 on desktop
+    (01 and 05 only, per `atmosphere.md`; briefly removed, restored by user
+    request, 2026-10-04).
+  - 02 (subject: the Clock Tower and afterglow): desktop skyline 0.6 and
+    Mid-Levels lights 0.7, as mobile already did.
+  - 03 (subject: the ferry) and 04 (subject: the junk): petals 0.3 out on
+    the open water.
+  - 05 (IFC and the searchlights) and 06 (the fireworks) were already
+    restrained and are unchanged.
+  - Approved 2026-10-04 (user approval).
 
 ## Priority 2 — Add one physical foreground cue to chapter 05
 
@@ -243,14 +256,12 @@ disable or remove it rather than expanding it.
 - [x] Priority B: calm water — approved 2026-10-04
 - [x] Priority C: foreground silhouettes — approved 2026-10-04
 - [x] Priority D: veiled moon — approved 2026-10-04
-- [ ] Priority E: quieter sky and palette — built 2026-10-04, awaiting approval
-- [ ] Priority F: per-chapter withholding
+- [x] Priority E: quieter sky and palette — approved 2026-10-04
+- [x] Priority F: per-chapter withholding — approved 2026-10-04
 - [ ] Priority 2: test one chapter 05 foreground object
 - [ ] Priority 3: one desktop and one mobile sequence review
 - [ ] Update the changelog with only the final kept decisions
 
 ## Immediate next action
 
-Review **Priority E: quieter sky and palette** in the browser (no
-screenshots, user request, 2026-10-04), then Priority F: per-chapter
-withholding.
+Priority 2: test one chapter 05 foreground object.

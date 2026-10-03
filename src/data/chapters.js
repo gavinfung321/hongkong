@@ -98,10 +98,12 @@ export const chapters = [
     },
     visibility: {
       // No shore mist on desktop: from here its drifts join the wisps into one band.
-      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 0, bauhinia: 1, bush: 1, bursts: 0, mist: 0, seaMist: 1, haze: 0.5, searchlights: 0.6 },
+      // Withheld (atmospheric depth Priority F, user choice, 2026-10-04): half
+      // the petals, skyline at 75%. Searchlights stay (01 and 05 only).
+      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 0, bauhinia: 1, bush: 1, bursts: 0, petals: 0.5, city: 0.75, mist: 0, seaMist: 1, haze: 0.5, searchlights: 0.6 },
       // No deck: the mobile storyboard has open water right to the bottom edge.
       // Palms at the tower's foot, as in the storyboard (user choice, 2026-10-03).
-      mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, deck: 0, railing: 0, palms: 1, bauhinia: 0, bush: 0, bursts: 0, mist: 0.6, seaMist: 1, haze: 0.5, searchlights: 0 },
+      mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, deck: 0, railing: 0, palms: 1, bauhinia: 0, bush: 0, bursts: 0, petals: 0.5, city: 0.75, mist: 0.6, seaMist: 1, haze: 0.5, searchlights: 0 },
     },
     fogDensity: 0.00045,
     vessels: {
@@ -161,7 +163,10 @@ export const chapters = [
     },
     visibility: {
       // afterglow: the red-orange sky low on the right (02 only; createScene.js).
-      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bush: 0, bursts: 0, mist: 0.5, seaMist: 0, haze: 0.8, searchlights: 0, afterglow: 1 },
+      // city, slopeLights: the skyline and Mid-Levels behind the tower dimmed,
+      // as on mobile, so the tower and afterglow lead (atmospheric depth
+      // Priority F, user choice, 2026-10-04).
+      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bush: 0, bursts: 0, city: 0.6, slopeLights: 0.7, mist: 0.5, seaMist: 0, haze: 0.8, searchlights: 0, afterglow: 1 },
       // Fainter shore mist: the phone looks straight at the tower's foot.
       // city, slopeLights: Central Plaza, BOC and the Mid-Levels lights
       // behind the tower dimmed, so the tower leads (user choice, 2026-10-03).
@@ -209,8 +214,10 @@ export const chapters = [
     visibility: {
       // city: the other towers and their LEDs at 40% so the ferry, IFC and
       // the wheel lead, as the storyboard asks (user choice, 2026-10-03).
-      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, city: 0.4, mist: 0.8, seaMist: 0, haze: 1, searchlights: 0 },
-      mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, city: 0.4, mist: 0.8, seaMist: 0, haze: 1, searchlights: 0 },
+      // petals 0.3: few petals out on the open water (atmospheric depth
+      // Priority F, user choice, 2026-10-04).
+      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 0.8, seaMist: 0, haze: 1, searchlights: 0 },
+      mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 0.8, seaMist: 0, haze: 1, searchlights: 0 },
     },
     fogDensity: 0.00045,
     // The ferry holds its place on the water through the hold (no drift on
@@ -276,9 +283,10 @@ export const chapters = [
     // stern, and it is small and distant while it fades.
     // city: the skyline behind the sails stays at 40%, as in 03, so the
     // sails lead and the full city waits for 05 (user choice, 2026-10-03).
+    // petals 0.3, as in 03 (atmospheric depth Priority F, user choice, 2026-10-04).
     visibility: {
-      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, city: 0.4, mist: 1, seaMist: 0, haze: 0.7, searchlights: 0 },
-      mobile: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, city: 0.4, mist: 1, seaMist: 0, haze: 0.7, searchlights: 0 },
+      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 1, seaMist: 0, haze: 0.7, searchlights: 0 },
+      mobile: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 1, seaMist: 0, haze: 0.7, searchlights: 0 },
     },
     fogDensity: 0.00063,
     vessels: {
