@@ -141,11 +141,16 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
          share the roof bands' draw call and fade with the `city` level
          (`LED` in `createIsland.js`).
        - **Waterfront lamps (2026-10-03, user request: the storyboard has
-         a bright line where the city meets the water).** A row of warm
-         lamps every 6 m along Central's harbour front, every fifth a
-         brighter cool white, with a few gaps; fixed 3 px dots, fogged like
-         the skyline, hidden behind the piers and podium, following the
-         `city` level (`WATERFRONT` in `createIsland.js`). One draw call.
+         a bright line where the city meets the water).** Warm lamps along
+         Central's harbour front in small clusters, not a row (user
+         request, 2026-10-04: an even line of dots read as fake, and there
+         were too many): 1–4 lamps 3–6 m apart, then 25–70 m dark; each
+         cluster at street level (4–8 m) or, three in ten, higher on a
+         podium front (9–16 m), set back 1–8 m; 15% cool white, glow
+         0.45–0.8. About 110 lamps (was about 225 in an even row). Fixed
+         3 px dots, fogged like the skyline, hidden behind the piers and
+         podium, following the `city` level (`WATERFRONT` in
+         `createIsland.js`). One draw call.
        - **Masts and warning lights:** masts are dark and low-contrast (one
          or two pixels wide; on phones, without antialiasing, a bright one
          would crawl). Each carries a red light, a fixed 2.6 px dot that
@@ -393,6 +398,17 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
          the posts are gone (one draw call fewer). **Checks:** consecutive
          phone frames at 05 → 06 show hard one-pixel post stripes before
          and soft, steady columns after; same warmth on desktop.
+       - **Pier halls dimmed and varied (user request, 2026-10-04):** the
+         five halls read as identical lightboxes, as bright as the
+         landmarks. The hall tile now holds all five halls side by side and
+         each hall's harbour face uses its own section (the halls are one
+         merged mesh, still one draw call): per hall 3–4 of 12 bays dark
+         (glow 0.03–0.09 and a darker interior), 1–2 bright (0.6–0.7), the
+         rest lit at 0.32–0.48 (was 0.5–0.62 throughout), dark bays in runs
+         of 1–3 so the lit ones cluster, and each hall scaled 0.85–1.1.
+         Seeded, painted once, so it never flickers. Material glow 0.7
+         (was 1). Order of brightness: IFC crown, wheel, the brighter pier
+         clusters, the waterfront lamps (`PIER_BAYS` in `facades.js`).
        - **Fewer background lights:** every skyline tower is now 3–6% lit
          (was 5–12%), still spread evenly with 10% almost dark; 06 dims the
          skyline to 60% like 05 (`city: 0.6` in `src/data/chapters.js`).
@@ -523,7 +539,9 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
     rate. They stop where the ridge comes down to the water in desktop
     02, so none stand on the open sea behind the ferry (user request,
     2026-10-03; a longer run and a Kowloon East run across the water were
-    removed). They follow the `city` level. Code: `FAR_SHORE` in
+    removed). Thinned to about half (every 12 m with 62% gaps, was 8 m
+    and 50%; user request, 2026-10-04: too many spots right of Central).
+    They follow the `city` level. Code: `FAR_SHORE` in
     `createIsland.js`.
   - **Mobile 02:** Central Plaza, BOC and the Mid-Levels lights crowded
     the sky behind the tower, so the phone 02 frame dims the city to

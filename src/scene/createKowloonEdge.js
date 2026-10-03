@@ -37,6 +37,7 @@ import {
 import { TOWER_FLOOD, addLampLight, addWetPaving } from './lamps.js';
 import { strut } from './strut.js';
 import { WORLD } from '../data/world.js';
+import { breatheLight } from './lightBreath.js';
 import { seededRandom } from './random.js';
 
 const unitBox = new BoxGeometry(1, 1, 1).translate(0, 0.5, 0);
@@ -212,6 +213,7 @@ function createClockTower() {
   // Warm floodlight at the foot of the front face.
   const flood = new PointLight(0xffa860, 420, 60, 2);
   flood.position.set(...TOWER_FLOOD);
+  breatheLight(flood, { period: 8.3, phase: 0.17, amount: 0.03 });
 
   tower.add(
     plinth,

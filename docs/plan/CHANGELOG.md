@@ -4,8 +4,57 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Newest first.
 One entry per change: what changed, why, and the files. Older history also
 lives in the dated notes inside each area file, and in `git log`.
 
+## 2026-10-04
+
+- **Waterfront lamps clustered, far shore thinned, railing A strictly
+  alternating** (user request, 2026-10-04):
+  - Central's waterfront lamps read as a fake straight line of dots, and
+    there were too many. They now stand in clusters of 1–4 with 25–70 m
+    dark between, at street or podium height and varied setback: about
+    110 lamps, down from about 225.
+  - The far-shore lights right of Central are thinned to about half
+    (spacing 12 m, gaps 62%).
+  - Railing A's extra lit post is gone (`lanternExtra` removed). It now
+    strictly alternates from post 1 (`lanternOffset: 1`): the big
+    lantern right of 港 and one under 香, with an unlit post between.
+  - Files: `src/scene/createIsland.js`, `src/data/world.js`,
+    `src/scene/lamps.js`; plan: `scene-city.md`, `scene-promenade.md`.
+- **Lighting density, Kowloon and Central waterfronts** (user request,
+  2026-10-04): irregular darkness and a clearer hierarchy, not a global
+  dim.
+  - Railings A and B: a lantern on every second big post (was every
+    post). Railing A also lights post 1 (`lanternExtra`, new in
+    `railingLayout`), so both lanterns framing desktop 01 stay. The
+    puddles' mirror of railing A follows the pattern. Railing lantern
+    halos at glow 0.7 (was 0.9); the three tall lamps, their glow, the
+    Clock Tower floodlight, `STONE_LAMP` and wet-paving strength are
+    unchanged.
+  - Central Ferry Pier halls: material glow 0.7 (was 1); per hall 3–4 of
+    12 bays dark with a darker interior, 1–2 bright (0.6–0.7), the rest
+    0.32–0.48 (was 0.5–0.62), each hall scaled 0.85–1.1. All five halls
+    share one tile with a section each and are one merged mesh, still one
+    draw call.
+  - Central waterfront lamps: spacing 8 m (was 6), gaps 25% (was 12%),
+    glow 0.55 / 0.8 (was 0.8 / 1.15), every seventh bright (was fifth).
+  - Checked at 1440 px (01, 02, 03, 05, and 01 → 02) and 390 px (01, 02,
+    03, 05). Files: `src/data/world.js`, `src/scene/lamps.js`,
+    `src/scene/createForeground.js`, `src/scene/facades.js`,
+    `src/scene/createIsland.js`; plan: `scene-promenade.md`,
+    `scene-city.md`. Evidence: `review-shots/lighting-density/`.
+
 ## 2026-10-03
 
+- **Light breathing, atmospheric depth Stage 3** (user request, 2026-10-03):
+  the warm practical lights now breathe very slightly during holds: the
+  railing lanterns and promenade lamp halos (±3%, each its own period and
+  phase), the Clock Tower floodlight (±3%), the ferry cabin light (±4%) and
+  the junk sail light (±3%). Slow paired sines, never in step, no random
+  flicker; held at base brightness in reduced motion. IFC, windows, LEDs and
+  the moon stay stable. `?off=light-motion` turns it off. No draw calls
+  added. Awaiting visual approval. Files: `src/scene/lightBreath.js` (new),
+  `src/scene/lamps.js`, `src/scene/createKowloonEdge.js`,
+  `src/scene/createVessels.js`, `src/main.js`; plan:
+  `atmospheric-depth-polish.md`, `atmosphere.md`.
 - **Depth haze, atmospheric depth Stage 2** (user request, 2026-10-03):
   four tall, separate mist wisps on the water about 200 m in front of the
   waterfront soften the podiums and the towers' feet in 01–04, so the

@@ -123,7 +123,9 @@ function createRailing(segments, { fade }) {
   const panel = addLampLight(new MeshLambertMaterial({ map: textures.panel, transparent }), STONE_LAMP);
   const iron = addLampLight(new MeshLambertMaterial({ color: IRON, transparent }), 2);
   const glass = new MeshBasicMaterial({ color: GLASS, transparent });
-  const glow = glowMaterial(GLOW, 0.9);
+  // 0.7 (was 0.9; user request, 2026-10-04): the Clock Tower stays the
+  // dominant warm light.
+  const glow = glowMaterial(GLOW, 0.7);
 
   const layouts = segments.map(railingLayout);
   const bayCount = layouts.reduce((n, l) => n + l.bays, 0);

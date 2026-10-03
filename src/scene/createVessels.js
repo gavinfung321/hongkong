@@ -22,6 +22,7 @@ import {
   Vector2,
   Vector3,
 } from 'three';
+import { breatheLight } from './lightBreath.js';
 import { lambert } from './palette.js';
 import { strut } from './strut.js';
 import {
@@ -400,6 +401,7 @@ function createFerry() {
   // Cabin light spilling onto the water around the hull.
   const glow = new PointLight(0xffb36b, 160, 45, 2);
   glow.position.y = 3;
+  breatheLight(glow, { period: 6.7, phase: 0.61, amount: 0.04 });
 
   ferry.add(
     hull,
@@ -755,6 +757,7 @@ function createJunk() {
   // draws red streaks under the junk the way the rim light draws the moon path.
   const sailLight = new PointLight(0xff6a3c, 180, 50, 2);
   sailLight.position.set(4.5, 6, 0);
+  breatheLight(sailLight, { period: 9.4, phase: 0.38, amount: 0.03 });
 
   // The junk sails slower than the ferry: a shorter, narrower wake, its foam
   // glowing faintly so it reads at night (user choice, 2026-10-03: it

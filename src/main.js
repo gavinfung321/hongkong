@@ -17,6 +17,7 @@ import { citySoft } from './scene/cityWindows.js';
 import { facadeBias } from './scene/facades.js';
 import { BLOOM } from './scene/bloom.js';
 import { createGating, makeFadeable } from './scene/gating.js';
+import { setBreathing, updateBreathing } from './scene/lightBreath.js';
 import { createCameraRig, fovForAspect } from './scroll/cameraRig.js';
 import { createScrollConductor } from './scroll/scrollConductor.js';
 import { createCopyLayer } from './ui/copyLayer.js';
@@ -63,10 +64,11 @@ const GRADE = params.get('grade') !== '0';
 const DPR_CAP = Number(params.get('dpr')) || 0;
 const OFF_LAYERS = { water: ['water'], clouds: ['cloud'], mist: ['mist', 'sea-mist'], haze: ['haze'], palms: ['palms'], petals: ['petals'], beams: ['searchlights'] };
 const OFF = (params.get('off') ?? '').split(',').flatMap((key) => OFF_LAYERS[key.trim()] ?? []);
+const OFF_KEYS = (params.get('off') ?? '').split(',').map((key) => key.trim());
 // ?off=texture removes the screen vignette, for A/B checks.
-if ((params.get('off') ?? '').split(',').some((key) => key.trim() === 'texture')) {
-  document.querySelector('.vignette')?.remove();
-}
+if (OFF_KEYS.includes('texture')) document.querySelector('.vignette')?.remove();
+// ?off=light-motion holds the practical lights at their base brightness.
+const LIGHT_MOTION = !OFF_KEYS.includes('light-motion');
 // ?entrance=slow|hold|fail: entrance test switches (loadingScreen.js).
 const ENTRANCE = params.get('entrance') ?? '';
 
@@ -201,6 +203,7 @@ async function start(initGuard, header, loading) {
     petals.setEnabled(!stepped);
     fireworks.setStill(stepped);
     searchlights.setStill(stepped);
+    setBreathing(LIGHT_MOTION && !stepped);
     shownKeyframe = -1;
     conductor.snap();
     needsRender = true;
@@ -476,6 +479,7 @@ async function start(initGuard, header, loading) {
       atmosphere.update(time);
       searchlights.update(time);
       fireworks.update(time);
+      updateBreathing(time);
       const speed = dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0;
       petals.update(dt, camera, speed);
       lastRendered = state.pRendered;

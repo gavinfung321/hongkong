@@ -24,6 +24,7 @@ import {
   Vector2,
   Vector3,
 } from 'three';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { PALETTE, basic, lambert } from './palette.js';
 import { addCityWindows } from './cityWindows.js';
 import { createMountains } from './createMountains.js';
@@ -211,27 +212,46 @@ function createTops(buildings, windowMaterial, seed) {
 
 // ---- Waterfront lights ---------------------------------------------------------
 
-// A line of lamps along Central's harbour front (user request, 2026-10-03:
-// the storyboard has a bright band where the city meets the water; ours was
-// a thin dim line). Dots of a fixed pixel size, `spacing` metres apart with
-// a few gaps, warm with every `brightEvery`th a brighter cool white, fogged
-// like the skyline. Piers and podium in front hide them.
-const WATERFRONT = { height: 7, spacing: 6, gap: 0.12, size: 3, warm: 0xffd2a0, cool: 0xe8f0ff, glow: [0.8, 1.15], brightEvery: 5, setback: 2 };
+// Lamps along Central's harbour front (user request, 2026-10-03: the
+// storyboard has a bright band where the city meets the water). Not a row:
+// a straight line of even dots read as fake (user request, 2026-10-04), so
+// they stand in small clusters (`cluster` lamps, `step` m apart) with dark
+// stretches of `gap` m between, at street level (`street` m up) or, a
+// `podiumShare` of them, higher on podium fronts (`podium`), set back
+// `setback` m; mostly warm, a `coolShare` cool white. Fixed pixel size,
+// fogged like the skyline. Piers and podium in front hide them.
+const WATERFRONT = {
+  cluster: [1, 4],
+  step: [3, 6],
+  gap: [25, 70],
+  street: [4, 8],
+  podium: [9, 16],
+  podiumShare: 0.3,
+  setback: [1, 8],
+  coolShare: 0.15,
+  size: 3,
+  warm: 0xffd2a0,
+  cool: 0xe8f0ff,
+  glow: [0.45, 0.8],
+};
 
 function createWaterfront(seed) {
   const [x0, x1, , front] = WORLD.island.slab;
   const random = seededRandom(seed);
+  const between = ([low, high]) => low + random() * (high - low);
   const warm = new Color(WATERFRONT.warm);
   const cool = new Color(WATERFRONT.cool);
   const position = [];
   const color = [];
-  let i = 0;
-  for (let x = x0; x <= x1; x += WATERFRONT.spacing, i++) {
-    if (random() < WATERFRONT.gap) continue;
-    const bright = i % WATERFRONT.brightEvery === 0;
-    position.push(x + (random() - 0.5) * 2, 3 + WATERFRONT.height, front - WATERFRONT.setback);
-    const c = (bright ? cool : warm).clone().multiplyScalar(WATERFRONT.glow[bright ? 1 : 0] * (0.85 + 0.3 * random()));
-    color.push(c.r, c.g, c.b);
+  for (let x = x0 + between(WATERFRONT.gap) / 2; x <= x1; x += between(WATERFRONT.gap)) {
+    const count = Math.floor(between([WATERFRONT.cluster[0], WATERFRONT.cluster[1] + 1]));
+    const podium = random() < WATERFRONT.podiumShare;
+    const setback = between(WATERFRONT.setback);
+    for (let n = 0; n < count && x <= x1; n++, x += between(WATERFRONT.step)) {
+      position.push(x, 3 + between(podium ? WATERFRONT.podium : WATERFRONT.street), front - setback - random() * 2);
+      const c = (random() < WATERFRONT.coolShare ? cool : warm).clone().multiplyScalar(between(WATERFRONT.glow));
+      color.push(c.r, c.g, c.b);
+    }
   }
   return lightDots(position, color, WATERFRONT.size, 'waterfrontLights');
 }
@@ -242,11 +262,12 @@ function createWaterfront(seed) {
 // `land` metres deep. The run stops where the ridge comes down to the
 // water in desktop 02, so no lights stand on the open sea (user request,
 // 2026-10-03; a Kowloon East run across the water was removed). `fog`
-// thins the fog on the lights so the far end still reads.
+// thins the fog on the lights so the far end still reads. Thinned to about
+// half (user request, 2026-10-04: too many spots; was spacing 8, gap 0.5).
 const FAR_SHORE = {
   runs: [{ from: [1400, -1120], to: [1900, -1155], rows: 3, height: 34 }],
-  spacing: 8,
-  gap: 0.5,
+  spacing: 12,
+  gap: 0.62,
   size: 2.5,
   glow: 1.4,
   land: { depth: 160, height: 8 },
@@ -487,7 +508,18 @@ function createPiers() {
   const [hallW, hallH, hallD] = PIER_HALL;
   // Every face starts the tile a whole hall width on, so columns line up round the corners.
   const hallGeometry = facadeUVs(new BoxGeometry(hallW, hallH, hallD).translate(0, hallH / 2, 0), hallW);
-  const halls = instanced(hallGeometry, facadeMaterial(pierHall({ width: hallW, height: hallH, spacing: 3, seed: 529 }), 1), count);
+  // One mesh: each hall's harbour face is shifted onto its own section of the
+  // tile, so the five halls light differently. Glow 0.7 (was 1; user request,
+  // 2026-10-04): the IFC and the wheel lead, the piers follow.
+  const halls = new Mesh(
+    mergeGeometries(xs.map((x, i) => {
+      const hall = hallGeometry.clone().translate(x, top, z - 1);
+      const uv = hall.attributes.uv;
+      for (let v = 0; v < uv.count; v++) uv.setX(v, uv.getX(v) + i * hallW - hallW / 2);
+      return hall;
+    })),
+    facadeMaterial(pierHall({ width: hallW, height: hallH, spacing: 3, seed: 529, halls: count }), 0.7),
+  );
   const roofs = instanced(unitBox, new MeshLambertMaterial({ color: 0x3e5a4a, emissive: 0x0f1a14 }), count);
   const ridge = new Shape([new Vector2(-11, 0), new Vector2(11, 0), new Vector2(0, 4)]);
   const ridgeGeometry = new ExtrudeGeometry(ridge, { depth: 38, bevelEnabled: false }).translate(0, 0, -19).rotateY(Math.PI / 2);
@@ -496,7 +528,6 @@ function createPiers() {
   xs.forEach((x, i) => {
     // The deck starts 1 m under the water so its sides cut the surface cleanly.
     decks.setMatrixAt(i, m.compose(new Vector3(x, -1, z - 1), q, new Vector3(44, top + 1, depth + 2)));
-    halls.setMatrixAt(i, m.compose(new Vector3(x, top, z - 1), q, new Vector3(1, 1, 1)));
     roofs.setMatrixAt(i, m.compose(new Vector3(x, top + hallH, z - 1), q, new Vector3(40, 1, 22)));
     ridges.setMatrixAt(i, m.compose(new Vector3(x, top + hallH + 1, z - 1), q, new Vector3(1, 1, 1)));
   });
