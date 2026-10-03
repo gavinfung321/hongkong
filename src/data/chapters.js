@@ -16,7 +16,9 @@
 // copy:        copy-safe region as % of the viewport (left / top / right / bottom).
 // visibility:  1 = shown, 0 = gated (faded out) at this chapter's hold pose.
 //              petals is a density (omitted = 1); city is the skyline
-//              windows' level (omitted = 1).
+//              windows' level (omitted = 1); accents dims the LED crowns,
+//              strips and landmarks further (omitted = 1); reflections
+//              scales the fixed lights' water columns (omitted = 1).
 // vessels:     [x, z, heading] world position of each vessel at this chapter's
 //              hold pose, per breakpoint (mobile is re-authored, not cropped).
 //              Optional via: { ferry: [[x, z, heading], ...] }, points a vessel
@@ -282,9 +284,11 @@ export const chapters = [
       desktop: `${SB}/frame-05-city-of-light-rough.png`,
       mobile: `${SB}/frame-05-city-of-light-mobile-rough.png`,
     },
+    // Close to the wheel (about 140 m, IFC about 270 m) so perspective makes
+    // the wheel IFC's co-star at true scale (user choice, 2026-10-03).
     camera: {
-      desktop: { position: [380, 40.4, -779], target: [362.9, 183.7, -1152], fov: 66.5, parallax: 1.8 },
-      mobile: { position: [568.7, 50, -500], target: [476.2, 139.4, -878.8], fov: 64.1 },
+      desktop: { position: [383.3, 16, -917.1], target: [426.6, 255, -1244.9], fov: 82, parallax: 1.8 },
+      mobile: { position: [264.4, 46.6, -900.2], target: [449.2, 184.8, -1226.9], fov: 80.2 },
     },
     copy: {
       desktop: { left: 5, top: 11, right: 50, bottom: 37 },
@@ -292,8 +296,11 @@ export const chapters = [
     },
     visibility: {
       // city: the towers around IFC at 60%, so IFC leads (user choice, 2026-10-02).
-      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, mist: 0.4, seaMist: 0, searchlights: 1 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, mist: 0.4, seaMist: 0, searchlights: 0.7 },
+      // accents: LED crowns, strips and the four landmarks down to a quarter
+      // of that; reflections: IFC's and the wheel's columns twice as long and
+      // bright (user choices, 2026-10-03).
+      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, accents: 0.25, reflections: 2, mist: 0.4, seaMist: 0, searchlights: 1 },
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, accents: 0.25, reflections: 2, mist: 0.4, seaMist: 0, searchlights: 0.7 },
     },
     fogDensity: 0.00045,
     // The ferry is hidden from here on; it keeps behind the cameras.
@@ -301,18 +308,18 @@ export const chapters = [
       desktop: { ferry: [120, -430, 1], junk: [230, -520, 0.24] },
       mobile: { ferry: [40, -370, 1], junk: [230, -520, 0.24] },
     },
-    // Deviation: the PNG draws the wheel about 3.5× its true size relative to
-    // IFC (frames 01 and 03 do not), so the wheel keeps its placement left of
-    // IFC at true scale. Desktop is solved for IFC; the wheel lands at about
-    // 41–50% instead of 29–42% (review note).
+    // The PNG draws the wheel about 3.5× its true size relative to IFC; the
+    // wheel stays true scale and the near camera makes up most of it: about
+    // 20% of the height on desktop (PNG 38–45%), 17% on phones (user choice
+    // 22–25%; any closer and IFC's crown leaves the frame).
     probes: {
       desktop: {
-        ifc: { left: 62, right: 72, top: 3, bottom: 87 },
-        wheel: { left: 29, right: 42, bottom: 89 },
+        ifc: { left: 56, right: 67, top: 3, bottom: 91 },
+        wheel: { left: 28, right: 42, top: 74, bottom: 95 },
       },
       mobile: {
-        ifc: { left: 64, right: 82, top: 25, bottom: 75 },
-        wheel: { left: 18, right: 38, bottom: 76 },
+        ifc: { left: 59, right: 90, top: 6, bottom: 80 },
+        wheel: { left: 7, right: 44, top: 65, bottom: 84 },
       },
     },
   },

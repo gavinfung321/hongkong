@@ -341,3 +341,8 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
   the junk's main sail and the moon, and a smaller pair at the left below
   the copy. Phones have two: a dim deck at the top and one lit bank
   above the moon. `src/data/atmosphere.js`.
+- **05 clouds: one mass (user choice, 2026-10-03).** For the new, closer
+  05 camera: on desktop four cards, a mass right of IFC's crown running
+  behind the tower at mid-height to a thin tail under the copy (was five
+  in rows); on phones a dim deck above and one lit bank behind IFC's
+  upper half (was four). `src/data/atmosphere.js`.

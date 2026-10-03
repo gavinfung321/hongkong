@@ -182,6 +182,18 @@ longer lens on the 04 camera, not a bigger model, so it fills about 60%
 of the desktop width (was 50%) and on phones its main sail rises to just
 under the copy (was 41% down the screen) ([scene-models.md](scene-models.md)).
 
+## 05 polish (user choices, 2026-10-03)
+
+A review of 05 against its storyboard found six improvements; the user
+chose four (the moon and the searchlights stay): the camera much closer
+to the wheel, so perspective makes it IFC's co-star at true scale (desktop
+IFC 3–90% of the height, wheel about 20%, was 15%; phones IFC about 70%,
+was 47%, wheel about 17%, was 8%) ([scene-city.md](scene-city.md)); the
+LED crowns, strips and landmarks dimmed further so the skyline steps down
+to IFC while the windows stay lit; IFC's and the wheel's reflections twice
+as long and bright ([scene-city.md](scene-city.md)); the clouds as one
+mass ([atmosphere.md](atmosphere.md)).
+
 **Not in the look test:** 3D models (GLBs; later dropped altogether, all 3D
 is built in code, user decision 2026-10-01), real fireworks, the sparkle cursor,
 particles in other chapters, sound, final copy and fonts.
