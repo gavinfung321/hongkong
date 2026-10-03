@@ -71,12 +71,17 @@ export const CLOUDS = {
       { chapter: 4, layer: 'back', band: 'low', x: 58, y: 38, width: 50, opacity: 0.35 },
       { chapter: 4, layer: 'front', band: 'thin', u: [0, 0.6], x: 38, y: 44, width: 30, opacity: 0.4 },
       // 06: the fireworks need dark sky, so a dim roof behind the bursts and
-      // lit banks below them, above the moon and ridge.
-      { chapter: 5, layer: 'back', band: 'tall', x: 70, y: 7, width: 70, opacity: 0.35 },
-      { chapter: 5, layer: 'back', band: 'low', x: 25, y: 45, width: 60, opacity: 0.45 },
-      { chapter: 5, layer: 'front', band: 'low', x: 42, y: 64, width: 80, opacity: 0.5 },
-      { chapter: 5, layer: 'front', band: 'thin', u: [0.4, 1], x: 87, y: 77, width: 28, opacity: 0.5 },
-      { chapter: 5, layer: 'front', band: 'tall', u: [0, 0.45], x: 15, y: 33, width: 28, opacity: 0.5 },
+      // one lit mass below them, above IFC's crown; the left and left-centre
+      // stay dark for the closing copy (user choice, 2026-10-03: five cards
+      // read as rows across the left).
+      { chapter: 5, layer: 'back', band: 'tall', x: 78, y: 6, width: 44, opacity: 0.3 },
+      { chapter: 5, layer: 'back', band: 'low', x: 72, y: 58, width: 50, opacity: 0.45 },
+      { chapter: 5, layer: 'front', band: 'thin', u: [0.4, 1], x: 84, y: 63, width: 30, opacity: 0.5 },
+      // A thinner, dimmer tail of that mass sweeping left, and a wisp under
+      // the left bursts that catches their light (user request, 2026-10-03:
+      // the left read as empty).
+      { chapter: 5, layer: 'back', band: 'low', u: [0, 0.6], x: 32, y: 64, width: 40, opacity: 0.35 },
+      { chapter: 5, layer: 'front', band: 'thin', u: [0.2, 0.8], x: 20, y: 56, width: 24, opacity: 0.35 },
     ],
     mobile: [
       // The phone's sky is tall. 01: one dim deck from the top down to the
@@ -106,8 +111,11 @@ export const CLOUDS = {
       { chapter: 4, layer: 'back', band: 'tall', x: 50, y: 6, width: 200, opacity: 0.4 },
       { chapter: 4, layer: 'front', band: 'low', u: [0.4, 1], x: 80, y: 32, width: 110, opacity: 0.45 },
       // 06: one lit bank between the bursts and IFC's crown; the bursts keep
-      // dark sky (user request, 2026-10-03: less cloud on phones).
-      { chapter: 5, layer: 'front', band: 'low', x: 45, y: 60, width: 170, opacity: 0.4 },
+      // dark sky (user request, 2026-10-03: less cloud on phones). Right of
+      // centre, under the bursts, not a full-width strip (user choice,
+      // 2026-10-03).
+      { chapter: 5, layer: 'front', band: 'low', u: [0.3, 1], x: 70, y: 60, width: 110, opacity: 0.4 },
+      { chapter: 5, layer: 'front', band: 'thin', u: [0.1, 0.6], x: 22, y: 63, width: 70, opacity: 0.35 },
     ],
   },
 };

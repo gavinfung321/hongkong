@@ -138,7 +138,9 @@ const bufferSize = new Vector2();
 const easeOut = (u) => 1 - (1 - u) ** 3;
 const lerpRange = ([a, b], u) => a + (b - a) * u;
 
-export function createFireworks(chapters, { onLoad } = {}) {
+// lights: { uBursts, uBurstLight } uniforms (createAtmosphere.js) that get the
+// brightest live bursts each pose, so the clouds pick up their colour.
+export function createFireworks(chapters, { onLoad, lights } = {}) {
   const group = new Group();
   group.name = 'fireworks';
   const finale = chapters.find((chapter) => chapter.bursts);
@@ -280,14 +282,33 @@ export function createFireworks(chapters, { onLoad } = {}) {
   }
 
   // Lays out the whole show at show time `t` (seconds).
+  const live = [];
+  let footer = 0; // setFooter
+  function shareLights() {
+    if (!lights) return;
+    live.sort((a, b) => b.light - a.light);
+    lights.uBursts.value.forEach((slot, k) => {
+      const entry = live[k];
+      const colour = lights.uBurstLight.value[k];
+      if (!entry) {
+        colour.setRGB(0, 0, 0);
+        return;
+      }
+      const { core, radius, sparkColor } = bursts[entry.i];
+      slot.set(core.x, core.y, core.z, radius);
+      colour.copy(sparkColor).multiplyScalar(entry.light);
+    });
+  }
+
   function pose(t) {
     alphas.array.fill(0);
+    live.length = 0;
     let anyPoint = false;
     specs.forEach((spec, i) => {
       const burst = bursts[i];
       const { mesh, core, radius } = burst;
       const p = MathUtils.euclideanModulo(t - spec.at, loop);
-      const strength = spec.strength * level;
+      const strength = spec.strength * level * (1 - 0.5 * footer);
       const { uniforms } = mesh.material;
 
       // The card: ignites at 70% size, opens, then cools, sinks and fades.
@@ -307,6 +328,7 @@ export function createFireworks(chapters, { onLoad } = {}) {
       }
       uniforms.uOpacity.value = opacity;
       mesh.visible = loaded && opacity > 0.001;
+      if (mesh.visible) live.push({ i, light: opacity * uniforms.uFlare.value ** 0.5 });
       if (!loaded) return;
 
       const base = i * stride;
@@ -351,6 +373,7 @@ export function createFireworks(chapters, { onLoad } = {}) {
     });
     points.visible = anyPoint;
     for (const buffer of [positions, colors, alphas, sizes]) buffer.needsUpdate = true;
+    shareLights();
 
     // The smoke: gathers after its burst, swells, drifts with the wind, fades.
     const { smoke } = FIREWORKS;
@@ -360,7 +383,7 @@ export function createFireworks(chapters, { onLoad } = {}) {
       let opacity = 0;
       if (s < smoke.life) {
         const u = s / smoke.life;
-        opacity = spec.opacity * level * MathUtils.smoothstep(s, 0, smoke.fadeIn) * (1 - u) ** 1.5;
+        opacity = spec.opacity * level * (1 - 0.3 * footer) * MathUtils.smoothstep(s, 0, smoke.fadeIn) * (1 - u) ** 1.5;
         const grow = lerpRange(smoke.grow, 1 - (1 - u) ** 2);
         mesh.scale.set(w * grow, h * grow, 1);
         mesh.position.copy(base).addScaledVector(right, smoke.drift[0] * w * u).addScaledVector(up, smoke.drift[1] * w * u);
@@ -464,6 +487,16 @@ export function createFireworks(chapters, { onLoad } = {}) {
     refresh();
   }
 
+  // 0..1 as the footer rises over 06 (user choice, 2026-10-03): the bursts
+  // dim to half and their smoke to 70%, so the show stays on but quieter
+  // behind the footer text. True when it changed.
+  function setFooter(value) {
+    if (Math.abs(value - footer) < 0.002) return false;
+    footer = value;
+    refresh();
+    return true;
+  }
+
   // Holds the show at time `t` (null runs it again).
   function hold(t) {
     held = t;
@@ -490,5 +523,5 @@ export function createFireworks(chapters, { onLoad } = {}) {
     pose(clock);
   }
 
-  return { group, hold, load, place, setLevel, setStill, update };
+  return { group, hold, load, place, setLevel, setFooter, setStill, update };
 }

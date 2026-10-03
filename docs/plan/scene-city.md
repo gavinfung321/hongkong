@@ -486,7 +486,7 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
     frame; camera clearance passes at the four mouse corners.
   - **Quieter neighbours:** a new `accents` level (default 1) dims only
     the LED crowns and strips and the four landmarks on top of `city`;
-    05 sets it to 0.25, so Bank of China and the magenta and amber
+    05 and 06 set it to 0.25, so Bank of China and the magenta and amber
     strips beside IFC drop back while the windows stay at 60%
     (`setAccentLevel` in `createIsland.js`). At 0.5 the change did not
     show.

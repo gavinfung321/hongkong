@@ -10,7 +10,7 @@ import { createForeground } from './scene/createForeground.js';
 import { createWordmark } from './scene/createWordmark.js';
 import { createMoon } from './scene/createMoon.js';
 import { createPetals } from './scene/createPetals.js';
-import { createAtmosphere } from './scene/createAtmosphere.js';
+import { burstLights, createAtmosphere } from './scene/createAtmosphere.js';
 import { createFireworks } from './scene/createFireworks.js';
 import { createSearchlights } from './scene/createSearchlights.js';
 import { citySoft } from './scene/cityWindows.js';
@@ -28,6 +28,7 @@ import { enterFallback, supportsWebGL2, watchContext } from './ui/fallback.js';
 
 const params = new URLSearchParams(window.location.search);
 const root = document.documentElement;
+const footerElement = document.querySelector('.site-footer');
 
 const INIT_TIMEOUT = 8000;
 const VEIL_IN = 150;
@@ -89,6 +90,7 @@ function start(initGuard, header) {
     onLoad: () => {
       needsRender = true;
     },
+    lights: burstLights,
   });
   const searchlights = createSearchlights();
   scene.add(moon.group, atmosphere.group, searchlights.group, kowloon.group, island.group, vessels.group, foreground.group, fireworks.group, wordmark.mesh, petals.group);
@@ -360,6 +362,9 @@ function start(initGuard, header) {
     const heroFadeTo = state.pTop + (HERO.sinkEnd - state.pTop) * HERO.fadeEnd;
     copy.update(state.p, { stepped, index: state.index, hero: { from: state.pTop, to: heroFadeTo } });
     header.update(state.index, hero);
+    // The fireworks soften into smoke over the first 60% of the footer's rise.
+    const footerTop = footerElement.getBoundingClientRect().top;
+    if (fireworks.setFooter(Math.min(Math.max((innerHeight - footerTop) / (innerHeight * 0.6), 0), 1))) needsRender = true;
 
     if (stepped) {
       if (wordmark.fadeTo(hero ? 1 : 0, dt)) needsRender = true;
