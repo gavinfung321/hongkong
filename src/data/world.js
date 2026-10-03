@@ -53,17 +53,21 @@ export const WORLD = {
     // `edgeRailings` follow the promontory and always show. Runs meeting at a
     // corner share one post: skipFirst / skipLast drop the duplicate.
     railings: [
-      // A: arrival promenade edge, the hero's foreground frame. Chunkier, with
-      // a lantern on every big post, like the storyboard (user choice,
-      // 2026-10-03).
-      { from: [-5.6, 97.4], to: [-48, 61.7], y: 2.5, scale: 1.3, lanternEvery: 1 },
+      // A: arrival promenade edge, the hero's foreground frame. Chunkier, like
+      // the storyboard (user choice, 2026-10-03), with a lantern on every
+      // second big post so the far end breaks into dark gaps (user request,
+      // 2026-10-04; it was every post), strictly alternating (user request,
+      // 2026-10-04). Offset 1 lights posts 1, 3, 5…: in desktop 01 the big
+      // lantern right of 港 and one under 香, with an unlit post between.
+      { from: [-5.6, 97.4], to: [-48, 61.7], y: 2.5, scale: 1.3, lanternEvery: 2, lanternOffset: 1 },
       { from: [-74, 92.2], to: [-50, 92.3], y: 2.5 }, // C: waterfront (mobile 02)
       { from: [-60, 61.7], to: [-48, 61.7], y: 2.5, skipFirst: true, skipLast: true }, // D: inlet, north side
     ],
     edgeRailings: [
-      // B: promontory's harbour edge, the desktop 02 foreground. Chunky with
-      // a lantern on every post, like A (user choice, 2026-10-03).
-      { from: [-50, 40], to: [-50, -60], y: 2.5, scale: 1.3, lanternEvery: 1 },
+      // B: promontory's harbour edge, the desktop 02 foreground. Chunky like A
+      // (user choice, 2026-10-03), a lantern on every second post (user
+      // request, 2026-10-04; it was every post).
+      { from: [-50, 40], to: [-50, -60], y: 2.5, scale: 1.3, lanternEvery: 2 },
       { from: [-50, -60], to: [-110, -60], y: 2.5, skipFirst: true }, // promontory's south tip
       { from: [-50, 40], to: [-60, 40], y: 2.5, skipFirst: true }, // inlet, south side
       // Inlet, west side. No lanterns: in mobile 02 this run points straight

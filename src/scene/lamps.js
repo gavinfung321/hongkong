@@ -1,5 +1,6 @@
 import { AdditiveBlending, Color, ShaderMaterial, Vector3, Vector4 } from 'three';
 import { WORLD } from '../data/world.js';
+import { breath, breatheGlsl } from './lightBreath.js';
 
 // Promenade railing bays (after the user's stone balustrade design): a big
 // square post every ~4 m, a slim post halfway, a lantern on every second big
@@ -11,8 +12,10 @@ const LAMP_LIGHT_Y = 3.55;
 
 // Bays start at every post; a post skipped at a corner belongs to the
 // neighbouring run (the bays themselves are kept). `scale` sizes the whole
-// run, post spacing included; `lanternEvery` counts big posts per lantern.
-export function railingLayout({ from, to, y, skipFirst = false, skipLast = false, lanterns = true, scale = 1, lanternEvery = LANTERN_EVERY }) {
+// run, post spacing included; `lanternEvery` counts big posts per lantern,
+// starting from post `lanternOffset` (0 = the run's first post).
+export function railingLayout({ from, to, y, skipFirst = false, skipLast = false, lanterns = true, scale = 1, lanternEvery = LANTERN_EVERY, lanternOffset = 0 }) {
+  const lit = (k) => (((k - lanternOffset) % lanternEvery) + lanternEvery) % lanternEvery === 0;
   const a = new Vector3(from[0], y, from[1]);
   const b = new Vector3(to[0], y, to[1]);
   const length = a.distanceTo(b);
@@ -24,9 +27,9 @@ export function railingLayout({ from, to, y, skipFirst = false, skipLast = false
     const position = a.clone().lerp(b, k / bays);
     if (k < bays) starts.push(position);
     if ((k === 0 && skipFirst) || (k === bays && skipLast)) continue;
-    posts.push({ position, lantern: lanterns && k % lanternEvery === 0 });
+    posts.push({ position, lantern: lanterns && lit(k) });
   }
-  return { a, b, length, bays, bayLength: length / bays, yaw, starts, posts, scale };
+  return { a, b, length, bays, bayLength: length / bays, yaw, starts, posts, scale, lanternEvery, lanternOffset };
 }
 
 // Every warm light on the promenade: railing lanterns and the tall lamps.
@@ -261,8 +264,9 @@ export function addWetPaving(material, { map, tile, y }) {
           float bay = paveRailSize.x / k;
           float post = min( q, bay - q );
           float slim = abs( q - bay * 0.5 );
-          if ( post < 0.12 && y > 1.14 && y < 1.41 ) return vec4( 0.0, 0.0, 0.0, 2.0 );
-          bool iron = post < 0.16 && y > 1.12 && y < 1.6;
+          bool lit = mod( floor( s / paveRailSize.x + 0.5 ) - ${f(railA.lanternOffset)}, ${f(railA.lanternEvery)} ) < 0.5;
+          if ( lit && post < 0.12 && y > 1.14 && y < 1.41 ) return vec4( 0.0, 0.0, 0.0, 2.0 );
+          bool iron = lit && post < 0.16 && y > 1.12 && y < 1.6;
           bool stone = y < 0.3
             || ( post < 0.31 && y < 1.12 )
             || ( slim < 0.13 && y < 1.01 )
@@ -389,16 +393,29 @@ export function addWetPaving(material, { map, tile, y }) {
 
 // Soft camera-facing glow for instanced lights. Each instance's matrix gives
 // the centre and size (scale x); the quad is pulled toward the camera by half
-// its size so the lantern's own cap and roof never cut it.
+// its size so the lantern's own cap and roof never cut it. Each light breathes
+// ±3% on a period (5–9 s) and phase hashed from its position, so neighbours
+// never pulse together (lightBreath.js).
 export function glowMaterial(color, strength = 1) {
   return new ShaderMaterial({
-    uniforms: { color: { value: new Color(color) }, opacity: { value: 1 }, strength: { value: strength } },
+    uniforms: {
+      color: { value: new Color(color) },
+      opacity: { value: 1 },
+      strength: { value: strength },
+      uBreathTime: breath.uTime,
+      uBreathDepth: breath.uDepth,
+    },
     vertexShader: /* glsl */ `
+      ${breatheGlsl}
       varying vec2 vUv;
+      varying float vBreath;
       void main() {
         vUv = uv;
         vec4 centre = modelViewMatrix * instanceMatrix * vec4( 0.0, 0.0, 0.0, 1.0 );
         float size = length( instanceMatrix[ 0 ].xyz );
+        vec3 seat = ( modelMatrix * instanceMatrix[ 3 ] ).xyz;
+        float h = fract( sin( dot( seat, vec3( 12.9898, 78.233, 37.719 ) ) ) * 43758.5453 );
+        vBreath = breathe( mix( 5.0, 9.0, fract( h * 7.13 ) ), h, 0.03 );
         centre.xyz += normalize( -centre.xyz ) * size * 0.5;
         centre.xy += position.xy * size;
         gl_Position = projectionMatrix * centre;
@@ -408,11 +425,12 @@ export function glowMaterial(color, strength = 1) {
       uniform float opacity;
       uniform float strength;
       varying vec2 vUv;
+      varying float vBreath;
       void main() {
         float r = length( vUv - 0.5 ) * 2.0;
         float core = exp( -r * r * 18.0 );
         float halo = pow( max( 1.0 - r, 0.0 ), 2.5 );
-        gl_FragColor = vec4( color, ( core * 0.8 + halo * 0.45 ) * strength * opacity );
+        gl_FragColor = vec4( color, ( core * 0.8 + halo * 0.45 ) * strength * opacity * vBreath );
         #include <colorspace_fragment>
       }`,
     transparent: true,

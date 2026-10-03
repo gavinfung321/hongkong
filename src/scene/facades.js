@@ -215,11 +215,13 @@ export function braceWall({ modules, seed, roof = [0.5, 0.2] }) {
 // fascia, `width` × `height` metres per tile, for metre UVs. The columns are
 // painted rather than modelled: sub-pixel posts against the glow shimmered on
 // phones (user report, 2026-10-02). Columns sit `spacing` apart, centred
-// half a spacing in.
-export function pierHall({ width, height, spacing, seed }) {
+// half a spacing in. The tile holds `halls` halls side by side, each its own
+// pattern and overall level (`PIER_BAYS.hall`), so the row doesn't read as
+// identical lightboxes (user request, 2026-10-04).
+export function pierHall({ width, height, spacing, seed, halls = 1 }) {
   const random = seededRandom(seed);
   const P = 16; // texels per metre
-  const [w, h] = [width * P, height * P];
+  const [w, h] = [width * halls * P, height * P];
   const [colour, base] = canvas(w, h);
   const [glow, light] = canvas(w, h);
   const y = (m) => h - m * P; // metres up from the foot to canvas rows
@@ -232,9 +234,39 @@ export function pierHall({ width, height, spacing, seed }) {
 
   base.fillStyle = '#4a3e32';
   base.fillRect(0, y(fascia), w, (fascia - plinth) * P);
-  for (let x = 0; x < width; x += spacing) {
+  const levels = [];
+  const perHall = Math.round(width / spacing);
+  for (let hall = 0; hall < halls; hall++) {
+    const bays = Array(perHall).fill(PIER_BAYS.lit);
+    const scale = PIER_BAYS.hall[0] + random() * (PIER_BAYS.hall[1] - PIER_BAYS.hall[0]);
+    // Dark bays in runs of 1–3, so the lit ones gather in clusters.
+    const dark = PIER_BAYS.dark.count[0] + Math.floor(random() * (PIER_BAYS.dark.count[1] - PIER_BAYS.dark.count[0] + 1));
+    const darkSoFar = () => bays.filter((b) => b === PIER_BAYS.dark).length;
+    while (darkSoFar() < dark) {
+      const start = Math.floor(random() * perHall);
+      const run = Math.min(1 + Math.floor(random() * 3), dark - darkSoFar());
+      for (let i = start; i < Math.min(start + run, perHall); i++) bays[i] = PIER_BAYS.dark;
+    }
+    const bright = PIER_BAYS.bright.count[0] + Math.floor(random() * (PIER_BAYS.bright.count[1] - PIER_BAYS.bright.count[0] + 1));
+    for (let n = 0; n < bright; ) {
+      const i = Math.floor(random() * perHall);
+      if (bays[i] === PIER_BAYS.lit) {
+        bays[i] = PIER_BAYS.bright;
+        n++;
+      }
+    }
+    for (const level of bays) levels.push([level, scale]);
+  }
+  levels.forEach(([level, scale], bay) => {
+    const x = bay * spacing;
+    const [low, high] = level.k;
+    // An unlit hall is darker inside too, not just without glow.
+    if (level === PIER_BAYS.dark) {
+      base.fillStyle = '#241e19';
+      base.fillRect(x * P, y(fascia), spacing * P, (fascia - plinth) * P);
+    }
     // Brightest under the ceiling, soft at the top and bottom edges.
-    const k = 0.5 + random() * 0.12;
+    const k = (low + random() * (high - low)) * scale;
     const warm = [255, 186 + random() * 14, 110];
     const g = light.createLinearGradient(0, y(fascia), 0, y(plinth));
     g.addColorStop(0, rgb(warm, k * 0.5));
@@ -243,7 +275,7 @@ export function pierHall({ width, height, spacing, seed }) {
     g.addColorStop(1, rgb(warm, k * 0.45));
     light.fillStyle = g;
     light.fillRect(x * P, y(fascia), spacing * P, (fascia - plinth) * P);
-  }
+  });
 
   base.fillStyle = '#8a8070';
   base.fillRect(0, 0, w, y(fascia));
@@ -253,16 +285,27 @@ export function pierHall({ width, height, spacing, seed }) {
   base.fillRect(0, y(plinth), w, plinth * P);
 
   const column = 0.8 * P;
-  for (let x = spacing / 2; x < width; x += spacing) {
+  for (let x = spacing / 2; x < width * halls; x += spacing) {
     base.fillStyle = '#b8b0a0';
     base.fillRect(x * P - column / 2, y(fascia), column, (fascia - plinth) * P);
     light.fillStyle = 'rgb(58, 52, 42)';
     light.fillRect(x * P - column / 2, y(fascia), column, (fascia - plinth) * P);
   }
 
-  const repeat = [1 / width, 1 / height];
+  const repeat = [1 / (width * halls), 1 / height];
   return { map: texture(colour, repeat), emissiveMap: texture(glow, repeat) };
 }
+
+// Pier hall bay levels (user request, 2026-10-04: the halls read as five
+// identical lightboxes). Per hall of 12 bays: `count` dark (3–4, 25–33%) and
+// bright (1–2) bays, the rest lit; `k` the glow range of each (lit was
+// 0.5–0.62 throughout). Each hall's level is scaled by `hall`.
+const PIER_BAYS = {
+  dark: { count: [3, 4], k: [0.03, 0.09] },
+  lit: { k: [0.32, 0.48] },
+  bright: { count: [1, 2], k: [0.6, 0.7] },
+  hall: [0.85, 1.1],
+};
 
 // Shared mipmap bias for every facade: phones take half a level blurrier, so
 // detail sliding past mid-scroll strobes less (user report, 2026-10-02).

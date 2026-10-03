@@ -89,11 +89,16 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
      the post's foot.
    - **Storyboard railing on the arrival promenade (user choice,
      2026-10-03).** Railing A, the hero's foreground frame, is built 1.3×
-     (posts 0.57 m, 1.46 m tall, spacing 5.2 m) with a lantern on every big
-     post, so three or four big lanterns run along the bottom of the hero
-     and two frame the 01 hold's corner, as in the storyboard (`scale`,
-     `lanternEvery` per run in `WORLD.foreground.railings`). Its lantern
-     pools scale with it. The other runs keep their size. Moving the
+     (posts 0.57 m, 1.46 m tall, spacing 5.2 m), as in the storyboard
+     (`scale`, `lanternEvery` per run in `WORLD.foreground.railings`). Its
+     lantern pools scale with it. **Lanterns thinned (user request,
+     2026-10-04):** every second big post (was every post), strictly
+     alternating with no pair of neighbours lit (user request,
+     2026-10-04). `lanternOffset: 1` lights posts 1, 3, 5, 7, 9, 11, so
+     desktop 01 keeps the big lantern right of 港 and one under 香, with
+     an unlit post between. The puddles' mirror of railing A follows the
+     same pattern. Railing lantern halos are at glow 0.7 (was
+     0.9); the tall lamps stay at 0.9. The other runs keep their size. Moving the
      camera lower or closer was tried in planning and left out: the near
      lantern already reaches the foot of 香, and either move would lift
      the railing behind the characters.
@@ -400,8 +405,10 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
 
 6. **02 promenade (user choices, 2026-10-03).**
    - **Railing B** (the promontory's harbour edge, desktop 02's
-     foreground) is built 1.3× with a lantern on every big post, like
-     railing A. Railing C (mobile 02's foreground) is unchanged.
+     foreground) is built 1.3× like railing A, with a lantern on every
+     second big post (was every post; user request, 2026-10-04), so 02
+     shows dark gaps between them and the Clock Tower leads. Railing C
+     (mobile 02's foreground) is unchanged.
    - **Puddles in 02:** three more puddles on the promontory fill the
      empty paving at the bottom left of desktop 02, on the camera's line
      to the Clock Tower. Inside any puddle the water now also mirrors the
