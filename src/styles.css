@@ -295,11 +295,12 @@ a:focus-visible {
 }
 
 .site-footer__statement p {
-  max-width: 46ch;
+  max-width: 62ch;
   color: var(--color-ivory);
   font-size: clamp(1.25rem, 1.9vw, 1.625rem);
   font-weight: 300;
   line-height: 1.4;
+  text-wrap: pretty;
 }
 
 .site-footer__columns {
@@ -324,6 +325,7 @@ a:focus-visible {
   font-weight: 400;
   letter-spacing: 0.24em;
   text-transform: uppercase;
+  text-wrap: balance;
 }
 
 .site-footer__column li {
@@ -411,8 +413,10 @@ a:focus-visible {
     margin-bottom: 36px;
   }
 
+  /* The mark sits above the statement so it keeps to four lines on phones. */
   .site-footer__statement {
-    gap: 16px;
+    flex-direction: column;
+    gap: 14px;
     padding-bottom: 32px;
   }
 
@@ -422,7 +426,7 @@ a:focus-visible {
   }
 
   .site-footer__statement p {
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
   }
 
   /* Chapters and landmarks side by side, the colophon below. */

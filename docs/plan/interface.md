@@ -122,7 +122,14 @@ How it is built:
 - Chapter 01's kicker is "Victoria Harbour" (was "Arrival"), naming the
   place like the other chapters, and its body reads "Night settles on the
   water, and the island begins to glow." so the name isn't repeated (user
-  requests, 2026-10-01). Still placeholder copy until the copy milestone.
+  requests, 2026-10-01).
+- **Final copy** (user request, 2026-10-03): all six chapters, the hidden
+  H1, page title, meta description and Open Graph tags now follow the
+  approved `docs/FINAL-NARRATIVE-COPY.md` word for word. Kickers 04 and 05
+  read "Junk with red sails" and "Two IFC"; the `data-copy="placeholder"`
+  markers are gone. Menu buttons are named "Open chapter menu" and "Close
+  chapter menu"; the footer return is named "Return to the beginning of the
+  harbour crossing". No loading, fallback or social image UI was added.
 
 ### 3.4 Nav bar and mobile menu
 
@@ -425,8 +432,8 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   - a hairline, then three columns with small uppercase headings (user
     choice): **Chapters** (links to all six), **Landmarks and vessels**
     (facts, not links: Clock Tower completed 1915, Star Ferry origins in
-    1880, Chinese junk before the 1950s, Two IFC completed 2003,
-    Observation Wheel opened 2014) and **Colophon** (Built with Three.js
+    1880, Chinese junk before the 1950s, Two IFC completed 2003) and
+    **Colophon** (Built with Three.js
     and WebGL; Original 3D scene and illustrated atmosphere; Designed for
     desktop and mobile);
   - a bottom bar: "© 2026 Victoria Harbour: A Night Crossing", 維港夜色
@@ -436,8 +443,15 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   column, colophon and bar now follow `FINAL-NARRATIVE-COPY.md`. The old
   "every model and texture made in code" line was dropped because the
   clouds and sky use painted textures. The details sit in a smaller grey
-  style after each name, without a comma, since on phones they drop to
-  their own line.
+  style after each name and its comma ("Clock Tower, completed 1915"); on
+  phones they drop to their own line. The Observation Wheel left the list:
+  it stays in the scene but is not part of the narrative (user request,
+  2026-10-03).
+- **Copy fit** (2026-10-03): the statement measure is 62ch, so it reads in
+  three lines on desktop (two would need about 100 characters a line); on
+  phones the mark sits above it at 17 px, so it stays at four lines at 390
+  and 414 px wide. Column headings use balanced wrapping, so "Landmarks and
+  vessels" breaks as "Landmarks / and vessels", never leaving one word.
 - **The fireworks quieten as the footer rises** (user choice, 2026-10-03):
   over the first 60% of the footer's rise the bursts dim to half strength
   and their smoke to 70%, so the show carries on behind the footer without

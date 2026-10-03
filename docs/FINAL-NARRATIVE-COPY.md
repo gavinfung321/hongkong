@@ -1,7 +1,9 @@
 # Final Narrative Copy
 
-**Status:** Proposed for review 2026-10-02. Copy document only; do not replace
-the current HTML while Cursor's active build step is in progress.
+**Status:** Approved and implemented 2026-10-03 (proposed 2026-10-02). The
+chapter, identity, navigation, footer, accessibility and metadata copy is live
+in `index.html`. The loading, fallback and social image wording stays here for
+their own later briefs.
 
 This document contains the proposed final public-facing copy for **Victoria
 Harbour: A Night Crossing**. It follows the approved chapter order, camera
@@ -359,7 +361,7 @@ When this copy is approved, Cursor should make one contained copy-only pass:
    `data-copy="placeholder"` attribute.
 2. Change chapter 04's kicker from `The Junk` to `Junk with red sails`.
 3. Change chapter 05's kicker from `IFC` to `Two IFC`.
-4. Rename the footer column to `Landmarks & vessels`, then replace its list and
+4. Rename the footer column to `Landmarks and vessels`, then replace its list and
    the footer statement and colophon.
 5. Replace menu button accessible names and the footer return accessible name.
 6. Update the page metadata.
@@ -374,16 +376,17 @@ create new UI until their own briefs are approved.
 
 ## 12. Approval checklist
 
-- [ ] Overall voice feels specific to Victoria Harbour rather than generic
-- [ ] Chapter 01 opening line approved
-- [ ] Clock Tower railway reference approved
-- [ ] Star Ferry direction and wording approved
-- [ ] `Junk with red sails` terminology approved
-- [ ] `Two IFC` naming approved
-- [ ] Fireworks line approved as authored-scene language, not an event claim
-- [ ] Footer statement and factual dates approved
-- [ ] English narrative with selected Traditional Chinese labels approved
-- [ ] Loading and fallback wording approved for their later briefs
+- [x] Overall voice feels specific to Victoria Harbour rather than generic
+- [x] Chapter 01 opening line approved
+- [x] Clock Tower railway reference approved
+- [x] Star Ferry direction and wording approved
+- [x] `Junk with red sails` terminology approved
+- [x] `Two IFC` naming approved
+- [x] Fireworks line approved as authored-scene language, not an event claim
+- [x] Footer statement and factual dates approved
+- [x] English narrative with selected Traditional Chinese labels approved
+- [x] Loading and fallback wording approved for their later briefs (not built
+  in this pass)
 
-Until these are approved, `index.html` remains the implementation source and
-its current chapter text remains visibly marked as placeholder copy.
+Approved 2026-10-03 and implemented in `index.html`; no chapter text remains
+marked as placeholder copy.
