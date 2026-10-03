@@ -346,3 +346,34 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
   behind the tower at mid-height to a thin tail under the copy (was five
   in rows); on phones a dim deck above and one lit bank behind IFC's
   upper half (was four). `src/data/atmosphere.js`.
+- **06 polish (user choices, 2026-10-03).**
+  - **Bursts:** the brightest burst was often cyan, and on phones two of
+    three were cyan, low and far left. Now as in the storyboard: a
+    warm-white hero in each half of the 8 s loop (desktop at 0 s and
+    4.8 s, phones at 0 s and 4.6 s), coral-pink support, one small cyan
+    accent, all upper right and top centre; nothing in the dark left and
+    left-centre kept for the closing copy; on phones no two overlap.
+    Timing unchanged. `bursts` in `src/data/chapters.js`.
+  - **Clouds:** desktop three cards (was five in rows across the left):
+    a dim roof behind the upper bursts and one lit mass under them,
+    above IFC's crown; phones one bank right of centre (was a
+    full-width strip). `src/data/atmosphere.js`.
+  - **Bursts light the clouds:** the four brightest live bursts (written
+    each frame by `createFireworks.js` into shared uniforms) tint the
+    clouds near them in their spark colour, thin edges most, falling off
+    with the angle from the burst in multiples of its own size
+    (`BURSTLIT` in `createAtmosphere.js`: strength 1.6, reach 1.5, edge
+    0.85; at 0.8 it did not show, at 2.5 it washed out the cloud cores).
+    Clouds only, not the mist.
+  - **Skyline:** `accents` stays at 0.25 through 06, as in 05, so the LED
+    strips and Bank of China don't brighten again under IFC's crown.
+  - **Left side (user request, 2026-10-03: "the left side is quite
+    empty").** With everything on the right, the left half under the
+    copy read as a void. Added, all below the copy text and smaller and
+    fainter than the right (70% or less): on desktop a coral burst at
+    22% / 48% (13% wide, at 2.2 s, with a lavender smoke puff) and a
+    small warm one at 36% / 36% (10% wide, at 5.8 s), filling gaps in
+    the loop; on phones a coral burst at 26% / 52% (22% wide, at 2 s).
+    The cloud mass gains a thinner, dimmer tail sweeping left and a wisp
+    under the left bursts that catches their light; phones one thin wisp
+    low on the left.

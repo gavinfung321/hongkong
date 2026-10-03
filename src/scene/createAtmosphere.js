@@ -43,6 +43,15 @@ const FEATHER = [0.06, 0.18]; // edge fade, as a share of the card's width / hei
 // warm up, their thin edges most, falling off with the angle from the moon's
 // rim as seen from the camera (`reach`, radians). Clouds only, not the mist.
 const MOONLIT = { color: 0xf6c46a, strength: 0.55, reach: 0.1, edge: 0.8 };
+// Firework light on the clouds (user choice, 2026-10-03): the brightest live
+// bursts (written each frame by createFireworks.js) tint the clouds near
+// them in their own colour, thin edges most, falling off with the angle from
+// the burst's centre in multiples of its own angular size (`reach`).
+const BURSTLIT = { count: 4, strength: 1.6, reach: 1.5, edge: 0.85 };
+export const burstLights = {
+  uBursts: { value: Array.from({ length: BURSTLIT.count }, () => new Vector4()) },
+  uBurstLight: { value: Array.from({ length: BURSTLIT.count }, () => new Color(0)) },
+};
 
 const vertexShader = `
   #include <fog_pars_vertex>
@@ -67,6 +76,9 @@ const fragmentShader = `
   uniform vec3 uTintHigh; // and at its top
   uniform vec4 uMoon; // world position, radius
   uniform vec3 uMoonLight; // colour × strength; black for the mist
+  uniform vec4 uBursts[ ${BURSTLIT.count} ]; // world centre, radius
+  uniform vec3 uBurstLight[ ${BURSTLIT.count} ]; // colour × live strength
+  uniform float uSkyLit; // 1 for clouds, 0 for the mist
   varying vec2 vUv;
   varying vec3 vWorld;
   void main() {
@@ -84,6 +96,15 @@ const fragmentShader = `
     float lit = exp( -max( angle - rim, 0.0 ) / ${MOONLIT.reach.toFixed(3)} );
     float thin = 1.0 - smoothstep( 0.15, 0.85, c.a );
     colour += uMoonLight * lit * ( 1.0 - ${MOONLIT.edge.toFixed(2)} + ${MOONLIT.edge.toFixed(2)} * thin );
+    vec3 view = normalize( vWorld - cameraPosition );
+    vec3 flash = vec3( 0.0 );
+    for ( int i = 0; i < ${BURSTLIT.count}; i++ ) {
+      vec3 toBurst = uBursts[ i ].xyz - cameraPosition;
+      float size = asin( clamp( uBursts[ i ].w / max( length( toBurst ), 1.0 ), 0.0, 1.0 ) );
+      float off = acos( clamp( dot( view, normalize( toBurst ) ), -1.0, 1.0 ) );
+      flash += uBurstLight[ i ] * exp( -max( off - 0.5 * size, 0.0 ) / ( ${BURSTLIT.reach.toFixed(2)} * size + 1e-4 ) );
+    }
+    colour += flash * uSkyLit * ${BURSTLIT.strength.toFixed(2)} * ( 1.0 - ${BURSTLIT.edge.toFixed(2)} + ${BURSTLIT.edge.toFixed(2)} * thin );
     gl_FragColor = vec4( colour, c.a * feather * uOpacity );
     #include <colorspace_fragment>
     #include <fog_fragment>
@@ -143,6 +164,9 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
         uTintHigh: { value: new Color(...tint.high) },
         uMoon: { value: moon },
         uMoonLight: { value: moonlit ? moonLight : new Color(0) },
+        uBursts: burstLights.uBursts,
+        uBurstLight: burstLights.uBurstLight,
+        uSkyLit: { value: moonlit ? 1 : 0 },
       },
       transparent: true,
       depthWrite: false,

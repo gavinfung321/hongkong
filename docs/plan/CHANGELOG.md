@@ -6,6 +6,34 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Footer fireworks kept** (user request: too few fireworks behind the
+  footer): instead of fading out, the bursts now dim to half strength and
+  the smoke to 70% at the footer. Files: `src/scene/createFireworks.js`;
+  plan: `interface.md`.
+- **Footer polish** (user choices, all three items from the footer review):
+  the statement, "Landmarks and vessels" column, colophon and bottom bar
+  now use the approved wording (the inaccurate "every model and texture
+  made in code" line is gone); the fireworks fade to thin smoke over the
+  first 60% of the footer's rise; less empty space above the return
+  button on phones (padding 72 → 40 px). Files: `index.html`,
+  `src/styles.css`, `src/main.js`, `src/scene/createFireworks.js`; plan:
+  `interface.md`.
+- **06 left side** (user request: the left half under the copy read as
+  empty): two supporting bursts on desktop (coral at 2.2 s with a smoke
+  puff, small warm at 5.8 s) and one on phones (coral at 2 s), smaller
+  and fainter than the right, all below the copy text; the cloud mass
+  gains a dimmer tail sweeping left and a wisp under the left bursts
+  (phones one wisp). Files: `src/data/chapters.js`,
+  `src/data/atmosphere.js`; plan: README, `atmosphere.md`.
+- **06 polish** (user choices, four of five items from the 06 review; the
+  moon stays): bursts recoloured and moved to the storyboard's palette
+  (warm-white hero twice per loop, coral support, one small cyan, upper
+  right and top centre, the left dark); 06's clouds as one mass under the
+  bursts; `accents` held at 0.25 through 06; the bursts now light nearby
+  clouds in their colour through shared uniforms. Files:
+  `src/data/chapters.js`, `src/data/atmosphere.js`, `src/main.js`,
+  `src/scene/createAtmosphere.js`, `src/scene/createFireworks.js`; plan:
+  README, `atmosphere.md`.
 - **05 polish** (user choices, four of six items from the 05 review; the
   moon and searchlights stay): the camera close to the wheel so it reads
   as IFC's co-star at true scale (desktop wheel ~20% of the height, was

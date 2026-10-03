@@ -194,6 +194,18 @@ to IFC while the windows stay lit; IFC's and the wheel's reflections twice
 as long and bright ([scene-city.md](scene-city.md)); the clouds as one
 mass ([atmosphere.md](atmosphere.md)).
 
+## 06 polish (user choices, 2026-10-03)
+
+A review of 06 against its storyboard found five improvements; the user
+chose four (the moon stays): the bursts recoloured and moved to the
+storyboard's palette, a warm-white hero in each half of the loop,
+coral-pink support and one small cyan accent, all upper right and top
+centre with the left kept dark; the clouds as one mass under the bursts;
+the skyline accents held at 05's level; and the bursts now light the
+clouds near them in their own colour ([atmosphere.md](atmosphere.md)).
+Then, because the left half read as empty (user request), smaller, fainter
+bursts, a smoke puff and a cloud tail were added on the left, below the copy.
+
 **Not in the look test:** 3D models (GLBs; later dropped altogether, all 3D
 is built in code, user decision 2026-10-01), real fireworks, the sparkle cursor,
 particles in other chapters, sound, final copy and fonts.

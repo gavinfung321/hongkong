@@ -418,23 +418,38 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
 - **A richer footer**, after the layout of the user's Kage screenshot, with
   original copy (no Kage text, lettering or code):
   - the "Return to the harbour" button (3.12);
-  - a statement in large light type beside our red-sail mark: "One night on
-    Victoria Harbour, crossed in six chapters: from the old Clock Tower in
-    Tsim Sha Tsui to the last fireworks over Central. Every boat, tower and
-    wave is built in code.";
+  - a statement in large light type beside our red-sail mark: "One night,
+    six chapters, one crossing. The journey runs from the old railway clock
+    at Tsim Sha Tsui to the lights of Central. The harbour, vessels and
+    skyline are built and animated in code.";
   - a hairline, then three columns with small uppercase headings (user
-    choice): **Chapters** (links to all six), **Landmarks** (facts, not
-    links: Clock Tower 1915, Star Ferry since 1888, Two IFC 2003,
-    Observation Wheel 2014) and **Colophon** (built live in Three.js and
-    WebGL; every model and texture made in code);
+    choice): **Chapters** (links to all six), **Landmarks and vessels**
+    (facts, not links: Clock Tower completed 1915, Star Ferry origins in
+    1880, Chinese junk before the 1950s, Two IFC completed 2003,
+    Observation Wheel opened 2014) and **Colophon** (Built with Three.js
+    and WebGL; Original 3D scene and illustrated atmosphere; Designed for
+    desktop and mobile);
   - a bottom bar: "© 2026 Victoria Harbour: A Night Crossing", 維港夜色
-    ("Victoria Harbour at night") in the centre, "WebGL · Three.js · Hong
+    ("Victoria Harbour at night") in the centre, "Three.js · WebGL · Hong
     Kong" on the right.
+- **Approved copy** (user choice, 2026-10-03): the statement, landmark
+  column, colophon and bar now follow `FINAL-NARRATIVE-COPY.md`. The old
+  "every model and texture made in code" line was dropped because the
+  clouds and sky use painted textures. The details sit in a smaller grey
+  style after each name, without a comma, since on phones they drop to
+  their own line.
+- **The fireworks quieten as the footer rises** (user choice, 2026-10-03):
+  over the first 60% of the footer's rise the bursts dim to half strength
+  and their smoke to 70%, so the show carries on behind the footer without
+  fighting the text. A first version faded them out completely; the user
+  found that too empty (user request, 2026-10-03). Driven from
+  `src/main.js` through `fireworks.setFooter()` in
+  `src/scene/createFireworks.js`.
 - The 06 scene stays behind it, dimmed by a dark gradient. On mobile the
   chapters and landmarks sit side by side with the colophon below, the
-  landmark years on their own line, and the bottom bar stacks.
-- Replaces the grey-box line "Grey-box prototype." Placeholder copy until
-  the copy milestone, like the chapters.
+  landmark years on their own line, and the bottom bar stacks. The space
+  above the return button on phones is tighter: 40 px of padding instead
+  of 72 px (user choice, 2026-10-03).
 - Built in `index.html` (`.site-footer`) and `styles.css`;
   `src/ui/siteFooter.js` publishes `--footer-in` (0 → 1) and `is-at-footer`.
   Also works in the poster-only fallback, where it is a plain footer.
