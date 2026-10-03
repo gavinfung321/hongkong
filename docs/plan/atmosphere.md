@@ -310,3 +310,29 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
     takes 0.08 ms on desktop. Composition probe: only the four older
     misses. JS 207 KB gzip.
   - The fireworks are complete (all three steps of §6.7).
+
+- **02 sky: afterglow and one cloud mass (user choice, 2026-10-03).**
+  The storyboard's 02 sky burns red-orange low on the right; ours was an
+  even navy with clouds in three stacked rows.
+  - **Afterglow:** the sky dome adds a soft dusky-rose glow (`AFTERGLOW`
+    in `createScene.js`; toned down from a bright red-orange that matched
+    no other scene, user request, 2026-10-03) round a compass heading,
+    brightest just above the horizon and fading upward over about a
+    sixth of the dome: desktop at
+    72° (right of the ferry, 38° wide), phones at 7° (right of the tower,
+    14° wide). It shows only in 02, through the `afterglow` gate (default
+    0, so other chapters leave it out), and warms and cools across the
+    whole move in and out. The water mirrors it (see
+    [scene-promenade.md](scene-promenade.md), water reflections).
+  - **Clouds:** 02's cards overlap at uneven heights as one mass on the
+    right, sweeping down toward the glow, with one faint trace above the
+    moon (desktop: five cards, was seven; phones: three, was five).
+  - **Code:** `createScene.js`, `gating.js` (per-key `defaults`),
+    `main.js`, `src/data/chapters.js`, `src/data/atmosphere.js`.
+
+- **03 clouds: one mass (user choice, 2026-10-03).** 03's cards sat in
+  rows too. On desktop four cards now overlap at uneven heights above the
+  moon and IFC, leaving the copy's upper left calm (was five, including
+  a bank behind the ferry's mast); on phones a dim deck above and one lit
+  bank over the moon with a trace on the left (was four full-width
+  strips). `src/data/atmosphere.js`.

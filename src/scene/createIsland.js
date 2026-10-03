@@ -233,11 +233,67 @@ function createWaterfront(seed) {
     const c = (bright ? cool : warm).clone().multiplyScalar(WATERFRONT.glow[bright ? 1 : 0] * (0.85 + 0.3 * random()));
     color.push(c.r, c.g, c.b);
   }
+  return lightDots(position, color, WATERFRONT.size, 'waterfrontLights');
+}
+
+// Far shore past the skyline's east end (user choice, 2026-10-03): sparse
+// low-rise lights on the island's east side, in a few rows `spacing`
+// metres apart along runs [x, z] → [x, z], over a dark strip of land
+// `land` metres deep. The run stops where the ridge comes down to the
+// water in desktop 02, so no lights stand on the open sea (user request,
+// 2026-10-03; a Kowloon East run across the water was removed). `fog`
+// thins the fog on the lights so the far end still reads.
+const FAR_SHORE = {
+  runs: [{ from: [1400, -1120], to: [1900, -1155], rows: 3, height: 34 }],
+  spacing: 8,
+  gap: 0.5,
+  size: 2.5,
+  glow: 1.4,
+  land: { depth: 160, height: 8 },
+  fog: 0.6,
+};
+
+function createFarShore(seed) {
+  const random = seededRandom(seed);
+  const warm = new Color(WATERFRONT.warm);
+  const cool = new Color(WATERFRONT.cool);
+  const position = [];
+  const color = [];
+  const land = new Group();
+  for (const { from, to, rows, height } of FAR_SHORE.runs) {
+    const length = Math.hypot(to[0] - from[0], to[1] - from[1]);
+    const strip = new Mesh(unitBox, lambert(0x1d1b29));
+    strip.scale.set(length, FAR_SHORE.land.height, FAR_SHORE.land.depth);
+    strip.rotation.y = -Math.atan2(to[1] - from[1], to[0] - from[0]);
+    strip.position.set((from[0] + to[0]) / 2, 0, (from[1] + to[1]) / 2 - FAR_SHORE.land.depth / 2 + 10);
+    land.add(strip);
+    for (let row = 0; row < rows; row++) {
+      for (let s = 0; s < length; s += FAR_SHORE.spacing) {
+        if (random() < FAR_SHORE.gap + row * 0.12) continue;
+        const t = s / length;
+        const back = row * 25 + random() * 20;
+        position.push(
+          from[0] + (to[0] - from[0]) * t + (random() - 0.5) * 6,
+          3 + 4 + random() * height * (row + 1) / rows,
+          from[1] + (to[1] - from[1]) * t - back,
+        );
+        const c = (random() < 0.2 ? cool : warm).clone().multiplyScalar(FAR_SHORE.glow * (0.6 + 0.6 * random()));
+        color.push(c.r, c.g, c.b);
+      }
+    }
+  }
+  const dots = lightDots(position, color, FAR_SHORE.size, 'farShoreLights', FAR_SHORE.fog);
+  land.add(dots.points);
+  land.name = 'farShore';
+  return { group: land, setLevel: dots.setLevel };
+}
+
+function lightDots(position, color, size, name, fog = 1) {
   const geometry = new BufferGeometry();
   geometry.setAttribute('position', new Float32BufferAttribute(position, 3));
   geometry.setAttribute('color', new Float32BufferAttribute(color, 3));
   const material = new ShaderMaterial({
-    uniforms: { uSize: { value: WATERFRONT.size }, uFog: { value: 0 }, uLevel: { value: 1 } },
+    uniforms: { uSize: { value: size }, uFog: { value: 0 }, uLevel: { value: 1 } },
     vertexShader: `
       uniform float uSize;
       uniform float uFog;
@@ -263,11 +319,11 @@ function createWaterfront(seed) {
     blending: AdditiveBlending,
   });
   const points = new Points(geometry, material);
-  points.name = 'waterfrontLights';
+  points.name = name;
   points.userData.noProbe = true;
   points.onBeforeRender = (renderer, scene) => {
-    material.uniforms.uSize.value = WATERFRONT.size * renderer.getPixelRatio();
-    material.uniforms.uFog.value = scene.fog?.density ?? 0;
+    material.uniforms.uSize.value = size * renderer.getPixelRatio();
+    material.uniforms.uFog.value = (scene.fog?.density ?? 0) * fog;
   };
   return {
     points,
@@ -565,7 +621,8 @@ export function createIsland() {
   const masts = mastMesh([...tops.masts, ...landmarks.masts]);
   const dots = createCityDots(buildings, SKYLINE_WINDOWS, WORLD.island.skyline.seed + 202);
   const waterfront = createWaterfront(WORLD.island.skyline.seed + 303);
-  group.add(createSlab(), skyline, tops.group, landmarks.group, masts, beacons.points, dots.points, waterfront.points);
+  const farShore = createFarShore(WORLD.island.skyline.seed + 404);
+  group.add(createSlab(), skyline, tops.group, landmarks.group, masts, beacons.points, dots.points, waterfront.points, farShore.group);
   const mountains = createMountains();
   group.add(mountains.group);
 
@@ -590,8 +647,9 @@ export function createIsland() {
     tops.crownMaterial.color.setScalar(value);
     dots.setLevel(value);
     waterfront.setLevel(value);
+    farShore.setLevel(value);
     landmarks.setLevel(value);
   }
 
-  return { group, ifc, wheel, update, setCityLevel };
+  return { group, ifc, wheel, update, setCityLevel, setSlopeLights: mountains.setLightLevel };
 }

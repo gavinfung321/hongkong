@@ -282,7 +282,7 @@ function createSlopeLights({ x, towers, west, roads, peak, seed }, ridge, z) {
   // Where a window floor shrinks to under `crowd` point widths on screen (phones,
   // narrow windows), the dots dim, so the towers don't merge into solid bars.
   const material = new ShaderMaterial({
-    uniforms: { uSize: { value: LIGHTS.size }, uHeight: { value: 900 } },
+    uniforms: { uSize: { value: LIGHTS.size }, uHeight: { value: 900 }, uLevel: { value: 1 } },
     vertexShader: `
       uniform float uSize;
       uniform float uHeight;
@@ -296,10 +296,11 @@ function createSlopeLights({ x, towers, west, roads, peak, seed }, ridge, z) {
         vColor = color * clamp( floorPixels / ( ${LIGHTS.crowd.toFixed(1)} * gl_PointSize ), 0.3, 1.0 );
       }`,
     fragmentShader: `
+      uniform float uLevel;
       varying vec3 vColor;
       void main() {
         float d = length( gl_PointCoord - 0.5 ) * 2.0;
-        gl_FragColor = vec4( vColor * smoothstep( 1.0, 0.0, d ), 1.0 );
+        gl_FragColor = vec4( vColor * uLevel * smoothstep( 1.0, 0.0, d ), 1.0 );
         #include <colorspace_fragment>
       }`,
     transparent: true,
@@ -324,12 +325,18 @@ export function createMountains() {
   for (const { mesh } of built) group.add(mesh);
   const haze = createMist(mist, ranges[0].taper);
   // In front of the near range by 20 m, well clear of its depth.
-  group.add(haze.mesh, createSlopeLights(lights, built[0].ridge, ranges[0].z + 20));
+  const slopeLights = createSlopeLights(lights, built[0].ridge, ranges[0].z + 20);
+  group.add(haze.mesh, slopeLights);
 
   // Continuous mode only; in reduced motion the mist holds still.
   function update(time) {
     haze.material.uniforms.uTime.value = time;
   }
 
-  return { group, update };
+  // The `slopeLights` level per chapter (mobile 02 dims them behind the tower).
+  function setLightLevel(value) {
+    slopeLights.material.uniforms.uLevel.value = value;
+  }
+
+  return { group, update, setLightLevel };
 }

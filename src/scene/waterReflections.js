@@ -50,7 +50,10 @@ export function reflectionSources({ tower, ferry, junk }) {
   list.push(source(mx, mz, my * 0.08, my, radius * 0.45, 0xf6c46a, 0.3, { taper: 0.6, tail: 0.15 }));
 
   // Moving: heights and half extents (along the hull, across it) in the boat's frame.
-  list.push(source(0, 0, 1.4, 6.6, 0, 0xffd29a, 0.32, { key: 'ferry', follow: ferry, extent: [14, 4], tail: 0.45 }));
+  // The ferry's windows: kept to the hull's length and close under it, a
+  // column of slivers (user choice, 2026-10-03: with a longer tail and the
+  // full hull width the glints scattered over 03's whole foreground).
+  list.push(source(0, 0, 1.4, 6.6, 0, 0xffd29a, 0.45, { key: 'ferry', follow: ferry, extent: [9, 3], tail: 0.15 }));
   list.push(source(0, 0, 5.6, 19.5, 0, 0xff5a36, 0.9, { key: 'junk', follow: junk, extent: [8, 0.5], taper: 0.3 }));
   list.push(source(0, 0, 2.9, 5, 0, 0xffc890, 0.3, { key: 'junk', follow: junk, extent: [3, 2] }));
 

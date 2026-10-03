@@ -48,7 +48,10 @@ const REFLECT = {
 // near the camera stay fine slivers rather than flat blobs (user request,
 // 2026-10-03); slivers are `aspect` times as long as tall. maxDensity keeps
 // dark gaps between glints even in the brightest core.
-const GLINT = { rowPixels: 2, rowMaxPixels: 6, grow: 30, aspect: 4, density: 2, maxDensity: 0.72, drift: 0.9 };
+// Near the camera the slivers stretch to `nearAspect` and each row is cut
+// (`cut`: share of the row dark at each edge), so the glints read as thin
+// slivers, not blobs (user choice, 2026-10-03).
+const GLINT = { rowPixels: 2, rowMaxPixels: 6, grow: 30, aspect: 4, nearAspect: 9, density: 2, maxDensity: 0.72, drift: 0.9, cut: 0.4 };
 // The night sky mirrored between the glints (user request, 2026-10-03): a dim
 // violet-navy times the water's Fresnel sheen (plus a small `floor` near the
 // camera), broken into soft bands by the wavelets, so the dark water has a
@@ -59,6 +62,10 @@ const SKY = { color: 0x2c2448, strength: 0.28, floor: 0.04, bands: [0.18, 0.55],
 // and brightens (`pulse`), so the reflection columns ripple down the water.
 // `rows`: radians per wavelet row; `speed`: radians per second.
 const SWELL = { rows: 0.45, speed: 1.7, sway: 0.3, pulse: 0.15 };
+// The 02 afterglow on the water (user choice, 2026-10-03: the right-hand
+// water read flat): the sky's glow (createScene.js) times the Fresnel sheen,
+// `width` times as wide squared, in drifting bands.
+const AFTERGLOW_MIRROR = { strength: 1.1, width: 0.6 };
 // The skyline shimmer: brightness of the strip read along the island front.
 const CITY = { power: 0.11, lit: 0.6, tail: 0.25 };
 // Plane segments per side. Positions interpolated across one 8 km triangle
@@ -124,7 +131,7 @@ function createNormalTexture() {
 
 const MAX = Math.max(...Object.values(REFLECT.max));
 
-export function createWater(renderer) {
+export function createWater(renderer, glow) {
   const normalMap = createNormalTexture();
   normalMap.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
 
@@ -153,7 +160,7 @@ export function createWater(renderer) {
   // (cool cyan) and the boats' point lights leave no glare on the water: the
   // streaks draw the boats' reflections instead.
   material.onBeforeCompile = (shader) => {
-    Object.assign(shader.uniforms, reflection);
+    Object.assign(shader.uniforms, reflection, glow);
     shader.vertexShader = shader.vertexShader
       .replace(
         '#include <common>',
@@ -179,6 +186,9 @@ export function createWater(renderer) {
         uniform sampler2D waterCity;
         uniform vec4 waterCityRange;
         uniform vec3 waterSky;
+        uniform vec3 uGlowColor;
+        uniform float uGlowLevel;
+        uniform vec2 uGlowHeading;
         varying vec3 vWaterWorld;
         float waterHash( vec2 p ) {
           return fract( sin( dot( p, vec2( 127.1, 311.7 ) ) ) * 43758.5453 );
@@ -290,7 +300,9 @@ export function createWater(renderer) {
             : ${GLINT.grow.toFixed(1)} * ( 1.0 + log( t1 / t0 ) ) + ( t - t1 ) / rowMax;
           float rowTan = clamp( t / ${GLINT.grow.toFixed(1)}, rowMin, rowMax );
           float azimuth = atan( fromEye.x, -fromEye.y );
-          vec2 g = vec2( azimuth / ( rowTan * ${GLINT.aspect.toFixed(1)} ), row );
+          float near = smoothstep( t0, mix( t0, t1, 0.4 ), t );
+          float aspect = mix( ${GLINT.aspect.toFixed(1)}, ${GLINT.nearAspect.toFixed(1)}, near );
+          vec2 g = vec2( azimuth / ( rowTan * aspect ), row );
           float drift = waterTime * ${GLINT.drift.toFixed(2)};
           float wobble = ( waterNoise( vec2( 3.7, floor( row ) * 0.61 + drift * 0.3 ) ) - 0.5 ) * ${(REFLECT.wobble * 2).toFixed(2)};
           float swellPhase = floor( row ) * ${SWELL.rows.toFixed(2)} - waterTime * ${SWELL.speed.toFixed(2)};
@@ -341,6 +353,15 @@ export function createWater(renderer) {
           float skyBand = waterNoise( g * vec2( ${SKY.bands[0].toFixed(2)}, ${SKY.bands[1].toFixed(2)} ) + vec2( drift * 0.15, -drift * 0.25 ) );
           totalEmissiveRadiance += waterSky * ( fresnel + ${SKY.floor.toFixed(2)} ) * ( 1.0 + ${SKY.contrast.toFixed(2)} * ( skyBand - 0.5 ) ) * crest * ( 1.0 - 0.6 * hullMask );
 
+          // The 02 afterglow mirrored under its heading, in broken bands
+          // that brighten toward the horizon.
+          if ( uGlowLevel > 0.0 ) {
+            float off = mod( degrees( azimuth ) - uGlowHeading.x + 540.0, 360.0 ) - 180.0;
+            float across = exp( -off * off / ( uGlowHeading.y * uGlowHeading.y * ${AFTERGLOW_MIRROR.width.toFixed(2)} ) );
+            float band = smoothstep( 0.3, 0.8, waterNoise( g * vec2( 0.12, 0.7 ) + vec2( drift * 0.1, -drift * 0.35 ) ) );
+            totalEmissiveRadiance += uGlowColor * uGlowLevel * across * fresnel * ${AFTERGLOW_MIRROR.strength.toFixed(2)} * ( 0.25 + 0.75 * band ) * crest * ( 1.0 - hullMask );
+          }
+
           // Glints: a sliver noise thresholded by the local brightness, so the
           // core is nearly solid and the edges break into sparse slivers.
           float lum = max( max( shine.r, shine.g ), shine.b );
@@ -351,6 +372,10 @@ export function createWater(renderer) {
             float density = clamp( lum * ${GLINT.density.toFixed(2)}, 0.0, ${GLINT.maxDensity.toFixed(2)} );
             float threshold = 1.0 - density;
             float glint = smoothstep( threshold, threshold + 0.06, n ) * mix( 0.45, 1.0, smoothstep( threshold, 1.0, n ) );
+            // Near the camera, where rows reach full size, a dark gap
+            // between wavelet rows cuts the glints into slivers.
+            float rowCut = smoothstep( 0.0, ${GLINT.cut.toFixed(2)}, fract( row ) ) * smoothstep( 1.0, 1.0 - ${GLINT.cut.toFixed(2)}, fract( row ) );
+            glint *= mix( 1.0, rowCut, near );
             vec3 glow = shine / lum * ( glint * ( 0.3 + 0.9 * density ) + 0.05 * density );
             totalEmissiveRadiance += 1.5 * ( 1.0 - exp( -glow / 1.5 ) );
           }

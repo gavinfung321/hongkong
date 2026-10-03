@@ -71,7 +71,7 @@ function start(initGuard, header) {
   world.setGrade(GRADE);
 
   scene.add(createLighting());
-  const water = createWater(renderer);
+  const water = createWater(renderer, world.sky.userData.glow);
   scene.add(water.mesh);
   const kowloon = createKowloonEdge();
   const island = createIsland();
@@ -117,23 +117,28 @@ function start(initGuard, header) {
     bursts: (value) => fireworks.setLevel(value),
     petals: (value) => petals.setDensity(value),
     city: (value) => island.setCityLevel(value),
+    slopeLights: (value) => island.setSlopeLights(value),
     mist: (value) => atmosphere.setMist(value),
     // Default window: gone early in the move to 06, before the fireworks lead.
     searchlights: (value) => searchlights.setLevel(value),
     // Default window: gone in the first 40% of the move to 03, before the camera nears them.
     seaMist: (value) => atmosphere.setSeaMist(value),
+    afterglow: (value) => world.sky.userData.setAfterglow(value),
   }, {
+    // The afterglow warms and cools across the whole move.
+    afterglow: { in: [0, 1], out: [0, 1] },
     // Mist changes gently across the whole move.
     mist: { in: [0, 1], out: [0, 1] },
     // The city dims across the whole move into 05 (and stays dim in 06), not in its first 40%.
     city: { in: [0, 1], out: [0, 1] },
+    slopeLights: { in: [0, 1], out: [0, 1] },
     // The palms pass in front of the Clock Tower early in the 01 → 02 move
     // and, on mobile, early in the 02 → 03 move.
     palms: { in: [0.62, 0.9], out: [0, 0.1] },
     // The camera passes over the bush early in the 01 → 02 move: gone while
     // it is still 1.8 m clear of the crown.
     bush: { out: [0, 0.08] },
-  });
+  }, { afterglow: 0 });
 
   const rig = createCameraRig(camera, chapters, { hold: SCROLL.hold });
   const parallax = createPointerParallax();
@@ -197,6 +202,7 @@ function start(initGuard, header) {
     wordmark.place({ ...opening, fov: openingFov }, width / height, HERO.wordmark[breakpoint]);
     atmosphere.place(breakpoint, width / height);
     searchlights.setBreakpoint(breakpoint);
+    world.sky.userData.setBreakpoint(breakpoint);
     needsRender = true;
   }
 

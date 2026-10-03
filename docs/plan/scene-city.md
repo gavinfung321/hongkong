@@ -454,3 +454,34 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
          shape instead of sliding as one pattern. The white stays
          restrained: the same brightness as before, lit only by the scene.
          Still a single plane per boat; draw calls unchanged.
+       - **Stronger ferry wake (user choices, 2026-10-03: in 02 and 03 it
+         barely showed):** the ferry's trail runs 90 m (was 45) with a
+         wider V (spread 0.45, was 0.34), so in 03 the bow wave's near
+         arm runs toward the camera on the right and foam trails off the
+         stern on the left; the white is 1.6× and glows faintly
+         (`glow`, emissive 0x5a6274) so it reads at night. The junk's is
+         unchanged.
+
+- **03 calmer skyline (user choice, 2026-10-03).** The storyboard keeps
+  the ferry, IFC and the wheel as the only strong hierarchy; Bank of
+  China, Central Plaza and the LED strips competed. 03 sets `city` to
+  40% (towers, crowns, LED strips, landmarks; IFC and the wheel are
+  separate and stay full), easing across the moves in and out.
+  `src/data/chapters.js`.
+
+- **02 far shore and quieter phone background (user choices,
+  2026-10-03).**
+  - **Far shore:** sparse low-rise lights continue the skyline east over
+    a low dark strip of land on the island's east side, three rows with
+    gaps, mostly warm with a fifth cool white, fogged at 60% of the usual
+    rate. They stop where the ridge comes down to the water in desktop
+    02, so none stand on the open sea behind the ferry (user request,
+    2026-10-03; a longer run and a Kowloon East run across the water were
+    removed). They follow the `city` level. Code: `FAR_SHORE` in
+    `createIsland.js`.
+  - **Mobile 02:** Central Plaza, BOC and the Mid-Levels lights crowded
+    the sky behind the tower, so the phone 02 frame dims the city to
+    35% (`city`) and the slope lights to 50% (new `slopeLights` gate,
+    default 1), easing across the moves in and out. Desktop unchanged.
+    Code: `src/data/chapters.js`, `createMountains.js`
+    (`setLightLevel`), `createIsland.js`, `main.js`.

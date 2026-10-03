@@ -59,8 +59,9 @@ function foamTexture(seed) {
 // halfWidthAt(x): the hull's half width at the waterline (0 off the hull),
 // bow along +X, scanned over `span`. trail: metres of wake behind the
 // stern; spread: tangent of the V's half angle; speed: metres per second
-// the foam streams past; strength: overall opacity.
-export function createWake({ halfWidthAt, span, trail, spread = 0.34, speed, strength = 1, seed }) {
+// the foam streams past; strength: overall opacity; glow: the white
+// water's own light, so it reads at night.
+export function createWake({ halfWidthAt, span, trail, spread = 0.34, speed, strength = 1, glow = 0x161b24, seed }) {
   let [stern, bow, beam] = [Infinity, -Infinity, 0];
   for (let x = span[0]; x <= span[1]; x += 0.25) {
     const hw = halfWidthAt(x);
@@ -186,7 +187,7 @@ export function createWake({ halfWidthAt, span, trail, spread = 0.34, speed, str
   const geometry = new PlaneGeometry(x1 - x0, 2 * half).rotateX(-Math.PI / 2).translate((x0 + x1) / 2, 0, 0);
   const material = new MeshLambertMaterial({
     color: 0xb4c0cc,
-    emissive: 0x161b24,
+    emissive: glow,
     map: foam,
     alphaMap: mask,
     transparent: true,

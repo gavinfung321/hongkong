@@ -39,7 +39,8 @@ export function makeFadeable(object) {
 // `windows`: per key, { in, out } as the [start, end] of the transition over
 // which the gate opens or closes instead, for subjects that are in frame
 // mid-transition and would otherwise show while crossing something.
-export function createGating(chapters, targets, windows = {}) {
+// `defaults`: a key's value where a chapter leaves it out (otherwise 1).
+export function createGating(chapters, targets, windows = {}, defaults = {}) {
   // Gates change within the first 40% of a transition: outgoing cards are gone
   // before they cross the copy, incoming subjects are ready while off-frame.
   function weight(key, fromValue, toValue, eased) {
@@ -53,7 +54,7 @@ export function createGating(chapters, targets, windows = {}) {
     const to = chapters[segment.to].visibility[breakpoint];
     const eased = stepped ? Math.round(segment.eased) : segment.eased;
     for (const [key, setOpacity] of Object.entries(targets)) {
-      setOpacity(weight(key, from[key] ?? 1, to[key] ?? 1, eased));
+      setOpacity(weight(key, from[key] ?? defaults[key] ?? 1, to[key] ?? defaults[key] ?? 1, eased));
     }
   }
 

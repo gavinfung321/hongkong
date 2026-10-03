@@ -386,8 +386,13 @@ function createFerry() {
   const wake = createWake({
     halfWidthAt: (x) => (Math.abs(x) < FERRY_HALF ? ferrySectionAt(x, 0)[2] : 0),
     span: [-FERRY_HALF, FERRY_HALF],
-    trail: 45,
+    // Longer and whiter (user choices, 2026-10-03: the wake barely showed
+    // in 02 and 03), its foam glowing faintly so it reads at night.
+    trail: 90,
+    spread: 0.45,
     speed: 3,
+    strength: 1.6,
+    glow: 0x5a6274,
     seed: 61,
   });
 

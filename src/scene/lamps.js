@@ -123,14 +123,20 @@ export const TOWER_FLOOD = [0, 1.5, 9];
 // radius z, turn], with ragged edges (`wobble`) and a soaked rim (`rim`, a
 // share of the radius). The 01 hold sees no deck. Inside, the stone goes
 // nearly black under the water, which mirrors railing A and the sky beyond
-// it, slightly rippled. `petals`: fallen bauhinia petals (`size` metres long)
-// lying on the deck, thickest within `reach` metres of the tree and the bush.
+// it, slightly rippled. Three more on the promontory fill the empty paving
+// at the bottom left of desktop 02 (user choice, 2026-10-03), on the 02
+// camera's line to the Clock Tower so they mirror its lit foot.
+// `petals`: fallen bauhinia petals (`size` metres long) lying on the deck,
+// thickest within `reach` metres of the tree and the bush.
 const PAVING = {
   weather: { size: 5, amount: 0.22, slab: 0.25 },
   puddles: {
     list: [
       [-18.6, 91.3, 1.4, 0.65, 0.6],
       [-15.9, 93.5, 0.7, 0.4, -0.3],
+      [-70.4, 6, 3.2, 1.8, 0.4],
+      [-76, 3, 1.8, 1.0, -0.4],
+      [-67.4, -0.5, 1.4, 0.8, 0.9],
     ],
     wobble: 0.2,
     rim: 0.3,
@@ -143,6 +149,10 @@ const PAVING = {
     glass: 3,
     halo: 0.04,
     ripple: 0.012,
+    // The Clock Tower in the water (traced as an upright slab `half` metres
+    // half wide, `height` tall facing the puddle): its floodlit foot (`base`,
+    // the lowest `glow` metres) and the brick above, before `reflect`.
+    tower: { half: 4.2, height: 42, glow: 7, base: [4.5, 2.6, 1], body: [1.1, 0.3, 0.16] },
   },
   petals: { cell: 0.3, size: [0.1, 0.06], reach: 7, density: 0.45, colour: [0.82, 0.2, 0.46] },
 };
@@ -354,6 +364,17 @@ export function addWetPaving(material, { map, tile, y }) {
             vec3 ray = normalize( vec3( toEye.x, -toEye.y, toEye.z ) );
             float cloud = paveNoise( vec2( atan( ray.x, -ray.z ) * 40.0, ray.y * 60.0 ) ) * 0.65 + paveNoise( vec2( atan( ray.x, -ray.z ) * 110.0, ray.y * 150.0 ) ) * 0.35;
             mirrored *= ${f(puddles.sky.clouds[0])} + ${f(puddles.sky.clouds[1])} * smoothstep( 0.3, 0.8, cloud );
+            vec3 up = vec3( -toEye.x, toEye.y, -toEye.z );
+            vec2 across = normalize( up.xz );
+            vec2 toTower = vec2( ${f(tx)}, ${f(tz)} ) - vLampWorld.xz;
+            float reach = dot( toTower, across );
+            if ( reach > 0.0 ) {
+              float lateral = abs( toTower.x * across.y - toTower.y * across.x + ripple.y * reach * 4.0 );
+              float rise = reach * up.y / length( up.xz ) + ripple.x * reach * 4.0;
+              if ( lateral < ${f(puddles.tower.half)} && rise < ${f(puddles.tower.height)} ) {
+                mirrored = mix( vec3( ${puddles.tower.base.map(f).join(', ')} ), vec3( ${puddles.tower.body.map(f).join(', ')} ), smoothstep( ${f(puddles.tower.glow * 0.5)}, ${f(puddles.tower.glow)}, rise ) );
+              }
+            }
             vec4 railing = paveRailMirror( vLampWorld.xz, ripple );
             if ( railing.a > 1.5 ) mirrored = lampColor * ${f(puddles.glass)};
             else if ( railing.a > 0.5 ) mirrored = railing.rgb;
