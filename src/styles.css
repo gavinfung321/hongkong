@@ -168,6 +168,150 @@ a:focus-visible {
   visibility: hidden;
 }
 
+/* Entrance (index.html, src/ui/loadingScreen.js): a dark title card over
+   everything while the scene starts; never shown without JavaScript. The
+   lettering appears once its fonts are in (is-typeset, inline script). */
+.entrance {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background:
+    radial-gradient(circle at 50% 46%, rgb(39 24 52 / 0.2), transparent 55%),
+    #05060b;
+  color: var(--color-cream);
+  transition: opacity var(--entrance-fade, 800ms) ease;
+}
+
+.is-booting .entrance,
+.entrance.is-leaving {
+  display: block;
+}
+
+.entrance.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* One centred group in the small viewport (100svh), so phone toolbars never
+   push it down; the small bottom bias puts it on the optical centre. */
+.entrance__group {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding:
+    env(safe-area-inset-top)
+    max(var(--page-inset), env(safe-area-inset-right))
+    calc(env(safe-area-inset-bottom) + 4svh)
+    max(var(--page-inset), env(safe-area-inset-left));
+  text-align: center;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.is-typeset .entrance__group {
+  opacity: 1;
+}
+
+/* Leaving, the lettering goes first so it never sits over the hero's 香港. */
+.entrance.is-leaving .entrance__group {
+  opacity: 0;
+  transition-duration: calc(var(--entrance-fade, 800ms) * 0.375);
+}
+
+.entrance__mark {
+  width: 18px;
+  height: 21px;
+}
+
+.entrance__zh {
+  margin-top: 16px;
+  padding-left: 0.08em; /* balances the trailing letter spacing */
+  font-family: var(--font-display-zh);
+  font-weight: 600;
+  font-synthesis: none;
+  font-size: 32px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  color: var(--color-ivory);
+}
+
+.entrance__line {
+  display: block;
+  position: relative;
+  width: 240px;
+  max-width: 100%;
+  height: 1px;
+  margin-top: 30px;
+  overflow: hidden;
+  background: rgb(243 233 210 / 0.12);
+}
+
+.entrance__line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(243 233 210 / 0.72);
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left;
+  transition: transform 240ms ease-out;
+}
+
+.entrance__label {
+  margin-top: 11px;
+  font-size: 10px;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+}
+
+@media (max-aspect-ratio: 4/5) {
+  .entrance__mark {
+    width: 16px;
+    height: 19px;
+  }
+
+  .entrance__zh {
+    margin-top: 14px;
+    font-size: 27px;
+  }
+
+  .entrance__line {
+    width: 200px;
+    margin-top: 27px;
+  }
+
+  .entrance__label {
+    margin-top: 10px;
+    font-size: 9px;
+  }
+}
+
+.entrance.is-reduced .entrance__group,
+.entrance.is-reduced .entrance__line::after {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entrance__group {
+    transition: none;
+  }
+}
+
+/* The scene is shown under the still-opaque cover in one step. */
+.is-booting.is-ready .world,
+.is-booting.is-ready .poster {
+  transition: none;
+}
+
 @media (max-aspect-ratio: 4/5) {
   .poster__art--landscape {
     display: none;

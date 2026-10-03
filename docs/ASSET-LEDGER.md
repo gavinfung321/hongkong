@@ -132,6 +132,12 @@ version, licence and licence URL). Typography brief: `TYPOGRAPHY-INTERFACE-BRIEF
 - The Chinese subsets hold only the site's characters. If any Chinese text
   changes, rebuild them and update `unicode-range` in `src/styles.css`.
 
+### Favicon (shipped 2026-10-03)
+
+| Runtime file | Type | Size | Rights/source | Notes |
+|---|---|---:|---|---|
+| `public/favicon.svg` | SVG icon, 32 × 32 | 0.3 KB | Original; the project's own red sail mark (mast and sail paths from the header logo in `index.html`) | Night-navy rounded square so the cream mast reads on light and dark tabs; battens left out at this size. Linked from `index.html` (user request, 2026-10-03) |
+
 ## Phase D — layer candidates (not approved)
 
 Ideas for more depth layers, after Kage's technique of stacking foreground,
