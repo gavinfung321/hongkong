@@ -1,10 +1,12 @@
 import {
   AdditiveBlending,
   CanvasTexture,
+  Color,
   Group,
   Mesh,
   MeshBasicMaterial,
   PlaneGeometry,
+  RepeatWrapping,
   SRGBColorSpace,
 } from 'three';
 import { WORLD } from '../data/world.js';
@@ -34,8 +36,28 @@ const MARIA = [
 const CRATERS = 6;
 // The glow round the disc, in moon radii from its centre: a soft corona
 // close in and a wide faint haze, as if seen through thin mist.
-const CORONA = { strength: 0.26, fall: 2.2 };
+// Corona 0.22 (was 0.26) and the disc at `veil.disc` (atmospheric depth
+// Priority D, user choice, 2026-10-04): the moon stays the focal light but no
+// longer dominates.
+const CORONA = { strength: 0.22, fall: 2.2 };
 const HAZE = { strength: 0.1, fall: 0.6 };
+
+// Thin cloud drifting slowly across the disc, so the moon is partly concealed:
+// a tileable band of streaks (`streaks` per tile, sizes as shares of the
+// tile), `size` in moon diameters, scrolled by `speed` tiles a second. It
+// holds still at `start` in reduced motion.
+const VEIL = {
+  disc: 0.86,
+  size: [4, 1.4],
+  streaks: 18,
+  length: [0.12, 0.38],
+  thickness: [0.05, 0.16],
+  alpha: [0.12, 0.3],
+  colour: [74, 62, 84],
+  speed: 0.004,
+  start: 0.12,
+  seed: 7,
+};
 
 const smoothstep = (a, b, t) => {
   const c = Math.min(Math.max((t - a) / (b - a), 0), 1);
@@ -196,6 +218,54 @@ function drawHalo() {
   return texture;
 }
 
+// Soft horizontal streaks, drawn three times across the seam so the tile wraps.
+function drawVeil() {
+  const [w, h] = [512, 128];
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  const random = seededRandom(VEIL.seed);
+  const range = ([a, b]) => a + random() * (b - a);
+  const [r, g, b] = VEIL.colour;
+  for (let i = 0; i < VEIL.streaks; i++) {
+    const x = random() * w;
+    const y = h * (0.5 + (random() - 0.5) * 0.6);
+    const rx = range(VEIL.length) * w;
+    const ry = range(VEIL.thickness) * h;
+    const alpha = range(VEIL.alpha);
+    for (const shift of [-w, 0, w]) {
+      ctx.save();
+      ctx.translate(x + shift, y);
+      ctx.scale(rx / ry, 1);
+      const streak = ctx.createRadialGradient(0, 0, 0, 0, 0, ry);
+      streak.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha})`);
+      streak.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+      ctx.fillStyle = streak;
+      ctx.fillRect(-ry, -ry, ry * 2, ry * 2);
+      ctx.restore();
+    }
+  }
+  const texture = new CanvasTexture(canvas);
+  texture.colorSpace = SRGBColorSpace;
+  texture.wrapS = RepeatWrapping;
+  return texture;
+}
+
+// Fades the veil card to nothing at its edges (fixed while the streaks scroll).
+function drawVeilMask() {
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 128;
+  const ctx = canvas.getContext('2d');
+  const mask = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+  mask.addColorStop(0, '#fff');
+  mask.addColorStop(0.55, '#fff');
+  mask.addColorStop(1, '#000');
+  ctx.fillStyle = mask;
+  ctx.fillRect(0, 0, 128, 128);
+  return new CanvasTexture(canvas);
+}
+
 export function createMoon() {
   const { position, radius, facing, seed } = WORLD.moon;
   const group = new Group();
@@ -213,12 +283,26 @@ export function createMoon() {
 
   const disc = new Mesh(
     new PlaneGeometry(1, 1),
-    new MeshBasicMaterial({ map: drawDisc(seed), transparent: true, depthWrite: false, fog: false }),
+    new MeshBasicMaterial({ map: drawDisc(seed), color: new Color(VEIL.disc, VEIL.disc, VEIL.disc), transparent: true, depthWrite: false, fog: false }),
   );
   disc.scale.setScalar(radius * 2);
 
+  const streaks = drawVeil();
+  streaks.offset.x = VEIL.start;
+  const veil = new Mesh(
+    new PlaneGeometry(1, 1),
+    new MeshBasicMaterial({ map: streaks, alphaMap: drawVeilMask(), transparent: true, depthWrite: false, fog: false }),
+  );
+  veil.scale.set(radius * 2 * VEIL.size[0], radius * 2 * VEIL.size[1], 1);
+  veil.position.z = 5;
+
   // The farthest see-through layer, so it draws before the mist and slope lights.
   halo.renderOrder = disc.renderOrder = -0.9;
-  group.add(halo, disc);
-  return { group };
+  veil.renderOrder = -0.89;
+  group.add(halo, disc, veil);
+
+  function update(seconds) {
+    streaks.offset.x = VEIL.start + seconds * VEIL.speed;
+  }
+  return { group, update };
 }

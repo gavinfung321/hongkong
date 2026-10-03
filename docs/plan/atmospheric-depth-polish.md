@@ -139,7 +139,7 @@ six directions below (user choice, 2026-10-04), in this order, one pass each.
   tree lose most of their fill and read as dark shapes, with warm edges
   where the lanterns catch them. The lanterns themselves are unchanged.
 - Success: the foreground frames the scene without competing with it.
-- **Built 2026-10-04, awaiting approval.** A `silhouette()` patch
+- **Approved 2026-10-04 (user approval).** A `silhouette()` patch
   (`lamps.js`) keeps only a share of the moon and sky fill on a material;
   the lantern pools are emitted light and stay full, so they catch the
   edges warm. Fill kept: railing A–D stone, panels and lantern iron 0.35;
@@ -154,6 +154,14 @@ six directions below (user choice, 2026-10-04), in this order, one pass each.
   so the focal light is partly concealed rather than fully revealed.
 - Success: the moon still reads as the focal light but no longer dominates
   every frame.
+- **Built 2026-10-04, awaiting approval.** The disc is drawn at 0.86 of its
+  colour and the corona at 0.22 (was 0.26). A thin veil of cloud sits just
+  in front of the disc: a seeded, tileable band of 18 soft violet-grey
+  streaks (alpha 0.12–0.3 each, overlapping), 4 × 1.4 moon diameters,
+  fading out at its edges, drifting sideways at 0.004 tiles a second (a
+  streak takes about a minute to cross the disc). In reduced motion it holds
+  still. Unfogged like the moon. The moon's water column is unchanged
+  (`VEIL` in `createMoon.js`).
 
 ### Priority E — Quieter sky and palette
 
@@ -225,8 +233,8 @@ disable or remove it rather than expanding it.
 - [ ] Approve or remove the existing light-breathing experiment
 - [x] Priority A: aerial perspective — approved 2026-10-04
 - [x] Priority B: calm water — approved 2026-10-04
-- [ ] Priority C: foreground silhouettes — built 2026-10-04, awaiting approval
-- [ ] Priority D: veiled moon
+- [x] Priority C: foreground silhouettes — approved 2026-10-04
+- [ ] Priority D: veiled moon — built 2026-10-04, awaiting approval
 - [ ] Priority E: quieter sky and palette
 - [ ] Priority F: per-chapter withholding
 - [ ] Priority 2: test one chapter 05 foreground object
@@ -235,5 +243,5 @@ disable or remove it rather than expanding it.
 
 ## Immediate next action
 
-Review **Priority C: foreground silhouettes** in the browser (no
-screenshots, user request, 2026-10-04), then Priority D: veiled moon.
+Review **Priority D: veiled moon** in the browser (no screenshots, user
+request, 2026-10-04), then Priority E: quieter sky and palette.

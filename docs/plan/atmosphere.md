@@ -51,6 +51,13 @@ The site should feel like a humid, cinematic Victoria Harbour evening:
 - `src/scene/aerialFog.js`; `?off=aerial` restores the old fog.
 - Approved 2026-10-04 (user approval).
 
+### Veiled moon
+
+- The moon is slightly dimmer (disc 0.86, corona 0.22) and a thin veil of
+  violet-grey cloud streaks drifts slowly across it, so it is partly
+  concealed; it holds still in reduced motion (user choice, 2026-10-04).
+- `VEIL` in `src/scene/createMoon.js`. Awaiting approval.
+
 ### Searchlights
 
 - Searchlights support scenes 01 and 05 only.
