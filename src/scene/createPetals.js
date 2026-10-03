@@ -1,5 +1,6 @@
 import {
   CanvasTexture,
+  ImageLoader,
   Color,
   DoubleSide,
   Euler,
@@ -56,12 +57,10 @@ function loadPetal() {
   [canvas.width, canvas.height] = PETAL_ART.size;
   const texture = new CanvasTexture(canvas);
   texture.colorSpace = SRGBColorSpace;
-  const image = new Image();
-  image.onload = () => {
+  new ImageLoader().load(`${import.meta.env.BASE_URL}${PETAL_ART.url}`, (image) => {
     canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
     texture.needsUpdate = true;
-  };
-  image.src = `${import.meta.env.BASE_URL}${PETAL_ART.url}`;
+  });
   return texture;
 }
 

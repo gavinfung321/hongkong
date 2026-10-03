@@ -1,6 +1,7 @@
 import {
   BufferGeometry,
   CanvasTexture,
+  ImageLoader,
   Color,
   DoubleSide,
   Euler,
@@ -405,12 +406,10 @@ function foliageTexture() {
   [canvas.width, canvas.height] = FOLIAGE_ART.size;
   foliageArt = new CanvasTexture(canvas);
   foliageArt.colorSpace = SRGBColorSpace;
-  const image = new Image();
-  image.onload = () => {
+  new ImageLoader().load(`${import.meta.env.BASE_URL}${FOLIAGE_ART.url}`, (image) => {
     canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
     foliageArt.needsUpdate = true;
-  };
-  image.src = `${import.meta.env.BASE_URL}${FOLIAGE_ART.url}`;
+  });
   return foliageArt;
 }
 

@@ -503,47 +503,62 @@ on screen for about 1–2 s per load, with the copy in its plain stacked layout
 until `main.js` ran (measured on the live site, simulated 4G: page 0.7 s,
 script 1.4 s, first 3D frame 1.7 s).
 
-- **Now:** while the scene loads, only the poster's night-sky gradient shows,
-  with the header and the vertical title; the poster art, copy and footer
-  are hidden (`is-booting`, set by a tiny inline script in `index.html`).
-  `main.js` lifts it with the first 3D frame, which fades in over the sky;
-  the art stays hidden during that fade. The poster art only shows in the
-  fallback (no WebGL 2, context lost, init error or timeout), and an inline
-  12 s timer shows the poster and copy if the script never arrives.
+- **Entrance (user request, 2026-10-03):** a dark title card covers the
+  page while the scene starts, like a film's opening title (technique
+  studied in Kage; nothing of Kage's is used). Markup in `index.html`
+  (`.entrance`), styles in `src/styles.css` ("Entrance"), logic in
+  `src/ui/loadingScreen.js`.
+  - **Look (centred direction, user choice, 2026-10-03):** dark, quiet
+    and mysterious. One small group, every line centred, in the middle of
+    the small viewport (`100svh`, so phone toolbars never push it down;
+    a 4svh bottom bias puts it on the optical centre; safe areas kept
+    clear). Top to bottom: the red sail mark (18 px wide; 16 px on
+    phones), 維港夜色 in Noto Serif TC 600 warm ivory (32 px; 27 px on
+    phones; 0.08em tracking, no synthetic bold), a 1 px line (240 px;
+    200 px on phones, never wider than the screen less its insets; track
+    cream at 12%, fill cream at 72%, so it never becomes the focus), and
+    "Preparing the harbour · 42%" (the real percentage) in Inter 10 px
+    (9 px on phones), muted lavender grey. Gaps 16, 30 and 11 px (14, 27
+    and 10 on phones). Background near black `#05060b` with a barely
+    visible aubergine radial at 50% 46%. The English title "Victoria
+    Harbour: A Night Crossing" is not shown on the card (user choice,
+    2026-10-03); it stays in the page title, metadata, social tags and the
+    hidden H1. The lettering waits for its fonts (at most 1.5 s, inline
+    script), so no system font shows first. Nothing else: no tagline, no
+    harbour objects, no texture, grain, glow or particles, and nothing in
+    the group moves except the progress line.
+  - **Real progress:** each task has a fixed weight and the line shows the
+    weighted share done: fonts 8, renderer 10, sky, lights and water 8,
+    Kowloon and the island 22, vessels 10, foreground, wordmark, moon,
+    petals, atmosphere, fireworks and searchlights 16, the hero's images
+    (clouds, mist, bauhinia, petals; the fireworks too when the page opens
+    on 06) 10, shaders 12 (compiled in parallel where the browser allows),
+    first frame 4. All are registered up front, so it only rises, and it
+    stops at 99% until the first frame is drawn. `main.js` yields between
+    stages so the line repaints and phones stay responsive. While the
+    script itself downloads it shows 0%; nothing creeps on a timer.
+  - **Timing:** from the top of the page the card stays at least 0.8 s
+    after navigation (a cached load holds at 100%), pauses 0.25 s on 100%,
+    then fades over 0.8 s, its lettering first, into the hero, which then
+    behaves as before. A chapter link or a restored scroll position skips
+    the minimum and the pause and fades in 0.5 s straight into that
+    chapter. Reduced motion: no line easing or lettering fade, a 0.3 s
+    plain fade. It never returns: not from the footer, not after a back or
+    forward visit, not after a lost context.
+  - **Scroll and input:** wheel, touch and scrolling keys are held while
+    the card is up; the scroll position itself is untouched, so deep links
+    and restored positions survive, and there is no scrollbar change when
+    it leaves. The card takes clicks while it is up, holds no focusable
+    element and moves no focus when it goes.
+  - **Safety:** any fallback (no WebGL 2, a start-up error, the 8 s guard,
+    a lost context while loading) fades the card into the readable poster
+    story. A font or image that is slow or fails is waited for at most 3 s
+    or 5 s from the script's start, then the scene goes on without it.
+    Without JavaScript the card never shows; if the script never arrives,
+    the inline 12 s timer lifts it. Hidden from screen readers.
+  - **Test switches** (explicit; ordinary visits never wait):
+    `?entrance=slow` (each stage waits 0.5 s), `?entrance=hold` (stays on
+    100%), `?entrance=fail` (start-up throws, shows the fallback handoff).
+- **Favicon:** `public/favicon.svg`, the sail mark on night navy.
 - **Later (Milestone 5):** a real snapshot of the hero frame replaces the
-  drawing, for loading and fallback alike (option B, chosen for launch).
-- **Later (Milestone 5): an entrance screen, after Kage (user request,
-  2026-10-02).** Studied in the local Kage copy (technique only): a dark
-  full-screen cover with a small mark, a short title, a 1 px progress line,
-  a caption and a percentage; the scene is built in small steps so the line
-  shows real progress; scrolling is locked until it is done; then the cover
-  fades out over 0.8 s and the hero plays its intro. Kage needs it more than
-  we do: it downloads about 3.7 MB (three.js, fonts, ten foreground cutouts,
-  four painted plates), we download about 0.22 MB and build everything in
-  code (first 3D frame ~1.7 s on simulated 4G). So ours is mainly an
-  entrance moment and a way to keep phones responsive while the scene
-  builds, not a necessity. Our version, all original (no Kage mark,
-  lettering, copy or code):
-  - **Look:** the night-sky colours of 3.12, the sail mark, 維港夜色 or
-    香港 in the display font, a thin cream progress line, an original
-    caption such as "Lighting the harbour", and a percentage.
-  - **Real progress:** `main.js` builds the scene in steps (water, Kowloon,
-    island and mountains, vessels, foreground, then compiling the shaders
-    ahead of the first frame), yielding between steps so the line moves
-    and the phone stays responsive. While the script itself downloads, the
-    line creeps slowly; it never runs backwards.
-  - **Exit:** a short minimum time (about 0.8 s) so fast loads don't
-    flash, a 0.8 s fade into the hero, then the opening push and the 香港
-    wordmark rising. Reloading mid-page skips the intro and fades straight
-    into that chapter. Reduced motion: no creeping line or intro, a plain
-    fade.
-  - **Safety:** it replaces the sky-only loading state above and keeps the
-    same rules: the fallback poster takes over if the 3D fails, and a timer
-    shows the poster and copy if the script never arrives. Hidden from
-    screen readers (the page title already announces the site).
-  - **When:** with the final copy and display fonts in Milestone 5, since
-    the caption and title lettering belong there; it could move earlier if
-    the user wants the entrance sooner.
-- Checked on a production build: loading shows the sky only, then a clean
-  fade into the 3D scene; `?fallback` shows the poster and copy; with the
-  script blocked, the poster and copy appear at 12 s.
+  drawn fallback poster (option B, chosen for launch).

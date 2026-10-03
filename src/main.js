@@ -25,6 +25,7 @@ import { createSiteFooter } from './ui/siteFooter.js';
 import { createCursorRing } from './ui/cursorRing.js';
 import { createPointerParallax } from './ui/pointerParallax.js';
 import { enterFallback, supportsWebGL2, watchContext } from './ui/fallback.js';
+import { createLoadingScreen } from './ui/loadingScreen.js';
 
 const params = new URLSearchParams(window.location.search);
 const root = document.documentElement;
@@ -58,25 +59,41 @@ const GRADE = params.get('grade') !== '0';
 const DPR_CAP = Number(params.get('dpr')) || 0;
 const OFF_LAYERS = { water: ['water'], clouds: ['cloud'], mist: ['mist', 'sea-mist'], palms: ['palms'], petals: ['petals'], beams: ['searchlights'] };
 const OFF = (params.get('off') ?? '').split(',').flatMap((key) => OFF_LAYERS[key.trim()] ?? []);
+// ?entrance=slow|hold|fail: entrance test switches (loadingScreen.js).
+const ENTRANCE = params.get('entrance') ?? '';
 
-function start(initGuard, header) {
+// The scene is built in stages behind the entrance cover, which shows each
+// one done; a fallback during a stage ends the start-up quietly.
+async function start(initGuard, header, loading) {
   const canvas = document.getElementById('world');
   const veil = document.querySelector('.veil');
   const sections = [...document.querySelectorAll('.chapter')];
   root.style.setProperty('--chapter-length', `${SCROLL.chapterLength}svh`);
+  let needsRender = true;
+  const stage = async (name) => {
+    await loading.stage(name);
+    if (root.classList.contains('is-fallback')) throw new Error('fallback during start-up');
+  };
 
   // Phones too: without it IFC's 1–2 px piers, slots, bands and fins crawl
   // while scrolling (user report, 2026-10-02).
   const world = createScene(canvas, { antialias: params.get('aa') !== '0' });
   const { renderer, scene, camera } = world;
   world.setGrade(GRADE);
+  await stage('renderer');
 
   scene.add(createLighting());
   const water = createWater(renderer, world.sky.userData.glow);
   scene.add(water.mesh);
+  await stage('world');
   const kowloon = createKowloonEdge();
   const island = createIsland();
+  await stage('harbour');
+  if (ENTRANCE === 'fail') throw new Error('entrance test: start-up failure');
   const vessels = createVessels({ hold: SCROLL.hold });
+  await stage('vessels');
+  // The wordmark is drawn in its web font, so it waits for the fonts (or their deadline).
+  await loading.fontsReady;
   const foreground = createForeground();
   const wordmark = createWordmark(renderer, HERO.wordmark.text, {
     onRepaint: () => {
@@ -98,6 +115,7 @@ function start(initGuard, header) {
   });
   const searchlights = createSearchlights();
   scene.add(moon.group, atmosphere.group, searchlights.group, kowloon.group, island.group, vessels.group, foreground.group, fireworks.group, wordmark.mesh, petals.group);
+  await stage('foreground');
   water.setSources(reflectionSources({
     tower: kowloon.clockTower,
     ferry: vessels.ferry,
@@ -166,7 +184,6 @@ function start(initGuard, header) {
   const forcedReduced = params.get('motion') === 'reduced';
   let stepped = forcedReduced || reducedQuery.matches;
   let shownKeyframe = -1;
-  let needsRender = true;
 
   function applyMotionMode() {
     root.classList.toggle('is-stepped', stepped);
@@ -344,21 +361,42 @@ function start(initGuard, header) {
 
   const switchedOff = OFF.flatMap((name) => scene.getObjectsByProperty('name', name));
 
-  // One unseen frame with every object drawn, hidden or off screen, so every
-  // shader is built behind the loading screen rather than mid-scroll.
-  function warmUp() {
+  // Every object drawn, hidden or off screen, so every shader is built behind
+  // the entrance cover rather than mid-scroll.
+  function showEverything() {
     const restore = [];
     scene.traverse((object) => {
       restore.push([object, object.visible, object.frustumCulled]);
       object.visible = true;
       object.frustumCulled = false;
     });
+    return () => {
+      for (const [object, visible, culled] of restore) {
+        object.visible = visible;
+        object.frustumCulled = culled;
+      }
+    };
+  }
+
+  // Scene shaders, compiled in parallel where the browser allows
+  // (KHR_parallel_shader_compile), otherwise one by one; the first frame's
+  // warm-up then builds the few left (post-processing, reflections).
+  async function compileShaders() {
+    if (!renderer.compileAsync) return;
+    const restore = showEverything();
+    try {
+      await renderer.compileAsync(scene, camera);
+    } finally {
+      restore();
+    }
+  }
+
+  // One unseen frame with everything drawn.
+  function warmUp() {
+    const restore = showEverything();
     water.reflect(camera, breakpoint);
     world.render();
-    for (const [object, visible, culled] of restore) {
-      object.visible = visible;
-      object.frustumCulled = culled;
-    }
+    restore();
   }
 
   const control = { free: false };
@@ -434,10 +472,9 @@ function start(initGuard, header) {
       ready = true;
       window.clearTimeout(initGuard);
       performance.mark('vh:first-frame');
-      fireworks.load();
-      requestAnimationFrame(() => {
-        root.classList.remove('is-booting');
+      loading.finish(() => {
         root.classList.add('is-ready');
+        fireworks.load();
       });
     }
   }
@@ -528,10 +565,20 @@ function start(initGuard, header) {
     });
   }
 
+  // The images the first view shows (clouds, mist, bauhinia, petals; the
+  // fireworks too when it opens on 06), then the shaders.
+  if (conductor.state.index === chapters.length - 1) fireworks.load();
+  await loading.textures();
+  await compileShaders();
+  await stage('shaders');
   play();
 }
 
 function boot() {
+  // From here this script's own guards apply, not the inline 12 s timer.
+  window.clearTimeout(window.__vhBootTimer);
+  const reduced = params.get('motion') === 'reduced' || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const loading = createLoadingScreen({ mode: ENTRANCE, reduced });
   // The header works in the poster-only fallback too, where links scroll natively.
   const header = createSiteHeader();
   createSiteFooter();
@@ -541,13 +588,12 @@ function boot() {
 
   root.classList.add('is-enhanced');
   const initGuard = window.setTimeout(() => enterFallback('init-timeout'), INIT_TIMEOUT);
-  try {
-    start(initGuard, header);
-  } catch (error) {
+  start(initGuard, header, loading).catch((error) => {
     window.clearTimeout(initGuard);
-    console.error(error);
+    if (root.classList.contains('is-fallback')) return;
+    if (ENTRANCE !== 'fail') console.error(error);
     enterFallback('init-error');
-  }
+  });
 }
 
 boot();

@@ -6,6 +6,28 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **Entrance and loading sequence** (user request, 2026-10-03; centred
+  direction, user choice, 2026-10-03): a near-black title card replaces
+  the sky-only loading state. One small centred group in the middle of
+  the small viewport: red sail mark, 維港夜色 (Noto Serif TC 600, 32 px;
+  27 px on phones), 1 px progress line (240 px; 200 px on phones),
+  "Preparing the harbour · N%". The English title is not shown on the
+  card; it stays in the page title, metadata and hidden H1. Progress is the weighted share of real start-up tasks
+  (fonts, renderer, world, harbour, vessels, foreground, images, shaders,
+  first frame), monotonic, 100% only after the first frame. `main.js`
+  builds in stages with a yield between them, waits for the hero's images
+  and compiles shaders with `compileAsync` before the first frame; the
+  bauhinia and petal artwork now load through three's `ImageLoader` so
+  they are counted. Minimum 0.8 s from the top, fade 0.8 s; deep links and
+  restored positions skip the minimum; fallbacks fade into the poster
+  story. Test switches `?entrance=slow|hold|fail`. Favicon added (the
+  missing-favicon 404 is gone). Holds pixel-identical, draw calls
+  unchanged, JS 218.5 → 219.8 KB gzip. Files: `index.html`,
+  `src/styles.css`, `src/ui/loadingScreen.js` (new), `src/main.js`,
+  `src/scene/bauhinia.js`, `src/scene/createPetals.js`,
+  `public/favicon.svg` (new); docs: `ASSET-LEDGER.md`; plan:
+  `interface.md` (3.12). Evidence: `review-shots/entrance-centred/`
+  (the first, left-aligned version: `review-shots/entrance/`).
 - **Phone 香港 clear of 01's copy** (user request, 2026-10-03): on shorter
   phone screens (414×715, 390×664, 375×667) the copy's body text covered the
   top of 香港, because the word stood at a fixed 42% of the height while the
