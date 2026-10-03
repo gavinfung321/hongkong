@@ -472,6 +472,32 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
   between the junk's sails stay behind the red and the full city
   arrives in 05. `src/data/chapters.js`.
 
+- **05 polish (user choices, 2026-10-03).**
+  - **Wheel as co-star:** the PNG draws the wheel about 3.5 times its
+    true size against IFC. The wheel stays true scale; the 05 camera
+    moves to about 140 m from it and 270 m from IFC, low (16 m desktop,
+    47 m phones) with a wide lens (82° and 80°), so perspective does the
+    work. The shift lens keeps IFC's sides upright. Desktop: IFC from 3%
+    to 90% of the height with the whole crown, the wheel about 20% (was
+    15%; PNG 38–45%). Phones: IFC about 70% (was 47%), the wheel about
+    17% (was 8%; the user chose 22–25%, but any closer and IFC's crown
+    leaves the frame). Trade-off: the desktop water band is now about 5%
+    of the height. The moves from 04 and to 06 were checked frame by
+    frame; camera clearance passes at the four mouse corners.
+  - **Quieter neighbours:** a new `accents` level (default 1) dims only
+    the LED crowns and strips and the four landmarks on top of `city`;
+    05 sets it to 0.25, so Bank of China and the magenta and amber
+    strips beside IFC drop back while the windows stay at 60%
+    (`setAccentLevel` in `createIsland.js`). At 0.5 the change did not
+    show.
+  - **Longer reflections:** a new `reflections` level (default 1)
+    scales the power and tail of the fixed lights' water columns (IFC,
+    wheel, Clock Tower, moon; the boats keep theirs); 05 sets 2
+    (`setBoost` in `createWater.js`). Most visible on phones; the glints
+    still read as broken dashes.
+  - Files: `src/data/chapters.js`, `src/main.js`,
+    `src/scene/createIsland.js`, `src/scene/createWater.js`.
+
 - **02 far shore and quieter phone background (user choices,
   2026-10-03).**
   - **Far shore:** sparse low-rise lights continue the skyline east over

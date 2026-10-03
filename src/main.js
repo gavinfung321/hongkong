@@ -118,6 +118,8 @@ function start(initGuard, header) {
     petals: (value) => petals.setDensity(value),
     city: (value) => island.setCityLevel(value),
     slopeLights: (value) => island.setSlopeLights(value),
+    accents: (value) => island.setAccentLevel(value),
+    reflections: (value) => water.setBoost(value),
     mist: (value) => atmosphere.setMist(value),
     // Default window: gone early in the move to 06, before the fireworks lead.
     searchlights: (value) => searchlights.setLevel(value),
@@ -132,6 +134,8 @@ function start(initGuard, header) {
     // The city dims across the whole move into 05 (and stays dim in 06), not in its first 40%.
     city: { in: [0, 1], out: [0, 1] },
     slopeLights: { in: [0, 1], out: [0, 1] },
+    accents: { in: [0, 1], out: [0, 1] },
+    reflections: { in: [0, 1], out: [0, 1] },
     // The palms pass in front of the Clock Tower early in the 01 → 02 move
     // and, on mobile, early in the 02 → 03 move.
     palms: { in: [0.62, 0.9], out: [0, 0.1] },

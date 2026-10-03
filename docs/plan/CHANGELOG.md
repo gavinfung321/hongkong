@@ -6,6 +6,16 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-03
 
+- **05 polish** (user choices, four of six items from the 05 review; the
+  moon and searchlights stay): the camera close to the wheel so it reads
+  as IFC's co-star at true scale (desktop wheel ~20% of the height, was
+  15%; phones IFC ~70%, was 47%, wheel ~17%, was 8%); new `accents` level
+  (05: 0.25) dims the LED crowns, strips and landmarks without darkening
+  the windows; new `reflections` level (05: 2) lengthens and brightens
+  IFC's and the wheel's water columns; 05's clouds as one mass. Files:
+  `src/data/chapters.js`, `src/data/atmosphere.js`, `src/main.js`,
+  `src/scene/createIsland.js`, `src/scene/createWater.js`; plan: README,
+  `scene-city.md`, `atmosphere.md`.
 - **04 junk bigger** (user choice: the camera, not the model): the junk
   read small for the hero reveal. The 04 camera's lens narrows (desktop
   66°, was 74.7°; phones 60°, was 79.9°), so on desktop the junk spans

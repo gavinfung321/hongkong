@@ -641,15 +641,28 @@ export function createIsland() {
 
   // Skyline and landmark light level per chapter (`city` in each chapter's
   // visibility): 05 dims the towers around IFC (user choice, 2026-10-02).
+  // `accents` (default 1) dims only the LED crowns and strips and the four
+  // landmarks on top of that, so in 05 they step down to IFC without the
+  // windows going dark (user choice, 2026-10-03).
   const skylineWindows = skyline.material.userData.cityWindows;
+  let cityLevel = 1;
+  let accentLevel = 1;
+  function applyLevels() {
+    skylineWindows.uCityStrength.value = SKYLINE_STRENGTH * cityLevel;
+    tops.crownMaterial.color.setScalar(cityLevel * accentLevel);
+    dots.setLevel(cityLevel);
+    waterfront.setLevel(cityLevel);
+    farShore.setLevel(cityLevel);
+    landmarks.setLevel(cityLevel * accentLevel);
+  }
   function setCityLevel(value) {
-    skylineWindows.uCityStrength.value = SKYLINE_STRENGTH * value;
-    tops.crownMaterial.color.setScalar(value);
-    dots.setLevel(value);
-    waterfront.setLevel(value);
-    farShore.setLevel(value);
-    landmarks.setLevel(value);
+    cityLevel = value;
+    applyLevels();
+  }
+  function setAccentLevel(value) {
+    accentLevel = value;
+    applyLevels();
   }
 
-  return { group, ifc, wheel, update, setCityLevel, setSlopeLights: mountains.setLightLevel };
+  return { group, ifc, wheel, update, setCityLevel, setAccentLevel, setSlopeLights: mountains.setLightLevel };
 }

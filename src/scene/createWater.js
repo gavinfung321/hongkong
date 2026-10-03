@@ -430,6 +430,14 @@ export function createWater(renderer, glow) {
     fades[key] = value;
   }
 
+  // Per-chapter boost for the fixed lights (IFC, wheel, tower, moon): power
+  // and tail scale together, so 05's columns run longer and denser (user
+  // choice, 2026-10-03). The boats keep theirs.
+  let boost = 1;
+  function setBoost(value) {
+    boost = value;
+  }
+
   // city: { data (RGBA bytes, one texel per step along x), x0, x1, z, height }
   // from waterReflections.js.
   function setCity({ data, x0, x1, z, height }) {
@@ -476,7 +484,8 @@ export function createWater(renderer, glow) {
     }
     kept.forEach(([s, width, fade], i) => {
       reflection.waterRefA.value[i].set(s.x, s.z, s.h0, s.h1);
-      const power = s.power * fade;
+      const lift = s.follow ? 1 : boost;
+      const power = s.power * fade * lift;
       reflection.waterRefB.value[i].set(s.colour.r * power, s.colour.g * power, s.colour.b * power, width);
       if (s.kind === 'hull') {
         const heading = s.follow.rotation.y;
@@ -486,7 +495,7 @@ export function createWater(renderer, glow) {
       }
       const mirror = (s.h1 - s.h0) / Math.max(Math.hypot(s.x - camera.position.x, s.z - camera.position.z), 1);
       reflection.waterRefC.value[i].set(
-        Math.max(s.tail * mirror, shortest),
+        Math.max(s.tail * lift * mirror, shortest),
         MathUtils.clamp(mirror * 0.25, shortest, REFLECT.head),
         s.taper,
         s.follow ? 1 : 0,
@@ -495,5 +504,5 @@ export function createWater(renderer, glow) {
     reflection.waterRefCount.value = kept.length;
   }
 
-  return { mesh, update, setSources, setFade, setCity, reflect };
+  return { mesh, update, setSources, setFade, setBoost, setCity, reflect };
 }
