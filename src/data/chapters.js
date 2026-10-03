@@ -84,7 +84,8 @@ export const chapters = [
       // No shore mist on desktop: from here its drifts join the wisps into one band.
       desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 0, bauhinia: 1, bush: 1, bursts: 0, mist: 0, seaMist: 1, searchlights: 0.6 },
       // No deck: the mobile storyboard has open water right to the bottom edge.
-      mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, deck: 0, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, mist: 0.6, seaMist: 1, searchlights: 0 },
+      // Palms at the tower's foot, as in the storyboard (user choice, 2026-10-03).
+      mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, deck: 0, railing: 0, palms: 1, bauhinia: 0, bush: 0, bursts: 0, mist: 0.6, seaMist: 1, searchlights: 0 },
     },
     fogDensity: 0.00045,
     vessels: {

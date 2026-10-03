@@ -126,18 +126,19 @@ The user asked for the first three now and to revisit the rest after:
 4. **Mountains** (done, user choice): Mid-Levels tower windows and road
    lamps instead of scattered specks, a Peak light, tonal texture on the
    slopes ([scene-city.md](scene-city.md)).
-5. **Railing** (quick pass done, user choice): rails and slim posts
-   matched to the posts, wider lantern pools on rails and paving. Still
-   open: bigger and closer, like the storyboard, with 3–4 lanterns set
-   into the posts (the biggest job; it runs into 02).
-6. **Paving** (not chosen for now): varied slab tones, a puddle or two.
+5. **Railing** (done, user choices): rails and slim posts matched to the
+   posts, wider lantern pools; then the arrival-promenade run built 1.3×
+   with a lantern on every big post, like the storyboard.
+6. **Paving** (done, user choice): weathered tone patches, small
+   puddles mirroring the lanterns, fallen bauhinia petals.
 
 Added on the second review (user choice, 2026-10-03): **skyline colour**,
 LED crowns and corner strips on some towers and a lamp line along
 Central's waterfront, IFC still leading ([scene-city.md](scene-city.md)).
 
-Also noted, not scheduled: the hero copy sits over the Clock Tower's top,
-and the right-hand tree's flowers sit behind the vertical 東方明珠.
+Third round (user choices, 2026-10-03): slope lights carried west of the
+Clock Tower, thinning out; soft dark pools behind 01's copy and
+東方明珠; the bauhinia tree's crown lowered clear of 東方明珠.
 
 **Not in the look test:** 3D models (GLBs; later dropped altogether, all 3D
 is built in code, user decision 2026-10-01), real fireworks, the sparkle cursor,

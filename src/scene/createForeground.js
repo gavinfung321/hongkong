@@ -141,17 +141,18 @@ function createRailing(segments, { fade }) {
   const up = new Vector3(0, 1, 0);
   const one = new Vector3(1, 1, 1);
   let [b, p, l] = [0, 0, 0];
-  for (const { posts: list, starts, bayLength, yaw } of layouts) {
+  for (const { posts: list, starts, bayLength, yaw, scale } of layouts) {
     q.setFromAxisAngle(up, yaw);
-    for (const start of starts) bays.setMatrixAt(b++, m.compose(start, q, new Vector3(bayLength / RAILING_BAY, 1, 1)));
+    const size = one.clone().multiplyScalar(scale);
+    for (const start of starts) bays.setMatrixAt(b++, m.compose(start, q, new Vector3(bayLength / RAILING_BAY, scale, scale)));
     for (const post of list) {
-      m.compose(post.position, q, one);
+      m.compose(post.position, q, size);
       posts.setMatrixAt(p, m);
       panels.setMatrixAt(p++, m);
       if (!post.lantern) continue;
       lanterns.setMatrixAt(l, m);
       lights.setMatrixAt(l, m);
-      glows.setMatrixAt(l++, m.compose(post.position.clone().setY(post.position.y + 1.28), q, new Vector3(1.3, 1.3, 1.3)));
+      glows.setMatrixAt(l++, m.compose(post.position.clone().setY(post.position.y + 1.28 * scale), q, size.clone().multiplyScalar(1.3)));
     }
   }
   glows.computeBoundingSphere();

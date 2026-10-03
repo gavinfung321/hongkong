@@ -895,10 +895,22 @@ html:not(.is-enhanced) .side-pager {
 }
 
 .vertical-text__title {
+  position: relative;
   color: var(--color-ivory);
   font-size: 1.75rem;
   letter-spacing: 0.3em;
   opacity: 0.92;
+}
+
+/* A soft dark pool behind 東方明珠, against the bauhinia's flowers (user
+   choice, 2026-10-03). */
+.vertical-text__title::before {
+  content: "";
+  position: absolute;
+  inset: -28px -30px;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgb(12 10 28 / 0.6), rgb(12 10 28 / 0.3) 60%, transparent);
+  pointer-events: none;
 }
 
 /* Leaves and returns with chapter 01's copy (copyLayer.js sets the values). */
@@ -1074,6 +1086,17 @@ html:not(.is-enhanced) .vertical-text__labels {
   opacity: calc(var(--copy-opacity, 0) * (1 - var(--footer-in, 0)));
   transform: translateY(calc(var(--copy-shift, 0) * 1px));
   text-shadow: 0 1px 3px rgb(0 0 0 / 0.8), 0 0 18px rgb(10 9 24 / 0.7);
+}
+
+/* A soft dark pool behind 01's copy, which can sit over the Clock Tower's
+   lit top on 16:10 and narrower windows (user choice, 2026-10-03). */
+.is-enhanced #chapter-01 .chapter__copy::before {
+  content: "";
+  position: absolute;
+  inset: -48px -72px -56px -64px;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgb(12 10 28 / 0.55), rgb(12 10 28 / 0.3) 55%, transparent);
+  pointer-events: none;
 }
 
 .is-enhanced .chapter__copy.is-hidden {

@@ -78,8 +78,13 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
            grid of lit windows (14–36 m wide, 45–140 m tall, 35–75% lit,
            warm with 30% cool), gathered low and thinning out up to 72% of
            the ridge height;
-         - four strings of orange road lamps crossing the slopes, one
-           climbing to the Peak, with gaps;
+         - 55 more towers west of the Clock Tower in the hero (Sheung
+           Wan to Kennedy Town), thinning out and staying lower over
+           500 m so High West's top stays dark behind the tower (user
+           choice, 2026-10-03: the lights stopped in a hard edge behind
+           the tower);
+         - five strings of orange road lamps crossing the slopes, one
+           climbing to the Peak, one low in the west, with gaps;
          - a small brighter cluster at the Peak (the Peak Tower and
            Galleria), behind IFC in 01.
          Fixed-size dots (1.7 px), so they don't twinkle as the camera
