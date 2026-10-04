@@ -157,6 +157,13 @@ const FERRY_SHEER = 1.9; // midships sheer above the waterline
 const FERRY_KEEL = -0.9;
 const FERRY_FULLNESS = 0.5;
 const FERRY_STATIONS = 48;
+// Preserve the ferry's warm night identity while keeping the lower deck's
+// passengers, seats and posts visible instead of blooming into solid white.
+const FERRY_LIGHTING = {
+  cabinTint: 0xe0e0e0,
+  ceiling: 0.48,
+  spill: 140,
+};
 
 const ferryD = (x) => Math.min(1, Math.abs(x) / FERRY_HALF);
 const ferryHalfWidth = (x) => {
@@ -275,7 +282,10 @@ function createFerry() {
     paint(0x1f5a36),
   );
   const cabinLoop = stadiumLoop(DECK, 3.5);
-  const cabin = new Mesh(ribbons([[lift(cabinLoop, 1.8), lift(cabinLoop, 4.4)]], 19.2), new MeshBasicMaterial({ map: ferryCabin() }));
+  const cabin = new Mesh(
+    ribbons([[lift(cabinLoop, 1.8), lift(cabinLoop, 4.4)]], 19.2),
+    new MeshBasicMaterial({ map: ferryCabin(), color: FERRY_LIGHTING.cabinTint }),
+  );
 
   const POST_R = BULWARK_R - 0.08;
   const postSpots = [];
@@ -296,7 +306,12 @@ function createFerry() {
   casing.setMatrixAt(1, m.makeTranslation(0, 3.65, -POST_R));
 
   // Green band with a lit ceiling under it, the upper deck and the roof.
-  const ceiling = new MeshStandardMaterial({ color: 0xf2e6cc, emissive: 0xffd9a0, emissiveIntensity: 0.55, roughness: 0.8 });
+  const ceiling = new MeshStandardMaterial({
+    color: 0xf2e6cc,
+    emissive: 0xffd9a0,
+    emissiveIntensity: FERRY_LIGHTING.ceiling,
+    roughness: 0.8,
+  });
   const band = stadiumSlab(DECK, 4.78, 4.35, 4.8, [ceiling, green]);
   // Each round end is six bays; the middle two are the bridge's dark glass.
   const upperMaps = ferryUpper(53);
@@ -399,7 +414,7 @@ function createFerry() {
   });
 
   // Cabin light spilling onto the water around the hull.
-  const glow = new PointLight(0xffb36b, 160, 45, 2);
+  const glow = new PointLight(0xffb36b, FERRY_LIGHTING.spill, 45, 2);
   glow.position.y = 3;
   breatheLight(glow, { period: 6.7, phase: 0.61, amount: 0.04 });
 
