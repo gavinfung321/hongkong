@@ -6,6 +6,29 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **02 ghost full size, legs toward the words** (user request, 2026-10-04).
+  Desktop keeps the original tall 1915, on the right, with the legs of
+  the digits facing the words. A narrow window shifts the words and the
+  photograph left to leave that sky open. Phones turn the same way.
+  Files: `src/scene/createStoryLayers.js`, `src/styles.css`; plan:
+  `narrative-spine.md`.
+- **02 ghost on the right** (user request, 2026-10-04). On a wide desktop
+  the 1915 is a shorter mark in the sky to the right of the first
+  paragraph, above the photograph. A narrow window keeps it beside the
+  tower. On a phone the digits turn so their tops point right. Files:
+  `src/scene/createStoryLayers.js`; plan: `narrative-spine.md`.
+- **02 room on a narrow window, one phone paragraph** (user request,
+  2026-10-04). On a narrow desktop the 1915 eases left, out of the
+  paragraphs, and the timeline starts further left so it ends before
+  鐘樓. On phones the second paragraph is gone and the first is the
+  same grey, so the tower stays clear. Desktop keeps both paragraphs,
+  the lead in cream. Files: `src/styles.css`,
+  `src/scene/createStoryLayers.js`; plan: `narrative-spine.md`.
+- **02 ghost clears the header** (user request, 2026-10-04). On a short
+  desktop window the 1915 shortens from the top so it stops just below
+  the header. The foot stays behind the ridge. Tall windows and phones
+  are unchanged. Files: `src/scene/createStoryLayers.js`; plan:
+  `narrative-spine.md`.
 - **03 phone seat-backs line off** (user request, 2026-10-04). The
   seat-backs sentence is gone on phones, so the board sits higher. The
   standfirst, the 1888 line, the board and the ticket stay. Desktop keeps

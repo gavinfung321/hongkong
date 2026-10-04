@@ -1609,6 +1609,23 @@ html:not(.is-enhanced) .vertical-text {
   letter-spacing: 0.1em;
 }
 
+/* A narrow desktop window: the words and the photograph shift left so the
+   right-hand sky can hold the full 1915 (user request, 2026-10-04). */
+@media (max-aspect-ratio: 3/2) {
+  [data-breakpoint="desktop"].is-enhanced #chapter-02 .chapter__copy {
+    --copy-left: 28;
+    --copy-right: 72;
+  }
+
+  [data-breakpoint="desktop"].is-enhanced #chapter-02 .chapter__facts {
+    right: max(var(--page-inset), calc((100 - var(--copy-right)) * 1vw));
+  }
+
+  [data-breakpoint="desktop"].is-enhanced .chapter__facts dd {
+    letter-spacing: 0.08em;
+  }
+}
+
 @media (orientation: landscape) and (max-height: 500px) {
   .is-enhanced .chapter__facts {
     display: none;
@@ -2824,11 +2841,16 @@ html:not(.is-enhanced) .vertical-text {
   line-height: 1.55;
 }
 
-/* 02 on phones: both paragraphs the same size, so the tower sits higher
-   once the print is gone. Beat 1 stays cream (user request, 2026-10-04). */
+/* 02 on phones: one paragraph, the same size and colour as the second used
+   to be, so the tower stays clear (user request, 2026-10-04). */
 [data-breakpoint="mobile"].is-enhanced #chapter-02 .chapter__beat:first-child {
+  color: var(--color-soft);
   font-size: 0.8125rem;
   line-height: 1.55;
+}
+
+[data-breakpoint="mobile"].is-enhanced #chapter-02 .chapter__beat + .chapter__beat {
+  display: none;
 }
 
 [data-breakpoint="mobile"].is-enhanced {

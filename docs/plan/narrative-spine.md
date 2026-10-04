@@ -236,8 +236,9 @@ The six drafts are approved (user request, 2026-10-04). Scene 02 now runs:
   scene keeps its mouse parallax (user choice, 2026-10-04).
 - **Beats** (user request, 2026-10-04: beat 1 above beat 2): beat 1 is the
   lead, 19 px in cream; beat 2 is 15 px in the soft body grey and no
-  longer dims beat 1. Phones stack them too, both at 13 px and full copy
-  width (user request, 2026-10-04; beat 1 was 17 px); beat 1 stays cream.
+  longer dims beat 1. On phones only the first paragraph shows, at 13 px
+  in the soft body grey, so the tower stays clear (user request,
+  2026-10-04). Desktop keeps both, the lead in cream.
 - **Label row** (user choice, 2026-10-04): `02 CLOCK TOWER` and a short
   hairline (56px desktop, 40px phones; `.chapter__label`). The Chinese
   name at its end was removed on every screen in 02 and 03, as it
@@ -247,18 +248,23 @@ The six drafts are approved (user request, 2026-10-04). Scene 02 now runs:
   Clocks begin · 1975 Last train · 1978 Station demolished, large serif
   years over small labels between hairlines, fixed at the foot of the
   screen under the copy column, clear of the ferry and the 鐘樓 margin
-  label (`.chapter__facts`; dates from the sources below). Phones too;
+  label (`.chapter__facts`; dates from the sources below). On a narrow
+  desktop window the row starts further left so the four labels fit and
+  still ends before 鐘樓 (user request, 2026-10-04). Phones too;
   hidden on phones turned sideways; in the fallback it reads in the copy.
 - **3D story layers** (user choice, 2026-10-04; `createStoryLayers.js`):
   - *1915 ghost:* giant faint Cormorant numerals, whole and upright,
     reading upward like a book's spine (user choice, 2026-10-04: split by
-    the tower into 19 and 15 it read oddly). Desktop: in the open sky
-    between the tower and the copy (about 35–49% across, 11–59% down, 12%),
-    3.2 km out behind the near range, so they rise from behind the ridge.
+    the tower into 19 and 15 it read oddly). Desktop: the full-size column
+    in the right-hand sky (about 11–59% down), legs of the digits facing
+    the words (user request, 2026-10-04). On a narrow window the words and
+    the photograph shift left so that sky stays open. On a short window
+    the top stops just below the header.
     Phones: right of the tower, between it and the skyline (about 63–85%
     across, 40–62% down, 20%), its foot above the right-hand palms (user
-    choice, 2026-10-04: on the left the palms hid it); still reading
-    upward. Set with lining figures through an SVG with the face
+    choice, 2026-10-04: on the left the palms hid it), turned the same way
+    so the legs face the tower (user request, 2026-10-04). Set with lining
+    figures through an SVG with the face
     embedded (canvas text only gives the face's old-style figures, which
     wobble upright).
   - *Dust:* about 200 warm motes (about 100 on phones) drifting up and

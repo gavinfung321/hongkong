@@ -6,6 +6,7 @@ import {
   Float32BufferAttribute,
   Group,
   MathUtils,
+  Matrix4,
   Mesh,
   MeshBasicMaterial,
   PerspectiveCamera,
@@ -24,12 +25,11 @@ import { seededRandom } from './random.js';
 
 // Chapter 02's story layers in the scene (narrative spine, user choice,
 // 2026-10-04). Their levels come from the copy layer (copyLayer.js):
-//   ghost: a giant faint 1915, whole and upright (reading upward, like the
-//          site's vertical lettering), in the open sky between the Clock
-//          Tower and the copy; on desktop it stands behind the near range,
-//          so it rises from behind the ridge (user choice, 2026-10-04: split
-//          by the tower into 19 and 15 it read oddly). It comes with the
-//          lead beat.
+//   ghost: a giant faint 1915. On desktop it is the full column in the
+//          right-hand sky; the words shift left on a narrow window to leave
+//          that room. The legs of the digits face the words. Phones keep it
+//          right of the tower, turned the same way (user request, 2026-10-04).
+//          It comes with the lead beat.
 //   dust:  warm motes drifting up through the lamp-lit air, with the
 //          darkening: thin in the open air, gathered round the tower's
 //          floodlit foot and the promenade lamps, and a few large soft ones
@@ -56,7 +56,9 @@ const GHOST = {
   // Phones: right of the tower, between it and the skyline, its foot above
   // the right-hand palms (user choice, 2026-10-04: on the left the palms hid
   // it); stronger, as it stands over the dark city at the veil's edge.
-  desktop: { x: 42, foot: 59, height: 48, depth: 3200, opacity: 0.12 },
+  // Wide or narrow: the full column in the right-hand sky. The copy moves
+  // left on a narrow window so this stays clear of the words (styles.css).
+  desktop: { x: 90, foot: 59, height: 48, depth: 3200, opacity: 0.12 },
   mobile: { x: 74, foot: 62, height: 22, depth: 420, opacity: 0.2 },
 };
 
@@ -117,6 +119,10 @@ const ndc = new Vector3();
 const forward = new Vector3();
 const right = new Vector3();
 const buffer = new Vector2();
+const camRight = new Vector3();
+const camUp = new Vector3();
+const camBack = new Vector3();
+const ghostBasis = new Matrix4();
 
 // The face's default figures are old-style, which wobble once turned
 // upright, and canvas text cannot ask for lining ones; so the numerals are
@@ -384,13 +390,25 @@ export function createStoryLayers(chapters, renderer, { onLoad } = {}) {
     const viewHeight = (depth) => 2 * depth * Math.tan(MathUtils.degToRad(fov / 2));
     const viewWidth = (depth) => viewHeight(depth) * aspect;
 
-    // Turned a quarter left, so it reads from the foot upward.
+    // The legs of the digits face screen-left, toward the words, and the
+    // tops face right. Same turn on desktop and phones (user request, 2026-10-04).
     if (ghostArt) {
-      const g = GHOST[breakpoint];
-      const length = (g.height / 100) * viewHeight(g.depth);
+      const spec = GHOST[breakpoint];
+      let foot = spec.foot;
+      let height = spec.height;
+      if (breakpoint === 'desktop') {
+        const header = document.querySelector('.site-header')?.offsetHeight ?? 72;
+        const room = foot - ((header + 16) / window.innerHeight) * 100;
+        if (room > 0) height = Math.min(height, room);
+      }
+      const length = (height / 100) * viewHeight(spec.depth);
       ghost.scale.set(length, length / ghostArt.aspect, 1);
-      ghost.position.copy(worldAt(position, g.x, g.foot - g.height / 2, g.depth));
-      ghost.rotation.set(0, yaw, Math.PI / 2);
+      ghost.position.copy(worldAt(position, spec.x, foot - height / 2, spec.depth));
+      camRight.setFromMatrixColumn(placementCamera.matrixWorld, 0);
+      camUp.setFromMatrixColumn(placementCamera.matrixWorld, 1);
+      camBack.setFromMatrixColumn(placementCamera.matrixWorld, 2);
+      ghostBasis.makeBasis(camUp.clone().negate(), camRight, camBack);
+      ghost.quaternion.setFromRotationMatrix(ghostBasis);
     }
 
     let index = 0;
