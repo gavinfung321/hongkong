@@ -25,9 +25,8 @@ file, then [`README.md`](README.md) and
 - Often asks to "analyze first": report findings and recommendations, then
   ask with multiple-choice options; an answer counts as approval to code.
 - Plain-language updates, outcome first.
-- Images embedded in chat don't display for the user. Copy review
-  screenshots into `review-shots/` (ignored by git, never committed) and
-  tell the user the file names.
+- Do not take screenshots or open a browser to check (user request,
+  2026-10-04). The user reviews at <http://localhost:5173/>.
 - Commit and push each approved change, then watch the deploy.
 
 ## Standing rules
@@ -38,6 +37,9 @@ file, then [`README.md`](README.md) and
   `docs/ASSET-LEDGER.md`. Commit plan edits with the code.
 - Never edit `~/.cursor/plans/*.plan.md`.
 - Licence: no Kage code, images, lettering or copy; techniques only.
+- Working speed (user request, 2026-10-04; full note in `README.md`): no
+  screenshots, no extra checks, no cleanup pass for its own sake. Only
+  imported code and requested images affect load time.
 - Never commit `docs/references/atmosphere/`, `docs/references/bauhinia/generated/`,
   `docs/references/foreground/` or the bauhinia photos (all gitignored).
   `docs/references/production-candidates/` is committed.

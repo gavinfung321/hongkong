@@ -44,6 +44,26 @@ After any change to the site's behaviour, look or content:
 4. New artwork, textures or fonts also go in `docs/ASSET-LEDGER.md`.
 5. Commit the plan edits with the code.
 
+## Working speed (user request, 2026-10-04)
+
+The user reviews at <http://localhost:5173/>. Do not take screenshots, do
+not open a browser to check, and do not run extra searches once the edit
+is clear. The user checks the page.
+
+**Cleanup does not come first.** The page's load is the JS bundle (budget
+230 KB gzip, last measured 210.5 KB), the fonts, and the images something
+on the page actually requests. Vite ships imported code only. Comments,
+unused source files, docs, and a copy sitting in `dist/` are not
+downloaded. A file in `public/` is downloaded only when the page asks for
+it.
+
+Do a cleanup when a measured figure is over budget: drop an image the page
+still loads, or stop importing code the first view does not need. Skip a
+general tidy of files, comments, or docs. That does not make the harbour
+load faster, and it does not make the next edit faster. The slow part of a
+coding turn is reading large files and taking screenshots. Read the one
+area file and the lines to edit.
+
 ## Goal
 
 Give the site the Kage-style depth and finish, proven on **one frame (01)**

@@ -6,6 +6,10 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **Working speed** (user request, 2026-10-04). No screenshots and no
+  browser checks; the user reviews the page. A file tidy does not speed
+  the site: only the bundle, fonts, and images the page requests do.
+  Files: `docs/plan/README.md`, `docs/plan/HANDOFF.md`.
 - **Darker footer, shorter credits, smaller loading title** (user request,
   2026-10-04). The footer wash goes near black. The colophon drops "Built
   with Three.js and WebGL" and "Designed for desktop and mobile"; the bar
