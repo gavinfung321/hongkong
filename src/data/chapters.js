@@ -34,6 +34,8 @@
 //              (vesselRoutes.js).
 // probes:      composition targets (% of viewport) checked by the debug probe.
 
+import { SCENE_03_CHAPTER } from '../story/scene03/config.js';
+
 const SB = '/docs/storyboards';
 
 export const SCROLL = {
@@ -231,68 +233,7 @@ export const chapters = [
       desktop: `${SB}/frame-03-across-the-water-rough.png`,
       mobile: `${SB}/frame-03-across-the-water-mobile-rough.png`,
     },
-    camera: {
-      desktop: { position: [77.6, 2.2, -323], target: [40.2, 50.7, -718.3], fov: 56.9 },
-      mobile: { position: [-31.2, 1.8, -218.1], target: [41.8, 112.7, -595.4], fov: 80.1, via: [[60, 3, -300]] },
-    },
-    // Index panels (narrative spine scene 03, user requests, 2026-10-04):
-    // the label and title top-left; on desktop the panels in a row along the
-    // foot, on phones the beat panels under the title and the route below.
-    copy: {
-      desktop: { left: 5, top: 11, right: 42, bottom: 40 },
-      mobile: { left: 8, top: 9, right: 92, bottom: 37 },
-    },
-    // Long enough for the route dot to cross; the camera stays on the hold
-    // pose through it.
-    dwell: 60,
-    visibility: {
-      // city: the other towers and their LEDs at 40% so the ferry, IFC and
-      // the wheel lead, as the storyboard asks (user choice, 2026-10-03).
-      // petals 0.3: few petals out on the open water (atmospheric depth
-      // Priority F, user choice, 2026-10-04). buoy: the channel buoy
-      // (atmospheric depth Priority 2, user choice, 2026-10-04;
-      // createBuoy.js). lens: a few quiet out-of-focus light discs
-      // (user choice, 2026-10-04; lensBusy stays 0, so 05's denser pack waits).
-      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 0.8, seaMist: 0, haze: 1, searchlights: 0, buoy: 1, lens: 1 },
-      mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 0.8, seaMist: 0, haze: 1, searchlights: 0, buoy: 1, lens: 1 },
-    },
-    fogDensity: 0.00045,
-    // The ferry holds its place on the water through the hold (no drift on
-    // either side of the keyframe; user request, 2026-10-03), then sails
-    // on toward Central slowly enough that the camera overtakes it on the
-    // way to 04: its cabin
-    // slides out past the left edge (at least 16 m off on desktop, about
-    // 27 m on phones) and its bow uncovers the junk, which comes up from
-    // beyond it (user request, 2026-10-03: a natural occlusion, no wipe).
-    // It waits behind the 04 camera, out of frame. The desktop via point
-    // sits a little back along the route, so the camera starts overtaking
-    // it as the move begins (user request, 2026-10-03).
-    vessels: {
-      desktop: { ferry: [69.3, -359.1, 1.26], junk: [59.5, -400.6, 0.46], via: { ferry: [[91.5, -381.5, 1.125]] }, drift: { ferry: [0, 0] } },
-      // Mobile: 34 m from the camera (was 53 m), so the ferry fills about a
-      // fifth of the frame's height as in the storyboard, its stern off the
-      // left edge (user choice, 2026-10-03).
-      // The junk (hidden here) waits right of the phone frame, so it comes
-      // in already shown rather than fading in on open water (transition
-      // review, 2026-10-03).
-      mobile: { ferry: [-29, -252.3, 1], junk: [160, -430, 0.5], via: { ferry: [[8, -318, 1]] }, drift: { ferry: [0, 0] } },
-    },
-    probes: {
-      desktop: {
-        ferry: { left: 0, right: 60, top: 24, bottom: 78 },
-        ifc: { left: 82, right: 87, top: 12 },
-        wheel: { left: 74, right: 78 },
-        horizon: 62,
-      },
-      // Deviation: the mobile PNG draws IFC at about half the size the shared
-      // world allows from mid-harbour, so IFC is wider here (review note).
-      mobile: {
-        ferry: { left: 0, right: 66, top: 52, bottom: 72 },
-        ifc: { left: 83, right: 94, top: 46 },
-        wheel: { left: 76, right: 82 },
-        horizon: 66,
-      },
-    },
+    ...SCENE_03_CHAPTER,
   },
   {
     id: '04',

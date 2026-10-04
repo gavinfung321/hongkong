@@ -8,6 +8,7 @@ import {
   Vector3,
 } from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { SCENE_03_BUOY } from '../story/scene03/config.js';
 import { rimLight } from './rimLight.js';
 
 // Chapter 03's open-water cue (atmospheric depth Priority 2, user choice,
@@ -20,18 +21,6 @@ import { rimLight } from './rimLight.js';
 // rolls and pitches slowly with the swell ([amplitude, rad/s] pairs) and
 // holds still in reduced motion. Lit only by the moon and sky, so it reads
 // as a dark shape on the water.
-const BUOY = {
-  desktop: { ahead: 20, side: 5.8, scale: 1 },
-  mobile: { ahead: 4.6, side: -1.5, scale: 0.45 },
-  colour: 0x4a1f1c,
-  // A faint cool edge of city light [colour, strength] (Priority 3 balance,
-  // user choice, 2026-10-04).
-  rim: [0x8fa6d8, 0.25],
-  heave: [0.07, 0.7],
-  roll: [0.035, 0.55],
-  pitch: [0.025, 0.8],
-};
-
 // Float profile (radius, height above the waterline): a fendered drum
 // tapering to a deck.
 const FLOAT = [
@@ -53,13 +42,13 @@ function buoyGeometry() {
 export function createBuoy(camera) {
   const group = new Group();
   group.name = 'buoy';
-  const material = rimLight(new MeshLambertMaterial({ color: BUOY.colour, transparent: true }), ...BUOY.rim);
+  const material = rimLight(new MeshLambertMaterial({ color: SCENE_03_BUOY.colour, transparent: true }), ...SCENE_03_BUOY.rim);
   const body = new Mesh(buoyGeometry(), material);
   group.add(body);
 
   function setBreakpoint(breakpoint) {
     const pose = camera[breakpoint];
-    const { ahead, side, scale } = BUOY[breakpoint];
+    const { ahead, side, scale } = SCENE_03_BUOY[breakpoint];
     const position = new Vector3().fromArray(pose.position);
     const forward = new Vector3().fromArray(pose.target).sub(position).setY(0).normalize();
     const right = new Vector3(-forward.z, 0, forward.x);
@@ -76,9 +65,9 @@ export function createBuoy(camera) {
 
   function update(seconds) {
     const wave = ([amount, speed], phase = 0) => amount * Math.sin(seconds * speed + phase);
-    body.position.y = wave(BUOY.heave);
-    body.rotation.z = wave(BUOY.roll, 1.3);
-    body.rotation.x = wave(BUOY.pitch, 2.1);
+    body.position.y = wave(SCENE_03_BUOY.heave);
+    body.rotation.z = wave(SCENE_03_BUOY.roll, 1.3);
+    body.rotation.x = wave(SCENE_03_BUOY.pitch, 2.1);
   }
 
   return { group, setOpacity, update, setBreakpoint };

@@ -3,9 +3,9 @@
 // tilts toward the pointer as one flat piece, a band of light follows the
 // pointer across it and the stub lifts at the perforation (styles.css reads
 // --sway, --hover, --tilt-x and --tilt-y). On touch screens a tap plays the
-// same for TAP seconds (user choice, 2026-10-04). It flips in with the
+// same for the configured tap duration (user choice, 2026-10-04). It flips in with the
 // panels (copyLayer.js). Continuous mode only; stepped mode keeps it still.
-const TAP = 1;
+import { SCENE_03_TICKET } from '../story/scene03/config.js';
 
 export function createTicket(root) {
   const figure = root.querySelector('.chapter__ticket');
@@ -45,7 +45,7 @@ export function createTicket(root) {
     if (event.pointerType === 'mouse') return;
     aim(event);
     hoverTarget = 1;
-    tap = TAP;
+    tap = SCENE_03_TICKET.tapSeconds;
   });
 
   function update(dt) {

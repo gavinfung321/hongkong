@@ -14,7 +14,7 @@
 // from here.
 //
 // 03 (`data-story="crossing"`) is an index of panels instead: the harbour
-// darkens further (CROSSING.dark), the panels come with the title, and the
+// darkens further (SCENE_03_CROSSING.dark), the panels come with the title, and the
 // route dot runs from Tsim Sha Tsui to Central across the dwell. Phones
 // leave the index off and keep the full departure card under the
 // standfirst. The ticket sits low in the open water (user request,
@@ -35,18 +35,10 @@
 // settles, with no darkening; cityLights.js sweeps the title, and `touch`
 // runs the office-window touch light (cityTouch.js) while it shows.
 import { smoothstep } from '../scroll/cameraRig.js';
+import { SCENE_03_CROSSING } from '../story/scene03/config.js';
 import { createDepartureBoard } from './departureBoard.js';
 import { createCityLights } from './cityLights.js';
 const RISE = 48; // px travelled while fading: in from below, out through the top
-// 03: the board's countdown is at least as far on as the `due` shares of
-// the route (it also runs on its own clock, departureBoard.js); a panel
-// or the ticket flips over once it is `flip` of the way in.
-const CROSSING = {
-  route: [0.1, 0.9],
-  dark: 0.7,
-  due: [0.3, 0.55, 0.8],
-  flip: 0.2,
-};
 const STATEMENT = { full: 0.7 };
 // Memory mode reaches `arrive` from `approach[0]` of the way into the chapter
 // until the camera settles, and the rest with the print. Past the keyframe
@@ -150,20 +142,21 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       story.panels.forEach((panel, k) => {
         setVar(panel, '--enter', enter[k]);
         panel.toggleAttribute('data-enter-hidden', !enter[k]);
-        if (enter[k] >= CROSSING.flip) panel.toggleAttribute('data-flipped', true);
+        if (enter[k] >= SCENE_03_CROSSING.flip) panel.toggleAttribute('data-flipped', true);
         else if (enter[k] === 0) panel.toggleAttribute('data-flipped', false);
       });
-      const route = level(CROSSING.route);
+      const route = level(SCENE_03_CROSSING.route);
       setVar(story.route, '--route', route);
+      setVar(story.route?.closest('.chapter__panel'), '--route', route);
       setVar(story.board, '--enter', label);
-      story.flaps?.update(label > 0 && base > 0, CROSSING.due.filter((share) => route >= share).length, stepped);
+      story.flaps?.update(label > 0 && base > 0, SCENE_03_CROSSING.due.filter((share) => route >= share).length, stepped);
       if (story.ticket) {
         setVar(story.ticket, '--enter', label);
         story.ticket.toggleAttribute('data-enter-hidden', label === 0);
-        if (label >= CROSSING.flip) story.ticket.toggleAttribute('data-flipped', true);
+        if (label >= SCENE_03_CROSSING.flip) story.ticket.toggleAttribute('data-flipped', true);
         else if (label === 0) story.ticket.toggleAttribute('data-flipped', false);
       }
-      return { mode: base * CROSSING.dark, yield: base * CROSSING.dark, wind: label * base };
+      return { mode: base * SCENE_03_CROSSING.dark, yield: base * SCENE_03_CROSSING.dark, wind: label * base };
     }
     if (story.lights) {
       story.lights.update(label > 0 && base > 0, stepped);

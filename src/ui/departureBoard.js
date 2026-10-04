@@ -1,19 +1,14 @@
 // 03's departure board (user choices, 2026-10-04): split-flap tiles that
 // flip through a few letters before landing, left to right, as the board
-// comes in. The "due" row counts down on its own clock, reaching ARRIVING
-// about 4 s after the board arrives, as visitors stay only a few seconds;
-// scrolling the route dot (copyLayer.js) can run it ahead, never back (user
-// choice, 2026-10-04). It flips only the tiles that change. Leaving the
-// chapter blanks the tiles so they flip in again on return. Stepped mode
-// sets the words directly.
+// comes in. The "due" row follows the route thresholds in copyLayer.js, so
+// the marker and countdown always describe the same point in the crossing.
+// It flips only the tiles that change. Leaving the chapter blanks the tiles
+// so they flip in again on return. Stepped mode sets the words directly.
 // English only in the tiles; the Chinese is in the labels and the route
 // panel's "Central 中環" (user choice, 2026-10-04).
-const TO = 'CENTRAL';
-const DUE = ['   3 MIN', '   2 MIN', '   1 MIN', 'ARRIVING'];
-const LATIN = 'ABCDEFGHIJKLMNOPRSTUVWXYZ0123456789';
-const TICK = 55; // ms per flip
-const DUE_LEAD = 400; // ms before the clock starts, so 3 MIN lands and reads
-const DUE_STEP = 1200; // ms per countdown step
+import { SCENE_03_BOARD } from '../story/scene03/config.js';
+
+const { destination: TO, due: DUE, characters: LATIN, tickMs: TICK } = SCENE_03_BOARD;
 
 export function createDepartureBoard(element) {
   const tiles = [];
@@ -32,8 +27,6 @@ export function createDepartureBoard(element) {
   let on = false;
   let status = -1;
   let timer = 0;
-  let elapsed = 0; // ms the board has been in, with frame stalls capped
-  let lastNow = 0;
   const root = document.documentElement;
 
   function show(tile, char) {
@@ -99,16 +92,10 @@ export function createDepartureBoard(element) {
     }
     const arriving = !on;
     on = true;
-    const now = performance.now();
     if (arriving) {
-      elapsed = 0;
       to.forEach(({ tile, char }, k) => aim(tile, char, 4 + k + Math.floor(Math.random() * 3), instant));
-    } else {
-      elapsed += Math.min(now - lastNow, 100);
     }
-    lastNow = now;
-    const clockStep = Math.max(0, Math.floor((elapsed - DUE_LEAD) / DUE_STEP));
-    const step = Math.min(DUE.length - 1, Math.max(status, routeStep, clockStep));
+    const step = Math.min(DUE.length - 1, Math.max(0, routeStep));
     if (step === status) return;
     const text = DUE[step];
     due.forEach((tile, k) => aim(tile, text[k], (arriving ? 6 + k : 3) + Math.floor(Math.random() * 3), instant));
