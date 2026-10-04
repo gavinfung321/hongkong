@@ -6,6 +6,27 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **03 phone seat-backs line off** (user request, 2026-10-04). The
+  seat-backs sentence is gone on phones, so the board sits higher. The
+  standfirst, the 1888 line, the board and the ticket stay. Desktop keeps
+  the sentence in the first panel. Files: `index.html`, `src/styles.css`,
+  `src/ui/copyLayer.js`; plan: `narrative-spine.md`.
+- **03 phone buoy further left** (user request, 2026-10-04). The buoy
+  moves from 0.9 m to 1.5 m left of the view, under the ferry, so the
+  ticket can keep its size in the lower right. Desktop is unchanged.
+  Files: `src/scene/createBuoy.js`; plan: `atmospheric-depth-polish.md`.
+- **03 phone ticket back down** (user request, 2026-10-04). The ticket
+  sits low in the open water again, just above the toolbar. The rule
+  that hid it on a short phone is gone. Files: `src/styles.css`,
+  `src/ui/copyLayer.js`; plan: `narrative-spine.md`.
+- **03 phone date** (user request, 2026-10-04). "Crossing since 1888" now
+  sits under the seat-backs line on phones. Desktop already says it on
+  the route panel. Files: `index.html`, `src/styles.css`,
+  `src/ui/copyLayer.js`; plan: `narrative-spine.md`.
+- **03 phone seat-backs line** (user request, 2026-10-04). Phones were
+  down to one sentence. The seat-backs line now sits under the
+  standfirst. The three panels stay on desktop. Files: `index.html`,
+  `src/styles.css`, `src/ui/copyLayer.js`; plan: `narrative-spine.md`.
 - **03 phone board and ticket** (user request, 2026-10-04). On phones the
   departure card is the full desktop board under the standfirst, and the
   ticket sits just beneath it on the right. It stays off when that would

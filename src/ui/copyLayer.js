@@ -17,7 +17,8 @@
 // darkens further (CROSSING.dark), the panels come with the title, and the
 // route dot runs from Tsim Sha Tsui to Central across the dwell. Phones
 // leave the index off and keep the full departure card under the
-// standfirst, with the ticket just beneath it (user request, 2026-10-04).
+// standfirst. The ticket sits low in the open water (user request,
+// 2026-10-04).
 // The sea haze drifts at the ferry's waterline
 // with the panels (`--wind`). The panels flip over on their top edge as
 // they come, like the seat backs, and the ticket (ticketCard.js) flips in
@@ -46,13 +47,6 @@ const CROSSING = {
   due: [0.3, 0.55, 0.8],
   flip: 0.2,
 };
-// The phone ticket: share of the window's width, height over width, the gap
-// under the board, and how far down the screen the ferry roof sits. Past
-// that line the ticket would cover the ferry, so it stays off.
-const TICKET_WIDTH = 0.46;
-const TICKET_RATIO = 344 / 720;
-const TICKET_GAP = 16;
-const TICKET_FERRY = 0.58;
 const STATEMENT = { full: 0.7 };
 // Memory mode reaches `arrive` from `approach[0]` of the way into the chapter
 // until the camera settles, and the rest with the print. Past the keyframe
@@ -68,24 +62,14 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
   const stories = copies.map((copy) => {
     if (!copy.classList.contains('chapter__copy--story')) return null;
     const board = copy.querySelector('.chapter__board');
-    // The ticket hangs just above the panels row on desktop. On phones it
-    // sits just under the board; --board-bottom is that card's foot
-    // (styles.css; TICKET_WIDTH matches its phone width).
+    // The ticket hangs just above the panels row on desktop (--panels-height).
     const panels = copy.querySelector('.chapter__panels');
-    const ticket = copy.querySelector('.chapter__ticket');
     if (panels) {
       const measure = () => {
         copy.style.setProperty('--panels-height', `${panels.offsetHeight}px`);
-        if (!ticket) return;
-        const phone = document.documentElement.dataset.breakpoint === 'mobile';
-        const boardBottom = board ? board.getBoundingClientRect().bottom : 0;
-        copy.style.setProperty('--board-bottom', `${boardBottom}px`);
-        const height = innerWidth * TICKET_WIDTH * TICKET_RATIO;
-        ticket.toggleAttribute('data-roomless', phone && boardBottom + TICKET_GAP + height > innerHeight * TICKET_FERRY);
       };
       const observer = new ResizeObserver(measure);
       observer.observe(panels);
-      if (board) observer.observe(board);
       observer.observe(copy);
       window.addEventListener('resize', measure);
       measures.push(measure);
@@ -102,6 +86,7 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       label: copy.querySelector('.chapter__label'),
       title: copy.querySelector('.chapter__title'),
       standfirst: copy.querySelector('.chapter__standfirst'),
+      since: copy.querySelector('.chapter__since'),
       beats: [...copy.querySelectorAll('.chapter__beat')],
       panels: [...copy.querySelectorAll('.chapter__panel')],
       route: copy.querySelector('.chapter__route'),
@@ -157,7 +142,7 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
     const base = stepped
       ? (i === index ? 1 : 0)
       : smoothstep(i + DARK.approach, key - copyFull, rendered) * (1 - smoothstep(DARK.lift[0], DARK.lift[1], rendered - key));
-    for (const element of [story.label, story.title, story.standfirst, ...story.beats]) setVar(element, '--enter', label);
+    for (const element of [story.label, story.title, story.standfirst, story.since, ...story.beats]) setVar(element, '--enter', label);
     for (const beat of story.beats) beat.toggleAttribute('data-enter-hidden', label === 0);
     const sink = stepped ? 1 : 1 - smoothstep(DARK.sink[0], DARK.sink[1], p - key);
     if (story.crossing) {

@@ -15,14 +15,14 @@ import { rimLight } from './rimLight.js';
 // the 03 pose per screen size: `ahead` metres along the view, `side` metres
 // right of it, at `scale`. Desktop: in the lower right, right of the ferry
 // and clear of IFC's and the wheel's water columns. Phones (user choice,
-// 2026-10-04): the lower right is crossed by those columns, so a smaller
-// buoy sits close in the lower left, under the ferry's hull. It heaves,
+// 2026-10-04): the lower right is the ticket's, so a smaller buoy sits
+// further left, under the ferry's hull (user request, 2026-10-04). It heaves,
 // rolls and pitches slowly with the swell ([amplitude, rad/s] pairs) and
 // holds still in reduced motion. Lit only by the moon and sky, so it reads
 // as a dark shape on the water.
 const BUOY = {
   desktop: { ahead: 20, side: 5.8, scale: 1 },
-  mobile: { ahead: 4.6, side: -0.9, scale: 0.45 },
+  mobile: { ahead: 4.6, side: -1.5, scale: 0.45 },
   colour: 0x4a1f1c,
   // A faint cool edge of city light [colour, strength] (Priority 3 balance,
   // user choice, 2026-10-04).

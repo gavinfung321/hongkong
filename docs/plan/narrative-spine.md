@@ -428,7 +428,9 @@ outlined cells over a darkened scene; no Kage code, type or copy):
   balanced over two lines on phones (user requests and choices,
   2026-10-04). On the phone scene the whole index is left off: The Route
   is step 3, and showing it alone broke the flow (user request,
-  2026-10-04);
+  2026-10-04). "Crossing since 1888" sits under the standfirst. The
+  seat-backs sentence is left off on phones; it stays in the first panel
+  on desktop (user request, 2026-10-04);
 - a 60svh dwell (was 110) holds the camera while the route dot crosses
   (dwell share 0.1–0.9);
 - wind haze, borrowed from 04 (user choice, 2026-10-04): the same two
@@ -465,10 +467,10 @@ outlined cells over a darkened scene; no Kage code, type or copy):
     Central, adult weekday fare HK$5.0, checked against the Star Ferry
     fare table on 2026-10-04) hangs over the water at the lower right,
     just above the panels, in the darker cream of the night grade. On
-    phones it sits just under that card, on the right, clear of the ferry
-    roof and the 天星小輪 label, 46% of the width; a tap plays the hover
-    effect for a second; left out when it would reach the ferry (user
-    request and choices, 2026-10-04). It behaves like a ticket, not cloth (user requests and
+    phones it sits low in the open water, just above the browser toolbar,
+    at the right, left of the 天星小輪 label and clear of the buoy,
+    46% of the width; a tap plays the hover effect for a second. It stays
+    on a short phone (user request, 2026-10-04). It behaves like a ticket, not cloth (user requests and
     choices, 2026-10-04; a cloth version, then a stiff-cloth version and a
     near-white export were tried the same day): a rigid card that flips
     in on its top edge with the panels, sways about a degree in the plane

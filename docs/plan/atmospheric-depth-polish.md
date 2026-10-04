@@ -279,10 +279,10 @@ below are kept as history. The 03 buoy stays.
   height (the phone camera looks up less, so more shows): about 63–97%
   across and the bottom 15% of the frame, under IFC's foot (IFC ends at
   80% down).
-- Mobile 03 buoy: IFC's and the wheel's water columns cross the lower
-  right, so a smaller buoy (0.45 scale, about 1.2 m above the water) sits
-  4.6 m out in the lower left, about 76–96% down, just under the ferry's
-  hull.
+- Mobile 03 buoy: the lower right is the ticket's, so a smaller buoy
+  (0.45 scale, about 1.2 m above the water) sits 4.6 m out and 1.5 m left
+  of the view, further under the ferry's hull (user request, 2026-10-04;
+  it was 0.9 m left).
 - Both are repositioned per screen size (`setBreakpoint`); the `bollard`
   and `buoy` gates are now 1 in mobile 05 and mobile 03 too.
 

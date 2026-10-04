@@ -1716,6 +1716,28 @@ html:not(.is-enhanced) .vertical-text {
   transition: opacity 150ms linear;
 }
 
+/* The same date as the route panel's meta. Phones have no route panel, so
+   it sits under the standfirst (user request, 2026-10-04). */
+.chapter__since {
+  display: none;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__since {
+  display: block;
+  margin: 0.75rem 0 0;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  opacity: var(--enter, 1);
+}
+
+.is-stepped .chapter__since {
+  transition: opacity 150ms linear;
+}
+
 .chapter__panel {
   position: relative;
   padding: 1.125rem 1.375rem 1.25rem;
@@ -2231,19 +2253,14 @@ html:not(.is-enhanced) .vertical-text {
   pointer-events: none;
 }
 
-/* Phones: just under the board, on the right, clear of the ferry roof and
-   the 天星小輪 label. Left out when that would reach the ferry
-   (copyLayer.js sets data-roomless; user request, 2026-10-04).
-   46vw matches TICKET_WIDTH there. */
+/* Phones: low in the open water, just above the browser toolbar, left of
+   the 天星小輪 label and clear of the buoy. It stays on a short phone
+   (user request, 2026-10-04). */
 [data-breakpoint="mobile"].is-enhanced .chapter__ticket {
-  top: calc(var(--board-bottom, 34lvh) + 1rem);
+  top: auto;
   right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 40px);
-  bottom: auto;
+  bottom: max(5lvh, calc(env(safe-area-inset-bottom) + 16px));
   width: 46vw;
-}
-
-[data-breakpoint="mobile"].is-enhanced .chapter__ticket[data-roomless] {
-  display: none;
 }
 
 @media (orientation: landscape) and (max-height: 500px) {
