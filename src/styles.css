@@ -2538,21 +2538,15 @@ html:not(.is-enhanced) .vertical-text {
 }
 
 /* Phones: the cards side by side under the label, the statement stacked at
-   the foot. */
+   the foot. The quote stays off, so it does not cross the main sail
+   (user request, 2026-10-04). */
 [data-breakpoint="mobile"].is-enhanced .chapter__photos.is-loaded {
   gap: 0.875rem;
   margin-top: 1.25rem;
 }
 
 [data-breakpoint="mobile"].is-enhanced .chapter__quote {
-  max-width: none;
-  margin-top: 0.25rem;
-  font-size: 1rem;
-  text-wrap: balance;
-}
-
-[data-breakpoint="mobile"].is-enhanced .chapter__quote::before {
-  margin-bottom: 0.5rem;
+  display: none;
 }
 
 [data-breakpoint="mobile"].is-enhanced .chapter__photo figcaption {

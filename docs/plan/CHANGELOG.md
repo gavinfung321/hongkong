@@ -6,6 +6,10 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **04 quote off on phones** (user request, 2026-10-04). The sailing
+  quote and the coral line above it are gone on phones, so they do not
+  cross the main sail. The cards, captions and foot line stay. Desktop
+  keeps the quote. Files: `src/styles.css`; plan: `narrative-spine.md`.
 - **02 phone beats the same size** (user request, 2026-10-04). On phones
   both paragraphs are 13 px, so the tower sits higher. Beat 1 stays
   cream. Desktop is unchanged. Files: `src/styles.css`; plan:

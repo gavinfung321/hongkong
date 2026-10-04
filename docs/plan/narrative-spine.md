@@ -558,8 +558,9 @@ request, 2026-10-04).
 - Layout: the label, the two cards and the quote down the left (desktop:
   larger cards, 23vw capped by the window's height, stepping down the
   column with "Now" set right, slightly askew, the quote ending above the
-  statement's hairline; user request, 2026-10-04. Phones: cards side by
-  side, level, the quote under them over the main sail's tip). A soft
+  statement's hairline (user request, 2026-10-04). Phones: cards side by
+  side and level; the quote is left out so it does not cross the main
+  sail (user request, 2026-10-04). A soft
   ink pool behind keeps the captions off the moon. The
   statement runs along the water at the foot: a full-width hairline
   drawing in from the left, the large title on the left and the intro on
