@@ -28,6 +28,7 @@ import { createScrollConductor } from './scroll/scrollConductor.js';
 import { createCopyLayer } from './ui/copyLayer.js';
 import { createMemoryPlates } from './ui/memoryPlate.js';
 import { createPaperCards } from './ui/paperCard.js';
+import { createTicket } from './ui/ticketCard.js';
 import { createSiteHeader } from './ui/siteHeader.js';
 import { createSiteFooter } from './ui/siteFooter.js';
 import { createCursorRing } from './ui/cursorRing.js';
@@ -237,6 +238,7 @@ async function start(initGuard, header, loading) {
   const copy = createCopyLayer(sections, chapters, SCROLL);
   const memories = createMemoryPlates(sections);
   const photoCards = createPaperCards(sections);
+  const ticket = createTicket(document);
 
   // ---- Motion mode ---------------------------------------------------------
 
@@ -550,6 +552,7 @@ async function start(initGuard, header, loading) {
       petals.update(dt, camera, speed, stirState);
       cursorMotes.update(dt, stirState);
       photoCards.update(dt);
+      ticket.update(dt);
       lastRendered = state.pRendered;
     }
 

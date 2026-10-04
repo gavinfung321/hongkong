@@ -6,6 +6,75 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **03: the board's countdown runs on a clock** (user choice,
+  2026-10-04). It only moved with scroll, so a visitor who stopped to look
+  saw 3 MIN forever. It now steps every 1.2 s after a 0.4 s lead, showing
+  ARRIVING about 4 s after the board arrives; scrolling the route dot can
+  run it ahead, never back, and it restarts on return. The board now waits
+  for the entrance cover to lift (on a link straight to 03 it had counted
+  down behind the cover). Files:
+  `src/ui/departureBoard.js`, `src/ui/copyLayer.js`; plan:
+  `narrative-spine.md`.
+- **03: 中環 removed from the board's tiles** (user choice, 2026-10-04).
+  It repeated the route panel's "Central 中環" and, on phones, added a
+  second line that pushed the panels and ticket down. The board now
+  reads CENTRAL on desktop and phones; the Chinese stays in the labels
+  (天星小輪, 往, 到達). Files: `src/ui/departureBoard.js`,
+  `src/styles.css`; plan: `narrative-spine.md`.
+- **03: 中環 above CENTRAL on the board; phone ticket centred in the
+  open water** (user requests and choices, 2026-10-04). On phones 中環
+  sat between CENTRAL and the countdown and read as part of it; the
+  destination is now stacked, Chinese above English as on Hong Kong
+  signs, on desktop and phones. The phone ticket was crowding the foot
+  of the screen and could slip under a browser toolbar; it is now
+  centred between the panels' foot and the foot of the smallest
+  viewport, and left out only where that gap is too small (was: under
+  760px tall). Files: `src/ui/departureBoard.js`, `src/ui/copyLayer.js`,
+  `src/styles.css`; plan: `narrative-spine.md`.
+- **03 ticket on phones** (user request and choices, 2026-10-04): over
+  the open water at the bottom right, below the panels, left of the
+  天星小輪 label and clear of the buoy; it flips in and sways as on
+  desktop, and a tap plays the tilt, glint and stub lift for a second.
+  Left out on phones under 760px tall. Files: `src/ui/ticketCard.js`,
+  `src/ui/copyLayer.js`, `src/styles.css`; plan: `narrative-spine.md`.
+- **03 ticket: a rigid card with ticket-like motion; board and ticket
+  arrive with the panels** (user requests and choices, 2026-10-04). The
+  ticket is back in the darker cream (the white looked worse) and no
+  longer uses the cloth renderer: it is a rigid card in two layers (main
+  part and stub) that flips in with the panels, sways about a degree
+  from its pin, and on hover tilts toward the pointer with a sliding
+  glint while the stub lifts at the perforation. The board and ticket
+  now come in with the panels instead of part-way through the hold.
+  `paperCard.js` is back as it was (stiff-card setting removed). Files:
+  `index.html`, `src/ui/ticketCard.js` (new), `src/ui/copyLayer.js`,
+  `src/main.js`, `src/styles.css`, `src/ui/paperCard.js`,
+  `public/plates/star-ferry-ticket.webp`; plan: `narrative-spine.md`;
+  `docs/ASSET-LEDGER.md`.
+- **03: no 1888; board moved clear of IFC; the ticket as stiff white
+  card** (user requests and choices, 2026-10-04). The outlined 1888 is
+  gone. The board moves from the top right, where it sat on IFC's crown,
+  to the open sky between the masts and the moon, and loses its dark box
+  for a faint backing; it still counts down with the route dot. The
+  ticket read as cloth: the photo cards' renderer now has a stiff card
+  material (`data-material="card"`) with a slow small sway, twist and
+  curl instead of the wave simulation, and the artwork is re-exported
+  near-white (brightness 0.8, was 0.56). 04's cloth is unchanged. Files:
+  `index.html`, `src/ui/copyLayer.js`, `src/ui/paperCard.js`,
+  `src/styles.css`, `public/plates/star-ferry-ticket.webp`; plan:
+  `narrative-spine.md`; `docs/ASSET-LEDGER.md`.
+- **03: departure board, panel flip, 1888 and a ticket** (user request
+  and choices, 2026-10-04). 03 read plain next to 02 and 04. Now the
+  panels flip over like the seat backs as they arrive; a faint outlined
+  1888 drifts in the sky; a split-flap board top right flips in "To
+  Central" and counts down with the route dot to "Arriving"; and our own
+  Star Ferry ticket (upper deck, HK$5.0) hangs on the cloth above the
+  panels. Phones get the board as one row and no ticket. The Chinese font
+  subsets were rebuilt with every character on the site (35, was 21;
+  03's panel words had been falling back to system fonts). Files:
+  `index.html`, `src/ui/departureBoard.js` (new), `src/ui/copyLayer.js`,
+  `src/styles.css`, `public/plates/star-ferry-ticket.webp`,
+  `public/fonts/noto-*-subset.woff2`; plan: `narrative-spine.md`;
+  `docs/ASSET-LEDGER.md`.
 - **03: wind haze along the waterline** (user request and choice,
   2026-10-04). 04's drifting harbour mist now runs in 03 too, coming
   in with the panels at 75% strength: a near band just above the

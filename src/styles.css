@@ -20,7 +20,7 @@
     U+201C-201E, U+2022, U+2026, U+2039-203A, U+20AC, U+2122, U+2191, U+2212;
 }
 
-/* The Chinese subsets hold only the 21 characters on the site; rebuild them if
+/* The Chinese subsets hold only the 35 characters on the site; rebuild them if
    any Chinese text changes. */
 @font-face {
   font-family: "Noto Serif TC";
@@ -28,8 +28,9 @@
   font-weight: 600;
   font-style: normal;
   font-display: fallback;
-  unicode-range: U+570B, U+591C, U+5929, U+5C0F, U+5E06, U+65B9, U+660E, U+661F, U+6771, U+6A13, U+6E2F, U+7159,
-    U+73E0, U+7DAD, U+8239, U+8272, U+82B1, U+8F2A, U+91D1, U+9418, U+9999;
+  unicode-range: U+4E2D, U+5230, U+524D, U+5411, U+5480, U+570B, U+591C, U+5929, U+5C0F, U+5C16, U+5E06, U+5F80,
+    U+65B9, U+660E, U+661F, U+6771, U+6A13, U+6C99, U+6D77, U+6E21, U+6E2F, U+7159, U+73E0, U+74B0, U+7DAD, U+7DDA,
+    U+822A, U+8239, U+8272, U+82B1, U+8F2A, U+9054, U+91D1, U+9418, U+9999;
 }
 
 @font-face {
@@ -38,8 +39,9 @@
   font-weight: 700;
   font-style: normal;
   font-display: fallback;
-  unicode-range: U+570B, U+591C, U+5929, U+5C0F, U+5E06, U+65B9, U+660E, U+661F, U+6771, U+6A13, U+6E2F, U+7159,
-    U+73E0, U+7DAD, U+8239, U+8272, U+82B1, U+8F2A, U+91D1, U+9418, U+9999;
+  unicode-range: U+4E2D, U+5230, U+524D, U+5411, U+5480, U+570B, U+591C, U+5929, U+5C0F, U+5C16, U+5E06, U+5F80,
+    U+65B9, U+660E, U+661F, U+6771, U+6A13, U+6C99, U+6D77, U+6E21, U+6E2F, U+7159, U+73E0, U+74B0, U+7DAD, U+7DDA,
+    U+822A, U+8239, U+8272, U+82B1, U+8F2A, U+9054, U+91D1, U+9418, U+9999;
 }
 
 @font-face {
@@ -48,8 +50,9 @@
   font-weight: 500;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+570B, U+591C, U+5929, U+5C0F, U+5E06, U+65B9, U+660E, U+661F, U+6771, U+6A13, U+6E2F, U+7159,
-    U+73E0, U+7DAD, U+8239, U+8272, U+82B1, U+8F2A, U+91D1, U+9418, U+9999;
+  unicode-range: U+4E2D, U+5230, U+524D, U+5411, U+5480, U+570B, U+591C, U+5929, U+5C0F, U+5C16, U+5E06, U+5F80,
+    U+65B9, U+660E, U+661F, U+6771, U+6A13, U+6C99, U+6D77, U+6E21, U+6E2F, U+7159, U+73E0, U+74B0, U+7DAD, U+7DDA,
+    U+822A, U+8239, U+8272, U+82B1, U+8F2A, U+9054, U+91D1, U+9418, U+9999;
 }
 
 :root {
@@ -1803,7 +1806,20 @@ html:not(.is-enhanced) .vertical-text {
   /* A matte near-black on desktop, no glass (user request, 2026-10-04). */
   background-color: rgb(6 5 16 / calc(0.9 * var(--enter, 1)));
   background-image: linear-gradient(90deg, rgb(47 122 76 / calc(0.32 * var(--panel-tint))), transparent 50%);
-  transition: --panel-tint 550ms ease;
+  transform: rotateX(-80deg);
+  transform-origin: 50% 0;
+  transition: --panel-tint 550ms ease, transform 900ms cubic-bezier(0.3, 1.45, 0.5, 1);
+}
+
+/* Each panel flips over on its top edge as it comes, settling with a small
+   overshoot, like the ferry's reversible seat backs; all three together
+   (copyLayer.js sets data-flipped; user choice, 2026-10-04). */
+.is-enhanced .chapter__panels {
+  perspective: 1600px;
+}
+
+.is-enhanced .chapter__panel[data-flipped] {
+  transform: none;
 }
 
 /* Hover, after Kage's lesson rows (technique only): the panel stays put; a
@@ -1871,6 +1887,10 @@ html:not(.is-enhanced) .vertical-text {
 .is-stepped .chapter__panel,
 .is-stepped .chapter__panel > * {
   transition: opacity 150ms linear, background-color 150ms linear;
+}
+
+.is-stepped .chapter__panel {
+  transform: none;
 }
 
 .is-stepped .chapter__panel:hover > * {
@@ -1973,6 +1993,323 @@ html:not(.is-enhanced) .vertical-text {
   .is-enhanced .chapter__panel-meta {
     display: none;
   }
+}
+
+/* 03's departure board: split-flap tiles with a hairline across the
+   middle, the destination in cream and the countdown in amber
+   (departureBoard.js; user choices, 2026-10-04). On desktop it sits in the
+   open sky between the masts and the moon, level with the title and clear
+   of IFC, with no box: only a faint backing behind the tiles (user choice,
+   2026-10-04, was boxed top right over IFC's crown). On phones it is one
+   row under the standfirst, left out on short phones. */
+.chapter__board {
+  display: none;
+}
+
+.is-enhanced .chapter__board {
+  display: block;
+  position: fixed;
+  top: max(11lvh, calc(var(--header-height) + env(safe-area-inset-top) + 4px));
+  left: 41vw;
+  padding: 0.75rem 0.875rem 0.875rem;
+  border-radius: 4px;
+  background: rgb(6 5 16 / 0.35);
+  text-shadow: 0 1px 3px rgb(0 0 0 / 0.8);
+  opacity: var(--enter, 1);
+  pointer-events: none;
+}
+
+.chapter__board-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.75rem;
+  color: var(--color-muted);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.chapter__board-head::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-ferry-light);
+  box-shadow: 0 0 8px var(--color-ferry);
+}
+
+.chapter__board-head span,
+.chapter__board-label span {
+  font-family: var(--font-text-zh);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+}
+
+.chapter__board-row {
+  display: grid;
+  grid-template-columns: 4.75rem auto;
+  align-items: center;
+}
+
+.chapter__board-row + .chapter__board-row {
+  margin-top: 0.375rem;
+}
+
+.chapter__board-label {
+  color: var(--color-muted);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.625rem;
+  text-transform: uppercase;
+}
+
+.chapter__board-tiles {
+  display: flex;
+  gap: 2px;
+}
+
+.chapter__board-tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 1.125rem;
+  height: 1.625rem;
+  border-radius: 2px;
+  background: linear-gradient(#1d1b33, #151329 50%, #0f0d20 50%, #17152c);
+  color: var(--color-cream);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.chapter__board-tile::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: rgb(0 0 0 / 0.65);
+}
+
+[data-board="due"] .chapter__board-tile {
+  color: var(--color-warm);
+}
+
+/* Two names for one flip, so each new letter restarts it. */
+.chapter__board-tile[data-flip="a"] {
+  animation: board-flip-a 110ms ease-out;
+}
+
+.chapter__board-tile[data-flip="b"] {
+  animation: board-flip-b 110ms ease-out;
+}
+
+@keyframes board-flip-a {
+  from {
+    filter: brightness(1.6);
+    transform: perspective(120px) rotateX(-70deg);
+  }
+}
+
+@keyframes board-flip-b {
+  from {
+    filter: brightness(1.6);
+    transform: perspective(120px) rotateX(-70deg);
+  }
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__board {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  position: static;
+  width: fit-content;
+  margin-top: 0.875rem;
+  padding: 0.5rem;
+  background: rgb(6 5 16 / 0.55);
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__board-head,
+[data-breakpoint="mobile"].is-enhanced .chapter__board-label {
+  display: none;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__board-row {
+  display: block;
+  margin: 0;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__board-tile {
+  width: 0.875rem;
+  height: 1.375rem;
+  font-size: 0.75rem;
+}
+
+@media (max-height: 740px) {
+  [data-breakpoint="mobile"].is-enhanced .chapter__board {
+    display: none;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .is-enhanced .chapter__board {
+    display: none;
+  }
+}
+
+.is-stepped .chapter__board {
+  transition: opacity 150ms linear;
+}
+
+.is-stepped .chapter__board-tile {
+  animation: none;
+}
+
+/* 03's ticket: our own artwork as a stiff card (ticketCard.js), hung over
+   the open water at the lower right, just above the panels (copyLayer.js
+   measures --panels-height); it flips in on its top edge with the panels.
+   The stub is a second layer of the same artwork over the right 25.6%, so
+   it can lift at the perforation. Under a mouse the card tilts toward the
+   pointer, a band of light follows it and the stub lifts (a tap does the
+   same on phones); idle, it sways about a degree from its pin (user
+   requests and choices, 2026-10-04). */
+.chapter__ticket {
+  max-width: 14rem;
+  margin: 1.25rem 0 0;
+}
+
+.chapter__ticket-card {
+  --stub: 25.556%;
+  --radius: 0.625rem;
+  position: relative;
+  border-radius: var(--radius);
+}
+
+.chapter__ticket-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+.chapter__ticket-stub,
+.chapter__ticket-glint {
+  display: none;
+}
+
+[data-breakpoint].is-enhanced .chapter__ticket {
+  position: fixed;
+  right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 64px + 2rem);
+  bottom: calc(max(5lvh, calc(env(safe-area-inset-bottom) + 16px)) + var(--panels-height, 10rem) + 2.25rem);
+  width: min(13vw, 14rem);
+  max-width: none;
+  margin: 0;
+  opacity: var(--enter, 1);
+  transform: perspective(1200px) rotateX(-80deg);
+  transform-origin: 50% 0;
+  transition: transform 900ms cubic-bezier(0.3, 1.45, 0.5, 1);
+}
+
+[data-breakpoint].is-enhanced .chapter__ticket[data-flipped] {
+  transform: perspective(1200px) rotateX(0deg);
+}
+
+.is-enhanced .chapter__ticket[data-enter-hidden] {
+  visibility: hidden;
+}
+
+/* Sways from the pin at the top; tilts about the middle. */
+[data-breakpoint].is-enhanced .chapter__ticket-card {
+  --lift: var(--hover, 0);
+  transform: rotate(calc(2deg + var(--sway, 0) * 1deg)) translateY(50%) perspective(700px)
+    rotateX(calc(var(--tilt-y, 0) * var(--lift) * -7deg)) rotateY(calc(var(--tilt-x, 0) * var(--lift) * 9deg))
+    translateY(-50%);
+  transform-origin: 50% 0;
+  transform-style: preserve-3d;
+  box-shadow: calc(10px - var(--tilt-x, 0) * var(--lift) * 6px) calc(14px - var(--tilt-y, 0) * var(--lift) * 6px) 28px
+    rgb(243 233 210 / calc(0.16 + 0.06 * var(--lift)));
+}
+
+[data-breakpoint].is-enhanced .chapter__ticket-art {
+  clip-path: inset(0 var(--stub) 0 0 round var(--radius) 0 0 var(--radius));
+}
+
+[data-breakpoint].is-enhanced .chapter__ticket-stub {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--stub);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: url("/plates/star-ferry-ticket.webp") right center / auto 100% no-repeat;
+  filter: brightness(calc(1 + var(--lift) * 0.08));
+  transform: rotateY(calc(var(--lift) * -16deg));
+  transform-origin: 0 50%;
+}
+
+[data-breakpoint].is-enhanced .chapter__ticket-glint {
+  display: block;
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  background: linear-gradient(105deg, transparent 38%, rgb(255 246 226 / 0.28) 50%, transparent 62%) no-repeat;
+  background-position: calc(50% - var(--tilt-x, 0) * 25%) 0;
+  background-size: 300% 100%;
+  opacity: var(--lift);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* Phones: centred in the open water between the panels' foot and the foot
+   of the smallest viewport (so a browser toolbar never covers it), left of
+   the 天星小輪 label and clear of the buoy; left out where there is no
+   room (copyLayer.js measures --panels-bottom and sets data-roomless;
+   user choices, 2026-10-04). 46vw matches TICKET_WIDTH there. */
+[data-breakpoint="mobile"].is-enhanced .chapter__ticket {
+  top: calc((var(--panels-bottom, 70svh) + 100svh - 46vw * 344 / 720) / 2);
+  right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 40px);
+  bottom: auto;
+  width: 46vw;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__ticket[data-roomless] {
+  display: none;
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .is-enhanced .chapter__ticket {
+    display: none;
+  }
+}
+
+.is-stepped .chapter__ticket {
+  transition: opacity 150ms linear;
+}
+
+[data-breakpoint].is-stepped .chapter__ticket,
+[data-breakpoint].is-stepped .chapter__ticket[data-flipped] {
+  transform: none;
+}
+
+[data-breakpoint].is-stepped .chapter__ticket-card {
+  transform: rotate(2deg);
+  box-shadow: 10px 14px 28px rgb(243 233 210 / 0.16);
+}
+
+[data-breakpoint].is-stepped .chapter__ticket-stub {
+  filter: none;
+  transform: none;
+}
+
+[data-breakpoint].is-stepped .chapter__ticket-glint {
+  display: none;
 }
 
 /* 04's statement header and photo cards (narrative spine scene 04, user

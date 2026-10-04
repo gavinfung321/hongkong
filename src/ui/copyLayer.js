@@ -17,7 +17,11 @@
 // darkens further (CROSSING.dark), the panels come with the title, and the
 // route dot runs from Tsim Sha Tsui to Central across the dwell. On the
 // shortest phones the second panel takes the first one's place. The sea
-// haze drifts at the ferry's waterline with the panels (`--wind`).
+// haze drifts at the ferry's waterline with the panels (`--wind`). The
+// panels flip over on their top edge as they come, like the seat backs, and
+// the ticket (ticketCard.js) flips in with them while the departure board
+// (departureBoard.js) flips its letters in; the board then counts down
+// with the route (user choices, 2026-10-04).
 //
 // 04 (`data-story="statement"`): the label and the statement header come as
 // the camera settles, the two photo cards (paperCard.js) hang in part-way
@@ -26,10 +30,25 @@
 // the cards), and a sea haze drifts across the water with the cards
 // (`--wind`); the petals stay, as there is no dust to give way to.
 import { smoothstep } from '../scroll/cameraRig.js';
+import { createDepartureBoard } from './departureBoard.js';
 const RISE = 48; // px travelled while fading: in from below, out through the top
 // Shares of the dwell: 02's print and timeline wait about half a screen.
 const STORY = { print: [0.5, 0.8] };
-const CROSSING = { route: [0.1, 0.9], swap: [0.4, 0.6], dark: 0.7 };
+// 03: the board's countdown is at least as far on as the `due` shares of
+// the route (it also runs on its own clock, departureBoard.js); a panel
+// or the ticket flips over once it is `flip` of the way in.
+const CROSSING = {
+  route: [0.1, 0.9],
+  swap: [0.4, 0.6],
+  dark: 0.7,
+  due: [0.3, 0.55, 0.8],
+  flip: 0.2,
+};
+// The phone ticket: share of the window's width, height over width, and the
+// least space kept above and below it (px).
+const TICKET_WIDTH = 0.46;
+const TICKET_RATIO = 344 / 720;
+const TICKET_MARGIN = 20;
 const STATEMENT = { photos: [0.2, 0.5], arrive: 0.45, full: 0.65 };
 // Memory mode reaches `arrive` from `approach[0]` of the way into the chapter
 // until the camera settles, and the rest with the print. Past the keyframe
@@ -43,7 +62,30 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
   const opacities = copies.map(() => -1);
   const stories = copies.map((copy) => {
     if (!copy.classList.contains('chapter__copy--story')) return null;
+    const board = copy.querySelector('.chapter__board');
+    // The ticket hangs just above the panels row on desktop, and in the
+    // open water below the panels on phones, left out where there is no
+    // room for it (styles.css; TICKET_WIDTH matches its phone width).
+    const panels = copy.querySelector('.chapter__panels');
+    const ticket = copy.querySelector('.chapter__ticket');
+    if (panels) {
+      const measure = () => {
+        copy.style.setProperty('--panels-height', `${panels.offsetHeight}px`);
+        if (!ticket) return;
+        const bottom = copy.getBoundingClientRect().top + panels.offsetTop + panels.offsetHeight;
+        copy.style.setProperty('--panels-bottom', `${Math.round(bottom)}px`);
+        const height = innerWidth * TICKET_WIDTH * TICKET_RATIO;
+        ticket.toggleAttribute('data-roomless', innerHeight - bottom < height + 2 * TICKET_MARGIN);
+      };
+      const observer = new ResizeObserver(measure);
+      observer.observe(panels);
+      observer.observe(copy);
+      window.addEventListener('resize', measure);
+    }
     return {
+      board,
+      flaps: board && createDepartureBoard(board),
+      ticket: copy.querySelector('.chapter__ticket'),
       crossing: copy.dataset.story === 'crossing',
       statement: copy.querySelector('.chapter__statement'),
       photos: copy.querySelector('.chapter__photos'),
@@ -110,6 +152,7 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       : smoothstep(i + DARK.approach, key - copyFull, rendered) * (1 - smoothstep(DARK.lift[0], DARK.lift[1], rendered - key));
     for (const element of [story.label, story.title, story.standfirst, ...story.beats]) setVar(element, '--enter', label);
     for (const beat of story.beats) beat.toggleAttribute('data-enter-hidden', label === 0);
+    const sink = stepped ? 1 : 1 - smoothstep(DARK.sink[0], DARK.sink[1], p - key);
     if (story.crossing) {
       const enter = story.panels.map(() => label);
       if (phone && shortPhone.matches) {
@@ -119,11 +162,21 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       story.panels.forEach((panel, k) => {
         setVar(panel, '--enter', enter[k]);
         panel.toggleAttribute('data-enter-hidden', !enter[k]);
+        if (enter[k] >= CROSSING.flip) panel.toggleAttribute('data-flipped', true);
+        else if (enter[k] === 0) panel.toggleAttribute('data-flipped', false);
       });
-      setVar(story.route, '--route', level(CROSSING.route));
+      const route = level(CROSSING.route);
+      setVar(story.route, '--route', route);
+      setVar(story.board, '--enter', label);
+      story.flaps?.update(label > 0 && base > 0, CROSSING.due.filter((share) => route >= share).length, stepped);
+      if (story.ticket) {
+        setVar(story.ticket, '--enter', label);
+        story.ticket.toggleAttribute('data-enter-hidden', label === 0);
+        if (label >= CROSSING.flip) story.ticket.toggleAttribute('data-flipped', true);
+        else if (label === 0) story.ticket.toggleAttribute('data-flipped', false);
+      }
       return { mode: base * CROSSING.dark, yield: base * CROSSING.dark, wind: label * base };
     }
-    const sink = stepped ? 1 : 1 - smoothstep(DARK.sink[0], DARK.sink[1], p - key);
     if (story.statement) {
       setVar(story.statement, '--enter', label);
       const photos = level(STATEMENT.photos) * sink;

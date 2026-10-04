@@ -436,7 +436,50 @@ outlined cells over a darkened scene; no Kage code, type or copy):
   (55vw, peak 0.2) farther out on the water; on phones the near band
   sits under the stacked panels and a wide faint band runs low on the
   water;
-- reduced motion: everything appears whole with the usual 150 ms fade.
+- more presence, as 03 read plain next to 02 and 04 (user request and
+  choices, 2026-10-04):
+  - the panels flip over on their top edge as they come in, all three
+    together, settling with a small overshoot, like the reversible seat
+    backs;
+  - a split-flap departure board in the open sky between the masts and
+    the moon, level with the title and clear of IFC, with no box, only a
+    faint backing (user choice, 2026-10-04; it was first boxed top right,
+    where it sat on IFC's crown); it comes in with the panels (user
+    request, 2026-10-04, was dwell share 0.25–0.4): "Star Ferry 天星小輪",
+    "To 往" CENTRAL (English only in the tiles: the Chinese is in the
+    labels and the route panel's "Central 中環"; user choice, 2026-10-04,
+    after 中環 was briefly stacked above it), and "Due 到達" counting
+    down 3 MIN, 2 MIN, 1 MIN, then ARRIVING on its own clock, one step
+    every 1.2 s after a 0.4 s lead, so ARRIVING shows about 4 s after the
+    board arrives even if the visitor stops scrolling; scrolling the route
+    dot past 0.3, 0.55 or 0.8 runs it ahead, and it never counts back
+    while in 03 (user choice, 2026-10-04; it was scroll-only). On a link
+    straight to 03 the board waits for the entrance cover to lift. Its tiles flip through a few letters before landing,
+    left to right; the countdown flips only the tiles that change;
+    leaving 03 blanks them so they flip in again. On phones it sits under
+    the standfirst as one short line (CENTRAL and the countdown), left
+    out on phones up to 740px tall;
+  - a Star Ferry ticket (our own artwork: upper deck, Tsim Sha Tsui to
+    Central, adult weekday fare HK$5.0, checked against the Star Ferry
+    fare table on 2026-10-04) hangs over the water at the lower right,
+    just above the panels, in the darker cream of the night grade. On
+    phones it is centred in the open water between the panels' foot and
+    the foot of the smallest viewport (so a browser toolbar never covers
+    it), at the right, left of the 天星小輪 label and clear of the buoy,
+    46% of the width; a tap plays the hover effect for a second; left out
+    only where that gap is too small for it (user request and choices,
+    2026-10-04). It behaves like a ticket, not cloth (user requests and
+    choices, 2026-10-04; a cloth version, then a stiff-cloth version and a
+    near-white export were tried the same day): a rigid card that flips
+    in on its top edge with the panels, sways about a degree in the plane
+    like a card on a pin, and under a mouse tilts toward the pointer as
+    one flat piece while a band of light follows the pointer and the stub
+    lifts at the perforation (`ticketCard.js`);
+  - a faint outlined "1888" in the sky was tried and removed the same
+    day (user request, 2026-10-04);
+- reduced motion: everything appears whole with the usual 150 ms fade
+  (the board shows its words without flipping, the panels stay still,
+  the ticket is a still image).
 
 Scene 02 was cut back the same way (user request, 2026-10-04): the
 label, title, both beats and the 1915 ghost fade in together as the
