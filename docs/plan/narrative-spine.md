@@ -424,12 +424,11 @@ outlined cells over a darkened scene; no Kage code, type or copy):
   with a dot that crosses with the scroll (user request: the moving
   route line), both in the ferry's green (user request, 2026-10-04), and
   "Crossing since 1888";
-- desktop: one row along the foot of the screen; phones: the three
-  panels stack in one column under the title, allowed to cover the
-  ferry, with a light 55% fill so the ferry shows through and a soft text
-  shadow for legibility, and the standfirst balanced over two lines
-  (user requests and choices, 2026-10-04); phones up to 740px tall tighten, and
-  below 620px drop the meta line and panel 02 takes 01's place mid-dwell;
+- desktop: one row along the foot of the screen; the standfirst is
+  balanced over two lines on phones (user requests and choices,
+  2026-10-04). On the phone scene the whole index is left off: The Route
+  is step 3, and showing it alone broke the flow (user request,
+  2026-10-04);
 - a 60svh dwell (was 110) holds the camera while the route dot crosses
   (dwell share 0.1–0.9);
 - wind haze, borrowed from 04 (user choice, 2026-10-04): the same two
@@ -437,7 +436,7 @@ outlined cells over a darkened scene; no Kage code, type or copy):
   75% of 04's strength. On desktop a near band runs just above the
   panels, along the ferry's waterline, with a fainter, narrower band
   (55vw, peak 0.2) farther out on the water; on phones the near band
-  sits under the stacked panels and a wide faint band runs low on the
+  sits under the ferry and a wide faint band runs low on the
   water;
 - more presence, as 03 read plain next to 02 and 04 (user request and
   choices, 2026-10-04):
@@ -459,18 +458,17 @@ outlined cells over a darkened scene; no Kage code, type or copy):
     while in 03 (user choice, 2026-10-04; it was scroll-only). On a link
     straight to 03 the board waits for the entrance cover to lift. Its tiles flip through a few letters before landing,
     left to right; the countdown flips only the tiles that change;
-    leaving 03 blanks them so they flip in again. On phones it sits under
-    the standfirst as one short line (CENTRAL and the countdown), left
-    out on phones up to 740px tall;
+    leaving 03 blanks them so they flip in again. On phones the same card
+    sits in the column under the standfirst: the heading, To 往, CENTRAL,
+    Due 到達 and the countdown (user request, 2026-10-04);
   - a Star Ferry ticket (our own artwork: upper deck, Tsim Sha Tsui to
     Central, adult weekday fare HK$5.0, checked against the Star Ferry
     fare table on 2026-10-04) hangs over the water at the lower right,
     just above the panels, in the darker cream of the night grade. On
-    phones it sits low in the open water, just above the browser toolbar,
-    at the right, left of the 天星小輪 label and clear of the buoy,
-    46% of the width; a tap plays the hover effect for a second; left out
-    only where that gap is too small for it (user request and choices,
-    2026-10-04). It behaves like a ticket, not cloth (user requests and
+    phones it sits just under that card, on the right, clear of the ferry
+    roof and the 天星小輪 label, 46% of the width; a tap plays the hover
+    effect for a second; left out when it would reach the ferry (user
+    request and choices, 2026-10-04). It behaves like a ticket, not cloth (user requests and
     choices, 2026-10-04; a cloth version, then a stiff-cloth version and a
     near-white export were tried the same day): a rigid card that flips
     in on its top edge with the panels, sways about a degree in the plane
@@ -608,9 +606,9 @@ sentence, no extra beats.
   only): the original 3D branch, wood and foliage from the promenade
   tree, placed in the scene from the 05 pose (user request, 2026-10-04:
   the flat camera-pinned overlay read worse, so the depth branch is
-  back). It stays hidden while the camera is moving, then slides in from
-  off the top-right once 05 has settled, and slips back out the same way
-  before the camera leaves (user request, 2026-10-04). Its foot sits just
+  back). It stays off while the camera is moving, then slides in from
+  off the top-right with the words and slips back out as they fade
+  (user request, 2026-10-04). Its foot sits just
   past the top-right edge, close to the lens, and it follows most of the
   mouse parallax. Phones skip it. Kept as a
   postcard frame, not copied onto other scenes (user choice, 2026-10-04).

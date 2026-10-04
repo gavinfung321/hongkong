@@ -220,8 +220,7 @@ async function start(initGuard, header, loading) {
       boatFade(value);
     },
   }, {
-    // The 05 branch stays hidden until the camera has settled, then slides
-    // in on its own. Quiet lens discs (03–04) and the boat come in over
+    // The 05 branch shares the words' fade (copyLayer.js). Quiet lens discs (03–04) and the boat come in over
     // the second half of the move; 05's denser pack (`lensBusy`) later;
     // the cloud band across most of it.
     branch: { in: [0.999, 1], out: [0, 0.02] },
@@ -462,18 +461,10 @@ async function start(initGuard, header, loading) {
 
   const branchChapter = chapters.findIndex((chapter) => chapter.id === '05');
 
-  function applyPose(p, isStepped, time) {
+  function applyPose(p, isStepped, time, slide = 0) {
     const segment = rig.update(p, { stepped: isStepped });
-    const held = segment.from === branchChapter && segment.eased <= 0.001;
-    const arrived = segment.to === branchChapter && segment.eased >= 0.999;
-    // The camera stays still for the first part of the leave. Start the
-    // slide back out then, so a fast scroll can hide it before the view moves.
-    const leaving = held && segment.u >= 0.05;
-    cornerBranch.follow(isStepped ? null : rig.shift, {
-      show: (held && !leaving) || arrived,
-      retreat: leaving,
-      stepped: isStepped,
-    });
+    // The sprig shares the 05 words' fade (copyLayer.js `words`).
+    cornerBranch.follow(isStepped ? null : rig.shift, { slide, stepped: isStepped });
     vessels.update(segment, time, !isStepped);
     gating.update(segment, breakpoint, isStepped);
     atmosphere.setSegment(segment, isStepped);
@@ -560,13 +551,13 @@ async function start(initGuard, header, loading) {
         if (shownKeyframe < 0) {
           shownKeyframe = state.index;
           conductor.setRendered(state.index + 0.5);
-          applyPose(state.index + 0.5, true, 0);
+          applyPose(state.index + 0.5, true, 0, state.index === branchChapter ? 1 : 0);
           needsRender = true;
         } else if (!veilActive) {
           runVeil(() => {
             shownKeyframe = conductor.state.index;
             conductor.setRendered(shownKeyframe + 0.5);
-            applyPose(shownKeyframe + 0.5, true, 0);
+            applyPose(shownKeyframe + 0.5, true, 0, shownKeyframe === branchChapter ? 1 : 0);
           });
         }
       }
@@ -582,7 +573,7 @@ async function start(initGuard, header, loading) {
       const glide = glideStart < 0 ? 0 : (1 - Math.min(1, Math.max(0, (now - glideStart) / (HERO.glide.duration * 1000)))) ** 3;
       rig.setGlide(HERO.glide.back * glide, HERO.glide.rise * glide);
       if (glide === 0) glideStart = -1;
-      if (!control.free) applyPose(state.pRendered, false, time);
+      if (!control.free) applyPose(state.pRendered, false, time, storyLevels.words ?? 0);
       camera.updateMatrixWorld();
       petals.setDensity(petalLevel * (1 - PETAL_YIELD * storyLevels.yield));
       wordmark.fadeAt(state.pRendered, heroFade.from, heroFade.to);

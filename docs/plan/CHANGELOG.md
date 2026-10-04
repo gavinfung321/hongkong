@@ -6,6 +6,28 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **03 phone board and ticket** (user request, 2026-10-04). On phones the
+  departure card is the full desktop board under the standfirst, and the
+  ticket sits just beneath it on the right. It stays off when that would
+  cover the ferry. Desktop is unchanged. Files: `src/styles.css`,
+  `src/ui/copyLayer.js`; plan: `narrative-spine.md`.
+- **03 phone countdown, index off** (user request, 2026-10-04). The route
+  panel on its own read as step 3 of a flow that was not on the phone.
+  Phones now keep the title, the standfirst, the countdown and the
+  ticket. All three panels stay on desktop. Files: `src/styles.css`,
+  `src/ui/copyLayer.js`; plan: `narrative-spine.md`.
+- **03 quieter on phones** (user request, 2026-10-04). Phones keep the
+  title, the standfirst, the route panel and the ticket. Facing Forward,
+  A Daily Crossing and the departure board are left off, so the ferry is
+  not covered by a column of reading. Desktop keeps all three panels and
+  the board. Files: `src/styles.css`, `src/ui/copyLayer.js`; plan:
+  `narrative-spine.md`.
+- **05 branch fades with the words** (user request, 2026-10-04). The
+  corner sprig was on its own clock, slower in and quicker out than the
+  sentence. It now uses the sentence's fade, so they arrive and leave
+  together. A fast scroll takes the sprig with the words. Files:
+  `src/scene/createCornerBranch.js`, `src/ui/copyLayer.js`,
+  `src/main.js`; plan: `narrative-spine.md`.
 - **04 quote off on phones** (user request, 2026-10-04). The sailing
   quote and the coral line above it are gone on phones, so they do not
   cross the main sail. The cards, captions and foot line stay. Desktop

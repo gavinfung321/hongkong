@@ -1913,13 +1913,10 @@ html:not(.is-enhanced) .vertical-text {
   transform: none;
 }
 
-/* On phones the panels stack in one column under the title, sharing their
-   hairlines; they cover the ferry, so the fill is light enough for it to
-   show through, with a soft shadow keeping the words crisp (user requests,
-   2026-10-04). */
+/* The index is a desktop row. On phones it would read as a numbered flow
+   with only its last step showing (user request, 2026-10-04). */
 [data-breakpoint="mobile"].is-enhanced .chapter__panels {
-  gap: 0;
-  margin-top: 1.25rem;
+  display: none;
 }
 
 /* The index shares the title's line, to save a row per panel. */
@@ -1953,32 +1950,6 @@ html:not(.is-enhanced) .vertical-text {
 
 [data-breakpoint="mobile"].is-enhanced .chapter__panel:last-child {
   border-bottom: 1px solid rgb(243 233 210 / calc(0.18 * var(--enter, 1)));
-}
-
-/* Short phones: tighter panels; on the shortest, no meta line and panel 02
-   takes 01's place (copyLayer.js, shortPhone). */
-@media (max-height: 740px) {
-  [data-breakpoint="mobile"].is-enhanced .chapter__panel {
-    padding: 0.75rem 0.875rem 0.875rem;
-  }
-
-  [data-breakpoint="mobile"].is-enhanced .chapter__route {
-    margin-top: 1rem;
-  }
-}
-
-@media (max-height: 619px) {
-  [data-breakpoint="mobile"].is-enhanced .chapter__panel-meta {
-    display: none;
-  }
-
-  [data-breakpoint="mobile"].is-enhanced .chapter__panel:not(:last-child) {
-    grid-area: 1 / 1;
-  }
-
-  [data-breakpoint="mobile"].is-enhanced .chapter__panel:first-child {
-    border-bottom: 0;
-  }
 }
 
 [data-breakpoint="mobile"].is-enhanced .chapter__panel-title {
@@ -2016,8 +1987,8 @@ html:not(.is-enhanced) .vertical-text {
    (departureBoard.js; user choices, 2026-10-04). On desktop it sits in the
    open sky between the masts and the moon, level with the title and clear
    of IFC, with no box: only a faint backing behind the tiles (user choice,
-   2026-10-04, was boxed top right over IFC's crown). On phones it is one
-   row under the standfirst, left out on short phones. */
+   2026-10-04, was boxed top right over IFC's crown). On phones the same
+   card sits in the column under the standfirst (user request, 2026-10-04). */
 .chapter__board {
   display: none;
 }
@@ -2140,41 +2111,18 @@ html:not(.is-enhanced) .vertical-text {
   }
 }
 
+/* The same card as desktop, in the column under the standfirst (user
+   request, 2026-10-04). */
 [data-breakpoint="mobile"].is-enhanced .chapter__board {
-  display: flex;
-  align-items: flex-end;
-  gap: 0.5rem;
   position: static;
   width: fit-content;
+  max-width: 100%;
   margin-top: 0.875rem;
-  padding: 0.5rem;
-  background: rgb(6 5 16 / 0.55);
-}
-
-[data-breakpoint="mobile"].is-enhanced .chapter__board-head,
-[data-breakpoint="mobile"].is-enhanced .chapter__board-label {
-  display: none;
-}
-
-[data-breakpoint="mobile"].is-enhanced .chapter__board-row {
-  display: block;
-  margin: 0;
-}
-
-[data-breakpoint="mobile"].is-enhanced .chapter__board-tile {
-  width: 0.875rem;
-  height: 1.375rem;
-  font-size: 0.75rem;
-}
-
-@media (max-height: 740px) {
-  [data-breakpoint="mobile"].is-enhanced .chapter__board {
-    display: none;
-  }
 }
 
 @media (orientation: landscape) and (max-height: 500px) {
-  .is-enhanced .chapter__board {
+  .is-enhanced .chapter__board,
+  [data-breakpoint="mobile"].is-enhanced .chapter__board {
     display: none;
   }
 }
@@ -2283,14 +2231,14 @@ html:not(.is-enhanced) .vertical-text {
   pointer-events: none;
 }
 
-/* Phones: low in the open water, just above the browser toolbar, left of
-   the 天星小輪 label and clear of the buoy; left out where there is no
-   room (copyLayer.js sets data-roomless; user request, 2026-10-04).
+/* Phones: just under the board, on the right, clear of the ferry roof and
+   the 天星小輪 label. Left out when that would reach the ferry
+   (copyLayer.js sets data-roomless; user request, 2026-10-04).
    46vw matches TICKET_WIDTH there. */
 [data-breakpoint="mobile"].is-enhanced .chapter__ticket {
-  top: auto;
+  top: calc(var(--board-bottom, 34lvh) + 1rem);
   right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 40px);
-  bottom: max(5lvh, calc(env(safe-area-inset-bottom) + 16px));
+  bottom: auto;
   width: 46vw;
 }
 

@@ -25,12 +25,12 @@ const BRANCH = {
   fill: 0.3,
 };
 
-// After the camera has settled on 05, the sprig slides in from off the
-// top-right (user request, 2026-10-04). `side` and `rise` are extra shares
-// of the half-frame, past the resting corner, so the whole sprig starts
-// outside. It takes `enter` seconds to arrive and `leave` seconds to slip
-// back out, and it stays hidden while the camera is still moving.
-const ENTER = { side: 1.05, rise: 1.15, enter: 1.15, leave: 0.45 };
+// The sprig slides in from off the top-right with the chapter's words,
+// and slips back out as they fade (user request, 2026-10-04). `side` and
+// `rise` are extra shares of the half-frame, past the resting corner, so
+// the whole sprig starts outside. The slide amount is the words' own
+// fade, so a fast scroll takes the sprig with them.
+const ENTER = { side: 1.05, rise: 1.15 };
 
 const forward = new Vector3();
 const right = new Vector3();
@@ -56,7 +56,6 @@ export function createCornerBranch(camera) {
   let gate = 0;
   let slide = 0;
   let shift = null;
-  let mode = 'hide';
 
   function place(breakpoint, aspect) {
     const pose = camera[breakpoint] ?? camera.desktop;
@@ -82,47 +81,32 @@ export function createCornerBranch(camera) {
     seat();
   }
 
-  // `next`: the camera's parallax shift this frame, or none. `travel` says
-  // whether 05 is held (`show`), the hold is being left while the camera is
-  // still still (`retreat`), or the camera is moving (`hide`).
+  // `next`: the camera's parallax shift this frame, or none. `travel.slide`
+  // is the 05 words' fade, 0 off screen to 1 at rest. Reduced motion snaps.
   function follow(next, travel) {
     shift = next;
-    if (travel.stepped) {
-      slide = travel.show ? 1 : 0;
-      mode = 'hold';
-      seat();
-      return;
-    }
-    mode = travel.show ? 'in' : travel.retreat ? 'out' : 'hide';
-    if (mode === 'hide') slide = 0;
+    slide = travel.stepped ? (travel.slide > 0 ? 1 : 0) : travel.slide;
+    seat();
   }
 
   function setOpacity(value) {
     gate = value;
-    if (mode === 'hold') seat();
+    seat();
   }
 
   function seat() {
-    const t = slide * slide * (3 - 2 * slide);
-    const out = 1 - t;
+    const out = 1 - slide;
     branch.group.position.copy(base);
     if (shift) branch.group.position.addScaledVector(shift, BRANCH.follow);
     branch.group.position.addScaledVector(axisRight, out * ENTER.side * spanW);
     branch.group.position.addScaledVector(axisUp, out * ENTER.rise * spanH);
-    const opacity = gate * t;
+    const opacity = gate * slide;
     branch.group.visible = opacity > 0.001;
     for (const material of branch.materials) material.opacity = opacity;
   }
 
-  function update(seconds, dt = 0) {
+  function update(seconds) {
     branch.update(seconds);
-    if (mode === 'hold') return;
-    if (mode === 'hide') slide = 0;
-    else {
-      const step = Math.min(dt, 0.05) / (mode === 'in' ? ENTER.enter : ENTER.leave);
-      slide = MathUtils.clamp(slide + (mode === 'in' ? step : -step), 0, 1);
-    }
-    seat();
   }
 
   return { group: branch.group, place, follow, setOpacity, update };
