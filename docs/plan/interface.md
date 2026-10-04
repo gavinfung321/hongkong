@@ -515,16 +515,19 @@ Serif TC 700). Copy regions widened for 03 desktop, 02 and 06 phones.
     choice): **Chapters** (links to all six), **Landmarks and vessels**
     (facts, not links: Clock Tower completed 1915, Star Ferry origins in
     1880, Chinese junk before the 1950s, Two IFC completed 2003) and
-    **Colophon** (Built with Three.js
-    and WebGL; Original 3D scene and illustrated atmosphere; Designed for
-    desktop and mobile);
+    **Colophon** (Created by Gavin Fung at HKAAA; Original 3D scene and
+    illustrated atmosphere; a short Dukling credit). "Built with Three.js
+    and WebGL", "Designed for desktop and mobile", and the long Red Sails
+    photo paragraph are gone (user request, 2026-10-04). The Dukling line
+    stays short because that photograph is CC BY-SA;
   - credit (user choice, 2026-10-03): the colophon opens with "Created by
     Gavin Fung at HKAAA" (HKAAA is the author's studio; "HKAAA" links to
     <https://hkaiautomation.com/>, user request, 2026-10-03), and the page head
     has `<meta name="author" content="Gavin Fung">`;
   - a bottom bar: "© 2026 Gavin Fung" (was the project name), 維港夜色
-    ("Victoria Harbour at night") in the centre, "Three.js · WebGL · Hong
-    Kong" on the right.
+    ("Victoria Harbour at night") in the centre, "Hong Kong" on the right
+    (the Three.js · WebGL prefix left with the colophon line, user request,
+    2026-10-04).
 - **Approved copy** (user choice, 2026-10-03): the statement, landmark
   column, colophon and bar now follow `FINAL-NARRATIVE-COPY.md`. The old
   "every model and texture made in code" line was dropped because the
@@ -545,7 +548,8 @@ Serif TC 700). Copy regions widened for 03 desktop, 02 and 06 phones.
   found that too empty (user request, 2026-10-03). Driven from
   `src/main.js` through `fireworks.setFooter()` in
   `src/scene/createFireworks.js`.
-- The 06 scene stays behind it, dimmed by a dark gradient. On mobile the
+- The 06 scene stays behind it. The gradient is near black from early in
+  the rise (user request, 2026-10-04: darker). On mobile the
   chapters and landmarks sit side by side with the colophon below, the
   landmark years on their own line, and the bottom bar stacks. The space
   above the return button on phones is tighter: 40 px of padding instead
@@ -609,8 +613,9 @@ script 1.4 s, first 3D frame 1.7 s).
     the small viewport (`100svh`, so phone toolbars never push it down;
     a 4svh bottom bias puts it on the optical centre; safe areas kept
     clear). Top to bottom: the red sail mark (18 px wide; 16 px on
-    phones), 維港夜色 in Noto Serif TC 600 warm ivory (32 px; 27 px on
-    phones; 0.08em tracking, no synthetic bold), a 1 px line (240 px;
+    phones), 維港夜色 in Noto Serif TC 600 warm ivory (22 px; 18 px on
+    phones; 0.22em tracking, no synthetic bold; user request, 2026-10-04:
+    smaller, so it reads as a mark), a 1 px line (240 px;
     200 px on phones, never wider than the screen less its insets; track
     cream at 12%, fill cream at 72%, so it never becomes the focus), and
     "Preparing the harbour · 42%" (the real percentage) in Inter 10 px

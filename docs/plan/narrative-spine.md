@@ -495,13 +495,15 @@ Files: `index.html`, `src/data/chapters.js`, `src/ui/copyLayer.js`,
 **As built (user requests and choices, 2026-10-04): statement header and
 two hanging photo cards.** The 3D stays untouched. A few quiet
 out-of-focus light discs sit in front of the lens, as in 03 (user
-choice, 2026-10-04).
+choice, 2026-10-04). The header and both cards fade in together as the
+camera settles, and the memory veil goes to full strength then (user
+request, 2026-10-04).
 
 - Atmosphere (user request and choices, 2026-10-04), DOM only like 03:
-  the memory veil darkens the harbour in two steps around a wide opening
-  on the sails (45% as the camera settles, 65% as the cards hang in;
-  lifting with the camera), so the sails stay brightest and the cards
-  stand out against the darker sky. Wind over the water: two thin bands
+  the memory veil darkens the harbour around a wide opening on the sails
+  (70% as the camera settles; lifting with the camera), so the sails stay
+  brightest and the cards stand out against the darker sky. Wind over the
+  water: two thin bands
   cut from the harbour mist sheet drift slowly left to right below the
   junk with the cards (56 s per pass, screened in, held still in reduced
   motion). The statement's bottom wash eased to 60% so the foot is not
@@ -601,9 +603,15 @@ sentence, no extra beats.
   about 50 px under a mouse, a quarter of the offices, half as bright,
   fading in 0.3 s; a tap on phones. Only in 05, off in reduced motion.
 - Corner bauhinia sprig on desktop (Kage frame-edge cutout, technique
-  only): original wood and foliage from the promenade tree, top-right,
-  following most of the mouse parallax. Phones skip it. Kept as a postcard
-  frame, not copied onto other scenes (user choice, 2026-10-04).
+  only): the original 3D branch, wood and foliage from the promenade
+  tree, placed in the scene from the 05 pose (user request, 2026-10-04:
+  the flat camera-pinned overlay read worse, so the depth branch is
+  back). It stays hidden while the camera is moving, then slides in from
+  off the top-right once 05 has settled, and slips back out the same way
+  before the camera leaves (user request, 2026-10-04). Its foot sits just
+  past the top-right edge, close to the lens, and it follows most of the
+  mouse parallax. Phones skip it. Kept as a
+  postcard frame, not copied onto other scenes (user choice, 2026-10-04).
 - Lens bokeh (Kage particles at several depths, technique only): out-of-
   focus petals and round light discs just in front of the camera. About
   nine round motes on desktop (three petals), six on phones (two petals);
@@ -615,9 +623,11 @@ sentence, no extra beats.
 - Searchlights sweep on their own. They do not follow the cursor (user
   request, 2026-10-04).
 - Wheel: the boarding plaza is denser (extra tents, two kiosks, three
-  lamps, string lights; not a fairground). Hovering the wheel in 05
-  speeds the turn about 16× (one turn in ~15 s); it eases back. Still
-  in reduced motion.
+  lamps, string lights). West of it a small night fair: a wave swinger
+  and a striped spiral-slide tower on a pad (user request, 2026-10-04;
+  Central carnival as a reference only, no sponsor lettering). Hovering
+  the wheel in 05 speeds the turn about 16× (one turn in ~15 s); it eases
+  back. Still in reduced motion.
 - Sources: [CTBUH Skyscraper Center](https://www.skyscrapercenter.com/building/two-international-finance-centre/205)
   (412 m, 88 floors, completed 2003); the
   [Skyscraper Museum](https://skyscraper.org/supertall/building/two-international-finance-centre/)

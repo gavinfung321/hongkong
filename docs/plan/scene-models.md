@@ -252,8 +252,9 @@ all six.
        with a soft halo, 42 violet lit gondolas hung outside the rim and
        always upright, four white tubular legs in A-frames front and back, and
        a boarding platform with eight white tents, two kiosks, three short
-       lamps and strings of warm bulbs (user request, 2026-10-04: denser
-       plaza, not a fairground). It turns once every 4 minutes in continuous
+       lamps and strings of warm bulbs, and to its west a small night fair
+       (user request, 2026-10-04): a wave swinger and a striped spiral-slide
+       tower on a pad, original, no sponsor lettering. It turns once every 4 minutes in continuous
        mode; in 05, hovering the wheel speeds that to about 15 seconds (16×;
        user request, 2026-10-04); in reduced motion it holds still. No
        sponsor banners or lettering.

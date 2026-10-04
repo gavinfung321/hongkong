@@ -245,9 +245,9 @@ a:focus-visible {
   font-family: var(--font-display-zh);
   font-weight: 600;
   font-synthesis: none;
-  font-size: 32px;
+  font-size: 22px;
   line-height: 1;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.22em;
   color: var(--color-ivory);
 }
 
@@ -289,7 +289,7 @@ a:focus-visible {
 
   .entrance__zh {
     margin-top: 14px;
-    font-size: 27px;
+    font-size: 18px;
   }
 
   .entrance__line {
@@ -559,7 +559,7 @@ a:focus-visible {
 .site-footer {
   padding: 96px max(var(--page-inset), env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom))
     max(var(--page-inset), env(safe-area-inset-left));
-  background: var(--color-fog);
+  background: #07060e;
   color: var(--color-soft);
   font-size: 0.8125rem;
 }
@@ -1427,7 +1427,7 @@ html:not(.is-enhanced) .vertical-text {
 
 /* The scene stays behind the footer, dimmed. */
 .is-enhanced .site-footer {
-  background: linear-gradient(to bottom, rgb(14 12 30 / 0), rgb(14 12 30 / 0.82) 160px, rgb(14 12 30 / 0.94));
+  background: linear-gradient(to bottom, rgb(5 4 10 / 0.35), rgb(5 4 10 / 0.94) 120px, #07060e);
 }
 
 /* The chapter layer leaves as the footer rises (--footer-in, siteFooter.js). */
@@ -2654,7 +2654,7 @@ html:not(.is-enhanced) .vertical-text {
   --veil-x: 64%;
   --veil-y: 40%;
   --veil-size: 34vw 40lvh;
-  background: radial-gradient(var(--veil-size) at var(--veil-x) var(--veil-y), rgb(8 6 24 / 0.02), rgb(8 6 24 / 0.6));
+  background: radial-gradient(var(--veil-size) at var(--veil-x) var(--veil-y), rgb(8 6 24 / 0.02), rgb(8 6 24 / 0.68));
 }
 
 [data-breakpoint="mobile"][data-veil="statement"].is-enhanced .memory-veil {

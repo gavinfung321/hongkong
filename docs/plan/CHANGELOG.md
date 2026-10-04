@@ -6,6 +6,44 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **Darker footer, shorter credits, smaller loading title** (user request,
+  2026-10-04). The footer wash goes near black. The colophon drops "Built
+  with Three.js and WebGL" and "Designed for desktop and mobile"; the bar
+  drops "Three.js · WebGL". The long Red Sails photo paragraph becomes
+  one Dukling credit (the photograph is CC BY-SA). The loading 維港夜色
+  is 22 px (18 px on phones) with wider tracking. Files: `index.html`,
+  `src/styles.css`; plan: `interface.md`, `FINAL-NARRATIVE-COPY.md`,
+  `ASSET-LEDGER.md`.
+- **05 corner sprig enters from the top-right** (user request, 2026-10-04).
+  The depth branch was fixed in the harbour, so it crossed the middle of
+  the frame as the camera arrived. It now stays hidden during the move,
+  then slides in from off the top-right once 05 has settled, and slips
+  back out the same way before the camera leaves. Files:
+  `src/scene/createCornerBranch.js`, `src/main.js`; plan:
+  `narrative-spine.md`.
+- **05 corner sprig back in the scene** (user request, 2026-10-04). The
+  flat camera-pinned overlay read worse than the depth branch, so the
+  sprig is the 3D one again: placed from the 05 pose, with depth, and
+  following most of the mouse parallax. Desktop only. Files:
+  `src/scene/createCornerBranch.js`, `src/scene/bauhinia.js`,
+  `src/main.js`; plan: `narrative-spine.md`, `ASSET-LEDGER.md`.
+- **05 corner sprig pinned to the frame** (user request, 2026-10-04). The
+  bauhinia branch was a 3D object placed from the 05 pose, so it read as
+  a stick on Two IFC. It is now parented to the live camera, flattened,
+  drawn without depth on the overlay layer, and kept in the top-right
+  sky. Shorter wood, denser flowers. Desktop only. Files:
+  `src/scene/createCornerBranch.js`, `src/scene/bauhinia.js`,
+  `src/main.js`; plan: `narrative-spine.md`, `ASSET-LEDGER.md`.
+- **05 fair pad left of the wheel; 04 words and photos together** (user
+  requests and choices, 2026-10-04). 05's empty water west of the
+  Observation Wheel is a small night fair on a new pad: a wave swinger
+  and a red-and-white spiral-slide tower, original, with no sponsor
+  lettering (the Central carnival is a reference only). 04's header and
+  both photo cards come in together, and the sails veil goes to full
+  strength as they arrive. Files: `src/scene/createFairground.js`,
+  `src/scene/createIsland.js`, `src/scene/waterReflections.js`,
+  `src/ui/copyLayer.js`, `src/data/chapters.js`, `src/styles.css`; plan:
+  `narrative-spine.md`, `scene-models.md`, `ASSET-LEDGER.md`.
 - **02 print with the words; quiet lens discs in 03 and 04** (user
   requests and choices, 2026-10-04). 02's 1915 print, timeline, steam
   and spare dust now fade in with the title and beats (they used to wait

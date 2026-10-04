@@ -321,7 +321,7 @@ export const chapters = [
       desktop: { left: 5, top: 11, right: 34, bottom: 76 },
       mobile: { left: 8, top: 9, right: 92, bottom: 37 },
     },
-    // Time for the cards to hang in after the statement.
+    // Cards hang with the statement (user request, 2026-10-04).
     dwell: 60,
     // The wheel is gated here: framing alone leaves it peeking past the junk's
     // stern, and it is small and distant while it fades.

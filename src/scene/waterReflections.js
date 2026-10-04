@@ -49,6 +49,9 @@ export function reflectionSources({ tower, ferry, junk, boat, wave }) {
   // 2026-10-03): from the rim's foot to its top, about the rim's width.
   const { position: [wx, wy, wz], radius: wr, hub } = WORLD.wheel;
   list.push(source(wx, wz, wy + hub - wr, wy + hub + wr, wr * 0.7, 0xff4a7c, 0.35, { key: 'wheel', tail: 0.45, taper: 0.4 }));
+  // 05 fair (user request, 2026-10-04): warm glow under the swinger and the slide.
+  list.push(source(wx - 28, wz + 19, wy + 2, wy + 14, 8, 0xffc878, 0.22, { key: 'wheel', tail: 0.2, taper: 0.5 }));
+  list.push(source(wx - 58, wz + 17, wy + 2, wy + 16, 4, 0xff8a5a, 0.18, { key: 'wheel', tail: 0.15, taper: 0.5 }));
 
   // A glitter path from the horizon to the moon's mirror image.
   const { position: [mx, my, mz], radius } = WORLD.moon;

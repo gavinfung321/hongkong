@@ -220,11 +220,11 @@ async function start(initGuard, header, loading) {
       boatFade(value);
     },
   }, {
-    // The 05 branch sits by the 05 camera: in only as the camera settles,
-    // out as it leaves. Quiet lens discs (03–04) and the boat come in over
+    // The 05 branch stays hidden until the camera has settled, then slides
+    // in on its own. Quiet lens discs (03–04) and the boat come in over
     // the second half of the move; 05's denser pack (`lensBusy`) later;
     // the cloud band across most of it.
-    branch: { in: [0.85, 1], out: [0, 0.1] },
+    branch: { in: [0.999, 1], out: [0, 0.02] },
     lens: { in: [0.6, 1], out: [0, 0.3] },
     lensBusy: { in: [0.75, 1], out: [0, 0.25] },
     boat: { in: [0.5, 1], out: [0, 0.4] },
@@ -459,9 +459,20 @@ async function start(initGuard, header, loading) {
 
   // ---- Frame ---------------------------------------------------------------
 
+  const branchChapter = chapters.findIndex((chapter) => chapter.id === '05');
+
   function applyPose(p, isStepped, time) {
     const segment = rig.update(p, { stepped: isStepped });
-    cornerBranch.follow(isStepped ? null : rig.shift);
+    const held = segment.from === branchChapter && segment.eased <= 0.001;
+    const arrived = segment.to === branchChapter && segment.eased >= 0.999;
+    // The camera stays still for the first part of the leave. Start the
+    // slide back out then, so a fast scroll can hide it before the view moves.
+    const leaving = held && segment.u >= 0.05;
+    cornerBranch.follow(isStepped ? null : rig.shift, {
+      show: (held && !leaving) || arrived,
+      retreat: leaving,
+      stepped: isStepped,
+    });
     vessels.update(segment, time, !isStepped);
     gating.update(segment, breakpoint, isStepped);
     atmosphere.setSegment(segment, isStepped);
@@ -581,7 +592,7 @@ async function start(initGuard, header, loading) {
       foreground.update(time);
       atmosphere.update(time);
       searchlights.update(time);
-      cornerBranch.update(time);
+      cornerBranch.update(time, dt);
       boat.update(dt, boatLevel, true);
       fireworks.update(time);
       moon.update(time);

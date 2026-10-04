@@ -42,6 +42,7 @@ import { WORLD } from '../data/world.js';
 import { seededRandom } from './random.js';
 import { strut } from './strut.js';
 import { hubGlow } from './surfaces.js';
+import { createFairground } from './createFairground.js';
 
 const unitBox = new BoxGeometry(1, 1, 1).translate(0, 0.5, 0);
 const SKYLINE_STRENGTH = 0.7;
@@ -796,6 +797,8 @@ export function createIsland() {
 
   const ifc = createIFC();
   const { wheel, turn } = createWheel();
+  const fair = createFairground();
+  wheel.add(fair.group);
   group.add(ifc, createPodium(), createPiers(), wheel);
 
   // The light wave's position on the waterfront, for its reflection.
@@ -850,13 +853,14 @@ export function createIsland() {
 
   // Continuous mode only; in reduced motion the wheel, mist, beacons and
   // landmark colours hold still, and there is no light wave. Hovering the
-  // wheel in 05 (large on screen) speeds the turn about 4×.
+  // wheel in 05 (large on screen) speeds the turn about 16×.
   function update(time, dt = 0, camera = null, pointer = null) {
     if (dt > 0) {
       const target = overWheel(camera, pointer) ? 1 : 0;
       wheelBoost += (target - wheelBoost) * (1 - Math.exp(-WHEEL_HOVER.ease * dt));
       wheelAngle += ((Math.PI * 2) / WHEEL_TURN) * MathUtils.lerp(1, WHEEL_HOVER.boost, wheelBoost) * dt;
       turn(wheelAngle);
+      fair.update(time);
     }
     mountains.update(time);
     landmarks.update(time);

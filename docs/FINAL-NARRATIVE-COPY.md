@@ -226,9 +226,13 @@ details, not claims of unbroken physical or corporate continuity.
 
 - Created by Gavin Fung at HKAAA (added 2026-10-03, user choice: HKAAA is
   the author's studio; "HKAAA" links to https://hkaiautomation.com/)
-- Built with Three.js and WebGL
 - Original 3D scene and illustrated atmosphere
-- Designed for desktop and mobile
+- Dukling photograph by Ank Kumar, CC BY-SA (shortened 2026-10-04, user
+  request: the long Red Sails paragraph was too long; the public-domain
+  junk needs no credit)
+
+"Built with Three.js and WebGL" and "Designed for desktop and mobile"
+were removed the same day (user request).
 
 Do not retain “Every model and texture made in code”; the approved WebP
 atmosphere and font files make that statement inaccurate.
@@ -239,7 +243,7 @@ atmosphere and font files make that statement inaccurate.
 |---|---|
 | Left | © 2026 Gavin Fung (was "© 2026 Victoria Harbour: A Night Crossing"; user choice, 2026-10-03) |
 | Centre | 維港夜色 |
-| Right | Three.js · WebGL · Hong Kong |
+| Right | Hong Kong (was "Three.js · WebGL · Hong Kong"; user request, 2026-10-04) |
 
 ---
 

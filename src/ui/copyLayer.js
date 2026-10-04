@@ -23,12 +23,10 @@
 // (departureBoard.js) flips its letters in; the board then counts down
 // with the route (user choices, 2026-10-04).
 //
-// 04 (`data-story="statement"`): the label and the statement header come as
-// the camera settles, the two photo cards (paperCard.js) hang in part-way
-// through the dwell and leave with the camera. The harbour darkens in two
-// steps around an opening on the sails (STATEMENT.arrive, then .full with
-// the cards), and a sea haze drifts across the water with the cards
-// (`--wind`); the petals stay, as there is no dust to give way to.
+// 04 (`data-story="statement"`): the label, statement header and both photo
+// cards come as the camera settles (user request, 2026-10-04), and the
+// harbour darkens to its full veil around an opening on the sails. A sea
+// haze drifts across the water with them (`--wind`); the petals stay.
 //
 // 05 (`data-story="lights"`): the label, title and words come as the camera
 // settles, with no darkening; cityLights.js sweeps the title, and `touch`
@@ -52,7 +50,7 @@ const CROSSING = {
 const TICKET_WIDTH = 0.46;
 const TICKET_RATIO = 344 / 720;
 const TICKET_MARGIN = 20;
-const STATEMENT = { photos: [0.2, 0.5], arrive: 0.45, full: 0.65 };
+const STATEMENT = { full: 0.7 };
 // Memory mode reaches `arrive` from `approach[0]` of the way into the chapter
 // until the camera settles, and the rest with the print. Past the keyframe
 // the print and timeline sink over `sink`, the darkness lifts over `lift`.
@@ -187,11 +185,11 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
     }
     if (story.statement) {
       setVar(story.statement, '--enter', label);
-      const photos = level(STATEMENT.photos) * sink;
+      const photos = label * sink;
       setVar(story.photos, '--enter', photos);
       for (const figure of story.figures) figure.toggleAttribute('data-enter-hidden', photos === 0);
       return {
-        mode: base * (STATEMENT.arrive + (STATEMENT.full - STATEMENT.arrive) * photos),
+        mode: base * STATEMENT.full,
         wind: photos * base,
       };
     }
