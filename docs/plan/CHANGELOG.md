@@ -6,6 +6,66 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **03: wind haze along the waterline** (user request and choice,
+  2026-10-04). 04's drifting harbour mist now runs in 03 too, coming
+  in with the panels at 75% strength: a near band just above the
+  panels at the ferry's waterline and a fainter, narrower band farther
+  out. The windiest chapter's name sets `data-wind` on the root, so each
+  scene places its own bands; the band peak is now a `--peak` variable.
+  Files: `src/ui/copyLayer.js`, `src/styles.css`; plan:
+  `narrative-spine.md`.
+- **04 cards: rounder corners, a light glow beneath, lift on hover** (user
+  requests and choice, 2026-10-04). Compared again with Kage's cards:
+  their corners are about 6% of the width (ours 3px), and on a dark page
+  their shadow pass is drawn in light, so a pale glow shows past the
+  lower and right edges. Ours now round at 5% of the width, cast a soft
+  cream glow (fainter where the cloth lifts), and have a thin lit hem
+  inside the edge; the pointer lifts the cloth instead of pressing it.
+  The still photo matches. Files: `src/ui/paperCard.js`,
+  `src/styles.css`; plan: `narrative-spine.md`.
+- **04 photos darker; the cards rebuilt as real cloth** (user requests,
+  2026-10-04). Both photos re-exported with a baked night grade (darker,
+  cooler, dark edges, a fade to night ink at the foot). The sheet was a
+  flat picture with summed sine waves and a drifting light band, so it
+  never read as cloth next to Kage's; it is now our own height-field
+  wave simulation (96 × 96, gusty wind, damping), with draw-in at the
+  edges so the outline ripples, light from the folds only, an outline
+  drawn on the cloth, and a pointer that presses a dent and leaves
+  ripples. Desktop cards a little larger (23vw). Files:
+  `src/ui/paperCard.js`, `src/styles.css`, `public/plates/`; plan:
+  `narrative-spine.md`; `docs/ASSET-LEDGER.md`.
+- **04 atmosphere: two-step darkening and wind haze** (user request and
+  choices, 2026-10-04). 04 now uses the memory veil like 02 and 03, with
+  its own shape: a wide opening on the sails, 45% as the camera settles
+  and 65% once the cards hang in. Two thin bands of the harbour mist
+  drift left to right across the water with the cards. The veil's shape
+  is now chosen by `data-veil` on the root (was `data-veil-crossing`);
+  petals thin only for 02 and 03 (`yield` level). The statement's bottom
+  wash is eased to 60%. Files: `index.html`, `src/ui/copyLayer.js`,
+  `src/main.js`, `src/styles.css`; plan: `narrative-spine.md`.
+- **04: bigger cards, a quote, credits to the footer** (user requests
+  and choices, 2026-10-04). On desktop the cards grow to 21vw (capped by
+  the window's height) and step down the left column, "Now" set right,
+  clear of the junk; the copy region now reaches 76% down. A sailing
+  saying in Cormorant italic, without a name, sits under the cards
+  ("I can't change the direction of the wind, but I can adjust my sails
+  to always reach my destination."). The photo credit line left 04 for
+  the footer's colophon; editing the CC BY-SA photo would not remove the
+  need to credit it. Files: `index.html`, `src/data/chapters.js`,
+  `src/styles.css`; plan: `narrative-spine.md`; `docs/ASSET-LEDGER.md`.
+- **04 built: statement header and hanging photo cards** (user requests
+  and choices, 2026-10-04). A "then and now" pair of junk photos (before
+  1945, public domain; the Dukling in 2016, CC BY-SA 4.0, credited)
+  hangs top-left as WebGL paper sheets after Kage's photo cards (our own
+  code): pinned along the top, gently swaying, light drifting across,
+  soft shadow; on hover a dent under the pointer, lifting corners and a
+  brighter outline. Still photos on touch and reduced motion. The title
+  and beat 2 run along the water as a statement header; beat 1 is
+  dropped. The cards hang in partway through a new 60svh dwell. The
+  user's own two photos had no reuse rights and stay reference only.
+  Files: `index.html`, `src/data/chapters.js`, `src/ui/copyLayer.js`,
+  `src/ui/paperCard.js` (new), `src/main.js`, `src/styles.css`,
+  `public/plates/`; plan: `narrative-spine.md`; `docs/ASSET-LEDGER.md`.
 - **Label rows lose their Chinese name** (user request and choice,
   2026-10-04). 鐘樓 and 天星小輪 at the end of 02's and 03's label rows
   repeated the vertical text at the right edge; removed on desktop and

@@ -1975,23 +1975,428 @@ html:not(.is-enhanced) .vertical-text {
   }
 }
 
+/* 04's statement header and photo cards (narrative spine scene 04, user
+   requests, 2026-10-04). Without the 3D story both sit in the copy's flow;
+   the photos show once loaded. */
+.chapter__statement-intro {
+  max-width: 40ch;
+  margin: 1rem 0 0;
+  color: var(--color-soft);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.chapter__statement-rule {
+  display: none;
+}
+
+.chapter__photos {
+  display: none;
+}
+
+.chapter__photos.is-loaded {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.chapter__photo {
+  margin: 0;
+}
+
+.chapter__photo-frame {
+  position: relative;
+}
+
+/* The still card matches the cloth (paperCard.js): corners at 5% of its
+   width, and a soft cream glow down and right instead of a shadow (user
+   requests, 2026-10-04). */
+.chapter__photo-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 5% / 8.4%;
+  box-shadow: 0 0 0 1px rgb(243 233 210 / 0.12), 10px 14px 30px rgb(243 233 210 / 0.12);
+}
+
+.chapter__photo figcaption {
+  margin-top: 0.875rem;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.chapter__photo figcaption span {
+  margin-right: 0.5em;
+  color: var(--color-coral);
+}
+
+/* A sailing saying under the cards, uncredited by choice (user choice,
+   2026-10-04), after a short coral line. Credits for the photos live in the
+   footer's colophon. */
+.chapter__quote {
+  grid-column: 1 / -1;
+  max-width: 30ch;
+  margin: 0;
+  color: var(--color-cream);
+  font-family: var(--font-display-en);
+  font-size: 1.375rem;
+  font-style: italic;
+  line-height: 1.3;
+}
+
+.chapter__quote::before {
+  content: "";
+  display: block;
+  width: 24px;
+  height: 1px;
+  margin-bottom: 0.75rem;
+  background: var(--color-coral);
+}
+
+.chapter__quote p {
+  margin: 0;
+}
+
+/* The cards hang a little askew, the second lower, and drop a few px as
+   they arrive. The canvas is the WebGL sheet (paperCard.js); the photo
+   underneath keeps the layout and the alt text. */
+.is-enhanced .chapter__photos {
+  position: relative;
+  opacity: var(--enter, 1);
+}
+
+/* An ink pool keeping the captions clear of the moon and sails. */
+.is-enhanced .chapter__photos::before {
+  content: "";
+  position: absolute;
+  inset: -40px -48px -48px;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgb(10 9 26 / 0.62), rgb(10 9 26 / 0.34) 60%, transparent);
+  pointer-events: none;
+}
+
+.is-enhanced .chapter__photo {
+  transform: translateY(calc((1 - var(--enter, 1)) * -10px)) rotate(-1.5deg);
+}
+
+.is-enhanced .chapter__photo + .chapter__photo {
+  transform: translateY(calc((1 - var(--enter, 1)) * -10px)) rotate(1deg);
+}
+
+.is-enhanced .chapter__quote {
+  margin-top: 0.5rem;
+}
+
+/* Desktop: larger cards stepping down the left column, "Now" set to its
+   right edge, clear of the junk; sized by the window's height too, so the
+   quote ends above the statement's hairline (user request, 2026-10-04). */
+[data-breakpoint="desktop"].is-enhanced .chapter__photos.is-loaded {
+  --card: min(23vw, calc((61lvh - 200px) * 0.86));
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+  margin-top: 1.75rem;
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__photo {
+  width: var(--card);
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__photo + .chapter__photo {
+  justify-self: end;
+}
+
+.chapter__photo-sheet {
+  display: none;
+  position: absolute;
+  pointer-events: none;
+}
+
+.is-enhanced .chapter__photo.has-sheet .chapter__photo-sheet {
+  display: block;
+}
+
+.is-enhanced .chapter__photo.has-sheet img {
+  visibility: hidden;
+}
+
+.is-stepped .chapter__photo.has-sheet .chapter__photo-sheet {
+  display: none;
+}
+
+.is-stepped .chapter__photo.has-sheet img {
+  visibility: visible;
+}
+
+/* The statement runs along the water at the foot of the screen: a full-width
+   hairline drawing in from the left, then the large title on the left and
+   the intro on the right, over a soft dark wash. */
+.is-enhanced .chapter__statement {
+  position: fixed;
+  left: max(var(--page-inset), env(safe-area-inset-left), calc(var(--copy-left) * 1vw));
+  right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 64px);
+  bottom: max(5lvh, calc(env(safe-area-inset-bottom) + 16px));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 2.5rem;
+  align-items: end;
+  pointer-events: none;
+}
+
+.is-enhanced .chapter__statement::before {
+  content: "";
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  height: 40lvh;
+  background: linear-gradient(to top, rgb(6 5 16 / 0.6), rgb(6 5 16 / 0.26) 50%, transparent);
+  opacity: var(--enter, 1);
+}
+
+.is-enhanced .chapter__statement-rule {
+  display: block;
+  grid-area: 1 / 1 / 2 / -1;
+  height: 1px;
+  margin-bottom: 1.5rem;
+  background: rgb(243 233 210 / 0.22);
+  transform: scaleX(var(--enter, 1));
+  transform-origin: left;
+}
+
+.is-enhanced .chapter__statement .chapter__title {
+  grid-area: 2 / 1;
+  margin: 0;
+  font-size: clamp(3.5rem, 6vw, 6.25rem);
+  line-height: 0.9;
+}
+
+.is-enhanced .chapter__statement-intro {
+  grid-area: 2 / 2;
+  justify-self: end;
+  max-width: 44ch;
+  margin: 0;
+  font-size: 0.9375rem;
+  opacity: var(--enter, 1);
+}
+
+/* Phones: the cards side by side under the label, the statement stacked at
+   the foot. */
+[data-breakpoint="mobile"].is-enhanced .chapter__photos.is-loaded {
+  gap: 0.875rem;
+  margin-top: 1.25rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__quote {
+  max-width: none;
+  margin-top: 0.25rem;
+  font-size: 1rem;
+  text-wrap: balance;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__quote::before {
+  margin-bottom: 0.5rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__photo figcaption {
+  font-size: 0.5625rem;
+  letter-spacing: 0.1em;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__statement {
+  right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 36px);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__statement::before {
+  height: 48lvh;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__statement-rule {
+  margin-bottom: 1rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__statement .chapter__title {
+  font-size: 3rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__statement-intro {
+  grid-area: 3 / 1;
+  justify-self: start;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  text-wrap: pretty;
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .is-enhanced .chapter__photos.is-loaded {
+    display: none;
+  }
+}
+
+.is-stepped .chapter__photos,
+.is-stepped .chapter__statement::before,
+.is-stepped .chapter__statement-intro {
+  transition: opacity 150ms linear;
+}
+
+.is-stepped .chapter__statement-rule {
+  transition: transform 150ms linear;
+}
+
 /* 03 darkens further than 02's arrival: a strong indigo frame closing in on
    a small opening over the ferry (user request, 2026-10-04). */
-[data-veil-crossing].is-enhanced .memory-veil {
+[data-veil="crossing"].is-enhanced .memory-veil {
   --veil-x: 30%;
   --veil-y: 56%;
   --veil-size: 22vw 22lvh;
   background: radial-gradient(var(--veil-size) at var(--veil-x) var(--veil-y), rgb(8 6 24 / 0.04), rgb(8 6 24 / 0.55));
 }
 
-[data-veil-crossing].is-enhanced .memory-veil::after {
+[data-veil="crossing"].is-enhanced .memory-veil::after {
   background: radial-gradient(ellipse farthest-corner at 50% 50%, transparent 30%, rgb(5 4 16 / 0.6) 100%);
 }
 
-[data-breakpoint="mobile"][data-veil-crossing].is-enhanced .memory-veil {
+[data-breakpoint="mobile"][data-veil="crossing"].is-enhanced .memory-veil {
   --veil-x: 22%;
   --veil-y: 62%;
   --veil-size: 40vw 14lvh;
+}
+
+/* 04 darkens in two steps around a wide opening on the sails, so the red
+   stays the brightest thing on screen and the cards stand out against the
+   darker sky top-left (user choice, 2026-10-04). */
+[data-veil="statement"].is-enhanced .memory-veil {
+  --veil-x: 64%;
+  --veil-y: 40%;
+  --veil-size: 34vw 40lvh;
+  background: radial-gradient(var(--veil-size) at var(--veil-x) var(--veil-y), rgb(8 6 24 / 0.02), rgb(8 6 24 / 0.6));
+}
+
+[data-breakpoint="mobile"][data-veil="statement"].is-enhanced .memory-veil {
+  --veil-x: 55%;
+  --veil-y: 50%;
+  --veil-size: 48vw 22lvh;
+}
+
+/* Wind over the water (04, user choice, 2026-10-04): two thin bands cut
+   from the harbour mist sheet drift slowly left to right below the junk,
+   with the cards (copyLayer.js sets --wind and data-wind). The sheet is
+   white haze on black, so it is screened in. Reduced motion holds them. */
+.wind-haze {
+  display: none;
+}
+
+[data-wind].is-enhanced .wind-haze {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  opacity: var(--wind, 0);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.wind-haze__drift {
+  --width: 75vw;
+  --h: calc(var(--width) * var(--band-h) / 1600 * 1.5);
+  position: absolute;
+  left: 0;
+  width: var(--width);
+  height: var(--h);
+  background: url("/atmosphere/harbour-mist.webp") no-repeat;
+  background-position: 0 calc(var(--h) * var(--band-top) / var(--band-h) * -1);
+  background-size: 100% calc(var(--h) * 534 / var(--band-h));
+  opacity: 0;
+  animation: wind-drift 56s linear infinite;
+}
+
+.wind-haze__drift:first-child {
+  --band-top: 163;
+  --band-h: 101;
+  bottom: 22lvh;
+}
+
+.wind-haze__drift:last-child {
+  --band-top: 423;
+  --band-h: 86;
+  --width: 90vw;
+  bottom: 9lvh;
+  animation-delay: -28s;
+}
+
+@keyframes wind-drift {
+  0% {
+    opacity: 0;
+    transform: translateX(-60vw);
+  }
+
+  25%,
+  70% {
+    opacity: var(--peak, 0.32);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(90vw);
+  }
+}
+
+[data-breakpoint="mobile"] .wind-haze__drift {
+  --width: 160vw;
+}
+
+[data-breakpoint="mobile"] .wind-haze__drift:first-child {
+  bottom: 27lvh;
+}
+
+[data-breakpoint="mobile"] .wind-haze__drift:last-child {
+  --width: 180vw;
+  bottom: 12lvh;
+}
+
+/* 03 (user choice, 2026-10-04): a near band at the ferry's waterline just
+   above the desktop panels and a thinner, fainter far band near the
+   horizon; on phones both under the ferry. Three quarters as strong, as
+   03's frame is darker. */
+[data-wind="crossing"].is-enhanced .wind-haze {
+  opacity: calc(var(--wind, 0) * 0.75);
+}
+
+[data-wind="crossing"] .wind-haze__drift:first-child {
+  bottom: 24lvh;
+}
+
+[data-wind="crossing"] .wind-haze__drift:last-child {
+  --width: 55vw;
+  --peak: 0.2;
+  bottom: 36lvh;
+}
+
+[data-breakpoint="mobile"][data-wind="crossing"] .wind-haze__drift:first-child {
+  bottom: 21lvh;
+}
+
+[data-breakpoint="mobile"][data-wind="crossing"] .wind-haze__drift:last-child {
+  --width: 120vw;
+  --peak: 0.26;
+  bottom: 8lvh;
+}
+
+.is-stepped .wind-haze {
+  transition: opacity 150ms linear;
+}
+
+.is-stepped .wind-haze__drift {
+  opacity: 0.26;
+  animation: none;
+  transform: translateX(10vw);
 }
 
 /* Memory mode: the harbour darkens and cools as the camera reaches a story

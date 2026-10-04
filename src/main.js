@@ -27,6 +27,7 @@ import { createCameraRig, fovForAspect } from './scroll/cameraRig.js';
 import { createScrollConductor } from './scroll/scrollConductor.js';
 import { createCopyLayer } from './ui/copyLayer.js';
 import { createMemoryPlates } from './ui/memoryPlate.js';
+import { createPaperCards } from './ui/paperCard.js';
 import { createSiteHeader } from './ui/siteHeader.js';
 import { createSiteFooter } from './ui/siteFooter.js';
 import { createCursorRing } from './ui/cursorRing.js';
@@ -235,6 +236,7 @@ async function start(initGuard, header, loading) {
   const conductor = createScrollConductor(sections, { ...SCROLL, dwell: dwellShare });
   const copy = createCopyLayer(sections, chapters, SCROLL);
   const memories = createMemoryPlates(sections);
+  const photoCards = createPaperCards(sections);
 
   // ---- Motion mode ---------------------------------------------------------
 
@@ -532,7 +534,7 @@ async function start(initGuard, header, loading) {
       rig.setGlide(HERO.glide.back * glide, HERO.glide.rise * glide);
       if (glide === 0) glideStart = -1;
       if (!control.free) applyPose(state.pRendered, false, time);
-      petals.setDensity(petalLevel * (1 - PETAL_YIELD * storyLevels.mode));
+      petals.setDensity(petalLevel * (1 - PETAL_YIELD * storyLevels.yield));
       wordmark.fadeAt(state.pRendered, heroFade.from, heroFade.to);
       water.update(dt);
       island.update(time);
@@ -546,7 +548,9 @@ async function start(initGuard, header, loading) {
       const speed = dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0;
       stirState = stir.enabled ? stir.update(dt) : null;
       petals.update(dt, camera, speed, stirState);
-      cursorMotes.update(dt, stirState);      lastRendered = state.pRendered;
+      cursorMotes.update(dt, stirState);
+      photoCards.update(dt);
+      lastRendered = state.pRendered;
     }
 
     story.update(time, camera, stepped ? null : stirState);
@@ -571,6 +575,7 @@ async function start(initGuard, header, loading) {
         root.classList.add('is-ready');
         fireworks.load();
         memories.load();
+        photoCards.load();
       });
     }
   }

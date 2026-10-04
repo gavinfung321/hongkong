@@ -104,6 +104,8 @@ Fit to the scene (the code-built ferry's numbers, so camera framings still hold)
 | `halftone.webp` | Overlay texture | All | P2 | <100 KB | Original | Must remain restrained and avoid reducing text contrast |
 | `public/plates/kowloon-terminus-1915.webp` | Memory print, alpha WebP 1400 × 737, 221 KB | 02 (desktop) | P1 | <250 KB | **Public domain** (Hong Kong and US; author unknown): [`KCR 1914.jpeg`](https://commons.wikimedia.org/wiki/File:KCR_1914.jpeg), Wikimedia Commons, credited there to the Hong Kong Public Libraries Multimedia Information System. Commons dates it 1914; the finished building and tower suggest late 1915 (as Gwulo dates a matching view), so the caption reads "ca. 1915". Source kept in `docs/references/kowloon-terminus-pd/kcr-1914-commons.jpg` | **In use since 2026-10-04, prototype** (narrative spine, user choice): cropped to source pixels 0, 470, 2984 × 1570 and baked once in a browser canvas (duotone ink to cream with faint coral midtones, darker top and corners, uneven burnt edges fading to transparency, fine static grain; WebP quality 0.82). Credited in its caption. Kept only if the scene 02 prototype is approved |
 | `kowloon-terminus-1937.jpg` (removed) | Editorial plate, JPEG 1024 × 576 | 02 | — | — | Original AI-assisted artwork (built-in image tool, 2026-10-04), the user's City in Time photos as reference only | **Not used** (user choice, 2026-10-04): shipped for one review as a light-line drawing; replaced by the public-domain photo print above. Concept kept locally in `docs/references/clock-tower/` |
+| `public/plates/junk-before-1945.webp` | Photo card, WebP 814 × 487, 11 KB (night grade baked in, 2026-10-04: ×0.68, slightly cooler, dark edges, fade to night ink at the foot) | 04 | P1 | <250 KB | **Public domain** (author unknown, before 1945): [`Hong Kong Junk boats.jpg`](https://commons.wikimedia.org/wiki/File:Hong_Kong_Junk_boats.jpg), Wikimedia Commons, from taipics.com | **In use since 2026-10-04** (user choice): the postcard's white border cropped off (source pixels 46, 49, 814 × 487), no grading. Captioned "Then · Before 1945"; noted in the footer's colophon (no credit required) |
+| `public/plates/dukling-2016.webp` | Photo card, WebP 1000 × 598, 47 KB (night grade baked in, 2026-10-04: ×0.68, 22% desaturated, cooler, dark edges, fade to night ink at the foot) | 04 | P1 | <250 KB | **CC BY-SA 4.0**, Ank Kumar, 14 May 2016: [`Aqua Luna Dukling 3-Mast Junk Ship, Hong Kong (Ank Kumar, Infosys Limited) 05.jpg`](https://commons.wikimedia.org/wiki/File:Aqua_Luna_Dukling_3-Mast_Junk_Ship,_Hong_Kong_(Ank_Kumar,_Infosys_Limited)_05.jpg), Wikimedia Commons | **In use since 2026-10-04** (user choice): cropped (source pixels 0, 70, 1920 × 1149 of the 1920px rendition) and resized, no grading; the crop is shared under the same licence. Credited in the footer's colophon (moved from under the cards, user request, 2026-10-04): names the author, links the file and the licence, and says "cropped" |
 | Local font files and licences | WOFF2 + text | All | P0 | ≤300 KB first view, ≤450 KB total | SIL OFL 1.1 | Shipped 2026-10-03; see "Fonts" below |
 
 ### Fonts (shipped 2026-10-03)
@@ -283,6 +285,14 @@ drawing (`memory-02-terminus-concept-v2.jpg`) and the layout mockup in the
 same folder were made with the built-in image tool, the drawing redrawn from
 a new angle. If a final illustration is kept, its own row goes in Phase C
 with the tool, method and rights.
+
+For scene 04 (2026-10-04) the user first picked two web photos, kept as
+links only (not downloaded into the repo, never shipped):
+
+| Source | Shows | Rights |
+|---|---|---|
+| [Māzŭ Resortwear, "The history of the junk boat"](https://www.mazuresortwear.com/blogs/news/the-history-of-the-junk-boat) | A black-and-white working junk, high-rises behind (probably 1970s–80s; the page gives no date or credit) | Unknown; the blog is not the rights holder. Not used |
+| [CNN, "All aboard the Dukling"](https://www.cnn.com/travel/article/dukling-hong-kong-junk-boat) | The Dukling under red sails | CNN or its photographer. Not used; the article is the source for the Dukling's dates |
 
 ## Asset approval gates
 

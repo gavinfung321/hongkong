@@ -429,6 +429,13 @@ outlined cells over a darkened scene; no Kage code, type or copy):
   below 620px drop the meta line and panel 02 takes 01's place mid-dwell;
 - a 60svh dwell (was 110) holds the camera while the route dot crosses
   (dwell share 0.1–0.9);
+- wind haze, borrowed from 04 (user choice, 2026-10-04): the same two
+  bands of harbour mist drift left to right as the panels fade in, at
+  75% of 04's strength. On desktop a near band runs just above the
+  panels, along the ferry's waterline, with a fainter, narrower band
+  (55vw, peak 0.2) farther out on the water; on phones the near band
+  sits under the stacked panels and a wide faint band runs low on the
+  water;
 - reduced motion: everything appears whole with the usual 150 ms fade.
 
 Scene 02 was cut back the same way (user request, 2026-10-04): the
@@ -440,13 +447,90 @@ about half a screen later (dwell share 0.5–0.8); the dwell is 80svh
 Files: `index.html`, `src/data/chapters.js`, `src/ui/copyLayer.js`,
 `src/styles.css`.
 
+### Scene 04
+
+**As built (user requests and choices, 2026-10-04): statement header and
+two hanging photo cards.** The 3D stays untouched.
+
+- Atmosphere (user request and choices, 2026-10-04), DOM only like 03:
+  the memory veil darkens the harbour in two steps around a wide opening
+  on the sails (45% as the camera settles, 65% as the cards hang in;
+  lifting with the camera), so the sails stay brightest and the cards
+  stand out against the darker sky. Wind over the water: two thin bands
+  cut from the harbour mist sheet drift slowly left to right below the
+  junk with the cards (56 s per pass, screened in, held still in reduced
+  motion). The statement's bottom wash eased to 60% so the foot is not
+  darkened twice. The petals do not thin out here (they give way only to
+  02's dust and 03's darkness).
+
+- Photos, "then and now" (user choice, 2026-10-04): a junk under sail,
+  before 1945 (public domain), and the Dukling under its rust-red sails,
+  2016 (Ank Kumar, CC BY-SA 4.0). The user's first picks (a Māzŭ
+  Resortwear blog photo and CNN's Dukling photo) had no reuse rights, so
+  they stay reference only. CNN gives the Dukling's dates: built 1955 as
+  a shrimpers' family boat, sank, restored, carrying visitors since 2015.
+  Captions "Then · Before 1945" and "Now · Dukling, built 1955". The
+  credit line under the cards looked odd and moved to the footer's
+  colophon (user request, 2026-10-04); the CC licence still needs it
+  there, cropped or not.
+- Quote under the cards (user request, 2026-10-04): "I can't change the
+  direction of the wind, but I can adjust my sails to always reach my
+  destination." Cormorant italic after a short coral line, shown without
+  a name (user choice, 2026-10-04). Origin, for the record: widely
+  credited to Jimmy Dean (Reader's Digest, 1987) but unverified; the
+  saying goes back at least to 1859 ([Quote Investigator](https://quoteinvestigator.com/2017/06/25/adjust-sails/)).
+  Text only; nothing taken from the sign photo the user shared.
+- Photos darkened (user request, 2026-10-04): a night grade is baked into
+  both files (about 30% darker, cooler, the Dukling a little
+  desaturated, soft dark edges, a fade to night ink over the lower 45%),
+  so the moving and still cards match.
+- Cloth cards, after Kage's photo cards (technique only, our own code and
+  values; user requests, 2026-10-04): each photo is a WebGL cloth pinned
+  along its top edge. A first version (summed sine waves, a drifting light
+  band) read as a flat picture; it was rebuilt the same day as a 96 × 96
+  height field stepped as a damped wave, with gusts of wind crossing it.
+  The cloth bulges up to 7% of the card's width and its foot leans out;
+  the sides and foot draw in as it tilts, so the outline ripples. Light
+  comes only from the folds (sheen on slopes, darker creases), and the
+  hairline outline is drawn on the cloth. Under a mouse the pointer lifts
+  the cloth toward the viewer, leaving ripples as it moves (lift, as
+  Kage's, user choice, 2026-10-04; it pressed in at first), the wind rises
+  a little and the outline brightens. It swings harder when it first
+  appears. Corners round at 5% of the card's width (was 3px), and a thin
+  hem inside the edge catches the light. On the night page the card casts
+  light, not shadow (user request, 2026-10-04): a soft cream glow down and
+  right of it, shifted with its depth and fainter where it lifts, showing
+  past the lower and right edges. The still photo matches (rounded
+  corners, cream glow). No grain or paper texture. Touch screens,
+  reduced motion and browsers without WebGL2 show the still photo.
+- Layout: the label, the two cards and the quote down the left (desktop:
+  larger cards, 23vw capped by the window's height, stepping down the
+  column with "Now" set right, slightly askew, the quote ending above the
+  statement's hairline; user request, 2026-10-04. Phones: cards side by
+  side, level, the quote under them over the main sail's tip). A soft
+  ink pool behind keeps the captions off the moon. The
+  statement runs along the water at the foot: a full-width hairline
+  drawing in from the left, the large title on the left and the intro on
+  the right (phones: stacked), over a soft dark wash.
+- Copy: the intro is beat 2 as approved ("Before the 1950s, wooden
+  sailing junks were Hong Kong's main fishing boats. The few that sail
+  the harbour now carry visitors, keeping the shape of that memory on the
+  water."). Beat 1 described the junk the 3D already shows, so it goes.
+- Timing: the label and statement come as the camera settles; the cards
+  hang in at dwell share 0.2–0.5 and leave with the camera; a 60svh
+  dwell (none before).
+- Still to do: the same sheet for 02's 1915 print (user request,
+  2026-10-04), once 04's feel is approved.
+
+Files: `index.html`, `src/data/chapters.js`, `src/ui/copyLayer.js`,
+`src/ui/paperCard.js`, `src/main.js`, `src/styles.css`,
+`public/plates/junk-before-1945.webp`, `public/plates/dukling-2016.webp`.
+
 Different technique per scene (user request, 2026-10-04), all DOM over
 the untouched 3D: 02 layered fade with a memory print and timeline; 03
-index panels with a route line. Chosen for the rest (user choices,
-2026-10-04), not yet built:
+index panels with a route line; 04 statement header with hanging photo
+cards. Chosen for the rest (user choices, 2026-10-04), not yet built:
 
-- 04 Red Sails: a statement header, a large headline on the left and a
-  short intro on the right, split by a full-width hairline;
 - 05 City of Light: words light up, the text starting dim and each word
   brightening in turn with the scroll, like the skyline switching on;
 - 06 Afterglow: one centred sentence whose letters close in from wide

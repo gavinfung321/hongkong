@@ -97,6 +97,10 @@
     <canvas id="world" class="world" aria-hidden="true"></canvas>
     <div class="vignette" aria-hidden="true"></div>
     <div class="memory-veil" aria-hidden="true"></div>
+    <div class="wind-haze" aria-hidden="true">
+      <div class="wind-haze__drift"></div>
+      <div class="wind-haze__drift"></div>
+    </div>
     <div class="veil" aria-hidden="true"></div>
 
     <header class="site-header">
@@ -265,14 +269,47 @@
       </section>
 
       <section class="chapter" id="chapter-04" data-chapter="04" aria-labelledby="chapter-04-title">
-        <div class="chapter__copy">
-          <p class="chapter__index">04</p>
-          <p class="chapter__kicker">Junk with red sails</p>
-          <h2 class="chapter__title" id="chapter-04-title">Red Sails</h2>
-          <p class="chapter__body">
-            A junk with red sails passes close enough to fill the night, its dark hull slipping through the
-            reflected city.
-          </p>
+        <div class="chapter__copy chapter__copy--story" data-story="statement">
+          <div class="chapter__label">
+            <p class="chapter__index">04</p>
+            <p class="chapter__kicker">Junk with red sails</p>
+            <span class="chapter__rule" aria-hidden="true"></span>
+          </div>
+          <div class="chapter__statement">
+            <h2 class="chapter__title" id="chapter-04-title">Red Sails</h2>
+            <span class="chapter__statement-rule" aria-hidden="true"></span>
+            <p class="chapter__statement-intro">
+              Before the 1950s, wooden sailing junks were Hong Kong's main fishing boats. The few that sail the
+              harbour now carry visitors, keeping the shape of that memory on the water.
+            </p>
+          </div>
+          <div class="chapter__photos">
+            <figure class="chapter__photo">
+              <div class="chapter__photo-frame">
+                <img
+                  data-src="plates/junk-before-1945.webp"
+                  width="814"
+                  height="487"
+                  alt="Black-and-white photograph of a wooden junk under full sail in the harbour, hills and steamships behind"
+                />
+              </div>
+              <figcaption><span>Then</span> Before 1945</figcaption>
+            </figure>
+            <figure class="chapter__photo">
+              <div class="chapter__photo-frame">
+                <img
+                  data-src="plates/dukling-2016.webp"
+                  width="1000"
+                  height="598"
+                  alt="Colour photograph of the junk Dukling under rust-red sails, the Central skyline behind"
+                />
+              </div>
+              <figcaption><span>Now</span> Dukling, built 1955</figcaption>
+            </figure>
+            <blockquote class="chapter__quote">
+              <p>“I can’t change the direction of the wind, but I can adjust my sails to always reach my destination.”</p>
+            </blockquote>
+          </div>
         </div>
       </section>
 
@@ -352,6 +389,11 @@
             <li>Created by Gavin Fung at <a href="https://hkaiautomation.com/" rel="noopener">HKAAA</a></li>
             <li>Built with Three.js and WebGL</li>
             <li>Original 3D scene and illustrated atmosphere</li>
+            <li>
+              Red Sails photos: junk before 1945, public domain;
+              <a href="https://commons.wikimedia.org/wiki/File:Aqua_Luna_Dukling_3-Mast_Junk_Ship,_Hong_Kong_(Ank_Kumar,_Infosys_Limited)_05.jpg" rel="noopener">Dukling by Ank Kumar</a>,
+              <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener">CC BY-SA 4.0</a>, cropped
+            </li>
             <li>Designed for desktop and mobile</li>
           </ul>
         </section>

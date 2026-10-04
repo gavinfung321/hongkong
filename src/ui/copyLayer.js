@@ -16,12 +16,21 @@
 // 03 (`data-story="crossing"`) is an index of panels instead: the harbour
 // darkens further (CROSSING.dark), the panels come with the title, and the
 // route dot runs from Tsim Sha Tsui to Central across the dwell. On the
-// shortest phones the second panel takes the first one's place.
+// shortest phones the second panel takes the first one's place. The sea
+// haze drifts at the ferry's waterline with the panels (`--wind`).
+//
+// 04 (`data-story="statement"`): the label and the statement header come as
+// the camera settles, the two photo cards (paperCard.js) hang in part-way
+// through the dwell and leave with the camera. The harbour darkens in two
+// steps around an opening on the sails (STATEMENT.arrive, then .full with
+// the cards), and a sea haze drifts across the water with the cards
+// (`--wind`); the petals stay, as there is no dust to give way to.
 import { smoothstep } from '../scroll/cameraRig.js';
 const RISE = 48; // px travelled while fading: in from below, out through the top
 // Shares of the dwell: 02's print and timeline wait about half a screen.
 const STORY = { print: [0.5, 0.8] };
 const CROSSING = { route: [0.1, 0.9], swap: [0.4, 0.6], dark: 0.7 };
+const STATEMENT = { photos: [0.2, 0.5], arrive: 0.45, full: 0.65 };
 // Memory mode reaches `arrive` from `approach[0]` of the way into the chapter
 // until the camera settles, and the rest with the print. Past the keyframe
 // the print and timeline sink over `sink`, the darkness lifts over `lift`.
@@ -36,6 +45,9 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
     if (!copy.classList.contains('chapter__copy--story')) return null;
     return {
       crossing: copy.dataset.story === 'crossing',
+      statement: copy.querySelector('.chapter__statement'),
+      photos: copy.querySelector('.chapter__photos'),
+      figures: [...copy.querySelectorAll('.chapter__photo')],
       label: copy.querySelector('.chapter__label'),
       title: copy.querySelector('.chapter__title'),
       standfirst: copy.querySelector('.chapter__standfirst'),
@@ -109,16 +121,28 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
         panel.toggleAttribute('data-enter-hidden', !enter[k]);
       });
       setVar(story.route, '--route', level(CROSSING.route));
-      return { mode: base * CROSSING.dark };
+      return { mode: base * CROSSING.dark, yield: base * CROSSING.dark, wind: label * base };
     }
     const sink = stepped ? 1 : 1 - smoothstep(DARK.sink[0], DARK.sink[1], p - key);
+    if (story.statement) {
+      setVar(story.statement, '--enter', label);
+      const photos = level(STATEMENT.photos) * sink;
+      setVar(story.photos, '--enter', photos);
+      for (const figure of story.figures) figure.toggleAttribute('data-enter-hidden', photos === 0);
+      return {
+        mode: base * (STATEMENT.arrive + (STATEMENT.full - STATEMENT.arrive) * photos),
+        wind: photos * base,
+      };
+    }
     const print = level(STORY.print) * sink;
 
     setVar(story.memory, '--memory-reveal', print);
     setVar(story.facts, '--enter', print);
 
+    const mode = base * (DARK.arrive + (1 - DARK.arrive) * print);
     return {
-      mode: base * (DARK.arrive + (1 - DARK.arrive) * print),
+      mode,
+      yield: mode,
       ghost: label * base,
       dust: base,
       steam: print * base,
@@ -126,14 +150,16 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
   }
 
   // In stepped mode only the active chapter's copy is shown. Returns the
-  // story levels for the 3D layers.
+  // story levels for the 3D layers; `yield` thins the petals.
   function update(p, { stepped = false, index = 0, hero, rendered = p, dwell = [] } = {}) {
-    const levels = { mode: 0, ghost: 0, dust: 0, steam: 0 };
-    let crossing = false;
+    const levels = { mode: 0, ghost: 0, dust: 0, steam: 0, wind: 0, yield: 0 };
+    let veil = '';
+    let wind = '';
     copies.forEach((copy, i) => {
       if (stories[i]) {
         const story = updateStory(p, rendered, i, dwell[i] ?? 0, stepped, index);
-        if (story.mode > levels.mode) crossing = stories[i].crossing;
+        if (story.mode > levels.mode) veil = copy.dataset.story ?? '';
+        if (story.wind > levels.wind) wind = copy.dataset.story;
         for (const name in story) levels[name] = Math.max(levels[name], story[name]);
       }
       const shownValue = i === 0 ? opacityAt(p, i, hero) : Math.min(opacityAt(p, i, hero), opacityAt(rendered, i, hero));
@@ -153,7 +179,16 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       copy.classList.toggle('is-hidden', value === 0);
     });
     setVar(root, '--memory-mode', levels.mode);
-    if (levels.mode > 0) root.toggleAttribute('data-veil-crossing', crossing);
+    // The veil's shape follows the darkest chapter (styles.css); it keeps
+    // its last shape while fading out.
+    if (levels.mode > 0 && root.dataset.veil !== veil) root.dataset.veil = veil;
+    // The haze's placement follows the windiest chapter (styles.css).
+    setVar(root, '--wind', levels.wind);
+    if (levels.wind > 0) {
+      if (root.dataset.wind !== wind) root.dataset.wind = wind;
+    } else if ('wind' in root.dataset) {
+      delete root.dataset.wind;
+    }
     return levels;
   }
 

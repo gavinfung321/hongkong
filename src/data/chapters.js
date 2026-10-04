@@ -311,10 +311,17 @@ export const chapters = [
       desktop: { position: [153.4, 3, -419.8], target: [-21.8, 76.8, -773.4], fov: 66, via: [[233.4, 8, -439.8]] },
       mobile: { position: [153.4, 3, -386.1], target: [212.7, 56.6, -773.9], fov: 60, via: [[233.4, 8, -486.1]] },
     },
+    // Statement header and photo cards (narrative spine scene 04, user
+    // requests, 2026-10-04): the label and the two cards top-left in the
+    // sky; the title and intro along the water at the foot (styles.css).
+    // Desktop: the cards and quote fill the left column down to just above
+    // the statement's hairline (user request, 2026-10-04).
     copy: {
-      desktop: { left: 5, top: 11, right: 34, bottom: 45 },
+      desktop: { left: 5, top: 11, right: 34, bottom: 76 },
       mobile: { left: 8, top: 9, right: 92, bottom: 37 },
     },
+    // Time for the cards to hang in after the statement.
+    dwell: 60,
     // The wheel is gated here: framing alone leaves it peeking past the junk's
     // stern, and it is small and distant while it fades.
     // city: the skyline behind the sails stays at 40%, as in 03, so the
