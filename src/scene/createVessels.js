@@ -402,13 +402,14 @@ function createFerry() {
   const wake = createWake({
     halfWidthAt: (x) => (Math.abs(x) < FERRY_HALF ? ferrySectionAt(x, 0)[2] : 0),
     span: [-FERRY_HALF, FERRY_HALF],
-    // Longer and whiter (user choices, 2026-10-03: the wake barely showed
-    // in 02 and 03), its foam glowing faintly so it reads at night. Eased
-    // a touch once the foam broke into patches (user request, 2026-10-03).
-    trail: 90,
-    spread: 0.45,
+    // Keep a subtle hull disturbance while the ferry is held in 03, then
+    // reveal the wider broken wake as it departs toward 04.
+    trail: 74,
+    spread: 0.42,
     speed: 3,
-    strength: 1.45,
+    strength: 1.3,
+    idlePresence: 0.22,
+    idleFlow: 0.08,
     glow: 0x464e60,
     seed: 61,
   });
@@ -817,18 +818,35 @@ export function createVessels({ hold }) {
   group.add(ferry, junk);
 
   const vessels = [
-    { key: 'ferry', object: ferry, route: null, swell: SWELL.ferry },
-    { key: 'junk', object: junk, route: null, swell: SWELL.junk },
+    { key: 'ferry', object: ferry, route: null, swell: SWELL.ferry, previous: new Vector3(), lastTime: null, wakeMotion: 0 },
+    { key: 'junk', object: junk, route: null, swell: SWELL.junk, previous: new Vector3(), lastTime: null, wakeMotion: 0 },
   ];
 
   function setPaths(chapters, breakpoint) {
-    for (const vessel of vessels) vessel.route = vesselRoute(chapters, breakpoint, vessel.key);
+    for (const vessel of vessels) {
+      vessel.route = vesselRoute(chapters, breakpoint, vessel.key);
+      vessel.lastTime = null;
+      vessel.wakeMotion = 0;
+    }
   }
 
   const pose = { position: new Vector3(), heading: 0 };
   function update(segment, time, animate) {
-    for (const { object, route, swell } of vessels) {
+    for (const vessel of vessels) {
+      const { object, route, swell } = vessel;
       vesselPose(route, segment, hold, pose);
+      const elapsed = vessel.lastTime === null ? 0 : Math.max(0, Math.min(0.1, time - vessel.lastTime));
+      let targetMotion = 0;
+      if (elapsed > 0) {
+        const distance = Math.hypot(pose.position.x - vessel.previous.x, pose.position.z - vessel.previous.z);
+        const planarSpeed = distance / elapsed;
+        targetMotion = Math.max(0, Math.min(1, (planarSpeed - 0.15) / 6));
+      }
+      vessel.previous.copy(pose.position);
+      vessel.lastTime = time;
+      const response = targetMotion > vessel.wakeMotion ? 8 : 3.5;
+      vessel.wakeMotion += (targetMotion - vessel.wakeMotion) * (1 - Math.exp(-elapsed * response));
+      if (!animate) vessel.wakeMotion = 0;
       object.position.copy(pose.position);
       object.rotation.y = pose.heading;
       if (animate) {
@@ -840,7 +858,7 @@ export function createVessels({ hold }) {
         object.rotation.x = 0;
         object.rotation.z = 0;
       }
-      object.userData.wake.update(object, time, animate);
+      object.userData.wake.update(object, time, animate, vessel.wakeMotion);
     }
   }
 

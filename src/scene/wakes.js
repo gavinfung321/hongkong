@@ -63,9 +63,21 @@ function foamTexture(seed) {
 // halfWidthAt(x): the hull's half width at the waterline (0 off the hull),
 // bow along +X, scanned over `span`. trail: metres of wake behind the
 // stern; spread: tangent of the V's half angle; speed: metres per second
-// the foam streams past; strength: overall opacity; glow: the white
-// water's own light, so it reads at night.
-export function createWake({ halfWidthAt, span, trail, spread = 0.34, speed, strength = 1, glow = 0x161b24, seed }) {
+// the foam streams past; strength: overall opacity; idlePresence and idleFlow
+// keep a restrained waterline disturbance when the vessel is not moving;
+// glow: the white water's own light, so it reads at night.
+export function createWake({
+  halfWidthAt,
+  span,
+  trail,
+  spread = 0.34,
+  speed,
+  strength = 1,
+  idlePresence = 0.22,
+  idleFlow = 0.08,
+  glow = 0x161b24,
+  seed,
+}) {
   let [stern, bow, beam] = [Infinity, -Infinity, 0];
   for (let x = span[0]; x <= span[1]; x += 0.25) {
     const hw = halfWidthAt(x);
@@ -231,6 +243,7 @@ export function createWake({ halfWidthAt, span, trail, spread = 0.34, speed, str
   });
   const churn = {
     wakeChurn: { value: 0 }, // the second layer's offset along the flow
+    wakeMotion: { value: 0 }, // 0 at rest, 1 at cruising speed
     wakeRepeat: { value: foam.repeat },
     wakeWater: { value: new Color(CHURN.water) },
   };
@@ -241,6 +254,7 @@ export function createWake({ halfWidthAt, span, trail, spread = 0.34, speed, str
         '#include <common>',
         `#include <common>
         uniform float wakeChurn;
+        uniform float wakeMotion;
         uniform vec2 wakeRepeat;
         uniform vec3 wakeWater;`,
       )
@@ -256,6 +270,10 @@ export function createWake({ halfWidthAt, span, trail, spread = 0.34, speed, str
         float sparkle = smoothstep( 0.78, 1.0, foamB ) * ${CHURN.sparkle.toFixed(2)};
         float whiteWater = clamp( wakeMask.r * foam + wakeMask.g * sparkle, 0.0, 1.0 );
         float disturbed = wakeMask.g * ${CHURN.opacity.toFixed(2)} * ( 0.7 + 0.3 * foamB );
+        float wakeNearHull = smoothstep( ${Math.max(0, (stern - x0) / (x1 - x0) - 0.08).toFixed(3)}, ${Math.min(1, (stern - x0) / (x1 - x0) + 0.04).toFixed(3)}, vAlphaMapUv.x );
+        float idleWake = mix( ${(idlePresence * 0.12).toFixed(3)}, ${idlePresence.toFixed(2)}, wakeNearHull );
+        whiteWater *= mix( idleWake, 1.0, wakeMotion );
+        disturbed *= mix( idleWake * 0.72, 1.0, wakeMotion );
         float wakeShare = whiteWater / max( whiteWater + disturbed * ( 1.0 - whiteWater ), 1e-4 );
         diffuseColor.rgb = mix( wakeWater * ( 0.85 + 0.4 * foamB ), diffuseColor.rgb, wakeShare );
         diffuseColor.a *= whiteWater + disturbed * ( 1.0 - whiteWater );`,
@@ -273,15 +291,21 @@ export function createWake({ halfWidthAt, span, trail, spread = 0.34, speed, str
 
   const tilt = new Euler(0, 0, 0, 'YXZ');
   const undo = new Quaternion();
+  let flowDistance = 0;
+  let lastTime = null;
   // Holds the wake flat on the surface under the boat's bob and roll, and
-  // streams the foam aft.
-  function update(boat, time, animate) {
+  // streams the foam aft in proportion to the boat's real movement.
+  function update(boat, time, animate, motion = 1) {
     tilt.set(boat.rotation.x, 0, boat.rotation.z);
     undo.setFromEuler(tilt).invert();
     mesh.quaternion.copy(undo);
     mesh.position.set(0, SURFACE - boat.position.y, 0).applyQuaternion(undo);
+    const elapsed = lastTime === null ? 0 : Math.max(0, Math.min(0.1, time - lastTime));
+    lastTime = time;
+    churn.wakeMotion.value = animate ? Math.max(0, Math.min(1, motion)) : 0;
     if (!animate) return;
-    const flow = (time * speed) / FOAM_TILE[0];
+    flowDistance += elapsed * speed * (idleFlow + (1 - idleFlow) * churn.wakeMotion.value);
+    const flow = flowDistance / FOAM_TILE[0];
     foam.offset.x = flow % 1;
     churn.wakeChurn.value = (CHURN.speed * CHURN.scale[0] * flow) % 1;
   }
