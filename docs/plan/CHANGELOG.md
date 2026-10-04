@@ -6,6 +6,26 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **香港 lingers longer on the first scroll** (user request and choice,
+  2026-10-04). The word and 01's copy now stay whole for a
+  moment, so the camera is seen nearing the word, then fade, gone after
+  about 70% of a screen of scrolling (was about half a screen on desktop
+  and a third on phones; the phones' early fade was for the old sink
+  crossing the moon, which no longer happens). Files:
+  `src/data/chapters.js` (`HERO.fadeStart`, `fadeEnd`),
+  `src/scene/createWordmark.js`, `src/main.js`; plan: `interface.md`.
+- **香港 is a fixed object in the scene; an opening glide** (user choices,
+  2026-10-04, after Kage's hero word, technique only). The word no longer
+  slides down by script: it stays at one place in the world and the camera
+  moves past it, so it grows a little, shifts with the mouse parallax and
+  fades as the camera pushes in. To make the camera's moves visible on it,
+  it now floats 16 m ahead on desktop (was standing on the water at 47 m)
+  and 25 m on phones (was 190 m), sized so the opening frame looks as
+  before. On load from the top of the page the camera eases in from 6 m
+  further back and 0.6 m higher over 2.4 s (not for deep links or reduced
+  motion). Files: `src/scene/createWordmark.js`, `src/data/chapters.js`
+  (`HERO`: `depth`, `leaveEnd`, `glide`), `src/scroll/cameraRig.js`,
+  `src/main.js`; plan: `interface.md`, `checks.md`, `README.md`.
 - **Lighter cursor trail; a middle petal layer** (user request and choice,
   2026-10-04). The cursor trail is cut to about a third: a mote every 3.2%
   of the window height travelled (was 1.2%), lives of 0.9–1.8 s (was

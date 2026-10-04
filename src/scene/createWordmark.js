@@ -26,7 +26,6 @@ const SHADE = [
   [0.7, 'rgb(140, 130, 165)'],
   [1, 'rgba(44, 38, 74, 0.95)'],
 ];
-const DROP = 1.4; // heights it moves down while leaving, enough to clear the frame
 const STEPPED_FADE = 0.3; // seconds
 
 function drawText(text) {
@@ -86,8 +85,6 @@ export function createWordmark(renderer, text, { onRepaint } = {}) {
   mesh.renderOrder = 10;
   mesh.layers.set(OVERLAY); // drawn after the glow, so it stays crisp
 
-  let restY = 0;
-  let height = 1;
   let opacity = 1;
   let placed = null; // last place() arguments, reused after the repaint
 
@@ -103,26 +100,21 @@ export function createWordmark(renderer, text, { onRepaint } = {}) {
         texture.dispose();
         ({ texture, aspect, padBottom, padTop } = next);
         mesh.userData.fontRepaints = (mesh.userData.fontRepaints ?? 0) + 1;
-        if (placed) {
-          const sink = (restY - mesh.position.y) / (height * DROP);
-          place(...placed);
-          apply(sink, opacity);
-        }
+        if (placed) place(...placed);
         onRepaint?.();
       })
       .catch(() => {});
   }
 
-  function apply(sink, value) {
+  function apply(value) {
     opacity = value;
     material.opacity = value;
     mesh.visible = value > 0.001;
-    mesh.position.y = restY - sink * height * DROP;
   }
 
   // Fills spec.width % of the screen with its feet at (spec.x, spec.foot) %
   // as seen from chapter 01's opening pose: standing on the water, or, with
-  // spec.depth (metres ahead of the camera), floating in the sky.
+  // spec.depth (metres ahead of the camera), floating there.
   // clearTop (% of the screen height): the glyph tops stay below it, the feet
   // moving down to spec.maxFoot at most, then the word shrinking instead.
   function place(pose, viewAspect, spec, clearTop) {
@@ -161,31 +153,29 @@ export function createWordmark(renderer, text, { onRepaint } = {}) {
     const depth = foot.clone().sub(position).dot(forward);
     const viewWidth = 2 * depth * Math.tan(MathUtils.degToRad(pose.fov / 2)) * viewAspect;
     const width = (widthPct / 100) * viewWidth;
-    height = width / aspect;
-    restY = foot.y - height * padBottom;
+    const height = width / aspect;
 
     mesh.scale.set(width, height, 1);
-    mesh.position.set(foot.x, restY, foot.z);
+    mesh.position.set(foot.x, foot.y - height * padBottom, foot.z);
     mesh.rotation.y = Math.atan2(-forward.x, -forward.z);
   }
 
-  // Continuous mode: moves down from the first scroll (from = progress at the
-  // top of the page), fully faded by fadeEnd of the way down.
-  function sinkAt(p, from, to, fadeEnd) {
-    const u = MathUtils.clamp((p - from) / (to - from), 0, 1);
-    apply(u * (2 - u), 1 - smoothstep(0, fadeEnd, u));
+  // Continuous mode: it stays where it stands, a fixed object the camera
+  // moves past (after the Kage reference's word; user choice, 2026-10-04),
+  // fading between progress `from` and `to`.
+  function fadeAt(p, from, to) {
+    apply(1 - smoothstep(from, to, p));
   }
 
-  // Stepped mode: no sinking, just a short fade. Returns true when it changed,
-  // so the caller renders every step including the last.
+  // Stepped mode: a short fade. Returns true when it changed, so the caller
+  // renders every step including the last.
   function fadeTo(target, dt) {
     const before = opacity;
-    const sunk = mesh.position.y !== restY;
     const step = dt / STEPPED_FADE;
     const next = target > opacity ? Math.min(target, opacity + step) : Math.max(target, opacity - step);
-    apply(0, dt > 0 ? next : target);
-    return opacity !== before || sunk;
+    apply(dt > 0 ? next : target);
+    return opacity !== before;
   }
 
-  return { mesh, place, sinkAt, fadeTo };
+  return { mesh, place, fadeAt, fadeTo };
 }

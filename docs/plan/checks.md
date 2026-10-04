@@ -144,8 +144,10 @@ The milestone passes when:
    while the camera moves; warning lights and colour cycles hold still in
    reduced motion (user choices, 2026-10-02).
 2. The wordmark reads in front of the whole scene, shading into dusk toward its
-   feet, raised over the boats (user request, 2026-10-02), and sinks and
-   fades out with the 01 copy from the first scroll.
+   feet, raised over the boats (user request, 2026-10-02). It stays fixed in
+   the scene while the camera glides in on load and pushes past it, and
+   fades out with the 01 copy from the first scroll (user choices,
+   2026-10-04).
    Mobile shows it horizontal and smaller, floating in the sky between the
    copy and the moon with the tower, junk, moon and IFC uncovered (user
    request, 2026-10-02).
@@ -160,7 +162,7 @@ The milestone passes when:
   copy, vertical label and side pager are gone and the nav bar is not
   forced back; the footer's chapter links land on their holds (user
   requests, 2026-10-02).
-4. Reduced-motion mode shows no sinking, no parallax, no particles and no
+4. Reduced-motion mode shows no opening glide, no parallax, no particles and no
    cursor ring, the palms and the bauhinia (leaves and its falling petals)
    hold still (user request, 2026-10-02), and the
    Observation Wheel holds still (it turns slowly in

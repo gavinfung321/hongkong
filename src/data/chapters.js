@@ -51,32 +51,44 @@ export const SCROLL = {
 };
 
 // The 香港 wordmark in the hero, authored on screen at chapter 01's opening pose.
-// x / foot: % of the viewport where the characters stand on the water.
-// width: % of the viewport width. It is drawn in front of everything and moves
-// down out of frame from the first scroll until progress sinkEnd (the hero is
-// p < 0; chapter 01's hold starts at 0.36), while chapter 01's holdDolly pushes in.
+// x / foot: % of the viewport where the characters' feet are; width: % of the
+// viewport width; depth: metres ahead of the camera. It is drawn in front of
+// everything, but it is a fixed object in the world: it never moves itself,
+// the camera moves past it (chapter 01's holdDolly push, the mouse parallax,
+// the opening glide), and it fades from the first scroll by progress leaveEnd
+// (the hero is p < 0; chapter 01's hold starts at 0.36). Close, so that the
+// camera's moves shift it against the far harbour (after the Kage reference's
+// word; user choice, 2026-10-04: it was 47 m out on the water on desktop and
+// 190 m on phones, and slid down out of frame by script).
 export const HERO = {
   wordmark: {
     text: '香港',
-    // Desktop stands on the water, raised over the boats (user request,
-    // 2026-10-02); its feet must stay below the horizon (57.5% at the opening
-    // pose). Mobile floats in the empty sky between the copy and the moon,
-    // 190 m ahead like the water placement it replaced (user request, 2026-10-02).
-    // Mobile fadeEnd: gone before it sinks across the moon and skyline
-    // (transition review, 2026-10-03). Mobile clear: px kept free under 01's
+    // Desktop floats over the harbour beyond the railing, raised over the
+    // boats (user request, 2026-10-02); its feet must stay below the horizon
+    // (57.5% at the opening pose). Mobile floats in the empty sky between the
+    // copy and the moon (user request, 2026-10-02).
+    // Mobile fadeEnd: a little sooner than desktop, the phone hero being
+    // shorter in reading time. Mobile clear: px kept free under 01's
     // copy on short screens, moving the feet down to maxFoot %, then shrinking
     // (user request, 2026-10-03).
     // Short landscape (phones turned sideways, under 500 px tall): the desktop
     // word keeps clear of 01's copy the same way, standing lower and smaller
     // (interface audit IS-03, user request, 2026-10-03).
-    desktop: { x: 50, foot: 74, width: 60 },
+    desktop: { x: 50, foot: 74, width: 60, depth: 16 },
     desktopShort: { clear: 14, maxFoot: 84 },
-    mobile: { x: 50, foot: 42, width: 78, depth: 190, fadeEnd: 0.4, clear: 14, maxFoot: 48 },
+    mobile: { x: 50, foot: 42, width: 78, depth: 25, fadeEnd: 0.8, clear: 14, maxFoot: 48 },
   },
-  sinkEnd: 0.2,
-  // Fraction of the sink by which the wordmark and chapter 01's copy have
-  // faded (a breakpoint's own fadeEnd wins).
-  fadeEnd: 0.6,
+  leaveEnd: 0.2,
+  // Fractions of the way to leaveEnd: the wordmark and chapter 01's copy stay
+  // whole until fadeStart, so the camera is seen nearing the word, then fade
+  // by fadeEnd (a breakpoint's own fadeEnd wins; user choice, 2026-10-04,
+  // was gone by 0.6, 0.4 on phones).
+  fadeStart: 0.15,
+  fadeEnd: 0.9,
+  // The opening glide (after the Kage reference; user choice, 2026-10-04):
+  // as the entrance cover lifts on a visit from the top, the camera eases in
+  // from `back` metres behind and `rise` above the opening pose.
+  glide: { back: 6, rise: 0.6, duration: 2.4 },
 };
 
 export const chapters = [

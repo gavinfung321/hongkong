@@ -477,6 +477,7 @@ async function start(initGuard, header, loading) {
   let time = 0;
   let lastRendered = 0;
   let ready = false;
+  let glideStart = -1; // frame time the opening glide began, or -1
 
   function frame(now) {
     const dt = last ? Math.min((now - last) / 1000, 0.1) : 0;
@@ -486,8 +487,11 @@ async function start(initGuard, header, loading) {
     state.motion = stepped ? 'stepped' : 'continuous';
     const hero = state.p < 0;
     const heroFadeEnd = HERO.wordmark[breakpoint]?.fadeEnd ?? HERO.fadeEnd;
-    const heroFadeTo = state.pTop + (HERO.sinkEnd - state.pTop) * heroFadeEnd;
-    const storyLevels = copy.update(state.p, { stepped, index: state.index, hero: { from: state.pTop, to: heroFadeTo }, rendered: state.pRendered, dwell: state.dwell });
+    const heroFade = {
+      from: state.pTop + (HERO.leaveEnd - state.pTop) * HERO.fadeStart,
+      to: state.pTop + (HERO.leaveEnd - state.pTop) * heroFadeEnd,
+    };
+    const storyLevels = copy.update(state.p, { stepped, index: state.index, hero: heroFade, rendered: state.pRendered, dwell: state.dwell });
     if (story.setLevels(storyLevels)) needsRender = true;
     header.update(state.index, hero);
     // A chapter address follows the crossing, so a reload or a shared link lands
@@ -524,9 +528,12 @@ async function start(initGuard, header, loading) {
       const offset = parallax.update(dt);
       const parallaxOn = parallax.enabled && breakpoint === 'desktop';
       rig.setParallax(parallaxOn ? offset.x : 0, parallaxOn ? offset.y : 0);
+      const glide = glideStart < 0 ? 0 : (1 - Math.min(1, Math.max(0, (now - glideStart) / (HERO.glide.duration * 1000)))) ** 3;
+      rig.setGlide(HERO.glide.back * glide, HERO.glide.rise * glide);
+      if (glide === 0) glideStart = -1;
       if (!control.free) applyPose(state.pRendered, false, time);
       petals.setDensity(petalLevel * (1 - PETAL_YIELD * storyLevels.mode));
-      wordmark.sinkAt(state.pRendered, state.pTop, HERO.sinkEnd, heroFadeEnd);
+      wordmark.fadeAt(state.pRendered, heroFade.from, heroFade.to);
       water.update(dt);
       island.update(time);
       foreground.update(time);
@@ -557,6 +564,10 @@ async function start(initGuard, header, loading) {
       window.clearTimeout(initGuard);
       performance.mark('vh:first-frame');
       loading.finish(() => {
+        // The opening glide, on visits from the top only: it starts under the
+        // still-opaque cover and eases in as the cover fades.
+        const fromTop = !/^#chapter-0[1-6]$/.test(location.hash) && window.scrollY <= 2;
+        if (fromTop && !stepped) glideStart = performance.now();
         root.classList.add('is-ready');
         fireworks.load();
         memories.load();
