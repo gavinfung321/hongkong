@@ -6,6 +6,21 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **Label rows lose their Chinese name** (user request and choice,
+  2026-10-04). 鐘樓 and 天星小輪 at the end of 02's and 03's label rows
+  repeated the vertical text at the right edge; removed on desktop and
+  phones alike. The hairline becomes a short accent after the kicker
+  (56px desktop, 40px phones), still drawing in from the left. Files:
+  `index.html`, `src/styles.css`; plan: `narrative-spine.md`.
+- **03 panels: shorter text, same on every screen** (user requests and
+  choice, 2026-10-04). Phones felt crowded; rather than shrink the 13px
+  text, each panel now holds one sentence, used on desktop too: 01 drops
+  its opening ("Low over the waves…", which the standfirst covers), 02
+  drops "shared each day by strangers". On phones the index shares the
+  title's line, the panels get more padding and space under the
+  standfirst, and "Crossing since 1888" returns (dropped only below
+  620px). Files: `index.html`, `src/styles.css`; plan:
+  `narrative-spine.md`.
 - **03 arrival darkness eased** (user request, 2026-10-04). Stacked on
   the stronger vignette, 03's own frame made the move from 02 to 03 too
   dark: its edges drop to about 55% (was 70%), the outer ring to 60%

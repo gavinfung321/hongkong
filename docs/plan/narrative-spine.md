@@ -239,8 +239,11 @@ The six drafts are approved (user request, 2026-10-04). Scene 02 now runs:
   lead, 19 px in cream; beat 2 is 15 px in the soft body grey and no
   longer dims beat 1. Phones stack them too (17 px and 13 px, full copy
   width); beat 2's last line just reaches the top of the tower's dome.
-- **Label row** (user choice, 2026-10-04): `02 CLOCK TOWER`, a hairline
-  across the copy column, and 鐘樓 at its end (`.chapter__label`).
+- **Label row** (user choice, 2026-10-04): `02 CLOCK TOWER` and a short
+  hairline (56px desktop, 40px phones; `.chapter__label`). The Chinese
+  name at its end was removed on every screen in 02 and 03, as it
+  repeated the vertical text at the right edge (user choice,
+  2026-10-04).
 - **Timeline row** (user choice, 2026-10-04): 1915 Tower rises · 1921
   Clocks begin · 1975 Last train · 1978 Station demolished, large serif
   years over small labels between hairlines, fixed at the foot of the
@@ -400,7 +403,12 @@ outlined cells over a darkened scene; no Kage code, type or copy):
 - the beats move into three panels,
   each with an index, a short title with Chinese, and smaller body text
   (beat 1 was too big): 01 Facing Forward 向前, 02 A Daily Crossing 渡海,
-  03 The Route 航線;
+  03 The Route 航線; the panel text is one short sentence each, the same
+  on desktop and phones (user choice, 2026-10-04): "Inside, the wooden
+  seat backs flip over, so passengers always face the way they are
+  going." / "Not a view but a commute: a few quiet minutes, the same
+  crossing their grandparents made." On phones the index shares the
+  title's line ("01 · Facing Forward");
 - the title, standfirst and all three panels fade in together as the
   camera settles, with no per-panel sequence (user request, 2026-10-04);
   each panel has top, left and bottom hairlines; on hover the
@@ -417,8 +425,8 @@ outlined cells over a darkened scene; no Kage code, type or copy):
   panels stack in one column under the title, allowed to cover the
   ferry, with a light 55% fill so the ferry shows through and a soft text
   shadow for legibility, and the standfirst balanced over two lines
-  (user requests and choices, 2026-10-04); phones up to 740px tall drop the meta line
-  and tighten, and below 620px panel 02 takes 01's place mid-dwell;
+  (user requests and choices, 2026-10-04); phones up to 740px tall tighten, and
+  below 620px drop the meta line and panel 02 takes 01's place mid-dwell;
 - a 60svh dwell (was 110) holds the camera while the route dot crosses
   (dwell share 0.1–0.9);
 - reduced motion: everything appears whole with the usual 150 ms fade.

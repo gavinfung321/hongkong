@@ -431,30 +431,25 @@ a:focus-visible {
   line-height: 1.6;
 }
 
-/* A story chapter's label row: index and kicker, a hairline, the Chinese
-   name at the far end (narrative spine, user choice, 2026-10-04). */
+/* A story chapter's label row: index and kicker, then a short hairline
+   (narrative spine, user choice, 2026-10-04). The Chinese name lives only
+   in the vertical text at the right edge, not here (user choice,
+   2026-10-04). */
 .chapter__label {
   display: flex;
   align-items: center;
 }
 
 .chapter__rule {
-  flex: 1;
+  width: 56px;
   height: 1px;
-  margin-inline: 1rem 0.875rem;
+  margin-left: 1rem;
   background: rgb(243 233 210 / 0.3);
   transform-origin: left;
 }
 
-.chapter__label-zh {
-  margin-right: -0.3em;
-  color: var(--color-cream);
-  font-family: var(--font-text-zh);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.3em;
-  line-height: 1.2;
-  opacity: 0.85;
+[data-breakpoint="mobile"] .chapter__rule {
+  width: 40px;
 }
 
 /* Two beats: a brighter, larger lead and a quieter second (user request,
@@ -1888,11 +1883,33 @@ html:not(.is-enhanced) .vertical-text {
    2026-10-04). */
 [data-breakpoint="mobile"].is-enhanced .chapter__panels {
   gap: 0;
-  margin-top: 0.875rem;
+  margin-top: 1.25rem;
+}
+
+/* The index shares the title's line, to save a row per panel. */
+[data-breakpoint="mobile"].is-enhanced .chapter__panel {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.5rem;
+  align-items: baseline;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__panel > * {
+  grid-column: 1 / -1;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__panel > .chapter__panel-index,
+[data-breakpoint="mobile"].is-enhanced .chapter__panel > .chapter__panel-title {
+  grid-column: auto;
+  margin-top: 0;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__panel-index::after {
+  content: " ·";
 }
 
 [data-breakpoint="mobile"].is-enhanced .chapter__panel {
-  padding: 0.875rem 1rem 1rem;
+  padding: 1.125rem 1.125rem 1.25rem;
   border-bottom: 0;
   background-color: rgb(6 5 16 / calc(0.55 * var(--enter, 1)));
   text-shadow: 0 1px 2px rgb(4 4 14 / 0.9), 0 0 12px rgb(4 4 14 / 0.6);
@@ -1902,15 +1919,11 @@ html:not(.is-enhanced) .vertical-text {
   border-bottom: 1px solid rgb(243 233 210 / calc(0.18 * var(--enter, 1)));
 }
 
-/* Short phones: tighter panels without the meta line; on the shortest,
-   panel 02 takes 01's place again (copyLayer.js, SHORT_PHONE). */
+/* Short phones: tighter panels; on the shortest, no meta line and panel 02
+   takes 01's place (copyLayer.js, shortPhone). */
 @media (max-height: 740px) {
   [data-breakpoint="mobile"].is-enhanced .chapter__panel {
-    padding: 0.625rem 0.875rem 0.75rem;
-  }
-
-  [data-breakpoint="mobile"].is-enhanced .chapter__panel-meta {
-    display: none;
+    padding: 0.75rem 0.875rem 0.875rem;
   }
 
   [data-breakpoint="mobile"].is-enhanced .chapter__route {
@@ -1919,6 +1932,10 @@ html:not(.is-enhanced) .vertical-text {
 }
 
 @media (max-height: 619px) {
+  [data-breakpoint="mobile"].is-enhanced .chapter__panel-meta {
+    display: none;
+  }
+
   [data-breakpoint="mobile"].is-enhanced .chapter__panel:not(:last-child) {
     grid-area: 1 / 1;
   }
@@ -1936,6 +1953,7 @@ html:not(.is-enhanced) .vertical-text {
 [data-breakpoint="mobile"].is-enhanced .chapter__panel-body {
   font-size: 0.8125rem;
   line-height: 1.55;
+  text-wrap: pretty;
 }
 
 @media (orientation: landscape) and (max-height: 500px) {
