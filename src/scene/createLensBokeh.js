@@ -21,16 +21,18 @@ import { seededRandom } from './random.js';
 // 05 a few soft petals too. They ride with the camera, drift down and to
 // the left, and shift against the mouse a little more than anything in the
 // scene. Drawn over everything. Off in reduced motion. Sizes in metres.
-// 03–04: about three quieter discs (`busy` 0). 05: the denser pack (`busy`
-// 1), skipping Two IFC's shaft (user request, 2026-10-04).
+// 03–04: two restrained edge highlights (`busy` 0). 05: the denser pack
+// (`busy` 1), skipping Two IFC's shaft (user request, 2026-10-04).
 const LENS = {
   count: { desktop: 12, mobile: 8 },
   petals: { desktop: 3, mobile: 2 },
-  few: { desktop: 3, mobile: 2 },
+  few: { desktop: 2, mobile: 1 },
   distance: [1.1, 1.8],
   size: { petal: [0.14, 0.24], mote: [0.05, 0.22] },
   opacity: { petal: [0.28, 0.42], mote: [0.18, 0.4] },
-  quiet: { opacity: 0.85, size: 1.35, side: 0.18 },
+  // Quiet scenes need depth, not visible lens rings: keep the remaining
+  // motes small, dim and outside the main ferry/copy composition.
+  quiet: { opacity: 0.48, size: 0.68, side: 0.58 },
   drift: [0.02, 0.05], // per second, as a share of the half width
   parallax: 0.08, // share of the half width at the pointer's full reach
   // Petals stay toward the sides. Motions may sit further in (05).
