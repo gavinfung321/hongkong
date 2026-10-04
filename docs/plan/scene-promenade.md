@@ -23,16 +23,19 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
      the hero, 01 and 03 on desktop and phone: the coral sails lead, no
      petal sits on the copy; composition probe as before.
    - **Depth:** a near layer of a few large petals (6 desktop / 4 mobile)
-     drawn over everything, including 香港; a far layer of small fogged
-     petals (70 / 32). Both travel with the camera, so moving still gives
-     parallax.
+     drawn over everything, including 香港; a middle layer of medium
+     petals about 6–18 m out (20 / 8; user choice, 2026-10-04: more volume
+     through depth, not count); a far layer of small fogged petals
+     (70 / 32). All travel with the camera, so moving still gives parallax
+     at three speeds.
    - **Motion:** slow fall, sideways breeze, sway and flutter; scrolling adds
      a short gust. The breeze blows toward screen left, away from the
      bauhinia tree, whose own falling petals join it (2026-10-02).
    - **Density:** sparse and calm. Full in the hero and 01–04, 0.6 in 05 so
      the city lights lead, 0 in 06 so the fireworks take over (`petals` in
      each chapter's `visibility`). Off in reduced motion.
-   - **Cost:** two instanced draw calls, 76 petals updated per frame.
+   - **Cost:** three instanced draw calls, 96 petals updated per frame
+     (44 on phones).
    - Built in `src/scene/createPetals.js`; sizes, counts, colours and wind are
      the constants at the top.
    - **Artwork (done 2026-10-02):** the petal artwork the user planned

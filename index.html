@@ -96,6 +96,7 @@
 
     <canvas id="world" class="world" aria-hidden="true"></canvas>
     <div class="vignette" aria-hidden="true"></div>
+    <div class="memory-veil" aria-hidden="true"></div>
     <div class="veil" aria-hidden="true"></div>
 
     <header class="site-header">
@@ -189,14 +190,40 @@
       </section>
 
       <section class="chapter" id="chapter-02" data-chapter="02" aria-labelledby="chapter-02-title">
-        <div class="chapter__copy">
-          <p class="chapter__index">02</p>
-          <p class="chapter__kicker">Clock Tower</p>
+        <div class="chapter__copy chapter__copy--story">
+          <div class="chapter__label">
+            <p class="chapter__index">02</p>
+            <p class="chapter__kicker">Clock Tower</p>
+            <span class="chapter__rule" aria-hidden="true"></span>
+            <span class="chapter__label-zh" lang="zh-Hant" aria-hidden="true">鐘樓</span>
+          </div>
           <h2 class="chapter__title" id="chapter-02-title">The Kowloon Edge</h2>
-          <p class="chapter__body">
-            The old railway clock still faces the harbour. It marks the shore where the city’s railway
-            journeys north once began.
-          </p>
+          <div class="chapter__beats">
+            <p class="chapter__body chapter__beat">
+              The clock still faces the harbour. The tower rose in 1915 beside the new Kowloon terminus, but
+              its clocks and bell only began keeping time in 1921.
+            </p>
+            <p class="chapter__body chapter__beat">
+              For sixty years, trains left from this shore for the journey north. In 1978 the station was
+              demolished and the tower alone was kept, still standing where those journeys began.
+            </p>
+            <figure class="chapter__memory">
+              <figcaption class="chapter__memory-caption">Kowloon terminus, ca. 1915 · Hong Kong Public Libraries</figcaption>
+              <img
+                class="chapter__memory-art"
+                data-src="plates/kowloon-terminus-1915.webp"
+                width="1400"
+                height="737"
+                alt="Photograph of the newly built Kowloon railway terminus and its clock tower, rickshaws waiting in the forecourt"
+              />
+            </figure>
+          </div>
+          <dl class="chapter__facts" aria-label="Clock Tower timeline">
+            <div><dt>1915</dt><dd>Tower rises</dd></div>
+            <div><dt>1921</dt><dd>Clocks begin</dd></div>
+            <div><dt>1975</dt><dd>Last train</dd></div>
+            <div><dt>1978</dt><dd>Station demolished</dd></div>
+          </dl>
         </div>
       </section>
 

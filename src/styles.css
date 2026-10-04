@@ -429,6 +429,85 @@ a:focus-visible {
   line-height: 1.6;
 }
 
+/* A story chapter's label row: index and kicker, a hairline, the Chinese
+   name at the far end (narrative spine, user choice, 2026-10-04). */
+.chapter__label {
+  display: flex;
+  align-items: center;
+}
+
+.chapter__rule {
+  flex: 1;
+  height: 1px;
+  margin-inline: 1rem 0.875rem;
+  background: rgb(243 233 210 / 0.3);
+  transform-origin: left;
+}
+
+.chapter__label-zh {
+  margin-right: -0.3em;
+  color: var(--color-cream);
+  font-family: var(--font-text-zh);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  line-height: 1.2;
+  opacity: 0.85;
+}
+
+/* Two beats: a brighter, larger lead and a quieter second (user request,
+   2026-10-04). */
+.chapter__beat:first-child {
+  max-width: 34ch;
+  color: var(--color-cream);
+  font-size: 1.1875rem;
+  line-height: 1.55;
+}
+
+.chapter__beat + .chapter__beat {
+  max-width: 40ch;
+  margin-top: 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+/* A story chapter's timeline: years over short labels, between hairlines. */
+.chapter__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 0;
+  margin: 1.25rem 0 0;
+}
+
+.chapter__facts > div {
+  padding-inline: 1.25rem;
+  border-left: 1px solid rgb(243 233 210 / 0.2);
+}
+
+.chapter__facts > div:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.chapter__facts dt {
+  color: var(--color-ivory);
+  font-family: var(--font-display-en);
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: lining-nums;
+}
+
+.chapter__facts dd {
+  margin: 0.5rem 0 0;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
 /* A thin rounded button with a dim outline. */
 .pill-link {
   display: inline-flex;
@@ -1363,7 +1442,7 @@ html:not(.is-enhanced) .vertical-text {
 
 .is-enhanced .chapter {
   display: block;
-  height: var(--chapter-length, 150svh);
+  height: calc(var(--chapter-length, 150svh) + var(--chapter-dwell, 0svh));
   min-height: 0;
   padding: 0;
 }
@@ -1417,6 +1496,220 @@ html:not(.is-enhanced) .vertical-text {
   margin-top: 0.625rem;
 }
 
+/* A story chapter arrives one layer at a time across its dwell, each layer
+   fading in place (copyLayer.js sets --enter; narrative spine, user request,
+   2026-10-04). Its copy never moves, so the timeline can be fixed to the
+   screen from inside it. */
+.is-enhanced .chapter__copy--story {
+  transform: none;
+}
+
+.is-enhanced .chapter__label {
+  opacity: min(1, calc(var(--enter, 1) * 2));
+}
+
+/* The hairline draws in from the left as the label arrives. */
+.is-enhanced .chapter__rule {
+  transform: scaleX(var(--enter, 1));
+}
+
+.is-enhanced .chapter__copy--story .chapter__title,
+.is-enhanced .chapter__beat,
+.is-enhanced .chapter__facts {
+  opacity: var(--enter, 1);
+}
+
+.is-enhanced .chapter__beats {
+  display: grid;
+}
+
+.is-enhanced .chapter__beat[data-enter-hidden] {
+  visibility: hidden;
+}
+
+.is-stepped .chapter__label,
+.is-stepped .chapter__copy--story .chapter__title,
+.is-stepped .chapter__beat,
+.is-stepped .chapter__facts {
+  transition: opacity 150ms linear;
+}
+
+.is-stepped .chapter__rule {
+  transition: transform 150ms linear;
+}
+
+/* The timeline sits at the foot of the screen under the copy column, clear
+   of the 鐘樓 label in the right margin. */
+.is-enhanced .chapter__facts {
+  position: fixed;
+  left: max(var(--page-inset), env(safe-area-inset-left), calc(var(--copy-left) * 1vw));
+  right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 64px);
+  bottom: max(5lvh, calc(env(safe-area-inset-bottom) + 16px));
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  pointer-events: none;
+}
+
+.is-enhanced .chapter__facts dt {
+  font-size: clamp(1.75rem, 2.4vw, 2.5rem);
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__facts {
+  right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 36px);
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__facts > div {
+  padding-inline: 0.625rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__facts > div:first-child {
+  padding-left: 0;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__facts dt {
+  font-size: 1.5rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__facts dd {
+  font-size: 0.5625rem;
+  letter-spacing: 0.1em;
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .is-enhanced .chapter__facts {
+    display: none;
+  }
+}
+
+/* The memory print: an archival photograph baked as a duotone print with
+   burnt edges and grain (the only grain on the site; user choice,
+   2026-10-04), under the beats on desktop and above the timeline on phones
+   (user choice, 2026-10-04). It develops upward from its lower edge after
+   beat 2 and sits still (user request, 2026-10-04); it stays out on very
+   short windows. */
+.chapter__memory {
+  display: none;
+}
+
+.is-enhanced .chapter__memory.is-loaded {
+  display: block;
+  width: min(100%, 36vw, 50lvh);
+  margin: 1.25rem 0 0;
+  opacity: var(--memory-reveal, 0);
+  pointer-events: none;
+}
+
+.chapter__memory-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Develops upward through a soft tide line, a little brighter as it lands. */
+  -webkit-mask-image: linear-gradient(to top, #000 calc(var(--memory-reveal, 0) * 140% - 40%), transparent calc(var(--memory-reveal, 0) * 140%));
+  mask-image: linear-gradient(to top, #000 calc(var(--memory-reveal, 0) * 140% - 40%), transparent calc(var(--memory-reveal, 0) * 140%));
+  filter: brightness(calc(0.7 + 0.3 * var(--memory-reveal, 0)));
+}
+
+.chapter__memory-caption {
+  margin-bottom: 0.5rem;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  opacity: clamp(0, calc((var(--memory-reveal, 0) - 0.7) / 0.3), 1);
+}
+
+.is-fallback .chapter__memory {
+  display: none;
+}
+
+/* Phones: fixed just above the timeline, aligned with it, at 70% of the
+   column (user choice, 2026-10-04); it covers the tower's lower half and the
+   steam while it shows. */
+[data-breakpoint="mobile"].is-enhanced .chapter__memory.is-loaded {
+  --print-left: max(var(--page-inset), env(safe-area-inset-left), calc(var(--copy-left) * 1vw));
+  position: fixed;
+  left: var(--print-left);
+  bottom: calc(max(5lvh, calc(env(safe-area-inset-bottom) + 16px)) + 5.5rem);
+  width: calc((100vw - 2 * var(--print-left)) * 0.7);
+  margin: 0;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__memory-caption {
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .is-enhanced .chapter__memory.is-loaded {
+    display: none;
+  }
+}
+
+.is-stepped .chapter__memory.is-loaded {
+  transition: opacity 150ms linear;
+}
+
+/* An ink pool behind 02's copy and print, deepening in memory mode. */
+.is-enhanced #chapter-02 .chapter__copy::before {
+  content: "";
+  position: absolute;
+  inset: -64px -80px -72px -96px;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgb(10 9 26 / 0.6), rgb(10 9 26 / 0.32) 60%, transparent);
+  opacity: calc(0.45 + 0.55 * var(--memory-mode, 0));
+  pointer-events: none;
+}
+
+/* Memory mode: the harbour darkens and cools as the camera reaches a story
+   chapter, and further while its memory print shows (copyLayer.js sets
+   --memory-mode; user request, 2026-10-04). A soft opening keeps the
+   Clock Tower lit, the way the subject keeps its glow in a dark grade;
+   the vignette (::after) closes in. */
+.memory-veil {
+  display: none;
+}
+
+.is-enhanced .memory-veil {
+  --veil-x: 25%;
+  --veil-y: 42%;
+  --veil-size: 20vw 50lvh;
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100vw;
+  height: 100lvh;
+  background: radial-gradient(var(--veil-size) at var(--veil-x) var(--veil-y), rgb(9 9 28 / 0.08), rgb(9 9 28 / 0.62));
+  opacity: var(--memory-mode, 0);
+  pointer-events: none;
+}
+
+[data-breakpoint="mobile"].is-enhanced .memory-veil {
+  --veil-x: 48%;
+  --veil-y: 50%;
+  --veil-size: 34vw 36lvh;
+}
+
+.is-enhanced .memory-veil::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse farthest-corner at 50% 50%, transparent 35%, rgb(4 4 14 / 0.72) 100%);
+  transform: scale(calc(1.3 - 0.3 * var(--memory-mode, 0)));
+}
+
+.is-stepped .memory-veil {
+  transition: opacity 150ms linear;
+}
+
+.is-stepped .memory-veil::after {
+  transform: none;
+}
+
 [data-breakpoint="mobile"].is-enhanced .chapter__title {
   margin-top: 0.375rem;
   font-size: clamp(2.25rem, 10vw, 3rem);
@@ -1426,6 +1719,20 @@ html:not(.is-enhanced) .vertical-text {
   max-width: 30ch;
   font-size: 0.9375rem;
   line-height: 1.58;
+}
+
+/* Phones stack the beats too; full width keeps them off the tower's dome. */
+[data-breakpoint="mobile"].is-enhanced .chapter__beat:first-child {
+  max-width: none;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__beat + .chapter__beat {
+  max-width: none;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
 }
 
 [data-breakpoint="mobile"].is-enhanced {
@@ -1448,6 +1755,14 @@ html:not(.is-enhanced) .vertical-text {
     margin-top: 0.375rem;
     font-size: 0.875rem;
     line-height: 1.5;
+  }
+
+  .is-enhanced .chapter__beat:first-child {
+    font-size: 0.9375rem;
+  }
+
+  .is-enhanced .chapter__beat + .chapter__beat {
+    font-size: 0.8125rem;
   }
 
   .side-pager {

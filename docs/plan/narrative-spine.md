@@ -56,6 +56,82 @@ unchanged historic working vessel.
 Proceed only if the six chapters read as one journey and each chapter adds
 meaning that the current image cannot communicate by itself.
 
+### Draft, 2026-10-04 (approved, user request, 2026-10-04)
+
+Kickers and titles unchanged. Beat 1 shows with the settled composition,
+beat 2 later in the same hold. Claims marked *[verify]* still need an
+authoritative source before they go live.
+
+**01 Departure** (56 words)
+
+> Night gathers on the water. Across the harbour, windows kindle beneath the
+> Peak, and their light reaches us in long, broken lines.
+>
+> People have crossed this water by ferry since 1880, a few minutes between
+> Kowloon and the island. Tonight we take the crossing slowly, from the old
+> railway clock to the lights of Central.
+
+**02 Memory** (58 words)
+
+> The clock still faces the harbour. The tower rose in 1915 beside the new
+> Kowloon terminus, but its clocks and bell only began keeping time in 1921.
+>
+> For sixty years, trains left from this shore for the journey north. In 1978
+> the station was demolished and the tower alone was kept, still standing
+> where those journeys began.
+
+**03 Ritual** (58 words)
+
+> Low over the waves, the Star Ferry carries its lit decks toward Central.
+> Inside, the wooden seat backs flip over, so passengers always face the way
+> they are going. *[verify]*
+>
+> For most aboard, this is not a view but a commute: a few quiet minutes on
+> the water, shared each day by strangers, the same crossing their
+> grandparents made.
+
+**04 Symbol** (56 words)
+
+> A junk with red sails passes close enough to fill the night, its battened
+> canvas catching the city's light, its dark hull slipping through the
+> reflections.
+>
+> Before the 1950s, wooden sailing junks were Hong Kong's main fishing boats.
+> The few that sail the harbour now carry visitors, keeping the shape of that
+> memory on the water.
+
+**05 Arrival** (54 words)
+
+> Two IFC rises above Central, its bright crown drawing the crossing toward a
+> wall of glass, steel and harbour light.
+>
+> Much of this shore stands on land reclaimed from the sea. The waterline has
+> moved outward again and again, and the harbour we cross tonight is narrower
+> than the one the first ferries knew. *[verify]*
+
+**06 Afterimage** (49 words)
+
+> Fireworks open above the harbour, then soften into smoke and drift slowly
+> over the water.
+>
+> The light fades, as light does. The water stays. In the morning the ferries
+> will cross again, and the clock will still be facing the shore. The crossing
+> ends; the harbour remains.
+
+Sources checked:
+
+- 02: [AMO](https://www.amo.gov.hk/en/historic-buildings/monuments/kowloon/monuments_43/index.html)
+  and the [AMO pamphlet](https://www.amo.gov.hk/filemanager/amo/common/download-area/pamphlet/clock_tower.pdf):
+  tower erected 1915; terminus opened 28 March 1916 and closed 30 November
+  1975 (so "sixty years" rounds 59.7); demolished October 1978, tower kept.
+  [LCSD](https://www.lcsd.gov.hk/en/hkcc/TSTClockTower/TelltheStory.html):
+  clocks and bell installed March 1921.
+- 01, 03: Star Ferry origins in 1880 (`FINAL-NARRATIVE-COPY.md` §10).
+- 04: wooden sailing junks the dominant fishing vessels before the 1950s
+  (Hong Kong Maritime Museum, `FINAL-NARRATIVE-COPY.md` §10).
+- Still to source: 03 reversible seat backs; 05 Central reclamation and the
+  narrowed harbour (Planning Department or Harbourfront Commission).
+
 ## Phase 2 — Build scene 02 only
 
 Scene 02 is the prototype because the Clock Tower has strong history, a clear
@@ -86,12 +162,164 @@ landmark and enough visual space for a richer narrative.
 - Record its source, generation method and rights in `docs/ASSET-LEDGER.md` if
   it is kept.
 
+### Layout and effect proposal, 2026-10-04 (user request, 2026-10-04; awaiting approval)
+
+Concepts in `docs/references/clock-tower/`: `memory-02-terminus-concept-v2.jpg`
+(the illustration direction) and `scene-02-layout-mockup-desktop.jpg` (the
+layout; its body text is placeholder, not the draft above). The user's two
+photos sit beside them as reference only.
+
+Illustration: an original light-line drawing of the terminus around 1937,
+redrawn from a new angle with a steam train under the platform canopy (so
+the railway reads at a glance), cream lines with coral glow on the tower and
+violet shadow, no solid fills, edges feathered into the sky. Not traced from
+the photos. Caption under it: `KOWLOON TERMINUS, CA. 1937` (date confirmed
+by the user from the photo's source, City in Time, 2026-10-04). The
+user's harbour-view photo (ca. 1950, same source) is kept for a possible
+scene 03 ferry memory. Both photos are reference only, git-ignored; sources
+in `docs/ASSET-LEDGER.md`.
+
+Desktop layers, back to front:
+
+1. **3D harbour:** unchanged, camera and pointer parallax as now.
+2. **Memory:** the drawing as a card in the 3D scene, in the empty
+   right-middle sky (about 52–90% across, 45–68% down), between the copy and
+   the ferry, clear of the tower. Being in the scene, it gets fog, half the
+   pointer parallax of the skyline, and a dim rippled reflection on the
+   water below it.
+3. **Copy:** the existing upper-right column (50–92% across, from 11% down).
+
+Sequence through the 02 hold (scroll-tied, so it reverses on scroll back):
+
+1. The camera settles; index, kicker and title rise line by line through a
+   clip, then beat 1.
+2. Midway: beat 1 dims to 40% and beat 2 rises beneath it. The memory
+   surfaces at the same time, revealed by a soft mask rising from the water
+   line, its reflection forming last.
+3. Leaving: the memory sinks back into the water (mask falling), then the
+   copy lifts out as now.
+
+Mobile: beat 2 replaces beat 1 in place with a crossfade; no illustration
+in the prototype. Reduced motion: both beats and the memory shown settled,
+no reveal.
+
+Reading time: the copy is fully shown for 0.28 of a segment (about 42 svh).
+Two beats likely need a longer hold for 02 only: a per-chapter hold, with
+the camera parked, not a new camera path.
+
+### Built, 2026-10-04 (user request, 2026-10-04; awaiting the Phase 3 decision)
+
+The six drafts are approved (user request, 2026-10-04). Scene 02 now runs:
+
+- **Copy:** the two 02 beats replace the single body (`index.html`). The
+  desktop region is 50–97% across, 11–82% down with the print (was right
+  92, bottom 39); phones 7.5–30% down (was bottom 23).
+- **Dwell:** chapter 02 has 130 svh of extra scroll at its keyframe
+  (`dwell: 130` in `chapters.js`, was 90; `scrollConductor.js`). The
+  camera, vessels and gates stay on the hold pose through it, so no other
+  chapter's timing changes; links and reloads land 24% into it
+  (`SCROLL.dwellLand`), once the title and beat 1 are in.
+- **Layered entrance** (user request, 2026-10-04: the site darkens first,
+  then the words and photo come up, not together). Scroll-tied, so it
+  reverses on the way back (`copyLayer.js`, `STORY` and `DARK`):
+  1. as the camera comes in from 01 (10% of the move until it settles),
+     the harbour darkens to 55% of memory mode; nothing else yet;
+  2. as it settles, the label row fades in and its hairline draws across;
+  3. then across the dwell: title (0–10%), beat 1 (8–20%) with the 1915
+     ghost (4–26%), beat 2 (32–46%), the print with the rest of the
+     darkness and the steam (46–72%), the timeline row (72–86%), on
+     phones too;
+  4. leaving, the print, steam and timeline sink first, the darkness lifts
+     early in the move to 03, and the words fade with the copy.
+- **Nothing moves but the scene** (user request, 2026-10-04): the words,
+  print and timeline only fade in place. The print's mouse drift and rise,
+  the beats' rise and the copy's 48 px slide are gone for 02; the 3D
+  scene keeps its mouse parallax (user choice, 2026-10-04).
+- **Beats** (user request, 2026-10-04: beat 1 above beat 2): beat 1 is the
+  lead, 19 px in cream; beat 2 is 15 px in the soft body grey and no
+  longer dims beat 1. Phones stack them too (17 px and 13 px, full copy
+  width); beat 2's last line just reaches the top of the tower's dome.
+- **Label row** (user choice, 2026-10-04): `02 CLOCK TOWER`, a hairline
+  across the copy column, and 鐘樓 at its end (`.chapter__label`).
+- **Timeline row** (user choice, 2026-10-04): 1915 Tower rises · 1921
+  Clocks begin · 1975 Last train · 1978 Station demolished, large serif
+  years over small labels between hairlines, fixed at the foot of the
+  screen under the copy column, clear of the ferry and the 鐘樓 margin
+  label (`.chapter__facts`; dates from the sources below). Phones too;
+  hidden on phones turned sideways; in the fallback it reads in the copy.
+- **3D story layers** (user choice, 2026-10-04; `createStoryLayers.js`):
+  - *1915 ghost:* giant faint Cormorant numerals, whole and upright,
+    reading upward like a book's spine (user choice, 2026-10-04: split by
+    the tower into 19 and 15 it read oddly). Desktop: in the open sky
+    between the tower and the copy (about 35–49% across, 11–59% down, 12%),
+    3.2 km out behind the near range, so they rise from behind the ridge.
+    Phones: right of the tower, between it and the skyline (about 63–85%
+    across, 40–62% down, 20%), its foot above the right-hand palms (user
+    choice, 2026-10-04: on the left the palms hid it); still reading
+    upward. Set with lining figures through an SVG with the face
+    embedded (canvas text only gives the face's old-style figures, which
+    wobble upright).
+  - *Dust:* about 200 warm motes (about 100 on phones) drifting up and
+    twinkling, gathered by the light rather than spread evenly (user
+    choice, 2026-10-04): a thin swarm in the open air in front of the
+    tower, a denser cluster at its floodlit foot, a small cluster round
+    each promenade lamp's head, and a few large, faint, out-of-focus motes
+    close to the lens that drift at half speed and come in with the 1915.
+    A share of each swarm only joins, and all brighten slightly, as the
+    print comes up. Held still in reduced motion. The petals ease to 40%
+    in full memory mode so the dust leads.
+  - *Pointer stir:* on desktop (mouse only), the moving pointer pushes the
+    motes aside and carries them a little along its path; they settle back
+    once it rests. It stirs the petals the same way across the whole site.
+    Off on touch and in reduced motion. Built in `src/ui/pointerStir.js`
+    (strength and decay) with the push in `createStoryLayers.js` and
+    `createPetals.js` (`STIR`). On its own it was too faint to notice, so
+    the cursor now also has its own trailing motes (`interface.md`, 3.10).
+  - *Steam:* two drifts of railway steam cut from the harbour mist artwork
+    crossing the tower's foot, fading in and out as they drift; one held
+    moment in reduced motion.
+- **Memory print, replacing the drawing** (user choices, 2026-10-04: a real
+  public-domain photo, archival print look, bigger, grain on the memory
+  layer only). `public/plates/kowloon-terminus-1915.webp` (1400 × 737,
+  221 KB, alpha) is the Hong Kong Public Libraries photo of the newly built
+  terminus (Wikimedia Commons, public domain), cropped and baked once in a
+  browser canvas: duotone from ink to cream with faint coral midtones, a
+  darker top and corners, uneven burnt edges that fade to transparency, and
+  fine static grain. It sits under the beats, up to 36vw wide (about 450 px
+  at 1440 × 900, 48–77% down), caption above it:
+  `KOWLOON TERMINUS, CA. 1915 · HONG KONG PUBLIC LIBRARIES`. It develops
+  upward through a soft tide line across 46–72% of the dwell, brightening
+  as it lands, and sinks as the camera leaves; it sits still. Only the
+  ferry's mast tips pass behind its lower edge. The AI drawing is no
+  longer used. Phones (user choices, 2026-10-04): fixed just above the
+  timeline and aligned with it, 70% of the column wide, caption above on
+  two lines (10 px). It covers the tower's lower half and the steam while
+  it shows; the beats stay up. (Tried the same day: the print in the
+  beats' place under the title, the beats fading out for it.)
+- **Memory mode** (user choices, 2026-10-04): a fixed veil over the harbour
+  (`.memory-veil`, under the copy) darkens and cools it to 62% outside a
+  soft opening around the Clock Tower, which stays lit (25% across, 42%
+  down on desktop; the tower's middle on phones); its vignette layer
+  closes in from 130% scale. It reaches 55% on arrival and full with the
+  print (`--memory-mode`, `copyLayer.js`). Phones too, now.
+- **Ink backdrop** (user choice, 2026-10-04): a soft dark pool behind 02's
+  copy and print, at 45% outside memory mode and full within it.
+- **Where the print hides:** phones turned sideways.
+- **Reduced motion:** the camera holds as before; each layer switches on
+  at the middle of its range with a short fade, the darkness follows the
+  chapter shown, the dust and steam hold still.
+- **Fallback:** label, both beats and the timeline read in order as plain
+  content; no print, no 3D layers.
+
+Reviewed once (1440 × 900, 1180 × 820, 390 × 844, reduced motion) at
+each step of the entrance: no console errors, layers in order as above.
+
 ### 3D background
 
 - Keep the existing camera, Clock Tower, palms, water and atmospheric motion.
 - Let the scene continue moving gently behind the narrative.
-- Do not add rain, flicker, extra mist, new lights or another foreground effect
-  during this prototype.
+- The 1915 ghost, dust and steam above are 02's only additions (user
+  choice, 2026-10-04); still no rain, flicker or new lights.
 - Reduced motion must present a composed still background and readable text.
 
 ## Phase 3 — Decide before rolling out
@@ -138,23 +366,24 @@ Suggested illustration priority after scene 02:
 
 ### Story draft
 
-- [ ] Write two connected beats for scene 01
-- [ ] Write two connected beats for scene 02
-- [ ] Write two connected beats for scene 03
-- [ ] Write two connected beats for scene 04
-- [ ] Write two connected beats for scene 05
-- [ ] Write two connected beats for scene 06
-- [ ] Verify historical claims and review the six-chapter arc
+- [x] Write two connected beats for scene 01 (draft 2026-10-04)
+- [x] Write two connected beats for scene 02 (draft 2026-10-04)
+- [x] Write two connected beats for scene 03 (draft 2026-10-04)
+- [x] Write two connected beats for scene 04 (draft 2026-10-04)
+- [x] Write two connected beats for scene 05 (draft 2026-10-04)
+- [x] Write two connected beats for scene 06 (draft 2026-10-04)
+- [ ] Verify historical claims (02 and 04 done; 03 seats and 05 reclamation open) and review the six-chapter arc
 
 ### Scene 02 prototype
 
-- [ ] Add two progressive semantic text blocks
-- [ ] Preserve the existing 3D camera and gentle background motion
-- [ ] Create one polished historical-memory illustration
-- [ ] Integrate the illustration without covering the tower or copy
-- [ ] Add a restrained mobile treatment
-- [ ] Check reduced motion and assistive reading order
-- [ ] Perform the minimal review defined above
+- [x] Add two progressive semantic text blocks (2026-10-04)
+- [x] Preserve the existing 3D camera and gentle background motion
+- [x] Create one polished historical-memory illustration
+- [x] Integrate the illustration without covering the tower or copy
+- [x] Add a restrained mobile treatment (beats stacked, the print above the timeline)
+- [x] Layered entrance, beat hierarchy, still copy, label row, timeline and 3D story layers (2026-10-04)
+- [x] Check reduced motion and assistive reading order
+- [x] Perform the minimal review defined above
 
 ### Decision
 
@@ -166,5 +395,5 @@ Suggested illustration priority after scene 02:
 
 ## Immediate next action
 
-Draft the six-chapter narrative as text only. Then implement **scene 02 only**
-and stop for a decision before changing any other chapter.
+The user reviews the scene 02 prototype in the preview and decides: keep,
+revise once, or remove. No other chapter changes before that.

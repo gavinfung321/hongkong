@@ -1,0 +1,480 @@
+import {
+  AdditiveBlending,
+  BufferGeometry,
+  CanvasTexture,
+  DoubleSide,
+  Float32BufferAttribute,
+  Group,
+  MathUtils,
+  Mesh,
+  MeshBasicMaterial,
+  PerspectiveCamera,
+  PlaneGeometry,
+  Points,
+  ShaderMaterial,
+  SRGBColorSpace,
+  Vector2,
+  Vector3,
+  Vector4,
+} from 'three';
+import { MIST_SHEET } from '../data/atmosphere.js';
+import { WORLD } from '../data/world.js';
+import { aimCamera, poseFov } from '../scroll/cameraRig.js';
+import { seededRandom } from './random.js';
+
+// Chapter 02's story layers in the scene (narrative spine, user choice,
+// 2026-10-04). Their levels come from the copy layer (copyLayer.js):
+//   ghost: a giant faint 1915, whole and upright (reading upward, like the
+//          site's vertical lettering), in the open sky between the Clock
+//          Tower and the copy; on desktop it stands behind the near range,
+//          so it rises from behind the ridge (user choice, 2026-10-04: split
+//          by the tower into 19 and 15 it read oddly). It comes with the
+//          lead beat.
+//   dust:  warm motes drifting up through the lamp-lit air, with the
+//          darkening: thin in the open air, gathered round the tower's
+//          floodlit foot and the promenade lamps, and a few large soft ones
+//          close to the lens, out of focus, which come with the 1915. They
+//          brighten, and the spare ones join, with the print. The desktop
+//          mouse stirs them (pointerStir.js).
+//   steam: two drifts of railway steam crossing the tower's foot, cut from
+//          the harbour mist artwork, while the 1915 print shows.
+// Each is authored on screen at the chapter's hold pose (x / y: % of the
+// viewport, width: % of its width, depth: metres ahead of the camera) and
+// then fixed in the world, so the mouse parallax still moves them against
+// the tower.
+const CHAPTER = '02';
+
+// x: the column's centre; foot: where the numerals start, height: their
+// length up the screen (% of the viewport height). Desktop: 3.2 km out,
+// behind the near range (1.8 km north), so the ridge hides the foot; phones
+// look at the range from below the copy, so there it stands in front of it.
+const GHOST = {
+  text: '1915',
+  font: 'fonts/cormorant-garamond-latin-600.woff2',
+  colour: 0xf3e9d2,
+  // Phones: right of the tower, between it and the skyline, its foot above
+  // the right-hand palms (user choice, 2026-10-04: on the left the palms hid
+  // it); stronger, as it stands over the dark city at the veil's edge.
+  desktop: { x: 42, foot: 59, height: 48, depth: 3200, opacity: 0.12 },
+  mobile: { x: 74, foot: 62, height: 22, depth: 420, opacity: 0.2 },
+};
+
+// Swarms of motes (user choice, 2026-10-04: more volume from depth and
+// light, not just count). Each fills a box in metres: `ahead` / `lift` from
+// the hold pose's camera, or centred `at` in the world. size: metres;
+// gain: brightness; spare: share that only joins with the print; near: the
+// out-of-focus layer, slower and softer. rise: metres per second.
+const LAMP_Y = 6.3;
+const lampSwarms = (count, size, box) =>
+  WORLD.foreground.lamps.map(([x, , z]) => ({ at: [x, LAMP_Y, z], box, count, size, spare: 0.25 }));
+const DUST = {
+  colour: [1, 0.84, 0.6],
+  rise: [0.08, 0.22],
+  desktop: [
+    { ahead: 22, lift: 4, box: [34, 16, 24], count: 110, size: 0.2, spare: 0.3 },
+    { at: [-62, 6.5, -9], box: [14, 10, 8], count: 50, size: 0.26, gain: 1.2, spare: 0.3 },
+    ...lampSwarms(12, 0.17, [3.5, 3, 3.5]),
+    { ahead: 5.5, lift: 0.5, box: [7, 4, 3], count: 7, size: 0.22, gain: 0.4, near: true },
+  ],
+  mobile: [
+    { ahead: 70, lift: 10, box: [30, 26, 50], count: 55, size: 0.5, spare: 0.3 },
+    { at: [-60, 9, -9], box: [18, 14, 12], count: 24, size: 0.45, spare: 0.3 },
+    ...lampSwarms(6, 0.4, [5, 4, 5]),
+    { ahead: 5, lift: 0.4, box: [3.5, 5, 3], count: 5, size: 0.2, gain: 0.4, near: true },
+  ],
+};
+const dustCount = (list) => list.reduce((sum, swarm) => sum + swarm.count, 0);
+// The pointer's push at full stir: radius, and how far a mote is pushed
+// aside and carried along, in ndc (the screen is 2 tall).
+const STIR = { radius: 0.28, push: 0.07, carry: 0.05 };
+
+// y: the drift's foot; stretch: its height over the art's own; travel:
+// share of its width it drifts over `period` seconds, fading in and out at
+// the ends; two drifts half a period apart.
+const STEAM = {
+  band: 'billow',
+  colour: 0xfff0dc,
+  opacity: 0.75,
+  stretch: 3,
+  period: 46,
+  travel: 0.3,
+  feather: [0.3, 0.2], // share of the width and height faded at the edges
+  desktop: [
+    { x: 22, y: 84, width: 46, depth: 38, phase: 0 },
+    { x: 34, y: 86, width: 40, depth: 42, phase: 0.5, mirror: true },
+  ],
+  mobile: [
+    { x: 40, y: 83, width: 110, depth: 112, phase: 0 },
+    { x: 60, y: 87, width: 90, depth: 118, phase: 0.5, mirror: true },
+  ],
+};
+// Reduced motion holds this moment: both drifts half in.
+const STILL_TIME = STEAM.period * 0.25;
+
+const placementCamera = new PerspectiveCamera();
+const ndc = new Vector3();
+const forward = new Vector3();
+const right = new Vector3();
+const buffer = new Vector2();
+
+// The face's default figures are old-style, which wobble once turned
+// upright, and canvas text cannot ask for lining ones; so the numerals are
+// set in an SVG with the face embedded, then trimmed to their ink.
+async function drawGhost() {
+  const response = await fetch(`${import.meta.env.BASE_URL}${GHOST.font}`);
+  if (!response.ok) throw new Error('ghost font');
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  let binary = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  const size = 512;
+  const [w, h] = [size * 3, size * 1.5];
+  // Fading toward its start, the foot of the column, as if rising from haze.
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
+    <defs>
+      <style>@font-face { font-family: Ghost; font-weight: 600; src: url(data:font/woff2;base64,${btoa(binary)}) format("woff2"); }</style>
+      <linearGradient id="fade"><stop offset="0" stop-color="#fff" stop-opacity="0.45"/><stop offset="0.3" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff"/></linearGradient>
+    </defs>
+    <text x="${size * 0.2}" y="${size}" font-family="Ghost" font-weight="600" font-size="${size}" style="font-variant-numeric: lining-nums" fill="url(#fade)">${GHOST.text}</text>
+  </svg>`;
+  const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+  const image = new Image();
+  image.src = url;
+  try {
+    await image.decode();
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+  const sheet = document.createElement('canvas');
+  [sheet.width, sheet.height] = [w, h];
+  const ctx = sheet.getContext('2d', { willReadFrequently: true });
+  ctx.drawImage(image, 0, 0);
+  const alpha = ctx.getImageData(0, 0, w, h).data;
+  let [x0, y0, x1, y1] = [w, h, 0, 0];
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (alpha[(y * w + x) * 4 + 3] < 8) continue;
+      x0 = Math.min(x0, x);
+      x1 = Math.max(x1, x);
+      y0 = Math.min(y0, y);
+      y1 = Math.max(y1, y);
+    }
+  }
+  if (x1 <= x0) throw new Error('ghost blank');
+  const pad = 8;
+  const canvas = document.createElement('canvas');
+  canvas.width = x1 - x0 + 1 + pad * 2;
+  canvas.height = y1 - y0 + 1 + pad * 2;
+  canvas.getContext('2d').drawImage(sheet, x0, y0, x1 - x0 + 1, y1 - y0 + 1, pad, pad, x1 - x0 + 1, y1 - y0 + 1);
+  const texture = new CanvasTexture(canvas);
+  texture.colorSpace = SRGBColorSpace;
+  return { texture, aspect: canvas.width / canvas.height };
+}
+
+// The mist sheet's band, feathered on all sides, drawn once it has loaded.
+function steamTexture(onLoad) {
+  const [y0, y1] = MIST_SHEET.bands[STEAM.band];
+  const canvas = document.createElement('canvas');
+  canvas.width = 1024;
+  canvas.height = Math.round(((y1 - y0) * canvas.width) / MIST_SHEET.size[0]);
+  const texture = new CanvasTexture(canvas);
+  texture.colorSpace = SRGBColorSpace;
+  const image = new Image();
+  image.onload = () => {
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(image, 0, y0, MIST_SHEET.size[0], y1 - y0, 0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = 'destination-in';
+    const [fx, fy] = STEAM.feather;
+    const across = ctx.createLinearGradient(0, 0, canvas.width, 0);
+    across.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    across.addColorStop(fx, '#000');
+    across.addColorStop(1 - fx, '#000');
+    across.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = across;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const down = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    down.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    down.addColorStop(fy, '#000');
+    down.addColorStop(1 - fy, '#000');
+    down.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = down;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    texture.needsUpdate = true;
+    onLoad?.();
+  };
+  image.src = `${import.meta.env.BASE_URL}${MIST_SHEET.url}`;
+  return { texture, aspect: canvas.width / canvas.height };
+}
+
+// aLook: size (m), gain, spare (1: only with the print), near (1: the
+// out-of-focus layer). uStir: pointer (ndc) and its velocity (ndc/s).
+const dustVertex = /* glsl */ `
+  uniform float uTime;
+  uniform float uScale;
+  uniform float uLevel;
+  uniform float uNear;
+  uniform float uSwell;
+  uniform float uAspect;
+  uniform vec2 uRise;
+  uniform vec4 uStir;
+  uniform vec3 uStirShape;
+  uniform float uStirStrength;
+  attribute vec3 aCentre;
+  attribute vec3 aBox;
+  attribute vec4 aSeed;
+  attribute vec4 aLook;
+  varying float vAlpha;
+  varying float vSoft;
+
+  void main() {
+    float t = uTime * mix(1.0, 0.45, aLook.w);
+    vec3 local = aSeed.xyz * aBox;
+    local.y += t * mix(uRise.x, uRise.y, fract(aSeed.w * 7.31));
+    local.x += sin(t * 0.23 + aSeed.w * 6.283) * 0.35 + t * 0.05;
+    local.z += cos(t * 0.19 + aSeed.w * 4.1) * 0.35;
+    local = mod(local, aBox) - 0.5 * aBox;
+    vec4 mv = modelViewMatrix * vec4(aCentre + local, 1.0);
+    gl_Position = projectionMatrix * mv;
+
+    // Pushed aside and carried along by the moving pointer, then settling back.
+    vec2 offset = gl_Position.xy / gl_Position.w - uStir.xy;
+    offset.x *= uAspect;
+    float gap = length(offset);
+    float reach = max(0.0, 1.0 - gap / uStirShape.x);
+    vec2 away = gap > 1e-4 ? offset / gap : vec2(0.0);
+    vec2 push = (away * uStirShape.y + uStir.zw * vec2(uAspect, 1.0) * uStirShape.z) * uStirStrength * reach * reach;
+    push.x /= uAspect;
+    gl_Position.xy += push * gl_Position.w;
+
+    // Softly gone near the box's faces, so a mote wrapping round never pops.
+    vec3 edge = abs(local) / (0.5 * aBox);
+    float inside = 1.0 - smoothstep(0.7, 1.0, max(max(edge.x, edge.y), edge.z));
+    float twinkle = 0.55 + 0.45 * sin(uTime * (0.6 + aSeed.w) + aSeed.w * 40.0);
+    float level = mix(uLevel, uNear, aLook.w) * mix(1.0, uSwell, aLook.z) * (0.85 + 0.3 * uSwell);
+    vAlpha = level * aLook.y * inside * twinkle;
+    vSoft = aLook.w;
+    gl_PointSize = clamp(aLook.x * (0.6 + 0.8 * fract(aSeed.w * 13.7)) * uScale / -mv.z, 1.0, 64.0);
+  }
+`;
+
+// Small motes are a tight glow; the near ones a broad soft disc.
+const dustFragment = /* glsl */ `
+  uniform vec3 uColour;
+  varying float vAlpha;
+  varying float vSoft;
+
+  void main() {
+    float glow = 1.0 - smoothstep(0.0, 1.0, length(gl_PointCoord - 0.5) * 2.0);
+    gl_FragColor = vec4(uColour, mix(glow * glow, glow, vSoft) * vAlpha);
+  }
+`;
+
+export function createStoryLayers(chapters, renderer, { onLoad } = {}) {
+  const chapter = chapters.find((c) => c.id === CHAPTER);
+  const group = new Group();
+  group.name = 'story';
+
+  // ---- Ghost ---------------------------------------------------------------
+  // Shown once its numerals are drawn; without them it stays out.
+  let ghostArt = null;
+  const ghostMaterial = new MeshBasicMaterial({
+    color: GHOST.colour,
+    transparent: true,
+    opacity: 0,
+    depthWrite: false,
+    fog: false,
+  });
+  const ghost = new Mesh(new PlaneGeometry(1, 1), ghostMaterial);
+  ghost.name = 'story-ghost';
+  ghost.visible = false;
+  group.add(ghost);
+
+  // ---- Dust ----------------------------------------------------------------
+  const random = seededRandom(1915);
+  const dustMax = Math.max(dustCount(DUST.desktop), dustCount(DUST.mobile));
+  const seeds = [];
+  for (let i = 0; i < dustMax; i++) seeds.push(random(), random(), random(), random());
+  const dustGeometry = new BufferGeometry();
+  dustGeometry.setAttribute('position', new Float32BufferAttribute(new Float32Array(dustMax * 3), 3));
+  dustGeometry.setAttribute('aSeed', new Float32BufferAttribute(seeds, 4));
+  const dustCentre = new Float32BufferAttribute(new Float32Array(dustMax * 3), 3);
+  const dustBox = new Float32BufferAttribute(new Float32Array(dustMax * 3), 3);
+  const dustLook = new Float32BufferAttribute(new Float32Array(dustMax * 4), 4);
+  dustGeometry.setAttribute('aCentre', dustCentre);
+  dustGeometry.setAttribute('aBox', dustBox);
+  dustGeometry.setAttribute('aLook', dustLook);
+  const dustUniforms = {
+    uTime: { value: 0 },
+    uScale: { value: 1 },
+    uLevel: { value: 0 },
+    uNear: { value: 0 },
+    uSwell: { value: 0 },
+    uAspect: { value: 1 },
+    uRise: { value: new Vector2(...DUST.rise) },
+    uStir: { value: new Vector4() },
+    uStirShape: { value: new Vector3(STIR.radius, STIR.push, STIR.carry) },
+    uStirStrength: { value: 0 },
+    uColour: { value: new Vector3(...DUST.colour) },
+  };
+  const dust = new Points(
+    dustGeometry,
+    new ShaderMaterial({
+      uniforms: dustUniforms,
+      vertexShader: dustVertex,
+      fragmentShader: dustFragment,
+      transparent: true,
+      depthWrite: false,
+      blending: AdditiveBlending,
+    }),
+  );
+  dust.name = 'story-dust';
+  dust.frustumCulled = false;
+  dust.visible = false;
+  group.add(dust);
+
+  // ---- Steam ---------------------------------------------------------------
+  const steamArt = steamTexture(onLoad);
+  const steam = [0, 1].map(() => {
+    const mesh = new Mesh(
+      new PlaneGeometry(1, 1),
+      new MeshBasicMaterial({
+        map: steamArt.texture,
+        color: STEAM.colour,
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+        side: DoubleSide,
+        fog: false,
+      }),
+    );
+    mesh.name = 'story-steam';
+    mesh.visible = false;
+    group.add(mesh);
+    return { mesh, spec: null, base: new Vector3(), right: new Vector3() };
+  });
+
+  const levels = { ghost: 0, dust: 0, steam: 0 };
+  let still = false;
+  let placed = null;
+  let ghostOpacity = GHOST.desktop.opacity;
+
+  // Screen point (x, y in %) at `depth` metres ahead, from the placement camera.
+  function worldAt(position, x, y, depth) {
+    ndc.set((x / 100) * 2 - 1, 1 - (y / 100) * 2, 0.5).unproject(placementCamera);
+    const ray = ndc.sub(position).normalize();
+    return position.clone().addScaledVector(ray, depth / ray.dot(forward));
+  }
+
+  function place(breakpoint, aspect) {
+    placed = [breakpoint, aspect];
+    ghostOpacity = GHOST[breakpoint].opacity;
+    ghostMaterial.opacity = levels.ghost * ghostOpacity;
+    const pose = chapter.camera[breakpoint];
+    const fov = poseFov(pose, aspect, breakpoint);
+    const position = new Vector3().fromArray(pose.position);
+    placementCamera.fov = fov;
+    placementCamera.aspect = aspect;
+    placementCamera.near = 0.5;
+    placementCamera.far = 5000;
+    aimCamera(placementCamera, position, new Vector3().fromArray(pose.target));
+    placementCamera.updateMatrixWorld();
+    forward.fromArray(pose.target).sub(position).setY(0).normalize();
+    right.set(-forward.z, 0, forward.x);
+    const yaw = Math.atan2(-forward.x, -forward.z);
+    const viewHeight = (depth) => 2 * depth * Math.tan(MathUtils.degToRad(fov / 2));
+    const viewWidth = (depth) => viewHeight(depth) * aspect;
+
+    // Turned a quarter left, so it reads from the foot upward.
+    if (ghostArt) {
+      const g = GHOST[breakpoint];
+      const length = (g.height / 100) * viewHeight(g.depth);
+      ghost.scale.set(length, length / ghostArt.aspect, 1);
+      ghost.position.copy(worldAt(position, g.x, g.foot - g.height / 2, g.depth));
+      ghost.rotation.set(0, yaw, Math.PI / 2);
+    }
+
+    let index = 0;
+    const centre = new Vector3();
+    for (const swarm of DUST[breakpoint]) {
+      if (swarm.at) centre.fromArray(swarm.at);
+      else centre.copy(position).addScaledVector(forward, swarm.ahead).setY(position.y + swarm.lift);
+      for (let k = 0; k < swarm.count; k++, index++) {
+        dustCentre.setXYZ(index, centre.x, centre.y, centre.z);
+        dustBox.setXYZ(index, ...swarm.box);
+        const spare = k < swarm.count * (swarm.spare ?? 0) ? 1 : 0;
+        dustLook.setXYZW(index, swarm.size, swarm.gain ?? 1, spare, swarm.near ? 1 : 0);
+      }
+    }
+    dustCentre.needsUpdate = true;
+    dustBox.needsUpdate = true;
+    dustLook.needsUpdate = true;
+    dustGeometry.setDrawRange(0, index);
+
+    STEAM[breakpoint].forEach((spec, i) => {
+      const card = steam[i];
+      const cardWidth = (spec.width / 100) * viewWidth(spec.depth);
+      const height = (cardWidth / steamArt.aspect) * STEAM.stretch;
+      card.spec = spec;
+      card.width = cardWidth;
+      card.base.copy(worldAt(position, spec.x, spec.y, spec.depth));
+      card.base.y += height / 2;
+      card.right.copy(right);
+      card.mesh.scale.set(spec.mirror ? -cardWidth : cardWidth, height, 1);
+      card.mesh.rotation.set(0, yaw, 0);
+      card.mesh.position.copy(card.base);
+    });
+  }
+
+  drawGhost()
+    .then((art) => {
+      ghostArt = art;
+      ghostMaterial.map = art.texture;
+      ghostMaterial.needsUpdate = true;
+      ghost.visible = levels.ghost > 0.001;
+      if (placed) place(...placed);
+      onLoad?.();
+    })
+    .catch(() => {});
+
+  // Returns true when anything changed, for reduced motion's on-demand frames.
+  function setLevels({ ghost: g = 0, dust: d = 0, steam: s = 0 }) {
+    if (g === levels.ghost && d === levels.dust && s === levels.steam) return false;
+    levels.ghost = g;
+    levels.dust = d;
+    levels.steam = s;
+    ghostMaterial.opacity = g * ghostOpacity;
+    ghost.visible = g > 0.001 && ghostArt !== null;
+    dustUniforms.uLevel.value = d;
+    dustUniforms.uNear.value = g;
+    dustUniforms.uSwell.value = s;
+    dust.visible = d > 0.001;
+    for (const card of steam) card.mesh.visible = s > 0.001;
+    return true;
+  }
+
+  // Reduced motion holds one moment.
+  function setStill(value) {
+    still = value;
+  }
+
+  // stir: the desktop pointer (pointerStir.js), or none.
+  function update(time, camera, stir) {
+    const t = still ? STILL_TIME : time;
+    if (dust.visible) {
+      renderer.getDrawingBufferSize(buffer);
+      dustUniforms.uTime.value = t;
+      dustUniforms.uScale.value = buffer.y / (2 * Math.tan(MathUtils.degToRad(camera.fov / 2)));
+      dustUniforms.uAspect.value = camera.aspect;
+      dustUniforms.uStirStrength.value = still || !stir ? 0 : stir.strength;
+      if (stir) dustUniforms.uStir.value.set(stir.x, stir.y, stir.vx, stir.vy);
+    }
+    if (!steam[0].mesh.visible) return;
+    for (const card of steam) {
+      if (!card.spec) continue;
+      const phase = (((t / STEAM.period + card.spec.phase) % 1) + 1) % 1;
+      card.mesh.position.copy(card.base).addScaledVector(card.right, (phase - 0.5) * STEAM.travel * card.width);
+      card.mesh.material.opacity = Math.sin(Math.PI * phase) * levels.steam * STEAM.opacity;
+    }
+  }
+
+  return { group, place, setLevels, setStill, update };
+}
