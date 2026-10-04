@@ -23,14 +23,15 @@ import { OVERLAY } from './bloom.js';
 // parallax, at three speeds.
 //   near: a few large petals close to the lens, drawn over everything,
 //         including the 香港 wordmark (user request, 2026-10-01).
-//   mid:  a scatter between the two, for depth rather than count (user
-//         choice, 2026-10-04); depth-tested.
+//   mid:  between the two, where petals read as petals with depth (user
+//         choices, 2026-10-04: added, then doubled); depth-tested.
 //   far:  many small petals, depth-tested and softened by fog.
+// The near layer stays small: it crosses 香港 and the copy.
 // box = [x, y, z] size in metres, centred `ahead` metres in front of the camera.
 const LAYERS = {
   near: { box: [5, 4, 5], ahead: 4, size: [0.13, 0.2], max: { desktop: 6, mobile: 4 } },
-  mid: { box: [18, 11, 12], ahead: 12, size: [0.15, 0.24], max: { desktop: 20, mobile: 8 } },
-  far: { box: [50, 26, 44], ahead: 30, size: [0.2, 0.34], max: { desktop: 70, mobile: 32 } },
+  mid: { box: [18, 11, 12], ahead: 12, size: [0.15, 0.24], max: { desktop: 40, mobile: 16 } },
+  far: { box: [50, 26, 44], ahead: 30, size: [0.2, 0.34], max: { desktop: 100, mobile: 44 } },
 };
 // The artwork's own fuchsia, dimmed for the night in four shades, so the petals
 // sit in the scene and the junk's coral sails lead (user choice, 2026-10-02).

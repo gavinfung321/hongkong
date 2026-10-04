@@ -62,6 +62,8 @@
   --color-coral: #e4573d;
   --color-cream: #f3e9d2;
   --color-cyan: #6fd3e0;
+  --color-ferry: #2f7a4c; /* the Star Ferry's hull green (createVessels.js) */
+  --color-ferry-light: #6cc293; /* the same green, light enough for text on the dark */
   --color-ivory: #fbf8f2; /* titles: thin strokes need more brightness than cream */
   --color-muted: #9b97ab; /* labels */
   --color-soft: #bdb8c8; /* body text */
@@ -1359,19 +1361,20 @@ html:not(.is-enhanced) .vertical-text {
   transition: opacity 400ms ease;
 }
 
-/* Darkens the corners over the finished 3D image, under the copy: about 24%
-   at the desktop corners and 16% on phones, open across the centre
-   (atmospheric depth Stage 1, user request, 2026-10-03; doubled after the
-   first 9% read as no change). */
+/* Darkens the edges over the finished 3D image in every scene, under the
+   copy, in a night indigo rather than black: about 48% at the desktop
+   corners and 38% on phones, open across the centre (atmospheric depth
+   Stage 1, user request, 2026-10-03; made more obvious, user requests,
+   2026-10-04: 24% / 16% read as barely there, 62% / 50% as too strong). */
 .is-enhanced .vignette {
   z-index: 0;
   opacity: 0;
   transition: opacity 400ms ease;
   background: radial-gradient(
     ellipse farthest-corner at 50% 48%,
-    transparent 38%,
-    rgb(6 5 16 / 0.1) 65%,
-    rgb(6 5 16 / 0.24) 100%
+    transparent 30%,
+    rgb(8 6 24 / 0.2) 58%,
+    rgb(8 6 24 / 0.48) 100%
   );
 }
 
@@ -1379,9 +1382,9 @@ html:not(.is-enhanced) .vertical-text {
   .is-enhanced .vignette {
     background: radial-gradient(
       ellipse farthest-corner at 50% 48%,
-      transparent 42%,
-      rgb(6 5 16 / 0.07) 68%,
-      rgb(6 5 16 / 0.16) 100%
+      transparent 34%,
+      rgb(8 6 24 / 0.15) 62%,
+      rgb(8 6 24 / 0.38) 100%
     );
   }
 }
@@ -1663,6 +1666,316 @@ html:not(.is-enhanced) .vertical-text {
   pointer-events: none;
 }
 
+/* 03's index panels: numbered, outlined cells holding the two beats and the
+   route, a technique learnt from Kage's chapter grid (no Kage code, type or
+   copy; user request, 2026-10-04). Without the 3D story they stack as plain
+   content. */
+.chapter__panels {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+/* One line under 03's title, setting up the panels (user choice,
+   2026-10-04); no wider than the title, so it ends left of the mast. */
+.chapter__standfirst {
+  max-width: 30ch;
+  margin: 0.5rem 0 0;
+  color: var(--color-soft);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.is-enhanced .chapter__standfirst {
+  opacity: var(--enter, 1);
+}
+
+/* Phones: balanced over two lines, no word left alone (user request,
+   2026-10-04). */
+[data-breakpoint="mobile"].is-enhanced .chapter__standfirst {
+  max-width: none;
+  font-size: 0.875rem;
+  text-wrap: balance;
+}
+
+.is-stepped .chapter__standfirst {
+  transition: opacity 150ms linear;
+}
+
+.chapter__panel {
+  position: relative;
+  padding: 1.125rem 1.375rem 1.25rem;
+  border: 1px solid rgb(243 233 210 / 0.16);
+}
+
+.chapter__panel-index,
+.chapter__panel-meta {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.chapter__panel-meta {
+  margin-top: 1rem;
+}
+
+.chapter__panel-title {
+  margin: 0.75rem 0 0;
+  color: var(--color-ivory);
+  font-family: var(--font-display-en);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.chapter__panel-title span,
+.chapter__route-ends span span {
+  margin-left: 0.4em;
+  color: var(--color-muted);
+  font-family: var(--font-text-zh);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+}
+
+.chapter__panel-body {
+  margin: 0.625rem 0 0;
+  color: var(--color-soft);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* The route: a hairline from Tsim Sha Tsui to Central, lit behind a
+   ferry-green dot that crosses with the scroll (copyLayer.js sets --route;
+   green, user request, 2026-10-04). */
+.chapter__route {
+  position: relative;
+  height: 1px;
+  margin-top: 1.5rem;
+  background: rgb(243 233 210 / 0.22);
+}
+
+.chapter__route::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-ferry-light);
+  transform: scaleX(var(--route, 1));
+  transform-origin: left;
+}
+
+.chapter__route-dot {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--route, 1) * 100%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-ferry-light);
+  box-shadow: 0 0 10px var(--color-ferry);
+  transform: translate(-50%, -50%);
+}
+
+.chapter__route-ends {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0.75rem 0 0;
+  color: var(--color-soft);
+  font-size: 0.75rem;
+}
+
+/* On desktop the panels form one row along the foot of the screen, cells
+   sharing their hairlines. All cells fade in together with the title
+   (copyLayer.js sets --enter; user request, 2026-10-04). */
+[data-breakpoint="desktop"].is-enhanced .chapter__panels {
+  position: fixed;
+  left: max(var(--page-inset), env(safe-area-inset-left), calc(var(--copy-left) * 1vw));
+  right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 64px);
+  bottom: max(5lvh, calc(env(safe-area-inset-bottom) + 16px));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin: 0;
+}
+
+.is-enhanced .chapter__panel {
+  border: 0;
+  border-bottom: 1px solid rgb(243 233 210 / calc(0.18 * var(--enter, 1)));
+  /* A matte near-black on desktop, no glass (user request, 2026-10-04). */
+  background-color: rgb(6 5 16 / calc(0.9 * var(--enter, 1)));
+  background-image: linear-gradient(90deg, rgb(47 122 76 / calc(0.32 * var(--panel-tint))), transparent 50%);
+  transition: --panel-tint 550ms ease;
+}
+
+/* Hover, after Kage's lesson rows (technique only): the panel stays put; a
+   ferry-green tint fades in from its left edge, the words slide right and
+   the index turns green (user requests, 2026-10-04). */
+@property --panel-tint {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+.is-enhanced .chapter__panel > * {
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1), color 400ms ease;
+}
+
+@media (hover: hover) {
+  .is-enhanced .chapter__panel:hover {
+    --panel-tint: 1;
+  }
+
+  .is-enhanced .chapter__panel:hover > * {
+    transform: translateX(6px);
+  }
+
+  .is-enhanced .chapter__panel:hover .chapter__panel-index {
+    color: var(--color-ferry-light);
+  }
+}
+
+.is-enhanced .chapter__panel::before,
+.is-enhanced .chapter__panel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgb(243 233 210 / 0.18);
+  pointer-events: none;
+}
+
+.is-enhanced .chapter__panel::before {
+  right: 0;
+  height: 1px;
+  opacity: var(--enter, 1);
+}
+
+.is-enhanced .chapter__panel::after {
+  bottom: 0;
+  width: 1px;
+  opacity: var(--enter, 1);
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__panel:last-child,
+[data-breakpoint="mobile"].is-enhanced .chapter__panel {
+  border-right: 1px solid rgb(243 233 210 / calc(0.18 * var(--enter, 1)));
+}
+
+.is-enhanced .chapter__panel > * {
+  opacity: var(--enter, 1);
+}
+
+.is-enhanced .chapter__panel[data-enter-hidden] {
+  visibility: hidden;
+}
+
+.is-stepped .chapter__panel,
+.is-stepped .chapter__panel > * {
+  transition: opacity 150ms linear, background-color 150ms linear;
+}
+
+.is-stepped .chapter__panel:hover > * {
+  transform: none;
+}
+
+/* On phones the panels stack in one column under the title, sharing their
+   hairlines; they cover the ferry, so the fill is light enough for it to
+   show through, with a soft shadow keeping the words crisp (user requests,
+   2026-10-04). */
+[data-breakpoint="mobile"].is-enhanced .chapter__panels {
+  gap: 0;
+  margin-top: 0.875rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__panel {
+  padding: 0.875rem 1rem 1rem;
+  border-bottom: 0;
+  background-color: rgb(6 5 16 / calc(0.55 * var(--enter, 1)));
+  text-shadow: 0 1px 2px rgb(4 4 14 / 0.9), 0 0 12px rgb(4 4 14 / 0.6);
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__panel:last-child {
+  border-bottom: 1px solid rgb(243 233 210 / calc(0.18 * var(--enter, 1)));
+}
+
+/* Short phones: tighter panels without the meta line; on the shortest,
+   panel 02 takes 01's place again (copyLayer.js, SHORT_PHONE). */
+@media (max-height: 740px) {
+  [data-breakpoint="mobile"].is-enhanced .chapter__panel {
+    padding: 0.625rem 0.875rem 0.75rem;
+  }
+
+  [data-breakpoint="mobile"].is-enhanced .chapter__panel-meta {
+    display: none;
+  }
+
+  [data-breakpoint="mobile"].is-enhanced .chapter__route {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-height: 619px) {
+  [data-breakpoint="mobile"].is-enhanced .chapter__panel:not(:last-child) {
+    grid-area: 1 / 1;
+  }
+
+  [data-breakpoint="mobile"].is-enhanced .chapter__panel:first-child {
+    border-bottom: 0;
+  }
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__panel-title {
+  margin-top: 0.5rem;
+  font-size: 1.25rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__panel-body {
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .is-enhanced .chapter__panel {
+    padding: 0.625rem 0.875rem 0.75rem;
+  }
+
+  .is-enhanced .chapter__panel-title {
+    margin-top: 0.375rem;
+    font-size: 1.125rem;
+  }
+
+  .is-enhanced .chapter__panel-body {
+    font-size: 0.75rem;
+  }
+
+  .is-enhanced .chapter__panel-meta {
+    display: none;
+  }
+}
+
+/* 03 darkens further than 02's arrival: a strong indigo frame closing in on
+   a small opening over the ferry (user request, 2026-10-04). */
+[data-veil-crossing].is-enhanced .memory-veil {
+  --veil-x: 30%;
+  --veil-y: 56%;
+  --veil-size: 22vw 22lvh;
+  background: radial-gradient(var(--veil-size) at var(--veil-x) var(--veil-y), rgb(8 6 24 / 0.04), rgb(8 6 24 / 0.55));
+}
+
+[data-veil-crossing].is-enhanced .memory-veil::after {
+  background: radial-gradient(ellipse farthest-corner at 50% 50%, transparent 30%, rgb(5 4 16 / 0.6) 100%);
+}
+
+[data-breakpoint="mobile"][data-veil-crossing].is-enhanced .memory-veil {
+  --veil-x: 22%;
+  --veil-y: 62%;
+  --veil-size: 40vw 14lvh;
+}
+
 /* Memory mode: the harbour darkens and cools as the camera reaches a story
    chapter, and further while its memory print shows (copyLayer.js sets
    --memory-mode; user request, 2026-10-04). A soft opening keeps the
@@ -1764,7 +2077,6 @@ html:not(.is-enhanced) .vertical-text {
   .is-enhanced .chapter__beat + .chapter__beat {
     font-size: 0.8125rem;
   }
-
   .side-pager {
     display: none;
   }

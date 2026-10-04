@@ -344,6 +344,9 @@ Keep the prototype only if:
 If the result is weaker or merely busier, remove the prototype and retain the
 current short-copy 3D showcase.
 
+**Decision (user request, 2026-10-04): scene 02 is approved as built**
+("so far 02 is good"); the rollout continues with scene 03.
+
 ## Phase 4 — Controlled rollout
 
 Only after scene 02 is approved:
@@ -362,6 +365,85 @@ Suggested illustration priority after scene 02:
 2. scene 04, a restrained maritime image only if it adds truth and context;
 3. no additional illustration unless a specific chapter still feels empty.
 
+### Scene 03
+
+**Rule (user request, 2026-10-04): 03 changes the narrative and the
+wording effects only. The 3D background stays exactly as it is** — no
+changes to the ferry, the water or any model, and no new 3D layers ("do not
+touch the 3D background. I just need you to build the narratives and the
+wordings effects"). A first build that animated the ferry's cabin, drew
+light trails on the water and added a route line was reversed the same day
+at the user's request; nothing of it remains in the code.
+
+Fact check (done 2026-10-04): the reversible seat backs are confirmed.
+Star Ferry's own release keeps "the reversible wooden benches" as an
+iconic feature ([Star Ferry, 2007](https://www.starferry.com.hk/sites/default/files/200709%20Morning%20Star%20Post-event%20Press%20Release_e.pdf));
+the backs swing to match the direction of travel, traced to 1904
+([CNN](https://edition.cnn.com/travel/article/star-ferry-hong-kong-history/index.html)).
+Beat 1's *[verify]* mark can go.
+
+Layout note from the 03 frame (desktop 1440 × 900): the ferry's mast and
+roof come up to about 23% and 40% down under the copy, so a second beat
+cannot stack in the top-left; the lower right is open dark water.
+
+**As built (user requests, 2026-10-04): index panels.** A line-by-line
+wipe was tried first and dropped ("I don't like these words effect at
+all"). 03 now borrows the technique of Kage's chapter grid (numbered,
+outlined cells over a darkened scene; no Kage code, type or copy):
+
+- the harbour darkens as the camera arrives, further than 02's arrival
+  (the memory veil at 0.7, its opening on the ferry; DOM only, no 3D;
+  eased from 0.85, user request, 2026-10-04);
+- the label and title stay top-left, with one standfirst line under the
+  title: "Kowloon to the Island, the slow way, every few minutes." (user
+  choice, 2026-10-04);
+- the beats move into three panels,
+  each with an index, a short title with Chinese, and smaller body text
+  (beat 1 was too big): 01 Facing Forward 向前, 02 A Daily Crossing 渡海,
+  03 The Route 航線;
+- the title, standfirst and all three panels fade in together as the
+  camera settles, with no per-panel sequence (user request, 2026-10-04);
+  each panel has top, left and bottom hairlines; on hover the
+  panel stays put while a ferry-green tint fades in from its left edge,
+  the words slide 6px right and the index turns green, after Kage's lesson
+  rows (user requests, 2026-10-04); on desktop the
+  panels are a matte near-black at 90%, no glass or blur (user request,
+  2026-10-04, replacing a frosted version);
+- the route panel has a hairline from Tsim Sha Tsui 尖沙咀 to Central 中環
+  with a dot that crosses with the scroll (user request: the moving
+  route line), both in the ferry's green (user request, 2026-10-04), and
+  "Crossing since 1888";
+- desktop: one row along the foot of the screen; phones: the three
+  panels stack in one column under the title, allowed to cover the
+  ferry, with a light 55% fill so the ferry shows through and a soft text
+  shadow for legibility, and the standfirst balanced over two lines
+  (user requests and choices, 2026-10-04); phones up to 740px tall drop the meta line
+  and tighten, and below 620px panel 02 takes 01's place mid-dwell;
+- a 60svh dwell (was 110) holds the camera while the route dot crosses
+  (dwell share 0.1–0.9);
+- reduced motion: everything appears whole with the usual 150 ms fade.
+
+Scene 02 was cut back the same way (user request, 2026-10-04): the
+label, title, both beats and the 1915 ghost fade in together as the
+camera settles; the memory print and the timeline then come up together
+about half a screen later (dwell share 0.5–0.8); the dwell is 80svh
+(was 130).
+
+Files: `index.html`, `src/data/chapters.js`, `src/ui/copyLayer.js`,
+`src/styles.css`.
+
+Different technique per scene (user request, 2026-10-04), all DOM over
+the untouched 3D: 02 layered fade with a memory print and timeline; 03
+index panels with a route line. Chosen for the rest (user choices,
+2026-10-04), not yet built:
+
+- 04 Red Sails: a statement header, a large headline on the left and a
+  short intro on the right, split by a full-width hairline;
+- 05 City of Light: words light up, the text starting dim and each word
+  brightening in turn with the scroll, like the skyline switching on;
+- 06 Afterglow: one centred sentence whose letters close in from wide
+  spacing, then the sources fade in.
+
 ## Checklist
 
 ### Story draft
@@ -372,7 +454,7 @@ Suggested illustration priority after scene 02:
 - [x] Write two connected beats for scene 04 (draft 2026-10-04)
 - [x] Write two connected beats for scene 05 (draft 2026-10-04)
 - [x] Write two connected beats for scene 06 (draft 2026-10-04)
-- [ ] Verify historical claims (02 and 04 done; 03 seats and 05 reclamation open) and review the six-chapter arc
+- [ ] Verify historical claims (02, 03 and 04 done; 05 reclamation open) and review the six-chapter arc
 
 ### Scene 02 prototype
 
@@ -387,13 +469,14 @@ Suggested illustration priority after scene 02:
 
 ### Decision
 
-- [ ] Approve and continue, revise once, or remove
-- [ ] If approved, roll out one chapter at a time
+- [x] Approve and continue, revise once, or remove (approved, 2026-10-04)
+- [ ] If approved, roll out one chapter at a time (03 next: narrative and wording effects only)
 - [ ] Use no more than two or three illustrations in total
 - [ ] Update `FINAL-NARRATIVE-COPY.md` only after the direction is approved
 - [ ] Record only kept decisions in `CHANGELOG.md`
 
 ## Immediate next action
 
-The user reviews the scene 02 prototype in the preview and decides: keep,
-revise once, or remove. No other chapter changes before that.
+Review the built text-only scene 03 ("the crossing") with the user:
+approve, revise once, or remove. No other chapter changes before 03 is
+decided.

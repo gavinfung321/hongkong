@@ -6,6 +6,85 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **03 arrival darkness eased** (user request, 2026-10-04). Stacked on
+  the stronger vignette, 03's own frame made the move from 02 to 03 too
+  dark: its edges drop to about 55% (was 70%), the outer ring to 60%
+  (was 80%), and it reaches 70% strength (was 85%). Files:
+  `src/styles.css`, `src/ui/copyLayer.js`.
+- **Stronger vignette everywhere; 03 cards matte, lighter on phones**
+  (user requests, 2026-10-04). The screen vignette in every scene is now
+  a night indigo at about 48% in the desktop corners and 38% on phones
+  (was 24% / 16%; a first 62% / 50% was too strong), starting nearer the
+  centre. 03's arrival veil frames harder (edges about 70%, outer ring to
+  80%) around a smaller opening on the ferry. 03's desktop cards are a matte near-black at 90% with no
+  blur; on phones they drop to 55% so the ferry shows through, with a
+  soft text shadow. Files: `src/styles.css`; plan:
+  `atmospheric-depth-polish.md`, `narrative-spine.md`.
+- **02 and 03: fewer scroll effects on the words** (user request and
+  choice, 2026-10-04). 02 now arrives in two steps: the label, title, both
+  beats and the 1915 ghost together as the camera settles, then the print
+  and timeline together about half a screen later; dwell 80svh (was 130).
+  03's title, standfirst and all panels fade in together (the hairlines no
+  longer draw); only the route dot moves, across a 60svh dwell (was 110).
+  The standfirst is back on phones, balanced over two lines. Files:
+  `src/ui/copyLayer.js`, `src/data/chapters.js`, `src/styles.css`; plan:
+  `narrative-spine.md`.
+- **03 on phones: stacked panels** (user request and choice, 2026-10-04).
+  The three panels now stack under the title, sharing hairlines and
+  drawing in from top to bottom, covering the ferry during the hold; the
+  fill is 88% so the cabin lights don't fight the text. Phones up to
+  740px tall tighten and drop "Crossing since 1888"; below 620px panel 02
+  takes 01's place as before. Files: `src/styles.css`,
+  `src/ui/copyLayer.js`.
+- **03 standfirst** (user choice, 2026-10-04). One line under the title,
+  "Kowloon to the Island, the slow way, every few minutes.", so the title
+  is not left alone and the eye is led to the panels; it fades in just
+  after the title. Desktop only: on phones a panel already sits under the
+  title, and the line pushed it onto the mast. Files: `index.html`, `src/ui/copyLayer.js`,
+  `src/styles.css`.
+- **03 hover slide halved** (user request, 2026-10-04). The words slide
+  6px on hover (was 12px). Files: `src/styles.css`.
+- **03 in ferry green** (user requests, 2026-10-04). The panel hover tint,
+  the hovered index and the route line and dot now use the Star Ferry's
+  hull green (#2f7a4c, a lighter #6cc293 for lines and text) instead of
+  coral and warm amber. Files: `src/styles.css`.
+- **03 panel hover, after Kage's lesson rows** (user request,
+  2026-10-04). The panel no longer lifts, glows or casts a shadow; on
+  hover a warm coral tint fades in from its left edge (gone by the middle),
+  its words slide 12px right and the index turns coral. Technique only, no
+  Kage code. Reduced motion: tint and colour only. Files: `src/styles.css`.
+- **03 panels frosted** (user request and choice, 2026-10-04). A darker
+  fill alone barely showed, as the veil already darkens the foot of the
+  screen; on desktop the panels now blur what is behind them (18px, a
+  little desaturated) over a 55% fill, so the water's glints become a
+  haze behind the text. Phones keep a plain 72% fill (was 50%) to spare
+  the GPU. Files: `src/styles.css`.
+- **03 panels: hover lift and a bottom line** (user requests, 2026-10-04).
+  On hover a panel lifts 6px, brightens and casts a soft shadow (no lift
+  with reduced motion); every panel now has its bottom hairline (phones
+  also the right one). Files: `src/styles.css`; plan:
+  `narrative-spine.md`.
+- **Scene 03: index panels, darker scene, route line** (user requests,
+  2026-10-04). The harbour darkens on arrival (veil at 0.85, opening on
+  the ferry); the beats move into numbered, outlined panels that draw in
+  one after another, with smaller text, after Kage's chapter grid
+  (technique only); a route panel runs a warm dot from Tsim Sha Tsui to
+  Central with the scroll. A line-by-line wipe tried first was dropped.
+  3D untouched. Files: `index.html`, `src/data/chapters.js`,
+  `src/ui/copyLayer.js`, `src/styles.css`; plan: `narrative-spine.md`.
+- **Scene 02 approved; scene 03 limited to text** (user requests,
+  2026-10-04). 02 is kept as built. A first 03 build (animated ferry
+  cabin, light trails on the water, route line) was reversed at the user's
+  request: 03 changes only the narrative and wording effects, never the 3D
+  background. The seat-back claim in 03's copy is now sourced. No code
+  change remains. Files: `narrative-spine.md`.
+- **More petals** (user request and choice, 2026-10-04). The middle layer,
+  where petals read as petals with depth, doubles (40 desktop / 16 phones,
+  was 20 / 8) and the far layer grows (100 / 44, was 70 / 32); the near
+  layer stays at 6 / 4 so few cross 香港 and the copy. The hero and 01 run
+  at 80% (was 50%); 03 and 04 stay sparse at 30%. Files:
+  `src/scene/createPetals.js`, `src/data/chapters.js`; plan:
+  `scene-promenade.md`.
 - **香港 lingers longer on the first scroll** (user request and choice,
   2026-10-04). The word and 01's copy now stay whole for a
   moment, so the camera is seen nearing the word, then fade, gone after

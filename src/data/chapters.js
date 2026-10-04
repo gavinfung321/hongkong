@@ -116,14 +116,15 @@ export const chapters = [
     },
     visibility: {
       // No shore mist on desktop: from here its drifts join the wisps into one band.
-      // Withheld (atmospheric depth Priority F, user choice, 2026-10-04): half
-      // the petals, skyline at 75%. Searchlights stay (01 and 05 only).
+      // Withheld (atmospheric depth Priority F, user choice, 2026-10-04):
+      // skyline at 75%; petals at 80% (were 50%, raised for a fuller opening,
+      // user choice, 2026-10-04). Searchlights stay (01 and 05 only).
       // moon 0.75 and the junk's sail reflection at half, so the Clock Tower
       // leads (Priority 3 balance, user choice, 2026-10-04).
-      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 0, bauhinia: 1, bush: 1, bursts: 0, petals: 0.5, city: 0.75, mist: 0, seaMist: 1, haze: 0.5, searchlights: 0.6, moon: 0.75, junkGlow: 0.5 },
+      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 0, bauhinia: 1, bush: 1, bursts: 0, petals: 0.8, city: 0.75, mist: 0, seaMist: 1, haze: 0.5, searchlights: 0.6, moon: 0.75, junkGlow: 0.5 },
       // No deck: the mobile storyboard has open water right to the bottom edge.
       // Palms at the tower's foot, as in the storyboard (user choice, 2026-10-03).
-      mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, deck: 0, railing: 0, palms: 1, bauhinia: 0, bush: 0, bursts: 0, petals: 0.5, city: 0.75, mist: 0.6, seaMist: 1, haze: 0.5, searchlights: 0, moon: 0.75, junkGlow: 0.5 },
+      mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, deck: 0, railing: 0, palms: 1, bauhinia: 0, bush: 0, bursts: 0, petals: 0.8, city: 0.75, mist: 0.6, seaMist: 1, haze: 0.5, searchlights: 0, moon: 0.75, junkGlow: 0.5 },
     },
     fogDensity: 0.00045,
     vessels: {
@@ -185,9 +186,9 @@ export const chapters = [
       desktop: { left: 50, top: 11, right: 97, bottom: 82 },
       mobile: { left: 8, top: 7.5, right: 92, bottom: 30 },
     },
-    // Long enough for the label, title, beats, print and timeline to arrive
-    // one at a time (user request, 2026-10-04).
-    dwell: 130,
+    // Time to read the header before the print and timeline come up (user
+    // request, 2026-10-04).
+    dwell: 80,
     visibility: {
       // afterglow: the red-orange sky low on the right (02 only; createScene.js).
       // city, slopeLights: the skyline and Mid-Levels behind the tower dimmed,
@@ -234,10 +235,16 @@ export const chapters = [
       desktop: { position: [77.6, 2.2, -323], target: [40.2, 50.7, -718.3], fov: 56.9 },
       mobile: { position: [-31.2, 1.8, -218.1], target: [41.8, 112.7, -595.4], fov: 80.1, via: [[60, 3, -300]] },
     },
+    // Index panels (narrative spine scene 03, user requests, 2026-10-04):
+    // the label and title top-left; on desktop the panels in a row along the
+    // foot, on phones the beat panels under the title and the route below.
     copy: {
-      desktop: { left: 5, top: 11, right: 42, bottom: 32 },
+      desktop: { left: 5, top: 11, right: 42, bottom: 40 },
       mobile: { left: 8, top: 9, right: 92, bottom: 37 },
     },
+    // Long enough for the route dot to cross; the camera stays on the hold
+    // pose through it.
+    dwell: 60,
     visibility: {
       // city: the other towers and their LEDs at 40% so the ferry, IFC and
       // the wheel lead, as the storyboard asks (user choice, 2026-10-03).
