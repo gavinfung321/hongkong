@@ -2249,7 +2249,7 @@ html:not(.is-enhanced) .vertical-text {
   position: fixed;
   right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 64px + 2rem);
   bottom: calc(max(5lvh, calc(env(safe-area-inset-bottom) + 16px)) + var(--panels-height, 10rem) + 2.25rem);
-  width: min(13vw, 14rem);
+  width: min(15vw, 16.5rem);
   max-width: none;
   margin: 0;
   opacity: var(--enter, 1);
