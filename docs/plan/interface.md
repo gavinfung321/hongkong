@@ -17,6 +17,7 @@ depth comes from layers around the simple 3D:
 | A big moon as the focal light | An original yellow moon behind the Peak ridge, drawn in code (3.9) |
 | Soft glow on the moon, lanterns and windows | Glow on lit windows, the Clock Tower faces and IFC's crown |
 | A ring that trails the mouse pointer | An original cursor ring, desktop only (3.10) |
+| Cold motes shed along the pointer's path | A warm cursor trail with our own values, desktop only (3.10) |
 | Fine diagonal-line texture over the page | The restrained halftone from the world bible |
 | Mostly dark frames with a vignette | Our navy and aubergine palette, plus a vignette |
 | Layers shift with the mouse | Cursor parallax on desktop |
@@ -421,6 +422,26 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
   clicks (`pointer-events: none`) and stops animating once it catches up.
 - Built in `src/ui/cursorRing.js` with styles in `styles.css`; the follow
   speed is `FOLLOW` in the script.
+- **Pointer stir** (user choice, 2026-10-04): the moving mouse also pushes
+  the drifting petals aside and carries them along, everywhere on the site,
+  and stirs scene 02's motes. Mouse only, off in reduced motion. See
+  `narrative-spine.md` (Pointer stir).
+- **Cursor trail** (user choices, 2026-10-04: "I want the mote or petal
+  following my cursor", then rebuilt after studying how Kage's cursor
+  wisps work; technique only, our own code and values). Warm motes, the
+  colour of scene 02's dust with paler cores, are shed by the mouse on
+  every section. They are released by distance travelled, spaced along
+  the path from a release point that trails the pointer slightly, so a
+  slow hand lays a thread and a quick one throws them wide. Each lives
+  0.9–1.8 s: it drifts back from the hand, frays on a slow curl, rises a
+  little and softens as it fades. A resting pointer breathes out one faint
+  mote about every 0.45 s. Thinned to about a third the same day (user
+  request, 2026-10-04: too many): one mote every 3.2% of the window height
+  travelled, a pool of 60, a narrower spread. Sizes and distances are
+  shares of the window height. Drawn in screen space after the bloom, over the scene
+  and under all page text. Mouse only, off in reduced motion.
+  `src/scene/createCursorMotes.js` (`TRAIL`). (The first version, 18
+  motes circling the pointer, read as a static cluster.)
 
 ### 3.12 "Return to the harbour" button (user request, 2026-10-02)
 

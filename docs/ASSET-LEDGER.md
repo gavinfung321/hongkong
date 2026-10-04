@@ -102,6 +102,8 @@ Fit to the scene (the code-built ferry's numbers, so camera framings still hold)
 | `ifc-detail.webp` | Editorial plate | 05 | P2 | <250 KB | Original | Use only if the skyline needs additional illustrated depth |
 | `water-noise.webp` | Tileable texture | All | P1 | <120 KB | Original or clearly licensed | Prefer procedural generation if it is cheaper and visually stable |
 | `halftone.webp` | Overlay texture | All | P2 | <100 KB | Original | Must remain restrained and avoid reducing text contrast |
+| `public/plates/kowloon-terminus-1915.webp` | Memory print, alpha WebP 1400 × 737, 221 KB | 02 (desktop) | P1 | <250 KB | **Public domain** (Hong Kong and US; author unknown): [`KCR 1914.jpeg`](https://commons.wikimedia.org/wiki/File:KCR_1914.jpeg), Wikimedia Commons, credited there to the Hong Kong Public Libraries Multimedia Information System. Commons dates it 1914; the finished building and tower suggest late 1915 (as Gwulo dates a matching view), so the caption reads "ca. 1915". Source kept in `docs/references/kowloon-terminus-pd/kcr-1914-commons.jpg` | **In use since 2026-10-04, prototype** (narrative spine, user choice): cropped to source pixels 0, 470, 2984 × 1570 and baked once in a browser canvas (duotone ink to cream with faint coral midtones, darker top and corners, uneven burnt edges fading to transparency, fine static grain; WebP quality 0.82). Credited in its caption. Kept only if the scene 02 prototype is approved |
+| `kowloon-terminus-1937.jpg` (removed) | Editorial plate, JPEG 1024 × 576 | 02 | — | — | Original AI-assisted artwork (built-in image tool, 2026-10-04), the user's City in Time photos as reference only | **Not used** (user choice, 2026-10-04): shipped for one review as a light-line drawing; replaced by the public-domain photo print above. Concept kept locally in `docs/references/clock-tower/` |
 | Local font files and licences | WOFF2 + text | All | P0 | ≤300 KB first view, ≤450 KB total | SIL OFL 1.1 | Shipped 2026-10-03; see "Fonts" below |
 
 ### Fonts (shipped 2026-10-03)
@@ -186,7 +188,7 @@ in `ASSET-QA-REPORT.md`.
 | The other nine foreground-pass candidates (`docs/references/foreground-pass-candidates/`: lamp, wet paving, harbour spray, firework smoke, palm fronds, ferry railing, junk rigging, pier canopy, bollard and chain) | Alpha PNG masters and WebP | — | **Not used; kept as sources** (user choice, 2026-10-03): foreground goes in only where it improves a composition. 03 uses the 3D ferry, wake and reflections (no spray or ferry-railing card); 04 the 3D junk's rigging. `central-pier-canopy-near` and `bollard-chain-near` are reserved for one optional 05 test, not started. Status per piece in the folder's `MANIFEST.md` | Original AI-assisted artwork; optimized locally |
 | `harbour-spray.webp` | Alpha WebP | 03–04 | **Not used** (user choice, 2026-10-03): shipped as a bow-spray card for a day and removed; a breaking wave with flying droplets reads too forceful for boats at harbour speed, even small and faint. Removed from `public/` | Original AI-assisted artwork; optimized locally |
 | `coral-clouds.webp` | Alpha WebP | Every chapter (cloud ceiling, user request 2026-10-02) | **In use since 2026-10-02** as `public/atmosphere/coral-clouds.webp` (1600 × 534, 251 KB, unchanged copy): sky cloud cards, Milestone 2 part 3g (user request); its bands are cropped, mirrored, tinted and scrolled in code for the two-layer ceiling (same file, no new art) | Original AI-assisted artwork (OpenAI image generation, user's direction); optimized locally; ours to ship |
-| `harbour-mist.webp` | Alpha WebP | 01–05 (faint in 06) | **In use since 2026-10-02** as `public/atmosphere/harbour-mist.webp` (1600 × 534, 225 KB, unchanged copy): the low mist belt off the island's waterfront and the open-water patches in the wide views, Milestone 2 part 3g (user request and choice) | Original AI-assisted artwork (OpenAI image generation, user's direction); optimized locally; ours to ship |
+| `harbour-mist.webp` | Alpha WebP | 01–05 (faint in 06) | **In use since 2026-10-02** as `public/atmosphere/harbour-mist.webp` (1600 × 534, 225 KB, unchanged copy): the low mist belt off the island's waterfront and the open-water patches in the wide views, Milestone 2 part 3g (user request and choice). Since 2026-10-04 its `billow` band also makes 02's railway steam (narrative spine, user choice): feathered in a canvas, stretched three times taller, tinted warm white; same file, no new art | Original AI-assisted artwork (OpenAI image generation, user's direction); optimized locally; ours to ship |
 | `firework-burst.webp` | Alpha WebP | 06 | **In use since 2026-10-02** as `public/atmosphere/firework-burst.webp` (768 × 692, 259 KB, unchanged copy; 9 KB over the brief's 250 KB aim, kept rather than compressed twice, user choice): the four still bursts in 06 | Original AI-assisted artwork; optimized locally; ours to ship |
 | `firework-smoke.webp` | Alpha WebP | 06 | **In use since 2026-10-02** as `public/atmosphere/firework-smoke.webp` (re-encoded from 1600 × 800, 391 KB, to 1200 × 600, 285 KB, WebP quality 0.78 with alpha, to meet the 300 KB aim): the smoke wisps in 06, fireworks step 3 (user request) | Original AI-assisted artwork; optimized locally; ours to ship |
 | `firework-embers.webp` | Alpha WebP | 06 | Not used (2026-10-02): the show's falling spark streaks cover the embers | Original AI-assisted artwork; optimized locally |
@@ -266,6 +268,21 @@ plus a ferry bow fragment and harbour spray not used yet. They are design
 references only: the railing, lamps and paving are built in code, and the
 images are never shipped or used as textures. The tool and its terms are
 to be recorded here if any image is ever imported.
+
+The narrative spine's scene 02 memory illustration (user request,
+2026-10-04) uses two historical photos the user shared, in
+`docs/references/clock-tower/` (git-ignored, local only):
+
+| File | Shows | Source and rights |
+|---|---|---|
+| `kowloon-terminus-1937-user.png` | The Kowloon railway terminus and Clock Tower from the street, cars along the kerb, ca. 1937 | [City in Time, Tsim Sha Tsui Clock Tower ca. 1937](https://www.cityintime.hk/en/article/tsim-sha-tsui-clock-tower-ca-1937/); its station photo is credited to FormAsia Books Limited. Rights not ours |
+| `kowloon-terminus-from-harbour-user.jpg` | The terminus and tower from the water, Star Ferry pier on the right, ca. 1950 | [City in Time, Salisbury Road ca. 1950](https://www.cityintime.hk/en/article/tsim-sha-tsui-salisbury-road-ca-1950/); its photos are credited to libraries and archives. Rights not ours |
+
+Reference only: never shipped, traced or used as a texture. The concept
+drawing (`memory-02-terminus-concept-v2.jpg`) and the layout mockup in the
+same folder were made with the built-in image tool, the drawing redrawn from
+a new angle. If a final illustration is kept, its own row goes in Phase C
+with the tool, method and rights.
 
 ## Asset approval gates
 

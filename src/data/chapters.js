@@ -17,6 +17,9 @@
 //              narrower than 1.6 (the sides are trimmed instead of the fov
 //              widening), so a tall subject keeps its size.
 // copy:        copy-safe region as % of the viewport (left / top / right / bottom).
+// dwell:       optional extra scroll, in svh, at this chapter's keyframe. The
+//              camera stays on the hold pose through it while the chapter's
+//              story plays out one layer at a time (copyLayer.js).
 // visibility:  1 = shown, 0 = gated (faded out) at this chapter's hold pose.
 //              petals is a density (omitted = 1); city is the skyline
 //              windows' level (omitted = 1); accents dims the LED crowns,
@@ -42,6 +45,9 @@ export const SCROLL = {
   // A jump of this many chapters or more snaps behind the veil; 0.9 so a jump
   // to the next chapter (exactly 1) does too (transition review, 2026-10-03).
   jumpThreshold: 0.9,
+  // Links and reloads land this share into a chapter's dwell, once its title
+  // and first beat are in (copyLayer.js STORY).
+  dwellLand: 0.24,
 };
 
 // The 香港 wordmark in the hero, authored on screen at chapter 01's opening pose.
@@ -159,10 +165,17 @@ export const chapters = [
         via: [[-44, 8, 90], [-24, 6, -35]],
       },
     },
+    // Two beats, the lead larger than the second, and on desktop the ca.
+    // 1915 memory print under them; the timeline row sits at the foot of the
+    // screen (narrative spine prototype, user requests, 2026-10-04). The
+    // print's lower edge may pass behind the ferry's masts in memory mode.
     copy: {
-      desktop: { left: 50, top: 11, right: 92, bottom: 39 },
-      mobile: { left: 8, top: 7.5, right: 92, bottom: 23 },
+      desktop: { left: 50, top: 11, right: 97, bottom: 82 },
+      mobile: { left: 8, top: 7.5, right: 92, bottom: 30 },
     },
+    // Long enough for the label, title, beats, print and timeline to arrive
+    // one at a time (user request, 2026-10-04).
+    dwell: 130,
     visibility: {
       // afterglow: the red-orange sky low on the right (02 only; createScene.js).
       // city, slopeLights: the skyline and Mid-Levels behind the tower dimmed,

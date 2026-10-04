@@ -100,7 +100,8 @@ The site should feel like a humid, cinematic Victoria Harbour evening:
 - no large bow spray;
 - no continuous mist belt;
 - no rain or drizzle;
-- no animated grain, paper texture or halftone;
+- no animated grain, paper texture or halftone (the scene 02 memory print
+  has static grain baked into the print itself, user choice, 2026-10-04);
 - no global flicker;
 - no extra foreground effect in every chapter.
 

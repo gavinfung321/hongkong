@@ -45,6 +45,8 @@ problem is found. Do not capture every chapter for a local change.
 ## Keep as the current baseline
 
 - The approved vignette stays. Do not add grain, paper texture or halftone.
+  One exception: the scene 02 memory print carries baked-in grain, on the
+  print only (user choice, 2026-10-04; `narrative-spine.md`).
 - Existing cloud masses, harbour mist and depth haze stay at their current
   settings. Do not add more haze layers.
 - Existing wakes, water reflections, searchlights and fireworks stay unless a

@@ -3,7 +3,11 @@ import { segmentAt } from './cameraRig.js';
 
 const HEIGHT_CHANGE_THRESHOLD = 150;
 
+// config.dwell: per section, the share of its height that is a dwell, where
+// progress stays on the keyframe and state.dwell[i] runs 0..1 instead;
+// config.dwellLand: how far into a dwell links land.
 export function createScrollConductor(sections, config) {
+  const dwellShare = sections.map((_, i) => config.dwell?.[i] ?? 0);
   const root = document.documentElement;
   let tops = [];
   let heights = [];
@@ -25,6 +29,7 @@ export function createScrollConductor(sections, config) {
     breakpoint: 'desktop',
     motion: 'continuous',
     jumped: false,
+    dwell: sections.map(() => 0),
   };
 
   function measure(force = false) {
@@ -49,20 +54,46 @@ export function createScrollConductor(sections, config) {
   }
   window.addEventListener('scroll', onScroll, { passive: true });
 
+  // Share of section i's height covered by the read line, 0..1.
+  function sectionShare(i, line) {
+    return MathUtils.clamp((line - tops[i]) / heights[i], 0, 1);
+  }
+
+  // Local progress in section i (0..1, keyframe at 0.5) for a share of its
+  // height; a dwell holds it at 0.5.
+  function localAt(i, share) {
+    const d = dwellShare[i];
+    const half = (1 - d) / 2;
+    if (share < half) return (0.5 * share) / half;
+    if (share < half + d) return 0.5;
+    return 0.5 + (0.5 * (share - half - d)) / half;
+  }
+
   // Negative above chapter 01 (the hero), measured in chapter-01 lengths.
   function progressAt(y) {
     const line = y + measuredHeight / 2;
     const count = sections.length;
     if (line < tops[0]) return (line - tops[0]) / heights[0];
     for (let i = 0; i < count; i++) {
-      if (line < tops[i] + heights[i]) return i + MathUtils.clamp((line - tops[i]) / heights[i], 0, 1);
+      if (line < tops[i] + heights[i]) return i + localAt(i, sectionShare(i, line));
     }
     return count;
   }
 
-  // Scroll position that puts keyframe k (p = k + 0.5) on the read line.
+  function updateDwell(y) {
+    const line = y + measuredHeight / 2;
+    dwellShare.forEach((d, i) => {
+      if (!d) return;
+      const half = (1 - d) / 2;
+      state.dwell[i] = MathUtils.clamp((sectionShare(i, line) - half) / d, 0, 1);
+    });
+  }
+
+  // Scroll position that puts keyframe k (p = k + 0.5) on the read line;
+  // config.dwellLand of the way into a dwell.
   function scrollForKeyframe(k) {
-    return tops[k] + heights[k] * 0.5 - measuredHeight / 2;
+    const d = dwellShare[k];
+    return tops[k] + heights[k] * ((1 - d) / 2 + d * (config.dwellLand ?? 0)) - measuredHeight / 2;
   }
 
   function publish() {
@@ -87,6 +118,7 @@ export function createScrollConductor(sections, config) {
     const count = sections.length;
     const p = progressAt(scrollY);
     state.p = p;
+    updateDwell(scrollY);
     state.index = MathUtils.clamp(Math.floor(p), 0, count - 1);
     state.local = p - state.index;
     state.phase = Math.abs(p - (state.index + 0.5)) <= config.hold ? 'hold' : 'transition';

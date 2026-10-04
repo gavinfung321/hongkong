@@ -16,6 +16,8 @@ import { createPetals } from './scene/createPetals.js';
 import { burstLights, createAtmosphere } from './scene/createAtmosphere.js';
 import { createFireworks } from './scene/createFireworks.js';
 import { createSearchlights } from './scene/createSearchlights.js';
+import { createStoryLayers } from './scene/createStoryLayers.js';
+import { createCursorMotes } from './scene/createCursorMotes.js';
 import { citySoft } from './scene/cityWindows.js';
 import { facadeBias } from './scene/facades.js';
 import { BLOOM } from './scene/bloom.js';
@@ -24,10 +26,12 @@ import { setBreathing, updateBreathing } from './scene/lightBreath.js';
 import { createCameraRig, fovForAspect } from './scroll/cameraRig.js';
 import { createScrollConductor } from './scroll/scrollConductor.js';
 import { createCopyLayer } from './ui/copyLayer.js';
+import { createMemoryPlates } from './ui/memoryPlate.js';
 import { createSiteHeader } from './ui/siteHeader.js';
 import { createSiteFooter } from './ui/siteFooter.js';
 import { createCursorRing } from './ui/cursorRing.js';
 import { createPointerParallax } from './ui/pointerParallax.js';
+import { createPointerStir } from './ui/pointerStir.js';
 import { enterFallback, supportsWebGL2, watchContext } from './ui/fallback.js';
 import { createLoadingScreen } from './ui/loadingScreen.js';
 
@@ -52,6 +56,8 @@ const ADAPTIVE = {
   step: 0.25,
   floor: { desktop: 1, mobile: 1.25 },
 };
+// Share of the petals that give way to the story dust in full memory mode.
+const PETAL_YIELD = 0.6;
 // Window edge blur on phones, in pixels (desktop 1).
 const MOBILE_WINDOW_SOFT = 1.5;
 // Painted facades on phones, in mipmap levels (desktop 0).
@@ -84,6 +90,10 @@ async function start(initGuard, header, loading) {
   const veil = document.querySelector('.veil');
   const sections = [...document.querySelectorAll('.chapter')];
   root.style.setProperty('--chapter-length', `${SCROLL.chapterLength}svh`);
+  sections.forEach((section, i) => {
+    if (chapters[i].dwell) section.style.setProperty('--chapter-dwell', `${chapters[i].dwell}svh`);
+  });
+  const dwellShare = chapters.map((chapter) => (chapter.dwell ?? 0) / (SCROLL.chapterLength + (chapter.dwell ?? 0)));
   let needsRender = true;
   const stage = async (name) => {
     await loading.stage(name);
@@ -129,10 +139,16 @@ async function start(initGuard, header, loading) {
     lights: burstLights,
   });
   const searchlights = createSearchlights();
+  const story = createStoryLayers(chapters, renderer, {
+    onLoad: () => {
+      needsRender = true;
+    },
+  });
   const bollard = createBollard(chapters.find((chapter) => chapter.id === '05').camera);
   const buoy = createBuoy(chapters.find((chapter) => chapter.id === '03').camera);
+  const cursorMotes = createCursorMotes(renderer);
   scene.add(bollard.group, buoy.group);
-  scene.add(moon.group, atmosphere.group, searchlights.group, kowloon.group, island.group, vessels.group, foreground.group, fireworks.group, wordmark.mesh, petals.group);
+  scene.add(moon.group, atmosphere.group, searchlights.group, kowloon.group, island.group, vessels.group, foreground.group, fireworks.group, story.group, wordmark.mesh, petals.group, cursorMotes.points);
   await stage('foreground');
   water.setSources(reflectionSources({
     tower: kowloon.clockTower,
@@ -146,6 +162,7 @@ async function start(initGuard, header, loading) {
     water.setFade(key, value);
   };
 
+  let petalLevel = 1;
   const gating = createGating(chapters, {
     ferry: reflected('ferry', makeFadeable(vessels.ferry)),
     junk: reflected('junk', makeFadeable(vessels.junk)),
@@ -157,7 +174,9 @@ async function start(initGuard, header, loading) {
     bauhinia: (value) => foreground.setOpacity('bauhinia', value),
     bush: (value) => foreground.setOpacity('bush', value),
     bursts: (value) => fireworks.setLevel(value),
-    petals: (value) => petals.setDensity(value),
+    petals: (value) => {
+      petalLevel = value;
+    },
     city: (value) => island.setCityLevel(value),
     slopeLights: (value) => island.setSlopeLights(value),
     accents: (value) => island.setAccentLevel(value),
@@ -211,8 +230,11 @@ async function start(initGuard, header, loading) {
 
   const rig = createCameraRig(camera, chapters, { hold: SCROLL.hold });
   const parallax = createPointerParallax();
-  const conductor = createScrollConductor(sections, SCROLL);
+  const stir = createPointerStir();
+  let stirState = null;
+  const conductor = createScrollConductor(sections, { ...SCROLL, dwell: dwellShare });
   const copy = createCopyLayer(sections, chapters, SCROLL);
+  const memories = createMemoryPlates(sections);
 
   // ---- Motion mode ---------------------------------------------------------
 
@@ -227,6 +249,8 @@ async function start(initGuard, header, loading) {
     petals.setEnabled(!stepped);
     fireworks.setStill(stepped);
     searchlights.setStill(stepped);
+    story.setStill(stepped);
+    if (stepped) cursorMotes.update(0, null);
     setBreathing(LIGHT_MOTION && !stepped);
     shownKeyframe = -1;
     conductor.snap();
@@ -285,6 +309,7 @@ async function start(initGuard, header, loading) {
     fireworks.place(breakpoint, width / height);
     placeWordmark();
     atmosphere.place(breakpoint, width / height);
+    story.place(breakpoint, width / height);
     searchlights.setBreakpoint(breakpoint);
     world.sky.userData.setBreakpoint(breakpoint);
     needsRender = true;
@@ -462,7 +487,8 @@ async function start(initGuard, header, loading) {
     const hero = state.p < 0;
     const heroFadeEnd = HERO.wordmark[breakpoint]?.fadeEnd ?? HERO.fadeEnd;
     const heroFadeTo = state.pTop + (HERO.sinkEnd - state.pTop) * heroFadeEnd;
-    copy.update(state.p, { stepped, index: state.index, hero: { from: state.pTop, to: heroFadeTo }, rendered: state.pRendered });
+    const storyLevels = copy.update(state.p, { stepped, index: state.index, hero: { from: state.pTop, to: heroFadeTo }, rendered: state.pRendered, dwell: state.dwell });
+    if (story.setLevels(storyLevels)) needsRender = true;
     header.update(state.index, hero);
     // A chapter address follows the crossing, so a reload or a shared link lands
     // where the visitor is; pages opened without one never get one.
@@ -499,6 +525,7 @@ async function start(initGuard, header, loading) {
       const parallaxOn = parallax.enabled && breakpoint === 'desktop';
       rig.setParallax(parallaxOn ? offset.x : 0, parallaxOn ? offset.y : 0);
       if (!control.free) applyPose(state.pRendered, false, time);
+      petals.setDensity(petalLevel * (1 - PETAL_YIELD * storyLevels.mode));
       wordmark.sinkAt(state.pRendered, state.pTop, HERO.sinkEnd, heroFadeEnd);
       water.update(dt);
       island.update(time);
@@ -510,10 +537,12 @@ async function start(initGuard, header, loading) {
       buoy.update(time);
       updateBreathing(time);
       const speed = dt > 0 ? Math.abs(state.pRendered - lastRendered) / dt : 0;
-      petals.update(dt, camera, speed);
-      lastRendered = state.pRendered;
+      stirState = stir.enabled ? stir.update(dt) : null;
+      petals.update(dt, camera, speed, stirState);
+      cursorMotes.update(dt, stirState);      lastRendered = state.pRendered;
     }
 
+    story.update(time, camera, stepped ? null : stirState);
     needsRender = false;
     for (const object of switchedOff) object.visible = false;
     if (!ready) warmUp();
@@ -530,6 +559,7 @@ async function start(initGuard, header, loading) {
       loading.finish(() => {
         root.classList.add('is-ready');
         fireworks.load();
+        memories.load();
       });
     }
   }

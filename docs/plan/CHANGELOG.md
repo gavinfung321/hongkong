@@ -6,6 +6,108 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **Lighter cursor trail; a middle petal layer** (user request and choice,
+  2026-10-04). The cursor trail is cut to about a third: a mote every 3.2%
+  of the window height travelled (was 1.2%), lives of 0.9–1.8 s (was
+  1.3–2.6), a pool of 60 (was 150), a narrower spread; the faint breath at
+  rest stays. The petals gain a middle depth layer (20 desktop / 8 phones,
+  about 6–18 m out) between the near and far ones, for volume through
+  depth; per-chapter levels unchanged. Files:
+  `src/scene/createCursorMotes.js`, `src/scene/createPetals.js`; plan:
+  `interface.md`, `scene-promenade.md`.
+- **Cursor trail rebuilt; phone photo above the timeline** (user choices,
+  2026-10-04). After studying how Kage's cursor wisps work (technique
+  only), the cursor motes are now shed along the pointer's path by
+  distance travelled, each with a short life, a fraying curl, a little
+  rise and a soft fade, plus a faint breath at rest; warm, 150 in the pool.
+  On phones the station photo sits just above the timeline at 70% width
+  and the beats no longer fade out for it. Files:
+  `src/scene/createCursorMotes.js`, `src/ui/copyLayer.js`,
+  `src/styles.css`; plan: `interface.md`, `narrative-spine.md`.
+- **Cursor motes, and scene 02 on phones** (user choices, 2026-10-04).
+  A small swarm of warm motes now follows the desktop mouse on every
+  section, trailing behind quick moves and dimming at rest (the stir alone
+  was too faint to notice). On phones the 1915 moves right of the tower,
+  clear of the palms, and the station photo returns: once both beats have
+  been read they fade and the print develops in their place under the
+  title. Files: `src/scene/createCursorMotes.js` (new),
+  `src/ui/pointerStir.js`, `src/main.js`, `src/scene/createStoryLayers.js`,
+  `src/ui/copyLayer.js`, `src/styles.css`; plan: `interface.md`,
+  `narrative-spine.md`.
+- **Scene 02: fuller floating lights, and a pointer stir** (user choices,
+  2026-10-04). The motes grow from about 140 to about 200 (70 to about 100
+  on phones) and gather by the light: open air, the tower's floodlit foot,
+  each promenade lamp, plus a few large soft out-of-focus motes near the
+  lens. Some only join, and all brighten a little, with the 1915 print. On
+  desktop the moving mouse pushes the motes, and the petals across the
+  whole site, aside and carries them along; they settle when it rests. No
+  glow of its own; off on touch and in reduced motion. Files:
+  `src/scene/createStoryLayers.js`, `src/scene/createPetals.js`,
+  `src/ui/pointerStir.js` (new), `src/main.js`; plan: `narrative-spine.md`,
+  `interface.md`.
+- **Scene 02: the 1915 ghost stands whole** (user choice, 2026-10-04: split
+  into 19 and 15 by the tower it read oddly). The numerals are now one
+  upright column reading upward, in the open sky between the tower and the
+  copy, rising from behind the ridge on desktop and standing left of the
+  tower on phones, with lining figures instead of the face's old-style
+  ones. Files: `src/scene/createStoryLayers.js`; plan: `narrative-spine.md`.
+- **Scene 02: layered entrance, beat hierarchy, still copy and new layers**
+  (user requests and choices, 2026-10-04). Arriving from 01, the harbour
+  darkens first (55% of memory mode, with a soft opening that keeps the
+  Clock Tower lit), then the label row and its hairline, title, beat 1,
+  beat 2, the print and a new timeline row come up one at a time across a
+  longer dwell (130 svh, was 90; links land once beat 1 is in). Beat 1 is
+  now a larger, brighter lead and no longer dims; phones stack the beats.
+  The words, print and timeline only fade (no drift or rise); the scene
+  keeps its mouse parallax. New layers: label row with 鐘樓, timeline
+  1915 · 1921 · 1975 · 1978, a giant faint 1915 in the sky behind the
+  tower, warm dust motes (the petals ease off in memory mode) and railway
+  steam cut from the harbour mist art crossing the tower's foot. Memory
+  mode now runs on phones too. Techniques only from the Kage reference; all
+  content is ours. Files: `index.html`, `src/styles.css`,
+  `src/ui/copyLayer.js`, `src/ui/memoryPlate.js`, `src/main.js`,
+  `src/data/chapters.js`, `src/scroll/scrollConductor.js`,
+  `src/scene/createStoryLayers.js` (new); plan: `narrative-spine.md`;
+  `docs/ASSET-LEDGER.md`.
+- **Scene 02: real photo print, memory mode and ink backdrop** (user
+  choices, 2026-10-04: the text alone read too plain). The AI drawing is
+  replaced by a public-domain photo of the newly built Kowloon terminus,
+  ca. 1915 (Hong Kong Public Libraries via Wikimedia Commons), baked as a
+  duotone print with burnt edges and grain (grain on the print only, an
+  exception to the no-grain rule) and shown larger under the beats. While
+  it shows, memory mode darkens and cools the harbour and closes the
+  vignette in, and a dark ink pool deepens behind the copy. Desktop only;
+  phones unchanged. Awaiting the keep, revise or remove decision. Files:
+  `index.html`, `src/styles.css`, `src/ui/memoryPlate.js`,
+  `src/ui/copyLayer.js`, `src/data/chapters.js`,
+  `public/plates/kowloon-terminus-1915.webp` (new; the 1937 drawing
+  removed); plan: `narrative-spine.md`, `atmosphere.md`,
+  `atmospheric-depth-polish.md`; `docs/ASSET-LEDGER.md`,
+  `docs/references/kowloon-terminus-pd/` (sources).
+- **Scene 02 narrative prototype** (user request, 2026-10-04): the six
+  two-beat drafts are approved and scene 02 is built. Its copy plays two
+  beats over 90 svh of extra scroll where the camera holds (other chapters
+  unchanged); beat 1 dims as beat 2 rises in on desktop and swaps out on
+  phones. A light-line drawing of the Kowloon terminus, ca. 1937, surfaces
+  beside the beats with beat 2 (desktop windows about 1230 px and wider),
+  its navy ground keyed out in a canvas, with a real-text caption.
+  Reduced motion switches the beats with a short fade. Awaiting the keep,
+  revise or remove decision. Files: `index.html`, `src/styles.css`,
+  `src/data/chapters.js`, `src/scroll/scrollConductor.js`,
+  `src/ui/copyLayer.js`, `src/ui/memoryPlate.js` (new), `src/main.js`,
+  `public/plates/kowloon-terminus-1937.jpg` (new); plan:
+  `narrative-spine.md`; `docs/ASSET-LEDGER.md`.
+- **Narrative spine: six two-beat drafts and the scene 02 layout** (user
+  request, 2026-10-04): drafted the observation and meaning beats for all
+  six chapters (49–58 words each, 02 and 04 facts sourced), and proposed
+  scene 02's layers: a feathered line drawing of the 1937 terminus in the
+  right-middle sky as a card in the 3D scene with a water reflection,
+  surfacing with beat 2. Concepts and the user's reference photos saved.
+  Text and plan only; the site is unchanged. Awaiting approval. Photo
+  dates and sources confirmed by the user (City in Time, ca. 1937 and
+  ca. 1950); the reference folder is git-ignored as the photos' rights are
+  not ours. Files: `docs/plan/narrative-spine.md`, `docs/ASSET-LEDGER.md`,
+  `.gitignore`, `docs/references/clock-tower/` (local only).
 - **05 bollard parallax calmed** (user request, 2026-10-04): it read as
   flying over the water. Its own movement against the skyline is cut to
   about a third (it follows 97.5% of the camera's parallax shift, was

@@ -18,15 +18,18 @@ import { seededRandom } from './random.js';
 import { OVERLAY } from './bloom.js';
 
 // Bauhinia (洋紫荊) petals drifting over the harbour: the user's petal artwork,
-// shaded per instance. Two depth layers live in boxes that travel with the
+// shaded per instance. Three depth layers live in boxes that travel with the
 // camera; petals wrap around inside them, so the camera's own motion still gives
-// parallax.
+// parallax, at three speeds.
 //   near: a few large petals close to the lens, drawn over everything,
 //         including the 香港 wordmark (user request, 2026-10-01).
+//   mid:  a scatter between the two, for depth rather than count (user
+//         choice, 2026-10-04); depth-tested.
 //   far:  many small petals, depth-tested and softened by fog.
 // box = [x, y, z] size in metres, centred `ahead` metres in front of the camera.
 const LAYERS = {
   near: { box: [5, 4, 5], ahead: 4, size: [0.13, 0.2], max: { desktop: 6, mobile: 4 } },
+  mid: { box: [18, 11, 12], ahead: 12, size: [0.15, 0.24], max: { desktop: 20, mobile: 8 } },
   far: { box: [50, 26, 44], ahead: 30, size: [0.2, 0.34], max: { desktop: 70, mobile: 32 } },
 };
 // The artwork's own fuchsia, dimmed for the night in four shades, so the petals
@@ -41,6 +44,11 @@ export const WIND = new Vector3(-0.35, 0, 0.1); // metres per second
 export const FALL = [0.25, 0.5]; // metres per second
 const GUST = { gain: 3, max: 2.5, rise: 3, decay: 1.2 }; // scroll speed → extra drift
 const FADE_WIDTH = 0.15; // share of the density range over which each petal shrinks away
+// The desktop pointer's stir (pointerStir.js, user choice, 2026-10-04):
+// radius in ndc (the screen is 2 tall); push: ndc per second outward at full
+// stir; carry: share of the pointer's own velocity passed on. The push sticks,
+// so a stirred petal drifts on from where it was sent.
+const STIR = { radius: 0.3, push: 0.5, carry: 0.35 };
 
 let petal;
 // Shared with the bauhinia's falling petals.
@@ -107,6 +115,27 @@ const euler = new Euler();
 const quaternion = new Quaternion();
 const scale = new Vector3();
 const matrix = new Matrix4();
+const screen = new Vector3();
+const right = new Vector3();
+const up = new Vector3();
+const offset = new Vector3();
+
+// Pushes p (world) away from the pointer and along its motion, in screen terms.
+function stirPetal(p, camera, stir, dt, tanHalf) {
+  screen.copy(p).project(camera);
+  if (screen.z > 1) return;
+  const dx = (screen.x - stir.x) * camera.aspect;
+  const dy = screen.y - stir.y;
+  const gap = Math.hypot(dx, dy);
+  if (gap >= STIR.radius || gap < 1e-4) return;
+  const f = (1 - gap / STIR.radius) ** 2 * stir.strength;
+  const depth = offset.copy(p).sub(camera.position).dot(forward);
+  if (depth <= 0) return;
+  const metres = tanHalf * depth * dt * f; // one ndc of height at this depth
+  const across = (dx / gap) * STIR.push + stir.vx * camera.aspect * STIR.carry;
+  const lift = (dy / gap) * STIR.push + stir.vy * STIR.carry;
+  p.addScaledVector(right, across * metres).addScaledVector(up, lift * metres);
+}
 
 function wrap(value, middle, half) {
   const span = half * 2;
@@ -119,6 +148,7 @@ export function createPetals() {
   const layers = [
     createLayer('near', LAYERS.near, texture, random, true),
     createLayer('far', LAYERS.far, texture, random, false),
+    createLayer('mid', LAYERS.mid, texture, random, false),
   ];
   const group = new Group();
   group.name = 'petals';
@@ -149,12 +179,19 @@ export function createPetals() {
   }
 
   // scrollSpeed: absolute scroll progress per second, for the gust.
-  function update(dt, camera, scrollSpeed = 0) {
+  // stir: the desktop pointer (pointerStir.js), or none.
+  function update(dt, camera, scrollSpeed = 0, stir = null) {
     if (!group.visible) return;
     time += dt;
     const targetGust = Math.min(scrollSpeed * GUST.gain, GUST.max);
     gust += (targetGust - gust) * (1 - Math.exp(-(targetGust > gust ? GUST.rise : GUST.decay) * dt));
     camera.getWorldDirection(forward);
+    const stirring = stir && stir.strength > 0.001;
+    const tanHalf = Math.tan(MathUtils.degToRad(camera.fov / 2));
+    if (stirring) {
+      right.setFromMatrixColumn(camera.matrixWorld, 0);
+      up.setFromMatrixColumn(camera.matrixWorld, 1);
+    }
 
     for (const set of layers) {
       const { layer, mesh, petals } = set;
@@ -171,6 +208,7 @@ export function createPetals() {
         p.x += (WIND.x + sway - gust) * dt;
         p.y += (gust * 0.4 - petal.fall) * dt;
         p.z += (WIND.z + gust * 0.3) * dt;
+        if (stirring) stirPetal(p, camera, stir, dt, tanHalf);
         p.set(wrap(p.x, centre.x, hx), wrap(p.y, centre.y, hy), wrap(p.z, centre.z, hz));
 
         const [sx, sy, sz] = petal.spin;
