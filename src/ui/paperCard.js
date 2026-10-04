@@ -11,7 +11,9 @@
 // the night page the card casts light rather than shadow: a soft cream glow
 // down and right of it, moving with the cloth. Under a mouse the pointer
 // lifts the cloth toward the viewer and leaves ripples behind it; the
-// outline, drawn on the cloth so it follows the folds, brightens. The technique follows Kage's photo cards, written
+// outline, drawn on the cloth so it follows the folds, brightens, and a
+// warm pool of light sits under the pointer, shaded by the folds like the
+// rest of the photo (user choice, 2026-10-04). The technique follows Kage's photo cards, written
 // from scratch (no Kage code, values or assets). Touch screens, reduced
 // motion (styles.css) and browsers without WebGL2 keep the still photo.
 
@@ -28,6 +30,7 @@ const LEAN = 0.06;
 const BLEED = 0.16;
 const LIFT = { radius: 0.3, height: 1.3 }; // radius: share of the width; height in height units
 const OUTLINE = { rest: 0.06, hover: 0.22 };
+const LANTERN = { radius: 0.38, gain: 0.45 }; // radius: share of the width; gain at the centre
 const CORNER = 0.05; // share of the card's width (user request, 2026-10-04)
 
 const SDF = /* glsl */ `
@@ -72,6 +75,7 @@ in float vCrease;
 uniform sampler2D uMap;
 uniform vec2 uSize;
 uniform float uOutline;
+uniform vec4 uLantern; // pointer (px), radius (px), gain
 out vec4 outColor;
 ${SDF}
 void main() {
@@ -83,6 +87,11 @@ void main() {
   float flatLight = 0.6 + 0.4 * light.z;
   float lit = (0.6 + 0.4 * dot(n, light)) / flatLight * vCrease;
   colour *= mix(1.0, lit, 0.65);
+  float pool = 1.0 - smoothstep(0.0, uLantern.z, distance(vLocal, uLantern.xy));
+  pool *= pool * uLantern.w;
+  vec3 warm = vec3(1.0, 0.92, 0.78);
+  // A little added light too, so the photo's darkest parts lift as well.
+  colour = colour * (1.0 + pool * warm) + 0.06 * pool * lit * warm;
   float tight = pow(halfway.z, 30.0);
   float glint = max(pow(max(dot(n, halfway), 0.0), 30.0) - tight, 0.0) / (1.0 - tight);
   float broadFlat = pow(halfway.z, 5.0);
@@ -419,6 +428,7 @@ function createSheet(figure, frame, image) {
       gl.uniform1f(uniforms.uRadius, CORNER * w);
       if (uniforms.uDepth) gl.uniform1f(uniforms.uDepth, 4 * w);
       if (uniforms.uOutline) gl.uniform1f(uniforms.uOutline, OUTLINE.rest + (OUTLINE.hover - OUTLINE.rest) * card.hover);
+      if (uniforms.uLantern) gl.uniform4f(uniforms.uLantern, card.pointer[0] * w, card.pointer[1] * h, LANTERN.radius * w, LANTERN.gain * card.hover);
       if (uniforms.uMap) gl.uniform1i(uniforms.uMap, 0);
       gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
     }

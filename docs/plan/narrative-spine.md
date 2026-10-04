@@ -538,7 +538,11 @@ two hanging photo cards.** The 3D stays untouched.
   hairline outline is drawn on the cloth. Under a mouse the pointer lifts
   the cloth toward the viewer, leaving ripples as it moves (lift, as
   Kage's, user choice, 2026-10-04; it pressed in at first), the wind rises
-  a little and the outline brightens. It swings harder when it first
+  a little and the outline brightens; a warm pool of light, about 45%
+  brighter at its centre and 38% of the card's width across, follows the
+  pointer, shaded by the folds so the ripples show through it, and eases
+  in and out with the hover (user choice, 2026-10-04; the glow under the
+  card stays as it is). It swings harder when it first
   appears. Corners round at 5% of the card's width (was 3px), and a thin
   hem inside the edge catches the light. On the night page the card casts
   light, not shadow (user request, 2026-10-04): a soft cream glow down and

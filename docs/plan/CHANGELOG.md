@@ -6,6 +6,13 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **04 photo cards: a warm light under the pointer** (user request and
+  choices, 2026-10-04). Hovering lifted the cloth but the spot under the
+  cursor stayed as bright as flat cloth. Now a warm pool of light follows
+  the pointer, about 45% brighter at the centre and fading out over 38%
+  of the card's width, shaded by the folds so the ripples show through;
+  it eases in and out with the hover. The glow under the card is
+  unchanged. Files: `src/ui/paperCard.js`; plan: `narrative-spine.md`.
 - **03: the board's countdown runs on a clock** (user choice,
   2026-10-04). It only moved with scroll, so a visitor who stopped to look
   saw 3 MIN forever. It now steps every 1.2 s after a 0.4 s lead, showing
