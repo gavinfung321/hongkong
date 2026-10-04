@@ -23,6 +23,12 @@ After any change to the site's behaviour, look or content:
 Do not edit the planning files in `~/.cursor/plans/*.plan.md`; the user keeps
 those unchanged.
 
+# Preview link
+
+The user reviews at http://localhost:5173/ (their running dev server, which
+reloads on save). Always point them there; don't start or mention other
+ports (user request, 2026-10-04).
+
 # Licence rule
 
 No Kage code, images, lettering or copy may be used; its licence grants no

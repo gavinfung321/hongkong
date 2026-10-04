@@ -24,18 +24,21 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old section 4, ite
      petal sits on the copy; composition probe as before.
    - **Depth:** a near layer of a few large petals (6 desktop / 4 mobile)
      drawn over everything, including 香港; a middle layer of medium
-     petals about 6–18 m out (20 / 8; user choice, 2026-10-04: more volume
-     through depth, not count); a far layer of small fogged petals
-     (70 / 32). All travel with the camera, so moving still gives parallax
-     at three speeds.
+     petals about 6–18 m out (40 / 16; user choices, 2026-10-04: added at
+     20 / 8 for volume through depth, then doubled because the site still
+     read thin); a far layer of small fogged petals (100 / 44, was 70 / 32).
+     The near layer stays small because it crosses 香港 and the copy. All
+     travel with the camera, so moving still gives parallax at three speeds.
    - **Motion:** slow fall, sideways breeze, sway and flutter; scrolling adds
      a short gust. The breeze blows toward screen left, away from the
      bauhinia tree, whose own falling petals join it (2026-10-02).
-   - **Density:** sparse and calm. Full in the hero and 01–04, 0.6 in 05 so
-     the city lights lead, 0 in 06 so the fireworks take over (`petals` in
-     each chapter's `visibility`). Off in reduced motion.
-   - **Cost:** three instanced draw calls, 96 petals updated per frame
-     (44 on phones).
+   - **Density:** calm. 0.8 in the hero and 01 (was 0.5; user choice,
+     2026-10-04, for a fuller opening), full in 02 (yielding 60% while its
+     story shows), 0.3 in 03 and 04 for the open water, 0.6 in 05 so the
+     city lights lead, 0 in 06 so the fireworks take over (`petals` in each
+     chapter's `visibility`). Off in reduced motion.
+   - **Cost:** three instanced draw calls, 146 petals updated per frame
+     (64 on phones).
    - Built in `src/scene/createPetals.js`; sizes, counts, colours and wind are
      the constants at the top.
    - **Artwork (done 2026-10-02):** the petal artwork the user planned

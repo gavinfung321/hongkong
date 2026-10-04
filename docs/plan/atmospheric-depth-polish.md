@@ -45,6 +45,13 @@ problem is found. Do not capture every chapter for a local change.
 ## Keep as the current baseline
 
 - The approved vignette stays. Do not add grain, paper texture or halftone.
+  Made much more obvious in every scene (user request, 2026-10-04): a
+  night-indigo edge at about 48% in the desktop corners and 38% on phones
+  (was 24% / 16%; 62% / 50% was tried and read too strong), open across
+  the centre; 03 adds a frame of its own over a small opening on the ferry,
+  eased after it stacked too dark with the vignette between 02 and 03
+  (user request, 2026-10-04): edges about 55%, outer ring 60%, reached at
+  70% strength (was 85%).
   One exception: the scene 02 memory print carries baked-in grain, on the
   print only (user choice, 2026-10-04; `narrative-spine.md`).
 - Existing cloud masses, harbour mist and depth haze stay at their current
@@ -190,7 +197,8 @@ six directions below (user choice, 2026-10-04), in this order, one pass each.
 - **Built 2026-10-04, awaiting approval.** Visibility gates only; cameras,
   vessel routes and copy unchanged (`chapters.js`):
   - 01 (subject: the harbour at dusk, framed by railing, tree and bush):
-    petals 0.5, skyline 0.75. The searchlights stay at 0.6 on desktop
+    petals 0.5 (raised to 0.8 later the same day, user choice, see
+    `scene-promenade.md`), skyline 0.75. The searchlights stay at 0.6 on desktop
     (01 and 05 only, per `atmosphere.md`; briefly removed, restored by user
     request, 2026-10-04).
   - 02 (subject: the Clock Tower and afterglow): desktop skyline 0.6 and

@@ -3,54 +3,57 @@
 // in than the damped camera allows: on a quick scroll a chapter's copy waits
 // for its scene instead of flashing over the previous one.
 //
-// A story chapter (`.chapter__copy--story`) arrives in layers (user request,
-// 2026-10-04). As the camera comes in, the harbour darkens to DARK.arrive of
-// memory mode (`--memory-mode` on the root); as it settles, the label and
-// its hairline draw in; then, across the dwell (scrollConductor.js), the
-// title, the lead beat, the second beat, the memory print and the timeline
-// row come up one at a time, each fading in place without moving. The print
-// takes memory mode the rest of the way; it and the timeline sink as the
-// camera leaves, and the darkness lifts early in the move out. All of it is
-// scroll-tied, so it reverses on the way back. The 3D story layers
-// (createStoryLayers.js) take their levels from here.
+// A story chapter (`.chapter__copy--story`) arrives in two steps (user
+// requests, 2026-10-04). As the camera comes in, the harbour darkens to
+// DARK.arrive of memory mode (`--memory-mode` on the root); as it settles,
+// the label, title and beats (and 02's 1915 ghost) fade in together; then,
+// part-way through the dwell (scrollConductor.js), the memory print and the
+// timeline come up together, taking memory mode the rest of the way. They
+// sink as the camera leaves, and the darkness lifts early in the move out.
+// All of it is scroll-tied, so it reverses on the way back. The 3D story
+// layers (createStoryLayers.js) take their levels from here.
+//
+// 03 (`data-story="crossing"`) is an index of panels instead: the harbour
+// darkens further (CROSSING.dark), the panels come with the title, and the
+// route dot runs from Tsim Sha Tsui to Central across the dwell. On the
+// shortest phones the second panel takes the first one's place.
 import { smoothstep } from '../scroll/cameraRig.js';
-
 const RISE = 48; // px travelled while fading: in from below, out through the top
-// Shares of the dwell over which each layer comes up; the 1915 ghost behind
-// the tower comes with the lead beat, which names the year.
-const STORY = {
-  title: [0, 0.1],
-  lead: [0.08, 0.2],
-  ghost: [0.04, 0.26],
-  second: [0.32, 0.46],
-  print: [0.46, 0.72],
-  facts: [0.72, 0.86],
-};
+// Shares of the dwell: 02's print and timeline wait about half a screen.
+const STORY = { print: [0.5, 0.8] };
+const CROSSING = { route: [0.1, 0.9], swap: [0.4, 0.6], dark: 0.7 };
 // Memory mode reaches `arrive` from `approach[0]` of the way into the chapter
 // until the camera settles, and the rest with the print. Past the keyframe
 // the print and timeline sink over `sink`, the darkness lifts over `lift`.
 const DARK = { arrive: 0.55, approach: 0.1, sink: [0.02, 0.1], lift: [0.02, 0.14] };
-// The label and hairline: progress into the chapter, as the camera settles.
+// The first step: progress into the chapter, as the camera settles.
 const LABEL = [0.38, 0.5];
 
 export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
   const copies = sections.map((section) => section.querySelector('.chapter__copy'));
   const opacities = copies.map(() => -1);
-  const stories = copies.map((copy) =>
-    copy.classList.contains('chapter__copy--story')
-      ? {
-          label: copy.querySelector('.chapter__label'),
-          title: copy.querySelector('.chapter__title'),
-          beats: [...copy.querySelectorAll('.chapter__beat')],
-          memory: copy.querySelector('.chapter__memory'),
-          facts: copy.querySelector('.chapter__facts'),
-        }
-      : null,
-  );
+  const stories = copies.map((copy) => {
+    if (!copy.classList.contains('chapter__copy--story')) return null;
+    return {
+      crossing: copy.dataset.story === 'crossing',
+      label: copy.querySelector('.chapter__label'),
+      title: copy.querySelector('.chapter__title'),
+      standfirst: copy.querySelector('.chapter__standfirst'),
+      beats: [...copy.querySelectorAll('.chapter__beat')],
+      panels: [...copy.querySelectorAll('.chapter__panel')],
+      route: copy.querySelector('.chapter__route'),
+      memory: copy.querySelector('.chapter__memory'),
+      facts: copy.querySelector('.chapter__facts'),
+    };
+  });
   const shown = new Map();
   const root = document.documentElement;
+  let phone = false;
+  // The shortest phones can't stack 03's panels; styles.css uses the same query.
+  const shortPhone = matchMedia('(max-height: 619px)');
 
   function setBreakpoint(breakpoint) {
+    phone = breakpoint === 'mobile';
     copies.forEach((copy, i) => {
       const { left, top, right, bottom } = chapters[i].copy[breakpoint];
       copy.style.setProperty('--copy-left', left);
@@ -90,26 +93,33 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       ? ([from, to]) => (dwell >= (from + to) / 2 ? 1 : 0)
       : ([from, to]) => smoothstep(from, to, dwell);
     const label = stepped ? 1 : smoothstep(i + LABEL[0], i + LABEL[1], p);
-    const sink = stepped ? 1 : 1 - smoothstep(DARK.sink[0], DARK.sink[1], p - key);
     const base = stepped
       ? (i === index ? 1 : 0)
       : smoothstep(i + DARK.approach, key - copyFull, rendered) * (1 - smoothstep(DARK.lift[0], DARK.lift[1], rendered - key));
-    const lead = level(STORY.lead);
-    const second = level(STORY.second);
+    for (const element of [story.label, story.title, story.standfirst, ...story.beats]) setVar(element, '--enter', label);
+    for (const beat of story.beats) beat.toggleAttribute('data-enter-hidden', label === 0);
+    if (story.crossing) {
+      const enter = story.panels.map(() => label);
+      if (phone && shortPhone.matches) {
+        enter[1] *= level(CROSSING.swap);
+        enter[0] *= 1 - enter[1];
+      }
+      story.panels.forEach((panel, k) => {
+        setVar(panel, '--enter', enter[k]);
+        panel.toggleAttribute('data-enter-hidden', !enter[k]);
+      });
+      setVar(story.route, '--route', level(CROSSING.route));
+      return { mode: base * CROSSING.dark };
+    }
+    const sink = stepped ? 1 : 1 - smoothstep(DARK.sink[0], DARK.sink[1], p - key);
     const print = level(STORY.print) * sink;
 
-    setVar(story.label, '--enter', label);
-    setVar(story.title, '--enter', level(STORY.title));
-    setVar(story.beats[0], '--enter', lead);
-    setVar(story.beats[1], '--enter', second);
-    story.beats[0]?.toggleAttribute('data-enter-hidden', lead === 0);
-    story.beats[1]?.toggleAttribute('data-enter-hidden', second === 0);
     setVar(story.memory, '--memory-reveal', print);
-    setVar(story.facts, '--enter', level(STORY.facts) * sink);
+    setVar(story.facts, '--enter', print);
 
     return {
       mode: base * (DARK.arrive + (1 - DARK.arrive) * print),
-      ghost: level(STORY.ghost) * base,
+      ghost: label * base,
       dust: base,
       steam: print * base,
     };
@@ -119,10 +129,12 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
   // story levels for the 3D layers.
   function update(p, { stepped = false, index = 0, hero, rendered = p, dwell = [] } = {}) {
     const levels = { mode: 0, ghost: 0, dust: 0, steam: 0 };
+    let crossing = false;
     copies.forEach((copy, i) => {
       if (stories[i]) {
         const story = updateStory(p, rendered, i, dwell[i] ?? 0, stepped, index);
-        for (const name in levels) levels[name] = Math.max(levels[name], story[name]);
+        if (story.mode > levels.mode) crossing = stories[i].crossing;
+        for (const name in story) levels[name] = Math.max(levels[name], story[name]);
       }
       const shownValue = i === 0 ? opacityAt(p, i, hero) : Math.min(opacityAt(p, i, hero), opacityAt(rendered, i, hero));
       const value = stepped ? (i === index ? 1 : 0) : Math.round(shownValue * 100) / 100;
@@ -141,6 +153,7 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       copy.classList.toggle('is-hidden', value === 0);
     });
     setVar(root, '--memory-mode', levels.mode);
+    if (levels.mode > 0) root.toggleAttribute('data-veil-crossing', crossing);
     return levels;
   }
 
