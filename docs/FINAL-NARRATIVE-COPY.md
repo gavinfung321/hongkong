@@ -291,8 +291,9 @@ landmarks and light.
 Victoria Harbour at night, with the Clock Tower, a Star Ferry, red sails and
 the illuminated skyline of Central.
 
-The final social image may show a subset of those subjects; revise its alt text
-to match the actual exported poster rather than keeping this line automatically.
+The image (2026-10-04, user request) is the hero frame, cropped to 1200×630:
+`posters/harbour-social.jpg`. It includes those subjects and the in-scene
+香港, so this alt text stands.
 
 ---
 

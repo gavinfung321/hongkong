@@ -16,6 +16,7 @@ export function supportsWebGL2() {
 export function enterFallback(reason) {
   root.classList.remove('is-enhanced', 'is-ready', 'is-booting');
   root.classList.add('is-fallback');
+  window.__vhShowPoster?.();
   root.dataset.fallback = reason;
   const canvas = document.getElementById('world');
   if (canvas) canvas.hidden = true;

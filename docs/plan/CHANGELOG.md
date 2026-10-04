@@ -6,6 +6,26 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **Social preview image** (user request, 2026-10-04). A shared link now
+  shows the hero: the opening frame cropped to 1200×630. A page visit
+  does not download it. Files: `public/posters/harbour-social.jpg`,
+  `index.html`; plan: `interface.md`, `ASSET-LEDGER.md`,
+  `FINAL-NARRATIVE-COPY.md`.
+- **Fallback poster stills** (user request, 2026-10-04). The greybox
+  drawing is replaced by stills of the opening frame: desktop 1016×648
+  (59 KB) and phone 390×844 (24 KB), including the in-scene 香港 and no
+  interface chrome. A normal visit does not request them; they load on
+  fallback, on the 12 s safety timer, or with JavaScript off. Files:
+  `public/posters/harbour-poster-desktop.webp`,
+  `public/posters/harbour-poster-mobile.webp`, `index.html`,
+  `src/ui/fallback.js`, `src/styles.css`; plan: `interface.md`,
+  `README.md`, `ASSET-LEDGER.md`.
+- **Paper grain passed** (user, 2026-10-04). It stays unbuilt. Next is a
+  still of the opening frame for the fallback poster. Plan: `README.md`.
+- **iPhone speed and the HKAAA line** (user, 2026-10-04). The phone
+  re-measure is closed as fine. "Created by Gavin Fung at HKAAA" stays.
+  The paper grain is the remaining offered item. Plan: `README.md`,
+  `HANDOFF.md`.
 - **Footer wash** (user request, 2026-10-04). The footer background is no
   longer solid: about 80% black under the hairline, darker toward the
   columns, so the fireworks show through. Files: `src/styles.css`; plan:

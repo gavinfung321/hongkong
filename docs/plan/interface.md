@@ -157,6 +157,12 @@ How it is built:
   markers are gone. Menu buttons are named "Open chapter menu" and "Close
   chapter menu"; the footer return is named "Return to the beginning of the
   harbour crossing". No loading, fallback or social image UI was added.
+- **Social image** (user request, 2026-10-04): a shared link shows the hero.
+  `posters/harbour-social.jpg` is the opening frame cropped to 1200×630,
+  the usual share-card shape, with the Clock Tower, 香港, the ferry, the
+  red sails and the skyline. It is a JPEG so chat apps that skip WebP
+  still show it. A visit to the page does not download it; only the
+  link preview does. The approved alt text is unchanged.
 
 ### 3.4 Nav bar and mobile menu
 
@@ -666,5 +672,11 @@ script 1.4 s, first 3D frame 1.7 s).
     `?entrance=slow` (each stage waits 0.5 s), `?entrance=hold` (stays on
     100%), `?entrance=fail` (start-up throws, shows the fallback handoff).
 - **Favicon:** `public/favicon.svg`, the sail mark on night navy.
-- **Later (Milestone 5):** a real snapshot of the hero frame replaces the
-  drawn fallback poster (option B, chosen for launch).
+- **Poster (user request, 2026-10-04):** the greybox drawing is replaced
+  by stills of the opening frame, `posters/harbour-poster-desktop.webp`
+  (1016×648, 59 KB) and `posters/harbour-poster-mobile.webp` (390×844,
+  24 KB). They include the in-scene 香港 and no interface chrome. A
+  normal visit does not request them. The inline script adds the images
+  on fallback or when the 12 s timer lifts the cover; without JavaScript
+  a `noscript` pair shows them. Phones use the portrait still (the same
+  `max-aspect-ratio: 4/5` switch as before).

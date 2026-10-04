@@ -111,8 +111,10 @@ choice, 2026-10-03; see "Film grade" in [`scene-city.md`](scene-city.md)).
 Build step 6 (measure and review) is done and Milestone 2 is closed
 (2026-10-03; see
 [`../milestone-2-review/REVIEW.md`](../milestone-2-review/REVIEW.md)).
-Carried forward: the phone frame-rate re-measure (Milestone 5) and the
-paper grain from the atmosphere brief (offered, not built).
+The iPhone speed check is closed (user, 2026-10-04: fine as it is). The
+colophon keeps "Created by Gavin Fung at HKAAA" (user, 2026-10-04).
+The paper grain is passed (user, 2026-10-04). The fallback poster is a
+still of the opening frame (user request, 2026-10-04; see interface 3.12).
 
 ## Foreground direction (user choice, 2026-10-03)
 
@@ -307,7 +309,7 @@ Stop for the user's review after each step, as in the grey-box.
 |---|---|
 | 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk, Clock Tower, IFC and wheel are already rebuilt from reference photos, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals, display fonts (the bauhinia tree is built in code, 2026-10-02). Also the user's stone railing (built in code with lanterns and tall lamps, 2026-10-02), promenade palms, wet paving tiles (built in code, 2026-10-02) and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
 | 4. Atmosphere, all chapters | Follow `ATMOSPHERE-EFFECTS-BRIEF.md`: clouds and local mist, ferry spray (tried and dropped, user choice, 2026-10-03), restrained searchlights, global print texture, chapter colour progression, and illustrated fireworks with smoke and embers. Local glows remain the baseline; a soft bloom is built (Milestone 2, part 3e, step 5; user choice, 2026-10-02). Coral clouds and the harbour mist are built (Milestone 2, part 3g; user request, 2026-10-02). |
-| 5. Copy and launch | Follow `FINAL-NARRATIVE-COPY.md` for the proposed final chapter, interface, footer, fallback and metadata wording. Add final poster images (a real snapshot of the hero frame replaces the drawn fallback poster, for loading and fallback; user choice, 2026-10-02), an entrance screen with real build progress, after Kage's technique (3.12; user request, 2026-10-02), a full performance pass on both iPhones, deployment. |
+| 5. Copy and launch | Follow `FINAL-NARRATIVE-COPY.md` for the proposed final chapter, interface, footer, fallback and metadata wording. Final poster images are stills of the opening frame (user request, 2026-10-04; they replace the drawn fallback poster, for fallback only — a normal visit does not load them). An entrance screen with real build progress, after Kage's technique (3.12; user request, 2026-10-02). A full performance pass on both iPhones (closed, user, 2026-10-04: fine). Deployment. |
 
 **Published early (user choice, 2026-10-02).** The work in progress is live at
 <https://gavinfung321.github.io/hongkong/> from the public repo
@@ -316,5 +318,5 @@ the HONG KONG wordmark, easy to type on a phone). Every push to `main`
 rebuilds the site (`.github/workflows/deploy.yml`), so the iPhone checks can
 use the live address. Before the first push, three bauhinia reference photos
 of unknown rights were removed from the whole history; they stay on the
-user's computer. Milestone 5 still owns the final launch (copy, posters,
-performance).
+user's computer. Milestone 5 still owns the final launch (copy and
+deployment). The poster stills and the phone speed check are done.

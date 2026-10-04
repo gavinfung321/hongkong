@@ -62,9 +62,12 @@ cloud ceiling (two layers in every chapter, wind drift; see
 forceful; the user declined a code-built bow foam too),
 the film grade, and the Milestone 2 review. The user approved 01 and
 raised the budgets (draw calls ≤ 220, code-drawn textures ≤ 32), so
-Milestone 2 is closed. Carried forward: the phone re-measure (Milestone
-5) and the paper grain from the atmosphere brief (offered, not built).
-No next task is set; ask the user which milestone (3, 4 or 5) comes next.
+Milestone 2 is closed. The phone re-measure is closed (user, 2026-10-04:
+fine). The colophon keeps "Created by Gavin Fung at HKAAA". The paper
+grain was passed. The fallback poster is a still of the opening frame
+(desktop and phone, loaded only when the 3D scene is unavailable). A
+shared link shows that same hero, cropped to 1200×630. No other next
+task is set.
 
 ## Fireworks: all three steps done (user choice, 2026-10-02)
 

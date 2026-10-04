@@ -159,6 +159,8 @@ a:focus-visible {
   inset: 0;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
 }
 
 .poster__art--portrait {
@@ -328,44 +330,6 @@ a:focus-visible {
   .poster__art--portrait {
     display: block;
   }
-}
-
-.poster__far {
-  fill: #241f3f;
-}
-
-.poster__skyline {
-  fill: #2e2a4a;
-}
-
-.poster__tower {
-  fill: #3a3452;
-}
-
-.poster__crown {
-  fill: var(--color-cream);
-}
-
-.poster__clock {
-  fill: var(--color-warm);
-}
-
-.poster__wheel {
-  fill: none;
-  stroke: #c2456a;
-  stroke-width: 3;
-}
-
-.poster__art--portrait .poster__wheel {
-  stroke-width: 1.5;
-}
-
-.poster__water {
-  fill: #15142b;
-}
-
-.poster__land {
-  fill: #191729;
 }
 
 /* Story (document-flow layout; also the fallback layout) */

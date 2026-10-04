@@ -15,6 +15,15 @@
       property="og:description"
       content="Cross Victoria Harbour through six cinematic chapters of water, vessels, landmarks and light."
     />
+    <meta property="og:image" content="https://gavinfung321.github.io/hongkong/posters/harbour-social.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Victoria Harbour at night, with the Clock Tower, a Star Ferry, red sails and the illuminated skyline of Central."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://gavinfung321.github.io/hongkong/posters/harbour-social.jpg" />
     <title>Victoria Harbour: A Night Crossing</title>
     <link rel="preload" href="/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/cormorant-garamond-latin-600.woff2" as="font" type="font/woff2" crossorigin />
@@ -29,8 +38,26 @@
     <script>
       (function (d) {
         d.classList.add('is-booting');
+        window.__vhShowPoster = function () {
+          var poster = document.querySelector('.poster');
+          if (!poster || poster.querySelector('.poster__art')) return;
+          [
+            ['poster__art poster__art--landscape', 'posters/harbour-poster-desktop.webp', 1016, 648],
+            ['poster__art poster__art--portrait', 'posters/harbour-poster-mobile.webp', 390, 844],
+          ].forEach(function (shot) {
+            var img = document.createElement('img');
+            img.className = shot[0];
+            img.alt = '';
+            img.width = shot[2];
+            img.height = shot[3];
+            img.decoding = 'async';
+            img.src = shot[1];
+            poster.appendChild(img);
+          });
+        };
         window.__vhBootTimer = setTimeout(function () {
           d.classList.remove('is-booting');
+          window.__vhShowPoster();
         }, 12000);
         var show = function () {
           d.classList.add('is-typeset');
@@ -60,38 +87,10 @@
     </div>
 
     <div class="poster" aria-hidden="true">
-      <svg
-        class="poster__art poster__art--landscape"
-        viewBox="0 0 1600 1000"
-        preserveAspectRatio="xMidYMax slice"
-        focusable="false"
-      >
-        <path class="poster__far" d="M0 520 L180 430 L360 470 L560 360 L760 440 L940 380 L1180 300 L1400 400 L1600 360 V560 H0 Z" />
-        <path class="poster__skyline" d="M560 560 V500 H600 V470 H650 V440 H700 V490 H760 V420 H800 V460 H860 V400 H900 V450 H960 V480 H1080 V430 H1110 V560 Z M1200 560 V420 H1240 V380 H1280 V440 H1330 V470 H1400 V500 H1460 V560 Z" />
-        <path class="poster__tower" d="M1120 560 V215 L1128 196 H1182 L1190 215 V560 Z" />
-        <rect class="poster__crown" x="1130" y="182" width="50" height="14" />
-        <circle class="poster__wheel" cx="1020" cy="532" r="28" />
-        <rect class="poster__water" x="0" y="560" width="1600" height="440" />
-        <path class="poster__land" d="M0 640 H520 V610 H0 Z" />
-        <path class="poster__tower" d="M140 615 V150 H240 V615 Z M155 150 V100 H225 V150 Z M170 100 A20 20 0 0 1 210 100 Z M188 80 H192 V60 H188 Z" />
-        <circle class="poster__clock" cx="190" cy="250" r="16" />
-      </svg>
-      <svg
-        class="poster__art poster__art--portrait"
-        viewBox="0 0 390 844"
-        preserveAspectRatio="xMidYMax slice"
-        focusable="false"
-      >
-        <path class="poster__far" d="M0 540 L60 500 L140 520 L220 470 L300 490 L390 460 V590 H0 Z" />
-        <path class="poster__skyline" d="M110 590 V560 H130 V545 H150 V530 H175 V555 H200 V535 H225 V560 H260 V545 H290 V590 Z" />
-        <path class="poster__tower" d="M316 590 V402 L320 394 H339 L343 402 V590 Z" />
-        <rect class="poster__crown" x="320" y="388" width="19" height="6" />
-        <circle class="poster__wheel" cx="296" cy="576" r="11" />
-        <rect class="poster__water" x="0" y="590" width="390" height="254" />
-        <path class="poster__land" d="M0 620 H150 V608 H0 Z" />
-        <path class="poster__tower" d="M24 612 V392 H70 V612 Z M30 392 V370 H64 V392 Z M37 370 A10 10 0 0 1 57 370 Z M46 360 H48 V348 H46 Z" />
-        <circle class="poster__clock" cx="47" cy="440" r="7" />
-      </svg>
+      <noscript>
+        <img class="poster__art poster__art--landscape" src="posters/harbour-poster-desktop.webp" alt="" width="1016" height="648" />
+        <img class="poster__art poster__art--portrait" src="posters/harbour-poster-mobile.webp" alt="" width="390" height="844" />
+      </noscript>
     </div>
 
     <canvas id="world" class="world" aria-hidden="true"></canvas>
