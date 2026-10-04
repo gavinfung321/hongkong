@@ -549,7 +549,12 @@ Serif TC 700). Copy regions widened for 03 desktop, 02 and 06 phones.
   `src/main.js` through `fireworks.setFooter()` in
   `src/scene/createFireworks.js`.
 - The 06 scene stays behind it. The gradient is near black from early in
-  the rise (user request, 2026-10-04: darker). On mobile the
+  the rise (user request, 2026-10-04: darker), then opened to a wash so
+  the bursts show through: about 80% black under the hairline, darker
+  toward the columns (user request, 2026-10-04). A cream hairline, the same
+  weight as the rules under the statement and above the bar, is the top
+  edge of the footer, just above "Return to the harbour" (user request,
+  2026-10-04; the dark band above it was removed the same day). On mobile the
   chapters and landmarks sit side by side with the colophon below, the
   landmark years on their own line, and the bottom bar stacks. The space
   above the return button on phones is tighter: 40 px of padding instead

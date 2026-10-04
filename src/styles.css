@@ -557,11 +557,22 @@ a:focus-visible {
 
 /* Footer: a statement, three columns and a bottom bar. */
 .site-footer {
-  padding: 96px max(var(--page-inset), env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom))
+  padding: 0 max(var(--page-inset), env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom))
     max(var(--page-inset), env(safe-area-inset-left));
   background: #07060e;
   color: var(--color-soft);
   font-size: 0.8125rem;
+}
+
+/* Closes the fireworks (user request, 2026-10-04): the same cream hairline
+   as the rules below, full width, in the dark band above the return. */
+.site-footer::before {
+  content: "";
+  display: block;
+  height: 1px;
+  margin: 0 calc(-1 * max(var(--page-inset), env(safe-area-inset-right))) 32px
+    calc(-1 * max(var(--page-inset), env(safe-area-inset-left)));
+  background: rgb(243 233 210 / 0.12);
 }
 
 .site-footer__return {
@@ -705,7 +716,7 @@ a:focus-visible {
   }
 
   .site-footer {
-    padding-top: 40px;
+    padding-top: 0;
   }
 
   .site-footer__return {
@@ -1427,7 +1438,7 @@ html:not(.is-enhanced) .vertical-text {
 
 /* The scene stays behind the footer, dimmed. */
 .is-enhanced .site-footer {
-  background: linear-gradient(to bottom, rgb(5 4 10 / 0.35), rgb(5 4 10 / 0.94) 120px, #07060e);
+  background: linear-gradient(to bottom, rgb(7 6 14 / 0.8), rgb(7 6 14 / 0.94) 42%, rgb(7 6 14 / 0.97));
 }
 
 /* The chapter layer leaves as the footer rises (--footer-in, siteFooter.js). */

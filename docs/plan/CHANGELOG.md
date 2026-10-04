@@ -6,6 +6,17 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **Footer wash** (user request, 2026-10-04). The footer background is no
+  longer solid: about 80% black under the hairline, darker toward the
+  columns, so the fireworks show through. Files: `src/styles.css`; plan:
+  `interface.md`.
+- **Footer line is the top edge** (user request, 2026-10-04). The dark band
+  above the closing hairline is gone; the line is the top of the footer.
+  Files: `src/styles.css`; plan: `interface.md`.
+- **Footer closing line** (user request, 2026-10-04). A cream hairline runs
+  the full width in the dark band above "Return to the harbour", matching
+  the rules already in the footer. Files: `src/styles.css`; plan:
+  `interface.md`.
 - **Working speed** (user request, 2026-10-04). No screenshots and no
   browser checks; the user reviews the page. A file tidy does not speed
   the site: only the bundle, fonts, and images the page requests do.
