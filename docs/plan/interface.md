@@ -12,7 +12,7 @@ depth comes from layers around the simple 3D:
 | Kage technique | Harbour version in this milestone |
 |---|---|
 | Painted 2D cutouts at the frame edges (grass, pine, wall) that move faster than the scene | The promenade railing as a painted cutout (frame 01) |
-| A giant wordmark inside the scene, with grass covering its feet | 香港 standing on the water in front of the scene, shaded toward its feet, sinking as you scroll |
+| A giant wordmark inside the scene, with grass covering its feet | 香港 fixed in the scene close to the camera, shaded toward its feet; the camera glides in on load and moves past it as you scroll |
 | Particles at several depths (red leaves, embers) | Bauhinia petals drifting across the whole site, gone for the fireworks (4.4) |
 | A big moon as the focal light | An original yellow moon behind the Peak ridge, drawn in code (3.9) |
 | Soft glow on the moon, lanterns and windows | Glow on lit windows, the Clock Tower faces and IFC's crown |
@@ -42,11 +42,16 @@ at the top. The wordmark needs a moment of its own first.
 - Chapter 01's copy shows from the moment the page loads, top-left at the top
   of the Clock Tower, together with the wordmark, logo, nav and scroll hint
   (user request, 2026-10-01). From the first scroll it rises and fades out in
-  step with the sinking wordmark, so 01's hold is scene only; links to 01 go
+  step with the fading wordmark, so 01's hold is scene only; links to 01 go
   to the top of the page. Other chapters' copy also leaves upward and arrives
   from below.
-- Scrolling through the hero sinks the wordmark. It is fully gone before the
-  01 copy starts fading in (progress p = 0.25).
+- Scrolling through the hero moves the camera past the wordmark, which fades.
+  It is fully gone before the 01 copy starts fading in (progress p = 0.25).
+- **Opening glide** (user choice, 2026-10-04, after Kage): when the page
+  loads at the top, the camera eases in from 6 m further back and 0.6 m
+  higher over 2.4 s as the loading screen lifts (`HERO.glide`,
+  `setGlide()` in `cameraRig.js`). Deep links and reduced motion start at
+  rest.
 - Deep links (`#chapter-01` … `#chapter-06`) and `?hold=` still land on each
   chapter's hold pose, unchanged.
 - Accessibility: the page gets one real `<h1>` in the hero, visually hidden
@@ -57,9 +62,17 @@ at the top. The wordmark needs a moment of its own first.
 
 Agreed with the user:
 
-- **Placement:** standing on the water, drawn in front of the whole scene
-  including the railing (user request, 2026-10-01, replacing "behind the
-  railing").
+- **Placement:** drawn in front of the whole scene including the railing
+  (user request, 2026-10-01, replacing "behind the railing").
+- **A fixed object, not a text effect** (user choice, 2026-10-04, after
+  Kage's hero word, technique only): it stays at one place in the world and
+  only the camera moves, so scrolling, the opening glide and the mouse
+  parallax all shift it like part of the scene. It floats 16 m ahead of the
+  camera on desktop and 25 m on phones, close enough for those moves to
+  show; its screen position and size at rest are authored as before and
+  converted to that depth (`depth` in the `HERO` block, `place()` in
+  `createWordmark.js`). Until 2026-10-04 it stood on the water 47 m out on
+  desktop and 190 m on phones, and slid down out of the frame by script.
 - **Height:** raised over the boats (user request, 2026-10-02: "move higher,
   it's ok to cover the boats"). Its feet stand at 74% of the screen height on
   desktop (was 88%) and 73% on mobile (was 80%), so it now spans roughly
@@ -71,22 +84,24 @@ Agreed with the user:
   sky between the copy and the moon: feet at 42%, about 78% of the width,
   spanning roughly 27–43%, so the moon rises just below it and the tower,
   junk, moon and IFC all show. Not the exact middle (50%), which would cover
-  the moon and the tower and IFC tops. It sits 190 m ahead of the camera,
-  the same distance the water placement had, so its size, haze and the
-  first-scroll sink and fade are unchanged (`depth` in the `HERO` block,
-  `place()` in `createWordmark.js`). Desktop still stands on the water.
+  the moon and the tower and IFC tops. It now floats 25 m ahead (see
+  Placement above).
   On shorter phone screens (a browser's toolbars showing, small phones)
   01's copy reached down over the top of 香港 (user request, 2026-10-03):
   the word now keeps 14 px clear below the copy, its feet moving down to
   48% at most (over the top of the moon), then shrinking instead (`clear`
   and `maxFoot` in the `HERO` block). At 390×844 it is as before.
-- **Exit:** from the first scroll it moves down out of the frame and fades,
-  while the camera pushes in (chapter 01's `holdDolly`, which now starts at
-  the top of the page instead of at the hold). Both start immediately, with no
-  dead zone.
+- **Exit:** from the first scroll the camera pushes in toward it (chapter
+  01's `holdDolly`, which starts at the top of the page). The word, with
+  01's copy, stays whole for the first 15% of the way to
+  `HERO.leaveEnd`, so the approach reads, then fades, gone by 90% (80% on
+  phones): about 70% of a screen of scrolling (user choice, 2026-10-04: it
+  was gone by 60% and 40%, about half and a third of a screen, which ended
+  before the camera visibly neared it). It no longer slides by script
+  (`fadeStart` and `fadeEnd` in the `HERO` block).
 - **Mobile:** stays horizontal (not stacked) and smaller, about 78% of the
   screen width.
-- **Reduced motion:** no sinking; it simply fades out when you leave the hero.
+- **Reduced motion:** no glide; it simply fades out when you leave the hero.
 
 How it is built:
 
@@ -109,7 +124,7 @@ How it is built:
   numbers **01–06** that stood beneath it on desktop are removed (user
   request, 2026-10-02): the nav bar, menu and side pager already link every
   chapter. The notes on the numbers below are history.
-- The hint shows only in the hero and fades out as the wordmark sinks. Its line
+- The hint shows only in the hero and fades out as the hero ends. Its line
   loops: a bright stroke draws in over a faint track and leaves to the right
   (user request, 2026-10-01).
 - The whole counter shows only in the hero and fades out once chapter 01 begins

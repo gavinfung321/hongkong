@@ -248,7 +248,7 @@ Stop for the user's review after each step, as in the grey-box.
 1. **Shell structure.** Hero section, hidden `<h1>`, nav bar, mobile menu,
    counter, logo. "Return to the harbour" goes to the hero. Move the copy regions down and
    re-run the checks for all twelve frames.
-2. **Wordmark and hint.** 香港 in the scene, sinking with scroll. "Scroll to
+2. **Wordmark and hint.** 香港 fixed in the scene, fading as the camera moves past. "Scroll to
    cross" hint. Reduced-motion fade. Desktop and mobile.
 3. **Vertical Chinese text.** 維港之夜 and the per-chapter labels.
 4. **Cursor parallax.** Then re-check composition and clearance at the

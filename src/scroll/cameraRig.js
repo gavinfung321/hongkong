@@ -127,6 +127,13 @@ export function createCameraRig(camera, chapters, { hold }) {
     aspect = value;
   }
 
+  // The opening glide's offset this frame: metres back along the view and up.
+  const glide = { back: 0, rise: 0 };
+  function setGlide(back, rise) {
+    glide.back = back;
+    glide.rise = rise;
+  }
+
   // x, y in -1..1 (+x right, +y up).
   function setParallax(x, y) {
     parallax.x = x;
@@ -174,6 +181,10 @@ export function createCameraRig(camera, chapters, { hold }) {
 
     if (!stepped) {
       holdDollyOffset(p, segment, dolly);
+      if (glide.back || glide.rise) {
+        direction.set(target.x - camera.position.x, 0, target.z - camera.position.z).normalize();
+        dolly.addScaledVector(direction, -glide.back).y += glide.rise;
+      }
       camera.position.add(dolly);
       target.add(dolly);
       parallaxOffset(segment, shift);
@@ -195,6 +206,7 @@ export function createCameraRig(camera, chapters, { hold }) {
     setBreakpoint,
     setAspect,
     setParallax,
+    setGlide,
     setStart,
     update,
     lookDirection,
