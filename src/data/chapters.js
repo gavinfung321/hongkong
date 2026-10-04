@@ -46,7 +46,7 @@ export const SCROLL = {
   // to the next chapter (exactly 1) does too (transition review, 2026-10-03).
   jumpThreshold: 0.9,
   // Links and reloads land this share into a chapter's dwell, once its title
-  // and first beat are in (copyLayer.js STORY).
+  // (and in 02 the print) are in (copyLayer.js).
   dwellLand: 0.24,
 };
 
@@ -251,9 +251,10 @@ export const chapters = [
       // petals 0.3: few petals out on the open water (atmospheric depth
       // Priority F, user choice, 2026-10-04). buoy: the channel buoy
       // (atmospheric depth Priority 2, user choice, 2026-10-04;
-      // createBuoy.js).
-      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 0.8, seaMist: 0, haze: 1, searchlights: 0, buoy: 1 },
-      mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 0.8, seaMist: 0, haze: 1, searchlights: 0, buoy: 1 },
+      // createBuoy.js). lens: a few quiet out-of-focus light discs
+      // (user choice, 2026-10-04; lensBusy stays 0, so 05's denser pack waits).
+      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 0.8, seaMist: 0, haze: 1, searchlights: 0, buoy: 1, lens: 1 },
+      mobile: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 0.8, seaMist: 0, haze: 1, searchlights: 0, buoy: 1, lens: 1 },
     },
     fogDensity: 0.00045,
     // The ferry holds its place on the water through the hold (no drift on
@@ -330,8 +331,8 @@ export const chapters = [
     // Phones: moon 0.6, as it sits right behind the copy's last line
     // (Priority 3 balance, user choice, 2026-10-04).
     visibility: {
-      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 1, seaMist: 0, haze: 0.7, searchlights: 0 },
-      mobile: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 1, seaMist: 0, haze: 0.7, searchlights: 0, moon: 0.6 },
+      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 1, seaMist: 0, haze: 0.7, searchlights: 0, lens: 1 },
+      mobile: { ferry: 1, junk: 1, ifc: 1, wheel: 0, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.3, city: 0.4, mist: 1, seaMist: 0, haze: 0.7, searchlights: 0, moon: 0.6, lens: 1 },
     },
     fogDensity: 0.00063,
     vessels: {
@@ -377,11 +378,14 @@ export const chapters = [
       // city: the towers around IFC at 60%, so IFC leads (user choice, 2026-10-02).
       // accents: LED crowns, strips and the four landmarks down to a quarter
       // of that; reflections: IFC's and the wheel's columns twice as long and
-      // bright (user choices, 2026-10-03). bollard: the harbour-edge
-      // bollard and chain (atmospheric depth Priority 2, user choice,
-      // 2026-10-04; createBollard.js).
-      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, accents: 0.25, reflections: 2, mist: 0.4, seaMist: 0, searchlights: 1, bollard: 1 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, accents: 0.25, reflections: 2, mist: 0.4, seaMist: 0, searchlights: 0.7, bollard: 1 },
+      // bright (user choices, 2026-10-03). The harbour-edge bollard and chain
+      // were removed (user request, 2026-10-04). 05's own layers (user
+      // choices, 2026-10-04; default 0 elsewhere): the corner branch
+      // (desktop only), the lens layer (lensBusy fills 05's denser pack;
+      // 03–04 keep three quiet discs), the cloud band, the light wave and
+      // the harbour boat.
+      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, accents: 0.25, reflections: 2, mist: 0.4, seaMist: 0, searchlights: 1, branch: 1, lens: 1, lensBusy: 1, cloudBand: 1, wave: 1, boat: 1 },
+      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, accents: 0.25, reflections: 2, mist: 0.4, seaMist: 0, searchlights: 0.7, branch: 0, lens: 1, lensBusy: 1, cloudBand: 1, wave: 1, boat: 1 },
     },
     fogDensity: 0.00045,
     // The ferry and junk are hidden from here on. The ferry keeps behind the

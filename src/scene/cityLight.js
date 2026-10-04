@@ -1,6 +1,24 @@
-import { Color } from 'three';
+import { CanvasTexture, Color, LinearFilter, Matrix4 } from 'three';
 import { PALETTE } from './palette.js';
 import { WORLD } from '../data/world.js';
+
+// 05's touch light (user choice, 2026-10-04): a small map of the screen
+// that the pointer paints and that fades (cityTouch.js). A few windows and
+// curtain-wall rooms switch on where it is bright. It is looked up by world
+// position through the main camera (uTouchMatrix), so the water's
+// reflections light the same offices.
+const TOUCH_SIZE = 128;
+// Kept subtle (user request, 2026-10-04: "way too much"): at most `share`
+// of the dark offices or rooms under the pointer switch on, at `level` of
+// a lit office's brightness.
+export const TOUCH_OFFICES = { share: 0.25, level: 0.5 };
+const touchCanvas = document.createElement('canvas');
+touchCanvas.width = TOUCH_SIZE;
+touchCanvas.height = TOUCH_SIZE;
+const touchTexture = new CanvasTexture(touchCanvas);
+touchTexture.minFilter = LinearFilter;
+touchTexture.generateMipmaps = false;
+export const cityTouchMap = { canvas: touchCanvas, texture: touchTexture };
 
 // Light the city throws on its own towers (user choice, 2026-10-02, the
 // lighting pass): warm street light washing up the lowest floors, fading
@@ -19,11 +37,26 @@ export const cityLight = {
   uSkyHigh: { value: new Color(SKY.high) },
   uSkyGain: { value: SKY.gain },
   uSkyFloor: { value: SKY.floor },
+  uTouchMap: { value: touchTexture },
+  uTouchMatrix: { value: new Matrix4() },
+  uTouchLevel: { value: 0 },
 };
 
 // streetLight( albedo, world y ): the street's warm light on a wall.
 // skyInGlass( view normal, view direction, world y ): the sky it mirrors.
+// cityTouch( world position ): the touch light there, 0–1.
 export const cityLightGlsl = `
+uniform sampler2D uTouchMap;
+uniform mat4 uTouchMatrix;
+uniform float uTouchLevel;
+float cityTouch( vec3 world ) {
+  if ( uTouchLevel <= 0.0 ) return 0.0;
+  vec4 c = uTouchMatrix * vec4( world, 1.0 );
+  if ( c.w <= 0.0 ) return 0.0;
+  vec2 uv = c.xy / c.w * 0.5 + 0.5;
+  if ( uv.x < 0.0 || uv.y < 0.0 || uv.x > 1.0 || uv.y > 1.0 ) return 0.0;
+  return texture2D( uTouchMap, uv ).r * uTouchLevel;
+}
 uniform vec3 uStreetColor;
 uniform float uStreetBase;
 uniform float uStreetHeight;

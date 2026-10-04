@@ -34,7 +34,8 @@ import { seededRandom } from './random.js';
 //          darkening: thin in the open air, gathered round the tower's
 //          floodlit foot and the promenade lamps, and a few large soft ones
 //          close to the lens, out of focus, which come with the 1915. They
-//          brighten, and the spare ones join, with the print. The desktop
+//          brighten, and the spare ones join, with the print (now with the
+//          words). The desktop
 //          mouse stirs them (pointerStir.js).
 //   steam: two drifts of railway steam crossing the tower's foot, cut from
 //          the harbour mist artwork, while the 1915 print shows.

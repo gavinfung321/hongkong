@@ -251,8 +251,11 @@ all six.
        28 cable spokes from each side of a wide hub, a glowing white hub disc
        with a soft halo, 42 violet lit gondolas hung outside the rim and
        always upright, four white tubular legs in A-frames front and back, and
-       a boarding platform with five white tents. It turns once every 4
-       minutes in continuous mode; in reduced motion it holds still. No
+       a boarding platform with eight white tents, two kiosks, three short
+       lamps and strings of warm bulbs (user request, 2026-10-04: denser
+       plaza, not a fairground). It turns once every 4 minutes in continuous
+       mode; in 05, hovering the wheel speeds that to about 15 seconds (16×;
+       user request, 2026-10-04); in reduced motion it holds still. No
        sponsor banners or lettering.
      - **Central Ferry Piers:** five pavilions on decks out over the water
        between IFC and the east: a warm lit hall behind a pale colonnade

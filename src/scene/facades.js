@@ -1,6 +1,6 @@
 import { CanvasTexture, MeshLambertMaterial, RepeatWrapping, SRGBColorSpace } from 'three';
 import { seededRandom } from './random.js';
-import { cityLight, cityLightGlsl } from './cityLight.js';
+import { TOUCH_OFFICES, cityLight, cityLightGlsl } from './cityLight.js';
 
 // Painted curtain-wall facades for the main towers, drawn in code (user
 // choice, 2026-10-02). Lit floors read as glass bands behind thin mullions,
@@ -126,7 +126,7 @@ export function curtainWall({ bays, floors, bay, floor, lit, coolShare, seed, le
   for (let b = 0; b < bays; b++) base.fillRect(b * PX, 0, MULLION, height);
 
   const repeat = [1 / (bays * bay), 1 / (floors * floor)];
-  return { map: texture(colour, repeat), emissiveMap: texture(glow, repeat) };
+  return { map: texture(colour, repeat), emissiveMap: texture(glow, repeat), rooms: true };
 }
 
 // Bank of China Tower: `modules` square facade modules stacked, UVs one per
@@ -315,13 +315,16 @@ export const facadeBias = { value: 0 };
 // neon: optional { map, color, repeat }, a line mask (red channel) glowing in
 // `color`, repeating `repeat` times up the colour map's tile.
 // The street light and sky reflection (cityLight.js) are added on top.
-export function facadeMaterial({ map, emissiveMap }, glow, { neon } = {}) {
+// Curtain walls (`rooms`) also switch a few dark rooms on under 05's touch
+// light: each bay of each floor is a room, its glass the rows GLASS of the
+// floor right of the mullion.
+export function facadeMaterial({ map, emissiveMap, rooms = false }, glow, { neon } = {}) {
   const material = new MeshLambertMaterial({ color: 0xffffff, map, emissive: 0xffffff, emissiveMap, emissiveIntensity: glow });
   material.onBeforeCompile = (shader) => {
     shader.uniforms.uFacadeBias = facadeBias;
     Object.assign(shader.uniforms, cityLight);
     shader.vertexShader = shader.vertexShader
-      .replace('#include <common>', '#include <common>\nvarying float vFacadeY;')
+      .replace('#include <common>', '#include <common>\nvarying vec3 vFacadeWorld;')
       .replace(
         '#include <begin_vertex>',
         `#include <begin_vertex>
@@ -329,14 +332,34 @@ export function facadeMaterial({ map, emissiveMap }, glow, { neon } = {}) {
         #ifdef USE_INSTANCING
           facadeWorld = instanceMatrix * facadeWorld;
         #endif
-        vFacadeY = ( modelMatrix * facadeWorld ).y;`,
+        vFacadeWorld = ( modelMatrix * facadeWorld ).xyz;`,
       );
     let emissive = `vec4 facadeGlow = texture2D( emissiveMap, vEmissiveMapUv, uFacadeBias );
       totalEmissiveRadiance *= facadeGlow.rgb;
       float facadeLit = max( max( facadeGlow.r, facadeGlow.g ), facadeGlow.b );
-      totalEmissiveRadiance += streetLight( diffuseColor.rgb, vFacadeY );
-      totalEmissiveRadiance += skyInGlass( normal, normalize( vViewPosition ), vFacadeY ) * ( 1.0 - smoothstep( 0.05, 0.35, facadeLit ) );`;
-    let head = `uniform float uFacadeBias;\nvarying float vFacadeY;\n${cityLightGlsl}`;
+      totalEmissiveRadiance += streetLight( diffuseColor.rgb, vFacadeWorld.y );
+      totalEmissiveRadiance += skyInGlass( normal, normalize( vViewPosition ), vFacadeWorld.y ) * ( 1.0 - smoothstep( 0.05, 0.35, facadeLit ) );`;
+    if (rooms) {
+      emissive += `
+      {
+        float touch = cityTouch( vFacadeWorld );
+        if ( touch > 0.0 ) {
+          vec2 texel = vEmissiveMapUv * vec2( textureSize( emissiveMap, 0 ) ) / ${PX.toFixed(1)};
+          vec2 room = floor( texel );
+          vec2 local = fract( texel );
+          float fromTop = ( 1.0 - local.y ) * ${PX.toFixed(1)};
+          float glassRows = step( ${GLASS[0].toFixed(1)}, fromTop ) * step( fromTop, ${GLASS[1].toFixed(1)} );
+          float pane = step( ${(MULLION / PX).toFixed(3)}, local.x ) * glassRows;
+          float on = step( 0.02 + ${(1 / TOUCH_OFFICES.share).toFixed(2)} * facadeHash( room + 3.7 ), touch ) * pane * ( 1.0 - smoothstep( 0.05, 0.3, facadeLit ) ) * ${TOUCH_OFFICES.level.toFixed(2)};
+          vec3 office = mix( vec3( 1.0, 0.76, 0.42 ), vec3( 1.0, 0.9, 0.74 ), step( 0.75, facadeHash( room.yx + 9.1 ) ) );
+          totalEmissiveRadiance += office * on * ( 0.75 + 0.25 * facadeHash( room + 1.3 ) );
+        }
+      }`;
+    }
+    let head = `uniform float uFacadeBias;\nvarying vec3 vFacadeWorld;\n${cityLightGlsl}
+float facadeHash( vec2 p ) {
+  return fract( sin( dot( p, vec2( 127.1, 311.7 ) ) ) * 43758.5453 );
+}`;
     if (neon) {
       Object.assign(shader.uniforms, {
         uNeonMap: { value: neon.map },
@@ -351,7 +374,7 @@ export function facadeMaterial({ map, emissiveMap }, glow, { neon } = {}) {
       .replace('#include <map_fragment>', 'diffuseColor *= texture2D( map, vMapUv, uFacadeBias );')
       .replace('#include <emissivemap_fragment>', emissive);
   };
-  material.customProgramCacheKey = () => (neon ? 'facade-neon' : 'facade');
+  material.customProgramCacheKey = () => `facade${neon ? '-neon' : ''}${rooms ? '-rooms' : ''}`;
   return material;
 }
 

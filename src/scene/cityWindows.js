@@ -1,5 +1,5 @@
 import { Color } from 'three';
-import { cityLight, cityLightGlsl } from './cityLight.js';
+import { TOUCH_OFFICES, cityLight, cityLightGlsl } from './cityLight.js';
 
 // Bays per run of a lit floor strip, once single bays are too narrow to draw:
 // the fade to the wall's average is measured at this width.
@@ -168,9 +168,14 @@ export function addCityWindows(material, options = {}) {
             float runEdge = smoothstep( 0.0, wr, fr ) * smoothstep( 0.0, wr, 1.0 - fr );
             float busy = 0.25 + 1.5 * cityHash( vec2( floor( cell.y / ${glsl(FLOOR_GROUP)} ), 9.1 ) + seed * 0.53 );
             vec2 office = vec2( run, cell.y );
-            float officeOn = step( cityHash( office + seed * 0.137 ), density * busy * ${glsl((1 - LONE) / OFFICE_ON)} );
+            // 05's touch light switches a few offices on, at part brightness
+            // (cityLight.js, TOUCH_OFFICES).
+            float touch = cityTouch( vCityPos );
+            float lit = step( cityHash( office + seed * 0.137 ), density * busy * ${glsl((1 - LONE) / OFFICE_ON)} );
+            float touched = step( 0.02 + ${glsl(1 / TOUCH_OFFICES.share)} * cityHash( office + seed * 0.613 + 21.7 ), touch );
+            float officeOn = max( lit, touched );
             vec3 officeLight = mix( uCityWarm, uCityCool, step( 1.0 - uCityCoolShare, cityHash( office.yx + seed ) ) ) *
-              ( 0.5 + 0.5 * cityHash( office + 7.7 ) );
+              ( 0.5 + 0.5 * cityHash( office + 7.7 ) ) * mix( ${glsl(TOUCH_OFFICES.level)}, 1.0, lit );
             float windowOn = officeOn * step( cityHash( cell + seed * 0.211 + 4.1 ), ${glsl(OFFICE_ON)} );
             float lone = step( cityHash( cell + seed * 0.137 + 11.3 ), density * ${glsl(LONE)} ) * ( 1.0 - windowOn );
             vec3 loneLight = mix( uCityWarm, uCityCool, step( 1.0 - uCityCoolShare, cityHash( cell.yx + seed ) ) ) *
@@ -186,7 +191,7 @@ export function addCityWindows(material, options = {}) {
             vec3 strips = officeLight * officeOn * strip * norm;
             // 0.3 window area × 0.75 mean brightness, lifted: a true average
             // of the dots reads dimmer than the dots themselves.
-            vec3 average = mix( uCityWarm, uCityCool, uCityCoolShare ) * min( density, 1.0 ) * uCityGlow;
+            vec3 average = mix( uCityWarm, uCityCool, uCityCoolShare ) * max( min( density, 1.0 ), touch * ${glsl(TOUCH_OFFICES.share * TOUCH_OFFICES.level)} ) * uCityGlow;
             float bays = smoothstep( 0.2, 0.5, w0.x );
             float far = smoothstep( 0.2, 0.5, max( w0.y, w0.x / ${RUN.toFixed(1)} ) );
             totalEmissiveRadiance += mix( mix( detail, strips, bays ), average, far ) * uCityStrength;

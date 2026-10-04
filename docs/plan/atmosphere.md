@@ -72,6 +72,8 @@ The site should feel like a humid, cinematic Victoria Harbour evening:
 - IFC does not emit a beam, so its crown remains the primary landmark light.
 - Phones use fewer or weaker beams.
 - Searchlights disappear before the fireworks chapter.
+- Each beam sweeps on its own period. They do not lean toward the cursor
+  (user request, 2026-10-04).
 
 ### Fireworks
 

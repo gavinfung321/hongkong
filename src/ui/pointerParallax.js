@@ -8,14 +8,17 @@ export function createPointerParallax() {
   const target = { x: 0, y: 0 };
   const value = { x: 0, y: 0 };
   const clamp = (v) => Math.max(-1, Math.min(1, v));
+  let inside = false;
 
   window.addEventListener('pointermove', (event) => {
     if (event.pointerType !== 'mouse') return;
+    inside = true;
     target.x = clamp((event.clientX / window.innerWidth) * 2 - 1);
     target.y = clamp(1 - (event.clientY / window.innerHeight) * 2);
   }, { passive: true });
   // Drifts back to the authored pose when the pointer leaves the window.
   document.documentElement.addEventListener('pointerleave', () => {
+    inside = false;
     target.x = 0;
     target.y = 0;
   });
@@ -31,6 +34,11 @@ export function createPointerParallax() {
     update,
     get enabled() {
       return fine.matches;
+    },
+    // Undamped pointer, or null when the mouse is off the page. Used to
+    // test hits (the wheel in 05) without the parallax lag.
+    get pointer() {
+      return inside ? target : null;
     },
   };
 }

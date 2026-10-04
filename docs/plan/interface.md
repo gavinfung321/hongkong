@@ -11,9 +11,9 @@ depth comes from layers around the simple 3D:
 
 | Kage technique | Harbour version in this milestone |
 |---|---|
-| Painted 2D cutouts at the frame edges (grass, pine, wall) that move faster than the scene | The promenade railing as a painted cutout (frame 01) |
+| Painted 2D cutouts at the frame edges (grass, pine, wall) that move faster than the scene | The promenade railing as a painted cutout (frame 01); in 05 a bauhinia sprig in the top-right corner (desktop) |
 | A giant wordmark inside the scene, with grass covering its feet | 香港 fixed in the scene close to the camera, shaded toward its feet; the camera glides in on load and moves past it as you scroll |
-| Particles at several depths (red leaves, embers) | Bauhinia petals drifting across the whole site, gone for the fireworks (4.4) |
+| Particles at several depths (red leaves, embers) | Bauhinia petals drifting across the whole site, gone for the fireworks (4.4); in 03–04 a few quiet out-of-focus light discs; in 05 more discs and petals just in front of the lens |
 | A big moon as the focal light | An original yellow moon behind the Peak ridge, drawn in code (3.9) |
 | Soft glow on the moon, lanterns and windows | Glow on lit windows, the Clock Tower faces and IFC's crown |
 | A ring that trails the mouse pointer | An original cursor ring, desktop only (3.10) |

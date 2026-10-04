@@ -76,8 +76,8 @@ export function createSearchlights() {
   // Leans the beam to the share `t` (0–1) of its sweep range.
   function aim(beam, t) {
     const [from, to] = beam.spec.lean;
-    const lean = MathUtils.degToRad(MathUtils.lerp(from, to, t));
-    beam.mesh.material.uniforms.uDir.value.set(Math.sin(lean), Math.cos(lean), -SEARCHLIGHTS.recede).normalize();
+    const angle = MathUtils.degToRad(MathUtils.lerp(from, to, t));
+    beam.mesh.material.uniforms.uDir.value.set(Math.sin(angle), Math.cos(angle), -SEARCHLIGHTS.recede).normalize();
   }
 
   function apply() {

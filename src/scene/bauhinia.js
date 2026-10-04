@@ -65,44 +65,44 @@ const FALLING = { count: 18, size: [0.13, 0.2], landing: 0.2 };
 
 const up = new Vector3(0, 1, 0);
 
+// One branch and its forks down to the twigs, added to skeleton.branches
+// and skeleton.tips.
+function branch(skeleton, random, start, dir, length, radius, level) {
+  const end = start.clone().addScaledVector(dir, length);
+  // Outer branches arch over and droop at their ends.
+  end.y -= length * 0.12 * (level - 1);
+  const middle = start.clone().addScaledVector(dir, length * 0.5).addScaledVector(up, length * 0.12);
+  skeleton.branches.push({ curve: new QuadraticBezierCurve3(start, middle, end), radius: [radius, radius * SHRINK], level });
+  const heading = end.clone().sub(middle).normalize();
+  if (level === LEVELS) {
+    skeleton.tips.push({ position: end, dir: heading });
+    return;
+  }
+  for (let i = 0; i < FORKS[level + 1]; i++) {
+    const axis = new Vector3(random() - 0.5, random() - 0.5, random() - 0.5).cross(heading).normalize();
+    const turn = new Quaternion().setFromAxisAngle(axis, 0.35 + random() * 0.45);
+    const next = heading.clone().applyQuaternion(turn);
+    next.y = next.y * 0.7 + 0.12;
+    branch(skeleton, random, end, next.normalize(), length * SHRINK * (0.85 + random() * 0.3), radius * SHRINK, level + 1);
+  }
+}
+
 // The skeleton: quadratic segments with radii, and the twig tips.
 function grow(random) {
-  const branches = [];
-  const tips = [];
   const trunkTop = new Vector3(TRUNK.lean, TRUNK.height, 0);
-  branches.push({
+  const skeleton = { branches: [], tips: [], trunkTop };
+  skeleton.branches.push({
     curve: new QuadraticBezierCurve3(new Vector3(), new Vector3(TRUNK.lean * 0.15, TRUNK.height * 0.6, 0), trunkTop),
     radius: [TRUNK.base, TRUNK.top],
     level: 0,
   });
-
-  function branch(start, dir, length, radius, level) {
-    const end = start.clone().addScaledVector(dir, length);
-    // Outer branches arch over and droop at their ends.
-    end.y -= length * 0.12 * (level - 1);
-    const middle = start.clone().addScaledVector(dir, length * 0.5).addScaledVector(up, length * 0.12);
-    branches.push({ curve: new QuadraticBezierCurve3(start, middle, end), radius: [radius, radius * SHRINK], level });
-    const heading = end.clone().sub(middle).normalize();
-    if (level === LEVELS) {
-      tips.push({ position: end, dir: heading });
-      return;
-    }
-    for (let i = 0; i < FORKS[level + 1]; i++) {
-      const axis = new Vector3(random() - 0.5, random() - 0.5, random() - 0.5).cross(heading).normalize();
-      const turn = new Quaternion().setFromAxisAngle(axis, 0.35 + random() * 0.45);
-      const next = heading.clone().applyQuaternion(turn);
-      next.y = next.y * 0.7 + 0.12;
-      branch(end, next.normalize(), length * SHRINK * (0.85 + random() * 0.3), radius * SHRINK, level + 1);
-    }
-  }
-
   for (let i = 0; i < LIMBS.count; i++) {
     const azimuth = ((i + random() * 0.5) / LIMBS.count) * Math.PI * 2;
     const rise = 0.55 + random() * 0.45;
     const dir = new Vector3(Math.cos(azimuth) + LIMBS.bias, rise, Math.sin(azimuth)).normalize();
-    branch(trunkTop, dir, LIMBS.length * (0.85 + random() * 0.3), LIMBS.radius, 1);
+    branch(skeleton, random, trunkTop, dir, LIMBS.length * (0.85 + random() * 0.3), LIMBS.radius, 1);
   }
-  return { branches, tips, trunkTop };
+  return skeleton;
 }
 
 function tube(curve, [r0, r1], shade) {
@@ -295,11 +295,11 @@ function addCardShader(material, time, soft) {
 
 // In the tree's local frame, so the wind is turned back by its yaw. Returns
 // the mesh, its material and step(time).
-function fallingPetals(spawns, random, { yaw, scale, height }) {
+function fallingPetals(spawns, random, { yaw, scale, height, count = FALLING.count }) {
   const wind = WIND.clone().applyAxisAngle(up, -yaw).divideScalar(scale);
   const landing = (FALLING.landing - height) / scale;
   const material = new MeshBasicMaterial({ map: petalTexture(), transparent: true, side: DoubleSide, depthWrite: false });
-  const mesh = new InstancedMesh(new PlaneGeometry(...PETAL_CARD), material, FALLING.count);
+  const mesh = new InstancedMesh(new PlaneGeometry(...PETAL_CARD), material, count);
   mesh.frustumCulled = false;
   mesh.renderOrder = 3;
   mesh.userData.noProbe = true;
@@ -307,7 +307,7 @@ function fallingPetals(spawns, random, { yaw, scale, height }) {
   const colour = new Color();
   const petals = [];
   const launch = (position) => position.copy(spawns[Math.floor(random() * spawns.length)]);
-  for (let i = 0; i < FALLING.count; i++) {
+  for (let i = 0; i < count; i++) {
     mesh.setColorAt(i, colour.setHex(COLOURS[Math.floor(random() * COLOURS.length)]));
     const petal = {
       position: launch(new Vector3()),
@@ -389,6 +389,46 @@ export function createBauhinia({ position, yaw = 0, scale = 1, seed = 5, viewer 
   return {
     group,
     materials: [bark, leafMaterial, falling.material],
+    update(seconds) {
+      time.value = seconds;
+      falling.step(seconds);
+    },
+  };
+}
+
+// A single flowering branch of the same tree, for a frame's corner (05,
+// createCornerBranch.js). Local frame: it grows from the origin toward +x,
+// arching and drooping; +y is up. `viewer`: a local point the flowers turn
+// toward. A few petals leave its flowers and fall `fall` metres (local)
+// before starting again, carried toward +x. Returns the group, the faded
+// materials, its reach along x, and update(time).
+const SPRIG = { length: 3.2, radius: 0.07, rise: -0.2, petals: 6, fall: 5 };
+
+export function createBauhiniaBranch({ seed = 17, viewer = null } = {}) {
+  const random = seededRandom(seed);
+  const time = { value: 0 };
+  // The crown's centre sits below and behind the middle of the branch, so
+  // its leaves face up and out.
+  const skeleton = { branches: [], tips: [], trunkTop: new Vector3(-0.6, -2.6, 0) };
+  branch(skeleton, random, new Vector3(), new Vector3(1, SPRIG.rise, 0.12).normalize(), SPRIG.length, SPRIG.radius, 2);
+
+  const bark = new MeshLambertMaterial({ vertexColors: true, transparent: true });
+  const wood = new Mesh(mergeGeometries(skeleton.branches.map(({ curve, radius }) => tube(curve, radius, 0.9))), bark);
+  wood.renderOrder = 2;
+  const cards = foliage(skeleton, random);
+  const { leaves, leafTwin, material: leafMaterial } = foliageMeshes(cards, random, time, { viewer });
+  const woodTwin = depthTwin(wood, new MeshBasicMaterial(DEPTH_ONLY));
+  const spawns = cards.filter(({ kind }) => kind === 'flower').map(({ position: p }) => p);
+  // Turned half round, so the harbour wind carries them toward +x.
+  const falling = fallingPetals(spawns, random, { yaw: Math.PI, scale: 1, height: SPRIG.fall, count: SPRIG.petals });
+
+  const group = new Group();
+  group.add(woodTwin, leafTwin, wood, leaves, falling.mesh);
+  const reach = Math.max(...cards.map(({ position: p }) => p.x));
+  return {
+    group,
+    materials: [bark, leafMaterial, falling.material],
+    reach,
     update(seconds) {
       time.value = seconds;
       falling.step(seconds);

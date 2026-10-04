@@ -6,6 +6,42 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **02 print with the words; quiet lens discs in 03 and 04** (user
+  requests and choices, 2026-10-04). 02's 1915 print, timeline, steam
+  and spare dust now fade in with the title and beats (they used to wait
+  for half the extra hold). 03 and 04 get about three small, dim
+  out-of-focus light discs in front of the camera; 05 still has the
+  denser pack. Files: `src/ui/copyLayer.js`, `src/styles.css`,
+  `src/data/chapters.js`, `src/scene/createLensBokeh.js`, `src/main.js`,
+  `src/scene/createStoryLayers.js`; plan: `narrative-spine.md`,
+  `interface.md`.
+- **05 wheel hover actually reads** (user request, 2026-10-04). The 4×
+  boost was too slow to see, and the hit test used a stale camera
+  matrix plus a circle that missed the tall disc. Hover now matches
+  the wheel on screen and speeds the turn 16× (~15 s per revolution).
+  Files: `src/scene/createIsland.js`, `src/main.js`; plan:
+  `scene-models.md`, `narrative-spine.md`.
+- **05 City of Light: layers around Two IFC** (user requests and choices,
+  2026-10-04). Copy stays one sourced sentence about Two IFC (same
+  left-column layout). The height line, the bollard and searchlights that
+  followed the cursor are gone. Around the tower: a desktop corner
+  bauhinia sprig; more round lens-bokeh discs (about nine on desktop, six
+  on phones) that skip IFC's shaft; a lit cloud band; a skyline light
+  wave every ~10 s; a small harbour boat; searchlights on their own
+  sweep; a denser boarding plaza under the wheel (extra tents, kiosks,
+  lamps, string lights); the wheel turns about 16× while the pointer is
+  over it. Touch-lit offices stay a small patch. Files: `index.html`,
+  `src/ui/cityLights.js`, `src/ui/cityTouch.js`, `src/ui/copyLayer.js`,
+  `src/scene/cityLight.js`, `src/scene/cityWindows.js`,
+  `src/scene/facades.js`, `src/styles.css`, `src/data/chapters.js`,
+  `src/data/atmosphere.js`, `src/main.js`, `src/scroll/cameraRig.js`,
+  `src/scene/createIsland.js`, `src/scene/createLensBokeh.js`,
+  `src/scene/createCornerBranch.js`, `src/scene/createHarbourBoat.js`,
+  `src/scene/createAtmosphere.js`, `src/scene/createSearchlights.js`,
+  `src/scene/bauhinia.js`, `src/scene/waterReflections.js`,
+  `src/ui/pointerParallax.js`; `src/scene/createBollard.js` deleted; plan:
+  `narrative-spine.md`, `scene-models.md`, `atmosphere.md`,
+  `interface.md`, `ASSET-LEDGER.md`.
 - **04 photo cards: a warm light under the pointer** (user request and
   choices, 2026-10-04). Hovering lifted the cloth but the spot under the
   cursor stayed as bright as flat cloth. Now a warm pool of light follows

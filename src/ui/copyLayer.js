@@ -6,12 +6,12 @@
 // A story chapter (`.chapter__copy--story`) arrives in two steps (user
 // requests, 2026-10-04). As the camera comes in, the harbour darkens to
 // DARK.arrive of memory mode (`--memory-mode` on the root); as it settles,
-// the label, title and beats (and 02's 1915 ghost) fade in together; then,
-// part-way through the dwell (scrollConductor.js), the memory print and the
-// timeline come up together, taking memory mode the rest of the way. They
-// sink as the camera leaves, and the darkness lifts early in the move out.
-// All of it is scroll-tied, so it reverses on the way back. The 3D story
-// layers (createStoryLayers.js) take their levels from here.
+// the label, title, beats, 1915 ghost, memory print and timeline fade in
+// together (user request, 2026-10-04: show everything at once, as 03 does
+// with its panels). They sink as the camera leaves, and the darkness lifts
+// early in the move out. All of it is scroll-tied, so it reverses on the
+// way back. The 3D story layers (createStoryLayers.js) take their levels
+// from here.
 //
 // 03 (`data-story="crossing"`) is an index of panels instead: the harbour
 // darkens further (CROSSING.dark), the panels come with the title, and the
@@ -29,11 +29,14 @@
 // steps around an opening on the sails (STATEMENT.arrive, then .full with
 // the cards), and a sea haze drifts across the water with the cards
 // (`--wind`); the petals stay, as there is no dust to give way to.
+//
+// 05 (`data-story="lights"`): the label, title and words come as the camera
+// settles, with no darkening; cityLights.js sweeps the title, and `touch`
+// runs the office-window touch light (cityTouch.js) while it shows.
 import { smoothstep } from '../scroll/cameraRig.js';
 import { createDepartureBoard } from './departureBoard.js';
+import { createCityLights } from './cityLights.js';
 const RISE = 48; // px travelled while fading: in from below, out through the top
-// Shares of the dwell: 02's print and timeline wait about half a screen.
-const STORY = { print: [0.5, 0.8] };
 // 03: the board's countdown is at least as far on as the `due` shares of
 // the route (it also runs on its own clock, departureBoard.js); a panel
 // or the ticket flips over once it is `flip` of the way in.
@@ -87,6 +90,7 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       flaps: board && createDepartureBoard(board),
       ticket: copy.querySelector('.chapter__ticket'),
       crossing: copy.dataset.story === 'crossing',
+      lights: copy.dataset.story === 'lights' ? createCityLights(copy) : null,
       statement: copy.querySelector('.chapter__statement'),
       photos: copy.querySelector('.chapter__photos'),
       figures: [...copy.querySelectorAll('.chapter__photo')],
@@ -177,6 +181,10 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       }
       return { mode: base * CROSSING.dark, yield: base * CROSSING.dark, wind: label * base };
     }
+    if (story.lights) {
+      story.lights.update(label > 0 && base > 0, stepped);
+      return { mode: 0, touch: stepped ? 0 : base };
+    }
     if (story.statement) {
       setVar(story.statement, '--enter', label);
       const photos = level(STATEMENT.photos) * sink;
@@ -187,7 +195,7 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
         wind: photos * base,
       };
     }
-    const print = level(STORY.print) * sink;
+    const print = label * sink;
 
     setVar(story.memory, '--memory-reveal', print);
     setVar(story.facts, '--enter', print);
@@ -205,7 +213,7 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
   // In stepped mode only the active chapter's copy is shown. Returns the
   // story levels for the 3D layers; `yield` thins the petals.
   function update(p, { stepped = false, index = 0, hero, rendered = p, dwell = [] } = {}) {
-    const levels = { mode: 0, ghost: 0, dust: 0, steam: 0, wind: 0, yield: 0 };
+    const levels = { mode: 0, ghost: 0, dust: 0, steam: 0, wind: 0, yield: 0, touch: 0 };
     let veil = '';
     let wind = '';
     copies.forEach((copy, i) => {

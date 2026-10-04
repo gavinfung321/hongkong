@@ -231,6 +231,11 @@ remove it and stop this task.
 
 ### Built 2026-10-04, awaiting approval
 
+**Removed 2026-10-04 (user request):** the 05 bollard and chain, on
+desktop and phones, once 05 gained its text layer (narrative spine Scene
+05); `createBollard.js`, its gate and `rig.shift` are gone. The notes
+below are kept as history. The 03 buoy stays.
+
 - The bollard and short chain (user choice, 2026-10-04), desktop only. A
   cast-iron mooring bollard (flange, waisted body, lipped head, domed cap;
   0.83 m) in the lower right of the 05 desktop frame, its base cropped by
@@ -344,7 +349,7 @@ disable or remove it rather than expanding it.
 - [x] Priority D: veiled moon — approved 2026-10-04
 - [x] Priority E: quieter sky and palette — approved 2026-10-04
 - [x] Priority F: per-chapter withholding — approved 2026-10-04
-- [x] Priority 2: test one chapter 05 foreground object — 05 bollard, 03 buoy and their phone versions approved 2026-10-04
+- [x] Priority 2: test one chapter 05 foreground object — 05 bollard, 03 buoy and their phone versions approved 2026-10-04; the 05 bollard removed later that day (user request)
 - [ ] Priority 3: one desktop and one mobile sequence review — reviewed and fixed 2026-10-04, awaiting approval
 - [ ] Update the changelog with only the final kept decisions
 

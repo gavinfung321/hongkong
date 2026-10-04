@@ -10,12 +10,14 @@ import { createVessels } from './scene/createVessels.js';
 import { createForeground } from './scene/createForeground.js';
 import { createWordmark } from './scene/createWordmark.js';
 import { createMoon } from './scene/createMoon.js';
-import { createBollard } from './scene/createBollard.js';
 import { createBuoy } from './scene/createBuoy.js';
 import { createPetals } from './scene/createPetals.js';
 import { burstLights, createAtmosphere } from './scene/createAtmosphere.js';
 import { createFireworks } from './scene/createFireworks.js';
 import { createSearchlights } from './scene/createSearchlights.js';
+import { createLensBokeh } from './scene/createLensBokeh.js';
+import { createCornerBranch } from './scene/createCornerBranch.js';
+import { createHarbourBoat } from './scene/createHarbourBoat.js';
 import { createStoryLayers } from './scene/createStoryLayers.js';
 import { createCursorMotes } from './scene/createCursorMotes.js';
 import { citySoft } from './scene/cityWindows.js';
@@ -29,6 +31,7 @@ import { createCopyLayer } from './ui/copyLayer.js';
 import { createMemoryPlates } from './ui/memoryPlate.js';
 import { createPaperCards } from './ui/paperCard.js';
 import { createTicket } from './ui/ticketCard.js';
+import { createCityTouch } from './ui/cityTouch.js';
 import { createSiteHeader } from './ui/siteHeader.js';
 import { createSiteFooter } from './ui/siteFooter.js';
 import { createCursorRing } from './ui/cursorRing.js';
@@ -58,6 +61,7 @@ const ADAPTIVE = {
   step: 0.25,
   floor: { desktop: 1, mobile: 1.25 },
 };
+const NO_POINTER = { x: 0, y: 0 };
 // Share of the petals that give way to the story dust in full memory mode.
 const PETAL_YIELD = 0.6;
 // Window edge blur on phones, in pixels (desktop 1).
@@ -146,16 +150,21 @@ async function start(initGuard, header, loading) {
       needsRender = true;
     },
   });
-  const bollard = createBollard(chapters.find((chapter) => chapter.id === '05').camera);
   const buoy = createBuoy(chapters.find((chapter) => chapter.id === '03').camera);
   const cursorMotes = createCursorMotes(renderer);
-  scene.add(bollard.group, buoy.group);
+  // 05's layers (user choices, 2026-10-04).
+  const lens = createLensBokeh();
+  const cornerBranch = createCornerBranch(chapters.find((chapter) => chapter.id === '05').camera);
+  const boat = createHarbourBoat();
+  scene.add(buoy.group, lens.group, cornerBranch.group, boat.group);
   scene.add(moon.group, atmosphere.group, searchlights.group, kowloon.group, island.group, vessels.group, foreground.group, fireworks.group, story.group, wordmark.mesh, petals.group, cursorMotes.points);
   await stage('foreground');
   water.setSources(reflectionSources({
     tower: kowloon.clockTower,
     ferry: vessels.ferry,
     junk: vessels.junk,
+    boat: boat.group,
+    wave: island.wave.marker,
   }));
   water.setCity(cityStrip(island.group.getObjectByName('skyline')));
   // Faded subjects fade their reflections too.
@@ -165,6 +174,9 @@ async function start(initGuard, header, loading) {
   };
 
   let petalLevel = 1;
+  let boatLevel = 0;
+  let waveLevel = 0;
+  const boatFade = reflected('boat', makeFadeable(boat.group));
   const gating = createGating(chapters, {
     ferry: reflected('ferry', makeFadeable(vessels.ferry)),
     junk: reflected('junk', makeFadeable(vessels.junk)),
@@ -190,23 +202,39 @@ async function start(initGuard, header, loading) {
     seaMist: (value) => atmosphere.setSeaMist(value),
     haze: (value) => atmosphere.setHaze(value * HAZE_SCALE),
     afterglow: (value) => world.sky.userData.setAfterglow(value),
-    bollard: (value) => bollard.setOpacity(value),
     buoy: (value) => buoy.setOpacity(value),
     moon: (value) => {
       moon.setLevel(value);
       water.setFade('moon', value);
     },
     junkGlow: (value) => water.setFade('junkGlow', value),
+    branch: (value) => cornerBranch.setOpacity(value),
+    lens: (value) => lens.setLevel(value),
+    lensBusy: (value) => lens.setBusy(value),
+    cloudBand: (value) => atmosphere.setCloudBand(value),
+    wave: (value) => {
+      waveLevel = value;
+    },
+    boat: (value) => {
+      boatLevel = value;
+      boatFade(value);
+    },
   }, {
+    // The 05 branch sits by the 05 camera: in only as the camera settles,
+    // out as it leaves. Quiet lens discs (03–04) and the boat come in over
+    // the second half of the move; 05's denser pack (`lensBusy`) later;
+    // the cloud band across most of it.
+    branch: { in: [0.85, 1], out: [0, 0.1] },
+    lens: { in: [0.6, 1], out: [0, 0.3] },
+    lensBusy: { in: [0.75, 1], out: [0, 0.25] },
+    boat: { in: [0.5, 1], out: [0, 0.4] },
+    cloudBand: { in: [0.3, 1], out: [0, 0.6] },
     // The moon and the junk's sail reflection change gently across the whole move.
     moon: { in: [0, 1], out: [0, 1] },
     junkGlow: { in: [0, 1], out: [0, 1] },
     // The 03 buoy comes in over the second half of the move into 03 and is
     // gone early in the move to 04.
     buoy: { in: [0.5, 1], out: [0.2, 0.5] },
-    // The 05 bollard sits by the 05 camera: in only as the camera settles, out
-    // as it leaves.
-    bollard: { in: [0.85, 1], out: [0, 0.1] },
     // The afterglow warms and cools across the whole move.
     afterglow: { in: [0, 1], out: [0, 1] },
     // Mist and haze change gently across the whole move.
@@ -228,7 +256,7 @@ async function start(initGuard, header, loading) {
     junk: { out: [0.4, 0.5] },
     // Phones, 02 → 03: the ferry is shown before it enters the frame.
     ferry: { in: [0, 0.1] },
-  }, { afterglow: 0, haze: 0, bollard: 0, buoy: 0 });
+  }, { afterglow: 0, haze: 0, buoy: 0, branch: 0, lens: 0, lensBusy: 0, cloudBand: 0, wave: 0, boat: 0 });
 
   const rig = createCameraRig(camera, chapters, { hold: SCROLL.hold });
   const parallax = createPointerParallax();
@@ -239,6 +267,7 @@ async function start(initGuard, header, loading) {
   const memories = createMemoryPlates(sections);
   const photoCards = createPaperCards(sections);
   const ticket = createTicket(document);
+  const cityTouch = createCityTouch();
 
   // ---- Motion mode ---------------------------------------------------------
 
@@ -251,6 +280,9 @@ async function start(initGuard, header, loading) {
     root.classList.toggle('is-stepped', stepped);
     root.dataset.motion = stepped ? 'stepped' : 'continuous';
     petals.setEnabled(!stepped);
+    lens.setEnabled(!stepped);
+    // No light wave in reduced motion (it only runs in island.update).
+    if (stepped) island.setWave(0);
     fireworks.setStill(stepped);
     searchlights.setStill(stepped);
     story.setStill(stepped);
@@ -307,8 +339,10 @@ async function start(initGuard, header, loading) {
     vessels.setPaths(chapters, breakpoint);
     petals.setBreakpoint(breakpoint);
     foreground.setBreakpoint(breakpoint);
-    bollard.setBreakpoint(breakpoint);
     buoy.setBreakpoint(breakpoint);
+    lens.setBreakpoint(breakpoint);
+    cornerBranch.place(breakpoint, width / height);
+    boat.setBreakpoint(breakpoint);
     copy.setBreakpoint(breakpoint);
     fireworks.place(breakpoint, width / height);
     placeWordmark();
@@ -427,7 +461,7 @@ async function start(initGuard, header, loading) {
 
   function applyPose(p, isStepped, time) {
     const segment = rig.update(p, { stepped: isStepped });
-    bollard.follow(isStepped ? null : rig.shift);
+    cornerBranch.follow(isStepped ? null : rig.shift);
     vessels.update(segment, time, !isStepped);
     gating.update(segment, breakpoint, isStepped);
     atmosphere.setSegment(segment, isStepped);
@@ -524,6 +558,7 @@ async function start(initGuard, header, loading) {
           });
         }
       }
+      boat.update(0, boatLevel, false);
       if (!needsRender && !control.free) return;
     } else {
       if (state.jumped && !veilActive) runVeil(() => conductor.snap());
@@ -536,13 +571,18 @@ async function start(initGuard, header, loading) {
       rig.setGlide(HERO.glide.back * glide, HERO.glide.rise * glide);
       if (glide === 0) glideStart = -1;
       if (!control.free) applyPose(state.pRendered, false, time);
+      camera.updateMatrixWorld();
       petals.setDensity(petalLevel * (1 - PETAL_YIELD * storyLevels.yield));
       wordmark.fadeAt(state.pRendered, heroFade.from, heroFade.to);
       water.update(dt);
-      island.update(time);
+      // The first wave waits for the entrance cover to lift.
+      island.setWave(root.classList.contains('is-ready') ? waveLevel : 0);
+      island.update(time, dt, camera, parallax.pointer);
       foreground.update(time);
       atmosphere.update(time);
       searchlights.update(time);
+      cornerBranch.update(time);
+      boat.update(dt, boatLevel, true);
       fireworks.update(time);
       moon.update(time);
       buoy.update(time);
@@ -553,12 +593,15 @@ async function start(initGuard, header, loading) {
       cursorMotes.update(dt, stirState);
       photoCards.update(dt);
       ticket.update(dt);
+      cityTouch.update(dt, storyLevels.touch, camera);
+      lens.update(dt, camera, parallaxOn ? offset : NO_POINTER);
       lastRendered = state.pRendered;
     }
 
     story.update(time, camera, stepped ? null : stirState);
     needsRender = false;
     for (const object of switchedOff) object.visible = false;
+    water.setFade('wave', island.wave.level);
     if (!ready) warmUp();
     water.reflect(camera, breakpoint);
     world.render();

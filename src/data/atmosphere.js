@@ -174,6 +174,25 @@ export const MIST = {
   ],
 };
 
+// 05's cloud band (user choice, 2026-10-04): thin drifts of low cloud among
+// the towers at mid-height, lit warm from below by the city, below IFC's
+// crown. The long drift stands just behind IFC, so IFC and the towers in
+// front cut through it; a short one hangs among the towers left of the
+// wheel. Cut from the mist sheet, fogged like the skyline and depth tested;
+// each faces the 05 desktop camera (`face`, x / z) and sways slowly on its
+// own period. x / z: centre, `y` the foot, width in metres; opacity at the
+// chapter's full `cloudBand` level.
+export const CLOUD_BAND = {
+  face: [383, -917],
+  drift: { share: 0.03, period: [60, 85] },
+  tint: { low: [1.55, 0.98, 0.72], high: [0.88, 0.78, 0.96] },
+  feather: 0.3,
+  cards: [
+    { x: 560, z: -1262, y: 150, width: 560, band: 'flat', opacity: 0.75 },
+    { x: 250, z: -1215, y: 96, width: 240, band: 'billow', u: [0.1, 0.6], opacity: 0.55 },
+  ],
+};
+
 // Depth haze (atmospheric depth Stage 2, user request, 2026-10-03): a band
 // of separate tall wisps cut from the mist sheet, on the water about 200 m
 // in front of the waterfront, so the view reads in layers (this band, the

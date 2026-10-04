@@ -2,6 +2,7 @@ import {
   AdditiveBlending,
   BoxGeometry,
   BufferGeometry,
+  CanvasTexture,
   CircleGeometry,
   Color,
   ConeGeometry,
@@ -12,14 +13,19 @@ import {
   InstancedMesh,
   LineBasicMaterial,
   LineSegments,
+  MathUtils,
   Matrix4,
   Mesh,
   MeshBasicMaterial,
   MeshLambertMaterial,
+  Object3D,
   Points,
+  PointsMaterial,
+  QuadraticBezierCurve3,
   Quaternion,
   ShaderMaterial,
   Shape,
+  SphereGeometry,
   TorusGeometry,
   Vector2,
   Vector3,
@@ -140,6 +146,55 @@ const LED = {
   level: 0.6,
 };
 
+// 05's light wave (user choice, 2026-10-04): every `period` seconds a band
+// of light `width` metres wide runs left to right along the skyline from x
+// `from` to `to` in `travel` seconds, flaring the LED crowns and strips it
+// passes in their own colours (`gain`, added on top of their dimmed level),
+// and IFC's crown fins as it crosses IFC (`flare`, falling off over
+// `flareWidth` metres). The first wave starts `first` seconds after the
+// chapter arrives. A followed light source lays it on the water
+// (waterReflections.js). Still in reduced motion: no wave.
+const WAVE = { period: 10, travel: 3.2, first: 1.2, from: -200, to: 1200, width: 70, gain: 1.3, flare: 1.4, flareWidth: 90 };
+export const lightWave = {
+  uWaveX: { value: -1e5 },
+  uWaveGain: { value: 0 },
+  uWaveWidth: { value: WAVE.width },
+  uFinFlare: { value: 0 },
+};
+
+function waveCrowns(material) {
+  material.onBeforeCompile = (shader) => {
+    Object.assign(shader.uniforms, lightWave);
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', '#include <common>\nvarying float vWaveX;')
+      .replace(
+        '#include <project_vertex>',
+        `#include <project_vertex>
+        vec4 waveWorld = vec4( transformed, 1.0 );
+        #ifdef USE_INSTANCING
+          waveWorld = instanceMatrix * waveWorld;
+        #endif
+        vWaveX = ( modelMatrix * waveWorld ).x;`,
+      );
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>', '#include <common>\nvarying float vWaveX;\nuniform float uWaveX;\nuniform float uWaveGain;\nuniform float uWaveWidth;')
+      .replace(
+        '#include <color_fragment>',
+        `#include <color_fragment>
+        {
+          float d = ( vWaveX - uWaveX ) / uWaveWidth;
+          #if defined( USE_COLOR ) || defined( USE_INSTANCING_COLOR )
+            diffuseColor.rgb += vColor.rgb * uWaveGain * exp( -d * d );
+          #else
+            diffuseColor.rgb += uWaveGain * exp( -d * d );
+          #endif
+        }`,
+      );
+  };
+  material.customProgramCacheKey = () => 'skyline-crowns-wave';
+  return material;
+}
+
 function createTops(buildings, windowMaterial, seed) {
   const random = seededRandom(seed);
   const ledRandom = seededRandom(seed + 7);
@@ -200,7 +255,7 @@ function createTops(buildings, windowMaterial, seed) {
     mesh.name = name;
     return mesh;
   };
-  const crownMaterial = new MeshBasicMaterial({ color: 0xffffff });
+  const crownMaterial = waveCrowns(new MeshBasicMaterial({ color: 0xffffff }));
   const pyramidGeometry = new ConeGeometry(Math.SQRT1_2, 1, 4).rotateY(Math.PI / 4).translate(0, 0.5, 0);
   const group = new Group();
   group.name = 'skylineTops';
@@ -397,18 +452,20 @@ const FIN_TIP = 0.15; // fin brightness at the tip, against 1 at the foot
 // Uplit crown (user choice, 2026-10-02): floodlights at the fins' feet, so
 // each fin is brightest at its base and fades toward its tip. The blade's
 // own height runs 0 to 1 before each instance stretches it.
+// 05's light wave flares them as it passes (`uFinFlare`, lightWave).
 function upliftFins(material) {
   material.onBeforeCompile = (shader) => {
+    shader.uniforms.uFinFlare = lightWave.uFinFlare;
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', '#include <common>\nvarying float vFinUp;')
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvFinUp = position.y;');
     shader.fragmentShader = shader.fragmentShader
-      .replace('#include <common>', '#include <common>\nvarying float vFinUp;')
+      .replace('#include <common>', '#include <common>\nvarying float vFinUp;\nuniform float uFinFlare;')
       .replace(
         '#include <emissivemap_fragment>',
         `#include <emissivemap_fragment>
         float finLight = mix( 1.0, ${FIN_TIP.toFixed(2)}, pow( clamp( vFinUp, 0.0, 1.0 ), 1.5 ) );
-        totalEmissiveRadiance *= finLight;
+        totalEmissiveRadiance *= finLight * ( 1.0 + uFinFlare );
         diffuseColor.rgb *= finLight;`,
       );
   };
@@ -543,10 +600,17 @@ function createPiers() {
 
 // ---- Observation Wheel -----------------------------------------------------------
 
-const WHEEL_TURN = 240; // seconds per revolution
+const WHEEL_TURN = 240; // seconds per revolution at rest
+const WHEEL_HOVER = { boost: 16, ease: 8, pad: 1.35 };
 const WHEEL_GONDOLAS = 42;
 const WHEEL_RIM = 1.1; // half the rim truss depth
 const WHEEL_FLANGE = 3.4; // hub flange offset, where the spokes start
+const PLAZA = {
+  tents: [-22, -15.5, -9, -2.5, 4, 10.5, 17, 23.5],
+  lamps: [[-24, 10.5], [-2, 11.2], [22, 10.4]],
+  kiosks: [[-30, 9.5, 3.2, 2.6], [30, 9.2, 2.8, 2.4]],
+  bulbs: { colour: 0xffd4a0, size: 5.5, spacing: 1.2, sag: 0.9 },
+};
 
 // The Hong Kong Observation Wheel: a lit red truss rim on cable spokes from a
 // wide glowing hub, 42 upright gondolas, white A-frame legs and a boarding
@@ -611,18 +675,88 @@ function createWheel() {
   const m = new Matrix4();
   const q = new Quaternion();
   const platform = new Mesh(unitBox, lambert(0x2c2838));
-  platform.scale.set(46, 1.2, 12);
-  const tents = new InstancedMesh(unitBox, new MeshLambertMaterial({ color: 0xe6e2da, emissive: 0x6a5a48 }), 5);
+  platform.scale.set(64, 1.2, 22);
+  // Boarding plaza (user request, 2026-10-04): extra tents, two kiosks,
+  // three short lamps and strings of bulbs. Not a fairground — the same
+  // small plaza, denser, so the land under the wheel isn't a blank pad.
+  const tentCount = PLAZA.tents.length;
+  const tents = new InstancedMesh(unitBox, new MeshLambertMaterial({ color: 0xe6e2da, emissive: 0x6a5a48 }), tentCount);
   const tentRoofs = new InstancedMesh(
     new ConeGeometry(3.6, 2.4, 4).rotateY(Math.PI / 4).translate(0, 1.2, 0),
     new MeshLambertMaterial({ color: 0xf4f0ea, emissive: 0x4a4038 }),
-    5,
+    tentCount,
   );
-  for (let i = 0; i < 5; i++) {
-    const x = -14 + i * 7;
-    tents.setMatrixAt(i, m.compose(new Vector3(x, 1.2, 3), q, new Vector3(5, 2.4, 5)));
-    tentRoofs.setMatrixAt(i, m.compose(new Vector3(x, 3.6, 3), q, new Vector3(1, 1, 1)));
-  }
+  const tentTops = [];
+  PLAZA.tents.forEach((x, i) => {
+    const z = i % 2 === 0 ? 9.2 : 7.4;
+    const s = i === 2 || i === 5 ? 0.84 : 1;
+    tents.setMatrixAt(i, m.compose(new Vector3(x, 1.2, z), q, new Vector3(4.6 * s, 2.2 * s, 4.6 * s)));
+    tentRoofs.setMatrixAt(i, m.compose(new Vector3(x, 3.4 * s, z), q, new Vector3(s, s, s)));
+    tentTops.push(new Vector3(x, 4.6 * s, z));
+  });
+  const kiosks = new InstancedMesh(unitBox, new MeshLambertMaterial({ color: 0xc8b49a, emissive: 0x4a3a28 }), PLAZA.kiosks.length);
+  PLAZA.kiosks.forEach(([x, z, w, h], i) => {
+    kiosks.setMatrixAt(i, m.compose(new Vector3(x, 1.2, z), q, new Vector3(w, h, w)));
+  });
+  const lampPost = mergeGeometries([
+    new CylinderGeometry(0.11, 0.16, 5.4, 8).translate(0, 2.7, 0),
+    new SphereGeometry(0.32, 10, 8).translate(0, 5.5, 0),
+  ]);
+  const lamps = new InstancedMesh(
+    lampPost,
+    new MeshLambertMaterial({ color: 0x2a2832, emissive: 0x5a4838 }),
+    PLAZA.lamps.length,
+  );
+  const lampGlow = new InstancedMesh(
+    new CircleGeometry(1.6, 16),
+    new MeshBasicMaterial({
+      color: 0xffd4a8,
+      transparent: true,
+      opacity: 0.45,
+      depthWrite: false,
+      blending: AdditiveBlending,
+      toneMapped: false,
+    }),
+    PLAZA.lamps.length,
+  );
+  PLAZA.lamps.forEach(([x, z], i) => {
+    lamps.setMatrixAt(i, m.compose(new Vector3(x, 0.6, z), q, new Vector3(1, 1, 1)));
+    lampGlow.setMatrixAt(i, m.compose(new Vector3(x, 6.1, z), q, new Vector3(1, 1, 1)));
+  });
+  lampGlow.userData.noProbe = true;
+
+  const bulbCanvas = document.createElement('canvas');
+  bulbCanvas.width = bulbCanvas.height = 32;
+  const bulbCtx = bulbCanvas.getContext('2d');
+  const bulbWash = bulbCtx.createRadialGradient(16, 16, 0, 16, 16, 16);
+  bulbWash.addColorStop(0, 'rgba(255, 255, 255, 1)');
+  bulbWash.addColorStop(0.45, 'rgba(255, 255, 255, 0.85)');
+  bulbWash.addColorStop(1, 'rgba(255, 255, 255, 0)');
+  bulbCtx.fillStyle = bulbWash;
+  bulbCtx.fillRect(0, 0, 32, 32);
+  const bulbPoints = [];
+  const stringLights = (a, b) => {
+    const mid = a.clone().lerp(b, 0.5);
+    mid.y -= PLAZA.bulbs.sag;
+    const curve = new QuadraticBezierCurve3(a, mid, b);
+    const n = Math.max(2, Math.round(curve.getLength() / PLAZA.bulbs.spacing));
+    for (let i = 0; i <= n; i++) bulbPoints.push(...curve.getPoint(i / n).toArray());
+  };
+  for (let i = 0; i < tentTops.length - 1; i++) stringLights(tentTops[i], tentTops[i + 1]);
+  stringLights(new Vector3(PLAZA.lamps[0][0], 5.6, PLAZA.lamps[0][1]), new Vector3(PLAZA.lamps[2][0], 5.6, PLAZA.lamps[2][1]));
+  const bulbs = new Points(
+    new BufferGeometry().setAttribute('position', new Float32BufferAttribute(bulbPoints, 3)),
+    new PointsMaterial({
+      color: PLAZA.bulbs.colour,
+      size: PLAZA.bulbs.size,
+      map: new CanvasTexture(bulbCanvas),
+      sizeAttenuation: false,
+      transparent: true,
+      depthWrite: false,
+      toneMapped: false,
+    }),
+  );
+  bulbs.userData.noProbe = true;
 
   const gondolas = new InstancedMesh(new BoxGeometry(2.3, 2.6, 2.3), basic(0x8f78f0), WHEEL_GONDOLAS);
   const position = new Vector3();
@@ -639,7 +773,7 @@ function createWheel() {
   }
   turn(0);
 
-  wheel.add(rotor, hub, disc, halo, legs, platform, tents, tentRoofs, gondolas);
+  wheel.add(rotor, hub, disc, halo, legs, platform, tents, tentRoofs, kiosks, lamps, lampGlow, bulbs, gondolas);
   const [x, y, z] = WORLD.wheel.position;
   wheel.position.set(x, y, z);
   return { wheel, turn };
@@ -664,13 +798,76 @@ export function createIsland() {
   const { wheel, turn } = createWheel();
   group.add(ifc, createPodium(), createPiers(), wheel);
 
+  // The light wave's position on the waterfront, for its reflection.
+  const waveMarker = new Object3D();
+  waveMarker.position.set(-1e5, 0, WORLD.island.skyline.z[0]);
+  let waveLevel = 0;
+  let waveStart = -1;
+  let waveOn = 0;
+  let wheelAngle = 0;
+  let wheelBoost = 0;
+  const hubNdc = new Vector3();
+  const rimX = new Vector3();
+  const rimY = new Vector3();
+
+  function overWheel(camera, pointer) {
+    if (!camera || !pointer) return false;
+    camera.updateMatrixWorld();
+    const [wx, wy, wz] = WORLD.wheel.position;
+    const { radius, hub } = WORLD.wheel;
+    const r = radius + 2; // gondolas sit outside the rim
+    hubNdc.set(wx, wy + hub, wz).project(camera);
+    if (hubNdc.z > 1) return false;
+    rimX.set(wx + r, wy + hub, wz).project(camera);
+    rimY.set(wx, wy + hub + r, wz).project(camera);
+    const rx = Math.abs(rimX.x - hubNdc.x) * WHEEL_HOVER.pad;
+    const ry = Math.abs(rimY.y - hubNdc.y) * WHEEL_HOVER.pad;
+    if (rx < 0.04 || ry < 0.04) return false;
+    const dx = (pointer.x - hubNdc.x) / rx;
+    const dy = (pointer.y - hubNdc.y) / ry;
+    return dx * dx + dy * dy <= 1;
+  }
+
+  function runWave(time) {
+    if (waveLevel <= 0.001) {
+      waveStart = -1;
+      waveOn = 0;
+      lightWave.uWaveGain.value = 0;
+      lightWave.uFinFlare.value = 0;
+      return;
+    }
+    if (waveStart < 0) waveStart = time - (WAVE.period - WAVE.first);
+    const phase = (time - waveStart) % WAVE.period;
+    const running = phase < WAVE.travel;
+    const x = running ? MathUtils.lerp(WAVE.from, WAVE.to, phase / WAVE.travel) : -1e5;
+    const d = (x - WORLD.ifc.position[0]) / WAVE.flareWidth;
+    lightWave.uWaveX.value = x;
+    lightWave.uWaveGain.value = WAVE.gain * waveLevel;
+    lightWave.uFinFlare.value = WAVE.flare * waveLevel * Math.exp(-d * d);
+    waveMarker.position.x = x;
+    waveOn = running ? waveLevel : 0;
+  }
+
   // Continuous mode only; in reduced motion the wheel, mist, beacons and
-  // landmark colours hold still.
-  function update(time) {
-    turn((time / WHEEL_TURN) * Math.PI * 2);
+  // landmark colours hold still, and there is no light wave. Hovering the
+  // wheel in 05 (large on screen) speeds the turn about 4×.
+  function update(time, dt = 0, camera = null, pointer = null) {
+    if (dt > 0) {
+      const target = overWheel(camera, pointer) ? 1 : 0;
+      wheelBoost += (target - wheelBoost) * (1 - Math.exp(-WHEEL_HOVER.ease * dt));
+      wheelAngle += ((Math.PI * 2) / WHEEL_TURN) * MathUtils.lerp(1, WHEEL_HOVER.boost, wheelBoost) * dt;
+      turn(wheelAngle);
+    }
     mountains.update(time);
     landmarks.update(time);
     beacons.update(time);
+    runWave(time);
+  }
+
+  // 05's light wave (`wave` in each chapter's visibility).
+  function setWave(value) {
+    waveLevel = value;
+    if (value <= 0.001) runWave(0);
   }
 
   // Skyline and landmark light level per chapter (`city` in each chapter's
@@ -698,5 +895,20 @@ export function createIsland() {
     applyLevels();
   }
 
-  return { group, ifc, wheel, update, setCityLevel, setAccentLevel, setSlopeLights: mountains.setLightLevel };
+  return {
+    group,
+    ifc,
+    wheel,
+    update,
+    setCityLevel,
+    setAccentLevel,
+    setWave,
+    wave: {
+      marker: waveMarker,
+      get level() {
+        return waveOn;
+      },
+    },
+    setSlopeLights: mountains.setLightLevel,
+  };
 }

@@ -100,14 +100,12 @@ authoritative source before they go live.
 > The few that sail the harbour now carry visitors, keeping the shape of that
 > memory on the water.
 
-**05 Arrival** (54 words)
+**05 Arrival** (31 words; rewritten to be about Two IFC alone, user
+request, 2026-10-04; the reclamation draft was dropped)
 
-> Two IFC rises above Central, its bright crown drawing the crossing toward a
-> wall of glass, steel and harbour light.
->
-> Much of this shore stands on land reclaimed from the sea. The waterline has
-> moved outward again and again, and the harbour we cross tonight is narrower
-> than the one the first ferries knew. *[verify]*
+> Two IFC rises 412 metres over Central. Finished in 2003, it was the city's
+> tallest tower for years, and it is still the one on every postcard of the
+> harbour. (Verified 2026-10-04; sources under Scene 05.)
 
 **06 Afterimage** (49 words)
 
@@ -129,8 +127,10 @@ Sources checked:
 - 01, 03: Star Ferry origins in 1880 (`FINAL-NARRATIVE-COPY.md` §10).
 - 04: wooden sailing junks the dominant fishing vessels before the 1950s
   (Hong Kong Maritime Museum, `FINAL-NARRATIVE-COPY.md` §10).
-- Still to source: 03 reversible seat backs; 05 Central reclamation and the
-  narrowed harbour (Planning Department or Harbourfront Commission).
+- 05: Two IFC's height, floors, completion and years as the tallest,
+  sourced 2026-10-04 (CTBUH Skyscraper Center, the Skyscraper Museum;
+  links under Scene 05).
+- Still to source: 03 reversible seat backs.
 
 ## Phase 2 — Build scene 02 only
 
@@ -219,18 +219,17 @@ The six drafts are approved (user request, 2026-10-04). Scene 02 now runs:
   camera, vessels and gates stay on the hold pose through it, so no other
   chapter's timing changes; links and reloads land 24% into it
   (`SCROLL.dwellLand`), once the title and beat 1 are in.
-- **Layered entrance** (user request, 2026-10-04: the site darkens first,
-  then the words and photo come up, not together). Scroll-tied, so it
-  reverses on the way back (`copyLayer.js`, `STORY` and `DARK`):
+- **Layered entrance** (user request, 2026-10-04, then revised the same
+  day: show the print with the words). Scroll-tied, so it reverses on the
+  way back (`copyLayer.js`, `DARK`):
   1. as the camera comes in from 01 (10% of the move until it settles),
      the harbour darkens to 55% of memory mode; nothing else yet;
-  2. as it settles, the label row fades in and its hairline draws across;
-  3. then across the dwell: title (0–10%), beat 1 (8–20%) with the 1915
-     ghost (4–26%), beat 2 (32–46%), the print with the rest of the
-     darkness and the steam (46–72%), the timeline row (72–86%), on
-     phones too;
-  4. leaving, the print, steam and timeline sink first, the darkness lifts
-     early in the move to 03, and the words fade with the copy.
+  2. as it settles, the label, title, both beats, 1915 ghost, memory
+     print, timeline, steam and spare dust fade in together, and memory
+     mode goes the rest of the way (user request, 2026-10-04: same as 03's
+     panels coming with the title);
+  3. leaving, the print, steam and timeline sink with the words, and the
+     darkness lifts early in the move to 03.
 - **Nothing moves but the scene** (user request, 2026-10-04): the words,
   print and timeline only fade in place. The print's mouse drift and rise,
   the beats' rise and the copy's 48 px slide are gone for 02; the 3D
@@ -411,6 +410,8 @@ outlined cells over a darkened scene; no Kage code, type or copy):
   title's line ("01 · Facing Forward");
 - the title, standfirst and all three panels fade in together as the
   camera settles, with no per-panel sequence (user request, 2026-10-04);
+  a few quiet out-of-focus light discs sit in front of the lens (user
+  choice, 2026-10-04; denser pack waits for 05);
   each panel has top, left and bottom hairlines; on hover the
   panel stays put while a ferry-green tint fades in from its left edge,
   the words slide 6px right and the index turns green, after Kage's lesson
@@ -481,11 +482,10 @@ outlined cells over a darkened scene; no Kage code, type or copy):
   (the board shows its words without flipping, the panels stay still,
   the ticket is a still image).
 
-Scene 02 was cut back the same way (user request, 2026-10-04): the
-label, title, both beats and the 1915 ghost fade in together as the
-camera settles; the memory print and the timeline then come up together
-about half a screen later (dwell share 0.5–0.8); the dwell is 80svh
-(was 130).
+Scene 02 was cut back the same way, then the print joined the words
+(user requests, 2026-10-04): the label, title, both beats, 1915 ghost,
+memory print and timeline fade in together as the camera settles; the
+dwell is 80svh (was 130).
 
 Files: `index.html`, `src/data/chapters.js`, `src/ui/copyLayer.js`,
 `src/styles.css`.
@@ -493,7 +493,9 @@ Files: `index.html`, `src/data/chapters.js`, `src/ui/copyLayer.js`,
 ### Scene 04
 
 **As built (user requests and choices, 2026-10-04): statement header and
-two hanging photo cards.** The 3D stays untouched.
+two hanging photo cards.** The 3D stays untouched. A few quiet
+out-of-focus light discs sit in front of the lens, as in 03 (user
+choice, 2026-10-04).
 
 - Atmosphere (user request and choices, 2026-10-04), DOM only like 03:
   the memory veil darkens the harbour in two steps around a wide opening
@@ -576,12 +578,60 @@ Files: `index.html`, `src/data/chapters.js`, `src/ui/copyLayer.js`,
 Different technique per scene (user request, 2026-10-04), all DOM over
 the untouched 3D: 02 layered fade with a memory print and timeline; 03
 index panels with a route line; 04 statement header with hanging photo
-cards. Chosen for the rest (user choices, 2026-10-04), not yet built:
+cards; 05 a title sweep and a small patch of offices lit by the pointer,
+with 3D layers around Two IFC (built, below).
+Chosen for 06 (user choice, 2026-10-04), not yet built: one centred
+sentence whose letters close in from wide spacing, then the sources fade
+in.
 
-- 05 City of Light: words light up, the text starting dim and each word
-  brightening in turn with the scroll, like the skyline switching on;
-- 06 Afterglow: one centred sentence whose letters close in from wide
-  spacing, then the sources fade in.
+### Scene 05
+
+**As built (user requests and choices, 2026-10-04): Two IFC as the
+postcard tower, with layers around it.** The chapter is about IFC as Hong
+Kong's signature tower, with no darkening (the city stays bright). The
+harbour-edge bollard, the height line (412 m / 88 / 2003) and the
+searchlights leaning toward the cursor are gone (user requests,
+2026-10-04). Copy stays the same left-column layout as 02–04: one sourced
+sentence, no extra beats.
+
+- Copy: label row "05 Two IFC" with the hairline; the title; one sentence
+  (above, in the 05 arrival).
+- Title sweep: a band of warm light sweeps once across the title (1.5 s).
+- Touch light, kept small (user request, 2026-10-04: "way too much"):
+  about 50 px under a mouse, a quarter of the offices, half as bright,
+  fading in 0.3 s; a tap on phones. Only in 05, off in reduced motion.
+- Corner bauhinia sprig on desktop (Kage frame-edge cutout, technique
+  only): original wood and foliage from the promenade tree, top-right,
+  following most of the mouse parallax. Phones skip it. Kept as a postcard
+  frame, not copied onto other scenes (user choice, 2026-10-04).
+- Lens bokeh (Kage particles at several depths, technique only): out-of-
+  focus petals and round light discs just in front of the camera. About
+  nine round motes on desktop (three petals), six on phones (two petals);
+  mixed sizes; they skip Two IFC's shaft (user request, 2026-10-04: more
+  of the circle bubbles).
+- Lit cloud band through the towers; a light wave along the skyline
+  about every 10 s (waits for the entrance cover); a small lit boat
+  crossing in front of the piers (kept).
+- Searchlights sweep on their own. They do not follow the cursor (user
+  request, 2026-10-04).
+- Wheel: the boarding plaza is denser (extra tents, two kiosks, three
+  lamps, string lights; not a fairground). Hovering the wheel in 05
+  speeds the turn about 16× (one turn in ~15 s); it eases back. Still
+  in reduced motion.
+- Sources: [CTBUH Skyscraper Center](https://www.skyscrapercenter.com/building/two-international-finance-centre/205)
+  (412 m, 88 floors, completed 2003); the
+  [Skyscraper Museum](https://skyscraper.org/supertall/building/two-international-finance-centre/)
+  (completed 2003, Hong Kong's tallest until the ICC in 2010).
+
+Files: `index.html`, `src/ui/cityLights.js`, `src/ui/cityTouch.js`,
+`src/ui/copyLayer.js`, `src/scene/cityLight.js`, `src/scene/cityWindows.js`,
+`src/scene/facades.js`, `src/styles.css`, `src/data/chapters.js`,
+`src/data/atmosphere.js`, `src/main.js`, `src/scroll/cameraRig.js`,
+`src/scene/createIsland.js`, `src/scene/createLensBokeh.js`,
+`src/scene/createCornerBranch.js`, `src/scene/createHarbourBoat.js`,
+`src/scene/createAtmosphere.js`, `src/scene/createSearchlights.js`,
+`src/scene/bauhinia.js`, `src/scene/waterReflections.js`,
+`src/ui/pointerParallax.js`; `src/scene/createBollard.js` deleted.
 
 ## Checklist
 
@@ -593,7 +643,7 @@ cards. Chosen for the rest (user choices, 2026-10-04), not yet built:
 - [x] Write two connected beats for scene 04 (draft 2026-10-04)
 - [x] Write two connected beats for scene 05 (draft 2026-10-04)
 - [x] Write two connected beats for scene 06 (draft 2026-10-04)
-- [ ] Verify historical claims (02, 03 and 04 done; 05 reclamation open) and review the six-chapter arc
+- [ ] Verify historical claims (02, 03, 04 and 05 done, 2026-10-04) and review the six-chapter arc
 
 ### Scene 02 prototype
 

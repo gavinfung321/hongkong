@@ -13,7 +13,7 @@ import {
   Vector3,
   Vector4,
 } from 'three';
-import { CLOUD_SHEET, CLOUDS, HAZE, MIST, MIST_SHEET, SEA_MIST } from '../data/atmosphere.js';
+import { CLOUD_BAND, CLOUD_SHEET, CLOUDS, HAZE, MIST, MIST_SHEET, SEA_MIST } from '../data/atmosphere.js';
 import { WORLD } from '../data/world.js';
 import { aimCamera, poseFov } from '../scroll/cameraRig.js';
 import { seededRandom } from './random.js';
@@ -248,14 +248,27 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
       }),
     ),
   );
+  // 05's cloud band (CLOUD_BAND).
+  const band = CLOUD_BAND.cards.map((spec) =>
+    makeCard(spec, MIST_SHEET, mistSheet, {
+      fog: true,
+      renderOrder: 0,
+      drift: CLOUD_BAND.drift,
+      name: 'cloud-band',
+      tint: CLOUD_BAND.tint,
+      feather: CLOUD_BAND.feather,
+    }),
+  );
   const [faceX, faceZ] = SEA_MIST.face;
-  for (const card of [...mist, ...seaMist, ...haze]) {
+  const [bandX, bandZ] = CLOUD_BAND.face;
+  for (const card of [...mist, ...seaMist, ...haze, ...band]) {
     const { spec, mesh } = card;
     mesh.scale.set(spec.width, spec.width / card.aspect, 1);
     const foot = mist.includes(card) ? MIST.y : (spec.y ?? 0);
     card.base.set(spec.x, foot + mesh.scale.y / 2, spec.z);
     mesh.position.copy(card.base);
     if (seaMist.includes(card)) mesh.lookAt(faceX, card.base.y, faceZ);
+    if (band.includes(card)) mesh.lookAt(bandX, card.base.y, bandZ);
     card.right.set(1, 0, 0).applyQuaternion(mesh.quaternion);
   }
 
@@ -264,6 +277,7 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
   let mistLevel = 0;
   let seaLevel = 0;
   let hazeLevel = 0;
+  let bandLevel = 0;
 
   function show(card, level) {
     const opacity = card.spec.opacity * level;
@@ -278,6 +292,7 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
     for (const card of mist) show(card, mistLevel);
     for (const card of seaMist) show(card, seaLevel);
     for (const card of haze) show(card, hazeLevel);
+    for (const card of band) show(card, bandLevel);
   }
 
   // Frames each cloud card at its chapter's hold pose for this screen.
@@ -333,6 +348,12 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
     apply();
   }
 
+  function setCloudBand(value) {
+    if (value === bandLevel) return;
+    bandLevel = value;
+    apply();
+  }
+
   function sway(card, time) {
     const [period, phase, share] = card.sway;
     const offset = Math.sin((time / period) * Math.PI * 2 + phase) * share * card.mesh.scale.x;
@@ -344,7 +365,8 @@ export function createAtmosphere(chapters, { onLoad } = {}) {
     for (const card of mist) sway(card, time);
     for (const card of seaMist) sway(card, time);
     for (const card of haze) sway(card, time);
+    for (const card of band) sway(card, time);
   }
 
-  return { group, place, setSegment, setMist, setSeaMist, setHaze, update };
+  return { group, place, setSegment, setMist, setSeaMist, setHaze, setCloudBand, update };
 }

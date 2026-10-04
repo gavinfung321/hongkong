@@ -1586,8 +1586,8 @@ html:not(.is-enhanced) .vertical-text {
 /* The memory print: an archival photograph baked as a duotone print with
    burnt edges and grain (the only grain on the site; user choice,
    2026-10-04), under the beats on desktop and above the timeline on phones
-   (user choice, 2026-10-04). It develops upward from its lower edge after
-   beat 2 and sits still (user request, 2026-10-04); it stays out on very
+   (user choice, 2026-10-04). It develops upward from its lower edge with
+   the words (user request, 2026-10-04) and sits still; it stays out on very
    short windows. */
 .chapter__memory {
   display: none;
@@ -2584,6 +2584,48 @@ html:not(.is-enhanced) .vertical-text {
 
 .is-stepped .chapter__statement-rule {
   transition: transform 150ms linear;
+}
+
+/* 05's arrival (cityLights.js; user choices, 2026-10-04). A band of warm
+   light sweeps once across the title: a copy of the title laid over it,
+   its letters filled with a moving gradient that is clear either side of
+   the band. */
+.chapter__title--sweep {
+  position: relative;
+}
+
+.chapter__title-sweep {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 40%, rgb(255 244 218 / 0.9) 47%, var(--color-warm) 50%, rgb(255 244 218 / 0.9) 53%, transparent 60%) 100% 0 / 300% 100% no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 10px rgb(242 179 107 / 0.55));
+  pointer-events: none;
+}
+
+.chapter__title--sweep[data-swept] .chapter__title-sweep {
+  animation: title-sweep 1.5s cubic-bezier(0.45, 0, 0.25, 1) both;
+}
+
+@keyframes title-sweep {
+  to {
+    background-position: 0 0;
+  }
+}
+
+.chapter__lights {
+  max-width: 34ch;
+  font-size: 1.1875rem;
+  line-height: 1.55;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__lights {
+  max-width: none;
+  font-size: 1.0625rem;
+  line-height: 1.5;
 }
 
 /* 03 darkens further than 02's arrival: a strong indigo frame closing in on

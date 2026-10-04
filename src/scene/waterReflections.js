@@ -28,9 +28,10 @@ function source(x, z, h0, h1, width, colour, power, extra = {}) {
   return { x, z, h0, h1, width, colour: new Color(colour), power, tail: 0.6, taper: 0, rank: power, ...extra };
 }
 
-// tower: the Clock Tower group; ferry, junk: the boats, followed every frame.
+// tower: the Clock Tower group; ferry, junk, boat: the boats, followed every
+// frame; wave: 05's light wave's marker on the waterfront (createIsland.js).
 // IFC and the moon come from WORLD.
-export function reflectionSources({ tower, ferry, junk }) {
+export function reflectionSources({ tower, ferry, junk, boat, wave }) {
   const list = [];
 
   // Longer tails on IFC, the wheel and the moon (Priority B, user choice,
@@ -68,6 +69,15 @@ export function reflectionSources({ tower, ferry, junk }) {
   // the lit cabins reflect as their own glints.
   list.push(source(0, 0, 0, 3, 0, 0x2a5a40, 0.1, { key: 'ferry', follow: ferry, extent: [19, 4.6], kind: 'hull', rank: 2 }));
   list.push(source(0, 0, 0, 3.6, 0, 0x8a5030, 0.08, { key: 'junk', follow: junk, extent: [12, 3.2], kind: 'hull', rank: 2 }));
+
+  // 05 (user choices, 2026-10-04): the light wave as a soft pink-white glow
+  // the wave's width under the crowns and strips it lights, faded by the
+  // wave itself; the harbour boat's string lights and cabin, and its hull.
+  if (wave) list.push(source(0, 0, 60, 220, 0, 0xffa8d8, 0.35, { key: 'wave', follow: wave, extent: [70, 70], tail: 0.3, taper: 0.5 }));
+  if (boat) {
+    list.push(source(0, 0, 1.2, 8, 0, 0xffcf94, 0.5, { key: 'boat', follow: boat, extent: [10, 2.5], tail: 0.2 }));
+    list.push(source(0, 0, 0, 1.6, 0, 0x1a2030, 0.1, { key: 'boat', follow: boat, extent: [11, 2.6], kind: 'hull', rank: 2 }));
+  }
   return list;
 }
 
