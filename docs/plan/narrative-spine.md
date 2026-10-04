@@ -236,8 +236,8 @@ The six drafts are approved (user request, 2026-10-04). Scene 02 now runs:
   scene keeps its mouse parallax (user choice, 2026-10-04).
 - **Beats** (user request, 2026-10-04: beat 1 above beat 2): beat 1 is the
   lead, 19 px in cream; beat 2 is 15 px in the soft body grey and no
-  longer dims beat 1. Phones stack them too (17 px and 13 px, full copy
-  width); beat 2's last line just reaches the top of the tower's dome.
+  longer dims beat 1. Phones stack them too, both at 13 px and full copy
+  width (user request, 2026-10-04; beat 1 was 17 px); beat 1 stays cream.
 - **Label row** (user choice, 2026-10-04): `02 CLOCK TOWER` and a short
   hairline (56px desktop, 40px phones; `.chapter__label`). The Chinese
   name at its end was removed on every screen in 02 and 03, as it
@@ -293,11 +293,12 @@ The six drafts are approved (user request, 2026-10-04). Scene 02 now runs:
   upward through a soft tide line across 46–72% of the dwell, brightening
   as it lands, and sinks as the camera leaves; it sits still. Only the
   ferry's mast tips pass behind its lower edge. The AI drawing is no
-  longer used. Phones (user choices, 2026-10-04): fixed just above the
-  timeline and aligned with it, 70% of the column wide, caption above on
-  two lines (10 px). It covers the tower's lower half and the steam while
-  it shows; the beats stay up. (Tried the same day: the print in the
-  beats' place under the title, the beats fading out for it.)
+  longer used. Phones leave out the photograph and its caption (user
+  request, 2026-10-04), and do not fetch the file; the beats, the 1915
+  ghost, the steam and the timeline stay. (Tried earlier that day: the
+  print fixed above the timeline, covering the tower's lower half; and
+  the print in the beats' place under the title, the beats fading out
+  for it.)
 - **Memory mode** (user choices, 2026-10-04): a fixed veil over the harbour
   (`.memory-veil`, under the copy) darkens and cools it to 62% outside a
   soft opening around the Clock Tower, which stays lit (25% across, 42%
@@ -306,7 +307,8 @@ The six drafts are approved (user request, 2026-10-04). Scene 02 now runs:
   print (`--memory-mode`, `copyLayer.js`). Phones too, now.
 - **Ink backdrop** (user choice, 2026-10-04): a soft dark pool behind 02's
   copy and print, at 45% outside memory mode and full within it.
-- **Where the print hides:** phones turned sideways.
+- **Where the print hides:** phones, and windows turned sideways and
+  shorter than 500px.
 - **Reduced motion:** the camera holds as before; each layer switches on
   at the middle of its range with a short fade, the darkness follows the
   chapter shown, the dust and steam hold still.
@@ -464,9 +466,8 @@ outlined cells over a darkened scene; no Kage code, type or copy):
     Central, adult weekday fare HK$5.0, checked against the Star Ferry
     fare table on 2026-10-04) hangs over the water at the lower right,
     just above the panels, in the darker cream of the night grade. On
-    phones it is centred in the open water between the panels' foot and
-    the foot of the smallest viewport (so a browser toolbar never covers
-    it), at the right, left of the 天星小輪 label and clear of the buoy,
+    phones it sits low in the open water, just above the browser toolbar,
+    at the right, left of the 天星小輪 label and clear of the buoy,
     46% of the width; a tap plays the hover effect for a second; left out
     only where that gap is too small for it (user request and choices,
     2026-10-04). It behaves like a ticket, not cloth (user requests and

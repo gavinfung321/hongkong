@@ -6,6 +6,24 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-04
 
+- **02 phone beats the same size** (user request, 2026-10-04). On phones
+  both paragraphs are 13 px, so the tower sits higher. Beat 1 stays
+  cream. Desktop is unchanged. Files: `src/styles.css`; plan:
+  `narrative-spine.md`.
+- **02 print off on phones** (user request, 2026-10-04). The terminus
+  photograph and the caption above it are gone on phones, and the file
+  is not fetched there. The paragraphs, the faint 1915, the steam and
+  the timeline stay. Desktop keeps the print. Files: `src/styles.css`,
+  `src/ui/memoryPlate.js`, `src/main.js`; plan: `narrative-spine.md`.
+- **03 phone ticket lower** (user request, 2026-10-04). On phones the
+  ticket sits near the foot of the open water, just above the browser
+  toolbar, instead of midway in that gap. It still stays off when the
+  gap is too small. Files: `src/styles.css`, `src/ui/copyLayer.js`;
+  plan: `narrative-spine.md`.
+- **Fallback introduction** (user request, 2026-10-04). The readable story
+  opens with the two approved lines. A normal visit does not show them.
+  Files: `index.html`, `src/styles.css`; plan: `interface.md`,
+  `FINAL-NARRATIVE-COPY.md`.
 - **Social preview image** (user request, 2026-10-04). A shared link now
   shows the hero: the opening frame cropped to 1200×630. A page visit
   does not download it. Files: `public/posters/harbour-social.jpg`,

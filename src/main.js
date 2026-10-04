@@ -361,6 +361,7 @@ async function start(initGuard, header, loading) {
     if (breakpointChanged) {
       breakpoint = next;
       root.dataset.breakpoint = breakpoint;
+      if (ready && breakpoint !== 'mobile') memories.load();
     }
     const ratio = targetPixelRatio();
     if (w !== width || h !== height || breakpointChanged || ratio !== pixelRatio) {

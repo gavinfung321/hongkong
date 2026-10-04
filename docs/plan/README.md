@@ -318,5 +318,6 @@ the HONG KONG wordmark, easy to type on a phone). Every push to `main`
 rebuilds the site (`.github/workflows/deploy.yml`), so the iPhone checks can
 use the live address. Before the first push, three bauhinia reference photos
 of unknown rights were removed from the whole history; they stay on the
-user's computer. Milestone 5 still owns the final launch (copy and
-deployment). The poster stills and the phone speed check are done.
+user's computer. Milestone 5's remaining step is publishing this work.
+The poster stills, the social image, the phone speed check and the
+fallback introduction are done.

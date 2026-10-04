@@ -262,6 +262,9 @@ words available to it.
 | Context-loss recovery | No alarming dialog; switch to the readable fallback story |
 | JavaScript disabled | Existing semantic story; no additional warning required |
 
+The two fallback lines are on the first screen of the readable story
+(user request, 2026-10-04). A normal visit does not show them.
+
 Never write “Loading experience…”, “Something went wrong” or a technical WebGL
 error to the general visitor.
 
@@ -392,8 +395,8 @@ create new UI until their own briefs are approved.
 - [x] Fireworks line approved as authored-scene language, not an event claim
 - [x] Footer statement and factual dates approved
 - [x] English narrative with selected Traditional Chinese labels approved
-- [x] Loading and fallback wording approved for their later briefs (not built
-  in this pass)
+- [x] Loading label is on the entrance card. The fallback introduction is
+  on the readable story (user request, 2026-10-04).
 
 Approved 2026-10-03 and implemented in `index.html`; no chapter text remains
 marked as placeholder copy.

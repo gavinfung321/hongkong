@@ -650,9 +650,24 @@ a:focus-visible {
     --header-height: 56px;
   }
 
-  .chapter {
+  .chapter,
+  .is-fallback .hero {
     padding-block-start: 48px;
     padding-inline-start: var(--page-inset);
+  }
+
+  .is-fallback .fallback-intro {
+    padding: 16px 18px;
+  }
+
+  .fallback-intro__title {
+    font-size: clamp(2.25rem, 10vw, 3rem);
+  }
+
+  .fallback-intro__body {
+    max-width: 30ch;
+    font-size: 0.9375rem;
+    line-height: 1.58;
   }
 
   .chapter__copy {
@@ -1304,6 +1319,48 @@ html:not(.is-enhanced) .vertical-text {
   height: 100svh;
 }
 
+/* Fallback introduction (user request, 2026-10-04). Hidden on a normal visit
+   and when JavaScript is off; the two approved lines show only once the
+   page has switched to the readable story. */
+.fallback-intro {
+  display: none;
+}
+
+.is-fallback .hero {
+  display: flex;
+  align-items: flex-start;
+  min-height: 100svh;
+  padding: clamp(72px, 10svh, 120px) var(--page-inset);
+  padding-inline-start: max(var(--page-inset), 20vw);
+}
+
+.is-fallback .fallback-intro {
+  display: block;
+  max-width: var(--measure);
+  padding: 20px 24px;
+  border-radius: 4px;
+  background: rgb(20 18 40 / 0.72);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.5);
+}
+
+.fallback-intro__title {
+  margin: 0;
+  color: var(--color-ivory);
+  font-family: var(--font-display-en);
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.fallback-intro__body {
+  max-width: 36ch;
+  margin: 1rem 0 0;
+  color: var(--color-soft);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
 /* Enhanced mode: fixed WebGL canvas behind scroll-driven copy */
 
 .world,
@@ -1560,10 +1617,10 @@ html:not(.is-enhanced) .vertical-text {
 
 /* The memory print: an archival photograph baked as a duotone print with
    burnt edges and grain (the only grain on the site; user choice,
-   2026-10-04), under the beats on desktop and above the timeline on phones
-   (user choice, 2026-10-04). It develops upward from its lower edge with
-   the words (user request, 2026-10-04) and sits still; it stays out on very
-   short windows. */
+   2026-10-04), under the beats on desktop. It develops upward from its
+   lower edge with the words (user request, 2026-10-04) and sits still.
+   Phones leave it out, photograph and caption (user request, 2026-10-04);
+   it also stays out on very short windows. */
 .chapter__memory {
   display: none;
 }
@@ -1597,25 +1654,9 @@ html:not(.is-enhanced) .vertical-text {
   opacity: clamp(0, calc((var(--memory-reveal, 0) - 0.7) / 0.3), 1);
 }
 
-.is-fallback .chapter__memory {
+.is-fallback .chapter__memory,
+[data-breakpoint="mobile"].is-enhanced .chapter__memory {
   display: none;
-}
-
-/* Phones: fixed just above the timeline, aligned with it, at 70% of the
-   column (user choice, 2026-10-04); it covers the tower's lower half and the
-   steam while it shows. */
-[data-breakpoint="mobile"].is-enhanced .chapter__memory.is-loaded {
-  --print-left: max(var(--page-inset), env(safe-area-inset-left), calc(var(--copy-left) * 1vw));
-  position: fixed;
-  left: var(--print-left);
-  bottom: calc(max(5lvh, calc(env(safe-area-inset-bottom) + 16px)) + 5.5rem);
-  width: calc((100vw - 2 * var(--print-left)) * 0.7);
-  margin: 0;
-}
-
-[data-breakpoint="mobile"].is-enhanced .chapter__memory-caption {
-  font-size: 0.625rem;
-  letter-spacing: 0.1em;
 }
 
 @media (orientation: landscape) and (max-height: 500px) {
@@ -2242,15 +2283,14 @@ html:not(.is-enhanced) .vertical-text {
   pointer-events: none;
 }
 
-/* Phones: centred in the open water between the panels' foot and the foot
-   of the smallest viewport (so a browser toolbar never covers it), left of
+/* Phones: low in the open water, just above the browser toolbar, left of
    the 天星小輪 label and clear of the buoy; left out where there is no
-   room (copyLayer.js measures --panels-bottom and sets data-roomless;
-   user choices, 2026-10-04). 46vw matches TICKET_WIDTH there. */
+   room (copyLayer.js sets data-roomless; user request, 2026-10-04).
+   46vw matches TICKET_WIDTH there. */
 [data-breakpoint="mobile"].is-enhanced .chapter__ticket {
-  top: calc((var(--panels-bottom, 70svh) + 100svh - 46vw * 344 / 720) / 2);
+  top: auto;
   right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 40px);
-  bottom: auto;
+  bottom: max(5lvh, calc(env(safe-area-inset-bottom) + 16px));
   width: 46vw;
 }
 
@@ -2821,6 +2861,13 @@ html:not(.is-enhanced) .vertical-text {
 [data-breakpoint="mobile"].is-enhanced .chapter__beat + .chapter__beat {
   max-width: none;
   margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+/* 02 on phones: both paragraphs the same size, so the tower sits higher
+   once the print is gone. Beat 1 stays cream (user request, 2026-10-04). */
+[data-breakpoint="mobile"].is-enhanced #chapter-02 .chapter__beat:first-child {
   font-size: 0.8125rem;
   line-height: 1.55;
 }

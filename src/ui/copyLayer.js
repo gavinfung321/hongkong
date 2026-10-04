@@ -64,9 +64,9 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
   const stories = copies.map((copy) => {
     if (!copy.classList.contains('chapter__copy--story')) return null;
     const board = copy.querySelector('.chapter__board');
-    // The ticket hangs just above the panels row on desktop, and in the
-    // open water below the panels on phones, left out where there is no
-    // room for it (styles.css; TICKET_WIDTH matches its phone width).
+    // The ticket hangs just above the panels row on desktop, and low in
+    // the open water on phones, left out where the foot gap cannot hold
+    // it above the toolbar (styles.css; TICKET_WIDTH matches its phone width).
     const panels = copy.querySelector('.chapter__panels');
     const ticket = copy.querySelector('.chapter__ticket');
     if (panels) {
@@ -74,9 +74,9 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
         copy.style.setProperty('--panels-height', `${panels.offsetHeight}px`);
         if (!ticket) return;
         const bottom = copy.getBoundingClientRect().top + panels.offsetTop + panels.offsetHeight;
-        copy.style.setProperty('--panels-bottom', `${Math.round(bottom)}px`);
         const height = innerWidth * TICKET_WIDTH * TICKET_RATIO;
-        ticket.toggleAttribute('data-roomless', innerHeight - bottom < height + 2 * TICKET_MARGIN);
+        const foot = Math.max(innerHeight * 0.05, 16);
+        ticket.toggleAttribute('data-roomless', innerHeight - bottom < height + foot + TICKET_MARGIN);
       };
       const observer = new ResizeObserver(measure);
       observer.observe(panels);

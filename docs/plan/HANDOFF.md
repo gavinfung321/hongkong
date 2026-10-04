@@ -66,8 +66,9 @@ Milestone 2 is closed. The phone re-measure is closed (user, 2026-10-04:
 fine). The colophon keeps "Created by Gavin Fung at HKAAA". The paper
 grain was passed. The fallback poster is a still of the opening frame
 (desktop and phone, loaded only when the 3D scene is unavailable). A
-shared link shows that same hero, cropped to 1200×630. No other next
-task is set.
+shared link shows that same hero, cropped to 1200×630. The readable
+story opens with the two approved fallback lines. Publishing this work
+is what remains.
 
 ## Fireworks: all three steps done (user choice, 2026-10-02)
 

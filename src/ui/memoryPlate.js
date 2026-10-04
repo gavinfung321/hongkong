@@ -9,6 +9,7 @@ export function createMemoryPlates(sections) {
 
   function load() {
     if (loaded) return;
+    if (document.documentElement.dataset.breakpoint === 'mobile') return;
     loaded = true;
     for (const figure of figures) {
       const image = figure.querySelector('img');

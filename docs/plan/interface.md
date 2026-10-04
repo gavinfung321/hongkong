@@ -680,3 +680,9 @@ script 1.4 s, first 3D frame 1.7 s).
   on fallback or when the 12 s timer lifts the cover; without JavaScript
   a `noscript` pair shows them. Phones use the portrait still (the same
   `max-aspect-ratio: 4/5` switch as before).
+- **Fallback introduction** (user request, 2026-10-04): once the page is
+  the readable story, the first screen carries the two approved lines,
+  "A night crossing of Victoria Harbour" and "The interactive harbour is
+  unavailable here, but the complete journey continues below." The six
+  chapters follow. A normal visit and a no-JavaScript visit do not show
+  them.
