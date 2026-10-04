@@ -1,0 +1,17 @@
+---
+description: For scene-specific work, read the scene map and open only that scene's files
+alwaysApply: true
+---
+
+# Scene edits
+
+For work on one harbour chapter (01–06):
+
+- Read `docs/SCENE-MAP.md` first.
+- Open only files mapped to the affected scene.
+- Do not read `CHANGELOG.md`, old plans, review screenshots or unrelated scenes unless explicitly requested.
+- Do not create screenshots or recordings unless explicitly requested.
+- Keep editable layout values in the scene's configuration (`src/data/chapters.js`, or the configuration block named for that scene in the map).
+- For small changes, run only `npm run build` and inspect the affected scene at http://localhost:5173/#chapter-0N.
+
+A ticket change in scene 03 reads the map, then opens `#chapter-03` in `index.html`, chapter `03` in `src/data/chapters.js`, the 03 blocks in `src/styles.css`, `src/ui/ticketCard.js` and `src/ui/departureBoard.js`.

@@ -1,5 +1,6 @@
 import {
   AdditiveBlending,
+  Box3,
   BufferGeometry,
   CanvasTexture,
   DoubleSide,
@@ -21,6 +22,7 @@ import {
 import { MIST_SHEET } from '../data/atmosphere.js';
 import { WORLD } from '../data/world.js';
 import { aimCamera, poseFov } from '../scroll/cameraRig.js';
+import { SCENE_02_GHOST, SCENE_02_LAYOUT } from '../story/scene02/config.js';
 import { seededRandom } from './random.js';
 
 // Chapter 02's story layers in the scene (narrative spine, user choice,
@@ -44,23 +46,6 @@ import { seededRandom } from './random.js';
 // then fixed in the world, so the mouse parallax still moves them against
 // the tower.
 const CHAPTER = '02';
-
-// x: the column's centre; foot: where the numerals start, height: their
-// length up the screen (% of the viewport height). Desktop: 3.2 km out,
-// behind the near range (1.8 km north), so the ridge hides the foot; phones
-// look at the range from below the copy, so there it stands in front of it.
-const GHOST = {
-  text: '1915',
-  font: 'fonts/cormorant-garamond-latin-600.woff2',
-  colour: 0xf3e9d2,
-  // Phones: right of the tower, between it and the skyline, its foot above
-  // the right-hand palms (user choice, 2026-10-04: on the left the palms hid
-  // it); stronger, as it stands over the dark city at the veil's edge.
-  // Wide or narrow: the full column in the right-hand sky. The copy moves
-  // left on a narrow window so this stays clear of the words (styles.css).
-  desktop: { x: 90, foot: 59, height: 48, depth: 3200, opacity: 0.12 },
-  mobile: { x: 74, foot: 62, height: 22, depth: 420, opacity: 0.2 },
-};
 
 // Swarms of motes (user choice, 2026-10-04: more volume from depth and
 // light, not just count). Each fills a box in metres: `ahead` / `lift` from
@@ -123,12 +108,14 @@ const camRight = new Vector3();
 const camUp = new Vector3();
 const camBack = new Vector3();
 const ghostBasis = new Matrix4();
+const towerBounds = new Box3();
+const towerCorner = new Vector3();
 
 // The face's default figures are old-style, which wobble once turned
 // upright, and canvas text cannot ask for lining ones; so the numerals are
 // set in an SVG with the face embedded, then trimmed to their ink.
 async function drawGhost() {
-  const response = await fetch(`${import.meta.env.BASE_URL}${GHOST.font}`);
+  const response = await fetch(`${import.meta.env.BASE_URL}${SCENE_02_GHOST.font}`);
   if (!response.ok) throw new Error('ghost font');
   const bytes = new Uint8Array(await response.arrayBuffer());
   let binary = '';
@@ -141,7 +128,7 @@ async function drawGhost() {
       <style>@font-face { font-family: Ghost; font-weight: 600; src: url(data:font/woff2;base64,${btoa(binary)}) format("woff2"); }</style>
       <linearGradient id="fade"><stop offset="0" stop-color="#fff" stop-opacity="0.45"/><stop offset="0.3" stop-color="#fff" stop-opacity="0.85"/><stop offset="1" stop-color="#fff"/></linearGradient>
     </defs>
-    <text x="${size * 0.2}" y="${size}" font-family="Ghost" font-weight="600" font-size="${size}" style="font-variant-numeric: lining-nums" fill="url(#fade)">${GHOST.text}</text>
+    <text x="${size * 0.2}" y="${size}" font-family="Ghost" font-weight="600" font-size="${size}" style="font-variant-numeric: lining-nums" fill="url(#fade)">${SCENE_02_GHOST.text}</text>
   </svg>`;
   const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
   const image = new Image();
@@ -275,8 +262,9 @@ const dustFragment = /* glsl */ `
   }
 `;
 
-export function createStoryLayers(chapters, renderer, { onLoad } = {}) {
+export function createStoryLayers(chapters, renderer, { onLoad, tower } = {}) {
   const chapter = chapters.find((c) => c.id === CHAPTER);
+  const copyElement = document.querySelector('#chapter-02 .chapter__copy');
   const group = new Group();
   group.name = 'story';
 
@@ -284,7 +272,7 @@ export function createStoryLayers(chapters, renderer, { onLoad } = {}) {
   // Shown once its numerals are drawn; without them it stays out.
   let ghostArt = null;
   const ghostMaterial = new MeshBasicMaterial({
-    color: GHOST.colour,
+    color: SCENE_02_GHOST.colour,
     transparent: true,
     opacity: 0,
     depthWrite: false,
@@ -362,7 +350,7 @@ export function createStoryLayers(chapters, renderer, { onLoad } = {}) {
   const levels = { ghost: 0, dust: 0, steam: 0 };
   let still = false;
   let placed = null;
-  let ghostOpacity = GHOST.desktop.opacity;
+  let ghostOpacity = SCENE_02_GHOST.standard.opacity;
 
   // Screen point (x, y in %) at `depth` metres ahead, from the placement camera.
   function worldAt(position, x, y, depth) {
@@ -373,7 +361,14 @@ export function createStoryLayers(chapters, renderer, { onLoad } = {}) {
 
   function place(breakpoint, aspect) {
     placed = [breakpoint, aspect];
-    ghostOpacity = GHOST[breakpoint].opacity;
+    const spec = breakpoint === 'mobile'
+      ? SCENE_02_GHOST.mobile
+      : aspect > 1.7
+        ? SCENE_02_GHOST.ultrawide
+        : aspect >= 1.35
+          ? SCENE_02_GHOST.standard
+          : SCENE_02_GHOST.compact;
+    ghostOpacity = spec.opacity;
     ghostMaterial.opacity = levels.ghost * ghostOpacity;
     const pose = chapter.camera[breakpoint];
     const fov = poseFov(pose, aspect, breakpoint);
@@ -390,12 +385,69 @@ export function createStoryLayers(chapters, renderer, { onLoad } = {}) {
     const viewHeight = (depth) => 2 * depth * Math.tan(MathUtils.degToRad(fov / 2));
     const viewWidth = (depth) => viewHeight(depth) * aspect;
 
+    // Keep the DOM story and the world-space ghost in one responsive
+    // composition. Measuring the tower at the authored hold pose avoids a
+    // viewport formula that moves at a different rate from the 3D subject.
+    let desktopLayout = null;
+    if (breakpoint === 'desktop' && tower && copyElement) {
+      tower.updateWorldMatrix(true, true);
+      towerBounds.setFromObject(tower, true);
+      let towerRight = -Infinity;
+      for (let i = 0; i < 8; i++) {
+        towerCorner.set(
+          i & 1 ? towerBounds.max.x : towerBounds.min.x,
+          i & 2 ? towerBounds.max.y : towerBounds.min.y,
+          i & 4 ? towerBounds.max.z : towerBounds.min.z,
+        ).project(placementCamera);
+        towerRight = Math.max(towerRight, (towerCorner.x * 0.5 + 0.5) * 100);
+      }
+      const copyLeft = MathUtils.clamp(
+        towerRight + SCENE_02_LAYOUT.towerGap,
+        ...SCENE_02_LAYOUT.copyLeft,
+      );
+      const copyRight = Math.min(copyLeft + SCENE_02_LAYOUT.copyWidth, SCENE_02_LAYOUT.copyRight);
+      copyElement.style.setProperty('--scene-02-copy-left', copyLeft.toFixed(2));
+      copyElement.style.setProperty('--scene-02-copy-right', copyRight.toFixed(2));
+
+      // Reserve the full visual width of the content, including the archival
+      // print even before it reveals. This keeps the DOM photograph from
+      // covering a digit while the ghost remains attached to the content.
+      let contentRight = copyLeft;
+      copyElement.querySelectorAll(
+        '.chapter__label, .chapter__title, .chapter__beat, .chapter__memory-caption',
+      ).forEach((element) => {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        for (const rect of range.getClientRects()) {
+          contentRight = Math.max(contentRight, (rect.right / window.innerWidth) * 100);
+        }
+      });
+      const memoryWidth = Math.min(
+        copyRight - copyLeft,
+        36,
+        (50 * window.innerHeight) / window.innerWidth,
+      );
+      contentRight = Math.max(contentRight, copyLeft + memoryWidth);
+      const ghostLeft = Math.min(
+        contentRight + SCENE_02_LAYOUT.ghostGap,
+        SCENE_02_LAYOUT.ghostRight,
+      );
+      desktopLayout = { copyLeft, copyRight, ghostLeft };
+    }
+
     // The legs of the digits face screen-left, toward the words, and the
     // tops face right. Same turn on desktop and phones (user request, 2026-10-04).
     if (ghostArt) {
-      const spec = GHOST[breakpoint];
       let foot = spec.foot;
       let height = spec.height;
+      let x = spec.x;
+      if (desktopLayout) {
+        const room = SCENE_02_LAYOUT.ghostRight - desktopLayout.ghostLeft;
+        const naturalWidth = height / (ghostArt.aspect * aspect);
+        const width = Math.min(naturalWidth, room);
+        height = width * ghostArt.aspect * aspect;
+        x = desktopLayout.ghostLeft + width / 2;
+      }
       if (breakpoint === 'desktop') {
         const header = document.querySelector('.site-header')?.offsetHeight ?? 72;
         const room = foot - ((header + 16) / window.innerHeight) * 100;
@@ -403,7 +455,7 @@ export function createStoryLayers(chapters, renderer, { onLoad } = {}) {
       }
       const length = (height / 100) * viewHeight(spec.depth);
       ghost.scale.set(length, length / ghostArt.aspect, 1);
-      ghost.position.copy(worldAt(position, spec.x, foot - height / 2, spec.depth));
+      ghost.position.copy(worldAt(position, x, foot - height / 2, spec.depth));
       camRight.setFromMatrixColumn(placementCamera.matrixWorld, 0);
       camUp.setFromMatrixColumn(placementCamera.matrixWorld, 1);
       camBack.setFromMatrixColumn(placementCamera.matrixWorld, 2);

@@ -1609,18 +1609,18 @@ html:not(.is-enhanced) .vertical-text {
   letter-spacing: 0.1em;
 }
 
-/* A narrow desktop window: the words and the photograph shift left so the
-   right-hand sky can hold the full 1915 (user request, 2026-10-04). */
+/* Scene 02 follows the Clock Tower's projected edge. createStoryLayers.js
+   writes the shared copy/ghost layout after placing the authored hold camera. */
+[data-breakpoint="desktop"].is-enhanced #chapter-02 .chapter__copy {
+  left: max(var(--page-inset), env(safe-area-inset-left), calc(var(--scene-02-copy-left, var(--copy-left)) * 1vw));
+  right: max(var(--page-inset), env(safe-area-inset-right), calc((100 - var(--scene-02-copy-right, var(--copy-right))) * 1vw));
+}
+
+[data-breakpoint="desktop"].is-enhanced #chapter-02 .chapter__facts {
+  left: max(var(--page-inset), env(safe-area-inset-left), calc(var(--scene-02-copy-left, var(--copy-left)) * 1vw));
+}
+
 @media (max-aspect-ratio: 3/2) {
-  [data-breakpoint="desktop"].is-enhanced #chapter-02 .chapter__copy {
-    --copy-left: 28;
-    --copy-right: 72;
-  }
-
-  [data-breakpoint="desktop"].is-enhanced #chapter-02 .chapter__facts {
-    right: max(var(--page-inset), calc((100 - var(--copy-right)) * 1vw));
-  }
-
   [data-breakpoint="desktop"].is-enhanced .chapter__facts dd {
     letter-spacing: 0.08em;
   }

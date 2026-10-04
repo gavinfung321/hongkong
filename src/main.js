@@ -146,6 +146,7 @@ async function start(initGuard, header, loading) {
   });
   const searchlights = createSearchlights();
   const story = createStoryLayers(chapters, renderer, {
+    tower: kowloon.clockTower,
     onLoad: () => {
       needsRender = true;
     },
