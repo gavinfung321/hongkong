@@ -1,7 +1,7 @@
 # Scene 03 — Crossing, countdown and cards
 
-**Status:** desktop presence is on the page (user choice, 2026-10-05):
-W2, C2, T1. The phone is unchanged. Awaiting a look.
+**Status:** closed (user approval, 2026-10-06). Desktop presence is W2, C2,
+T1 (user choice, 2026-10-05). The phone is unchanged.
 **Created:** user request, 2026-10-05
 **Review:** <http://localhost:5173/#chapter-03>
 

@@ -39,7 +39,7 @@ const TASKS = [
 // The faces the hero and the cover use, with the glyphs they show.
 const FONTS = [
   ['700 1em "Noto Serif TC"', '維港夜色香港'],
-  ['600 1em "Noto Serif TC"', '東方明珠'],
+  ['600 1em "Noto Serif TC"', '東方之珠'],
   ['500 1em "Noto Sans TC"', '維港'],
   ['600 1em "Cormorant Garamond"', 'A'],
   ['400 1em Inter', 'A'],

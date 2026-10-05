@@ -1,9 +1,9 @@
 # Final Narrative Copy
 
-**Status:** Approved and implemented 2026-10-03 (proposed 2026-10-02). The
-chapter, identity, navigation, footer, accessibility and metadata copy is live
-in `index.html`. The loading, fallback and social image wording stays here for
-their own later briefs.
+**Status:** The page is the source (user approval, 2026-10-06). Identity,
+navigation, footer, loading, fallback and metadata below already match
+`index.html`. Section 3 now records the live chapter sentences. The
+2026-10-03 draft remains noted where a chapter has since been rewritten.
 
 This document contains the proposed final public-facing copy for **Victoria
 Harbour: A Night Crossing**. It follows the approved chapter order, camera
@@ -53,11 +53,11 @@ authored layouts, not squeezed duplicate copy.
 | Header name | **Hong Kong** |
 | Header tagline | **Pearl of the Orient** |
 | Hero wordmark | **香港** |
-| Vertical title | **東方明珠** |
+| Vertical title | **東方之珠** |
 | Opening instruction | **Scroll to cross** |
 | Return action | **Return to the harbour** |
 
-The `Pearl of the Orient` / `東方明珠` pairing is retained as an approved brand
+The `Pearl of the Orient` / `東方之珠` pairing is retained as an approved brand
 device. It should not be repeated in chapter or footer prose.
 
 ---
@@ -86,67 +86,111 @@ repeating the on-screen instruction.
 **Kicker:** Clock Tower  
 **Title:** The Kowloon Edge  
 **Traditional Chinese label:** 鐘樓  
-**Body, 20 words:**
 
-> The old railway clock still faces the harbour. It marks the shore where the
-> city's railway journeys north once began.
+The 2026-10-03 sentence is retired. Two paragraphs (user approval through
+2026-10-05). On a phone only the first shows. The print is desktop only.
 
-Purpose: acknowledge the tower's railway history without stopping for a history
-lesson. “Once began” refers to the former terminus, not the current ferry.
+**Beat 1, 27 words:**
+
+> The clock still faces the harbour. The tower rose in 1915 beside the new
+> Kowloon terminus, but its clocks and bell only began keeping time in 1921.
+
+**Beat 2, desktop, 30 words:**
+
+> For sixty years, trains left from this shore for the journey north. In 1978
+> the station was demolished and the tower alone was kept, still standing
+> where those journeys began.
+
+**Print caption:** Kowloon terminus, ca. 1915 · Hong Kong Public Libraries
+
+**Timeline:** 1915 Tower rises · 1921 Clocks begin · 1975 Last train · 1978
+Station demolished
 
 ### 03
 
 **Kicker:** Star Ferry  
 **Title:** Across the Water  
 **Traditional Chinese label:** 天星小輪  
-**Body, 21 words:**
 
-> Low over the waves, the Star Ferry carries its warmly lit decks from Kowloon
-> toward Central, steady against the restless water.
+The 2026-10-03 ferry sentence is retired. The chapter is one crossing
+(user choice, 2026-10-05).
 
-Purpose: lower the viewpoint, name the direction of travel and make the ferry
-feel lived-in rather than monumental.
+**Standfirst, 10 words:**
+
+> Kowloon to the Island, the slow way, every few minutes.
+
+**Meaning, desktop, 16 words:**
+
+> Not a view but a commute: a few quiet minutes, the same crossing their
+> grandparents made.
+
+**Year, phone, and in reading order on desktop:** Crossing since 1888
+
+On desktop that year also captions the countdown as **Since 1888**. The
+phone hides that caption and shows the line under the standfirst.
+
+**Board:** Star Ferry 天星小輪 · To 往 · Due 到達 · Tsim Sha Tsui 尖沙咀 ·
+Central 中環. The due line counts 3 MIN, 2 MIN, 1 MIN, ARRIVING.
+
+**Ticket alt:** A Star Ferry ticket: upper deck, Tsim Sha Tsui to Central,
+adult weekday fare HK$5.0
+
+The footer still says the ferry’s origins are in 1880. The chapter’s 1888
+is the crossing date kept on the board. Both stay until a later choice.
 
 ### 04
 
 **Kicker:** Junk with red sails  
 **Title:** Red Sails  
 **Traditional Chinese label:** 帆船  
-**Body, 20 words:**
 
-> A junk with red sails passes close enough to fill the night, its dark hull
-> slipping through the reflected city.
+The 2026-10-03 passing-junk sentence is retired.
 
-Purpose: make this the most immediate encounter while avoiding a false claim
-that the vessel is an untouched historic craft.
+**Statement, 30 words:**
+
+> Before the 1950s, wooden sailing junks were Hong Kong's main fishing boats.
+> The few that sail the harbour now carry visitors, keeping the shape of that
+> memory on the water.
+
+**Then:** Before 1945  
+**Now:** Dukling, built 1955  
+
+**Quote:**
+
+> “I can’t change the direction of the wind, but I can adjust my sails to
+> always reach my destination.”
 
 ### 05
 
 **Kicker:** Two IFC  
 **Title:** City of Light  
 **Traditional Chinese label:** 國金  
-**Body, 20 words:**
 
-> Two IFC rises above Central, its bright crown drawing the crossing toward a
-> wall of glass, steel and harbour light.
+The 2026-10-03 crown sentence is retired.
 
-Purpose: shift from horizontal crossing to vertical city scale. The Observation
-Wheel remains visible in the composition, but the narrative does not elevate a
-recent entertainment addition to the same level as the crossing's core
-subjects.
+**Body, 30 words:**
+
+> Two IFC rises 412 metres over Central. Finished in 2003, it was the city's
+> tallest tower for years, and it is still the one on every postcard of the
+> harbour.
+
+**Callouts:** desktop “Light the skyline” and “Hover me”; phone “Tap me”
+for both.
 
 ### 06
 
 **Kicker:** Fireworks (was "Departure"; user request, 2026-10-03)  
 **Title:** Afterglow  
 **Traditional Chinese label:** 煙花  
-**Body, 19 words:**
 
-> The skyline falls away. Fireworks open above the harbour, then soften into
-> smoke, leaving the city to the dark.
+The 2026-10-03 fireworks sentence is retired (user request, 2026-10-05).
+The show stays in the picture. The words do not claim a nightly event.
 
-Purpose: release the forward movement and end on disappearance rather than a
-tourism-style climax. This describes the authored scene, not a nightly event.
+**Body, 32 words:**
+
+> The light fades, as light does. The water stays. In the morning the ferries
+> will cross again, and the clock will still be facing the shore. The
+> crossing ends; the harbour remains.
 
 ---
 
@@ -321,7 +365,8 @@ The image (2026-10-04, user request) is the hero frame, cropped to 1200×630:
 
 Before implementation is approved:
 
-1. Chapter body copy stays between 18 and 21 words as written.
+1. The 18-to-21-word cap was the 2026-10-03 draft. Live chapters in section
+   3 are the record. Scene 01 is still 18 words. Scenes 02 to 06 are longer.
 2. Desktop body measure remains no wider than 36 characters; mobile no wider
    than 30 characters.
 3. No chapter body exceeds four lines in either approved mobile viewport after
@@ -340,15 +385,17 @@ Do not shrink body text below the typography brief's minimum.
 
 ## 10. Factual notes and sources
 
-The final prose intentionally carries few dates. The footer facts are based on:
+Dates now sit in the chapter sentences for 02, 03, 04 and 05, and in
+Scene 02’s timeline. The footer facts stay the short orientation lines.
+They are based on:
 
 - [Hong Kong Antiquities and Monuments Office](https://www.amo.gov.hk/en/historic-buildings/monuments/kowloon/monuments_43/index.html):
   the former Kowloon Canton Railway Clock Tower was erected in 1915 as part of
   the Tsim Sha Tsui terminus.
 - [The Star Ferry's official company history](https://www.starferry.com.hk/en/theCompany):
   its service traces its origins to Dorabjee Naorojee Mithaiwala's harbour
-  ferry service in 1880; the present company became public in 1898. “Origins
-  in 1880” is more precise than the current footer's “since 1888”.
+  ferry service in 1880; the present company became public in 1898. The
+  footer keeps “origins in 1880”. Scene 03 keeps “Crossing since 1888”.
 - [Hong Kong Maritime Museum](https://www.hkmaritimemuseum.org/post/chi-junk-hk?lang=zh):
   traditional wooden sailing junks were dominant fishing vessels in Hong Kong
   before the 1950s. The footer uses a period rather than a specific origin year
@@ -357,14 +404,18 @@ The final prose intentionally carries few dates. The footer facts are based on:
 - [Council on Tall Buildings and Urban Habitat](https://www.skyscrapercenter.com/building/two-international-finance-centre/205):
   Two International Finance Centre was completed in 2003.
 
-Do not expand these facts into plaques within the chapter overlays. The site is
-an atmospheric crossing, not a historical reference guide.
+Scene 02’s timeline and Scene 03’s countdown are the plaques the chapters
+kept. Do not add a second set. The site remains a crossing, not a
+reference guide.
 
 ---
 
 ## 11. Implementation handoff
 
-When this copy is approved, Cursor should make one contained copy-only pass:
+The 2026-10-03 pass is done. Section 3 was brought in line with the page
+on 2026-10-06. That record did not change `index.html`.
+
+The original handoff was:
 
 1. Replace the six placeholder body lines and remove every
    `data-copy="placeholder"` attribute.
@@ -397,5 +448,8 @@ create new UI until their own briefs are approved.
 - [x] Loading label is on the entrance card. The fallback introduction is
   on the readable story (user request, 2026-10-04).
 
-Approved 2026-10-03 and implemented in `index.html`; no chapter text remains
-marked as placeholder copy.
+- [x] Live chapter sentences recorded from the page (2026-10-06)
+
+Approved 2026-10-03 and implemented in `index.html`. Later chapter
+rewrites are the sentences in section 3. No chapter text remains marked
+as placeholder copy.

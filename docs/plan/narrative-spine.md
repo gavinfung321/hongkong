@@ -396,7 +396,8 @@ any other chapter.
 - [x] Match Scene 02’s two desktop beats at beat 2’s size and measure.
 - [x] Match them on a short landscape window.
 - [x] Leave the phone as one paragraph.
-- [ ] Look at <http://localhost:5173/#chapter-02>.
+- [x] Look at <http://localhost:5173/#chapter-02> (closed, user approval,
+  2026-10-06).
 
 **On the page (2026-10-06):** desktop beat 1 is 0.9375rem, line-height
 1.6, measure 40ch, the same as beat 2. A short landscape window sets both
@@ -999,12 +1000,12 @@ footer is next.
 - [x] Approve and continue, revise once, or remove (approved, 2026-10-04)
 - [x] If approved, roll out one chapter at a time (06 approved, 2026-10-05)
 - [ ] Use no more than two or three illustrations in total
-- [ ] Update `FINAL-NARRATIVE-COPY.md` only after the direction is approved
+- [x] Update `FINAL-NARRATIVE-COPY.md` only after the direction is approved
+  (recorded 2026-10-06; the page is the source)
 - [ ] Record only kept decisions in `CHANGELOG.md`
 
 ## Immediate next action
 
-Scene 02’s phone paragraph is 0.9375rem (user choice, 2026-10-06).
-Awaiting a look at <http://localhost:5173/#chapter-02>. Desktop beats
-already match. Scene 05’s desktop callouts and Scene 03’s desktop pass
-are on the page and can be closed when asked.
+Scenes 02, 03 and 05 are closed (user approval, 2026-10-06).
+`FINAL-NARRATIVE-COPY.md` now records the live chapter sentences. The
+page is unchanged by that record.

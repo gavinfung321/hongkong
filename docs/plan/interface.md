@@ -220,11 +220,11 @@ How it is built:
 - An original mark: a simple junk-sail outline (the one place coral is
   allowed in the shell), next to the name "HONG KONG" in small caps.
 - Tagline under the name: "Pearl of the Orient" (user request, 2026-10-01;
-  it was "Victoria Harbour, after dark"). It pairs with the vertical 東方明珠.
+  it was "Victoria Harbour, after dark"). It pairs with the vertical 東方之珠.
 
 ### 3.6 Vertical Chinese text (built 2026-10-01)
 
-- **東方明珠** ("Pearl of the Orient"), written vertically down the right
+- **東方之珠** ("Pearl of the Orient"), written vertically down the right
   edge below the nav. It replaced 維港之夜. Large and bright so it reads as
   a second title: 1.75rem on desktop, 1.125rem on mobile, near-full ivory
   (user requests, 2026-10-01).

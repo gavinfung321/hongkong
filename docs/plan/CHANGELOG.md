@@ -6,6 +6,19 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-06
 
+- **Vertical title includes 之** (user request, 2026-10-06). The title reads
+  東方之珠. 之 was missing from Noto Serif TC, so it was drawn from another
+  face. It is now in the weight-600 file with 東, 方 and 珠. Files:
+  `index.html`, `public/fonts/noto-serif-tc-600-subset.woff2`,
+  `src/styles.css`, `src/ui/loadingScreen.js`; plan: `interface.md`,
+  `docs/ASSET-LEDGER.md`, `docs/FINAL-NARRATIVE-COPY.md`.
+- **Scenes 02, 03 and 05 closed** (user approval, 2026-10-06). The matched
+  Kowloon Edge paragraphs, the Across the Water desktop pass, and the
+  City of Light desktop callouts stay as built. The written copy now
+  records the live chapter sentences. The page is unchanged by the
+  record. Files: `docs/FINAL-NARRATIVE-COPY.md`; plan:
+  `narrative-spine.md`, `scene-03-crossing-plan.md`,
+  `scene-05-implementation-plan.md`, `README.md`.
 - **Scene 02 phone paragraph** (user choice, 2026-10-06). The single phone
   sentence comes up from 0.8125rem to 0.9375rem, the shared phone
   paragraph size. It still ends above the dome. Beat 2 stays hidden.

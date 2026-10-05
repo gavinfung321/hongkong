@@ -523,9 +523,8 @@ without fallback.
 
 ## Next action
 
-Scene 05’s desktop callouts are on the page (user choice, 2026-10-05):
-S2, D2, and the closer place. Awaiting a look at
-<http://localhost:5173/#chapter-05>. The phone is unchanged.
+Closed (user approval, 2026-10-06). Desktop callouts are S2, D2, and the
+closer place (user choice, 2026-10-05). The phone is unchanged.
 
 ## Desktop callout size and dim (user request, 2026-10-05)
 

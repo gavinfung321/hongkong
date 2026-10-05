@@ -20,15 +20,16 @@
     U+201C-201E, U+2022, U+2026, U+2039-203A, U+20AC, U+2122, U+2191, U+2212;
 }
 
-/* The Chinese subsets hold only the 35 characters on the site; rebuild them if
-   any Chinese text changes. */
+/* The Chinese subsets hold only the characters on the site. The 600 serif
+   file also includes 之 for the vertical title (user request, 2026-10-06).
+   Rebuild them if any Chinese text changes. */
 @font-face {
   font-family: "Noto Serif TC";
   src: url("/fonts/noto-serif-tc-600-subset.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: fallback;
-  unicode-range: U+4E2D, U+5230, U+524D, U+5411, U+5480, U+570B, U+591C, U+5929, U+5C0F, U+5C16, U+5E06, U+5F80,
+  unicode-range: U+4E2D, U+4E4B, U+5230, U+524D, U+5411, U+5480, U+570B, U+591C, U+5929, U+5C0F, U+5C16, U+5E06, U+5F80,
     U+65B9, U+660E, U+661F, U+6771, U+6A13, U+6C99, U+6D77, U+6E21, U+6E2F, U+7159, U+73E0, U+74B0, U+7DAD, U+7DDA,
     U+822A, U+8239, U+8272, U+82B1, U+8F2A, U+9054, U+91D1, U+9418, U+9999;
 }
@@ -1246,7 +1247,7 @@ html:not(.is-enhanced) .side-pager {
   opacity: 0.92;
 }
 
-/* A soft dark pool behind 東方明珠, against the bauhinia's flowers (user
+/* A soft dark pool behind 東方之珠, against the bauhinia's flowers (user
    choice, 2026-10-03). */
 .vertical-text__title::before {
   content: "";
