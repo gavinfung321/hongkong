@@ -6,6 +6,13 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Dedicated Scene 05 implementation plan** (user request, 2026-10-05).
+  Added a ten-step checklist for a progressive Central arrival: short
+  camera-held reading time, label and title, verified IFC sentence, existing
+  corner branch, delayed office-light interaction, mobile, reduced motion,
+  final review and approval gates. IFC, wheel, skyline, camera, copy,
+  branch artwork and all existing city effects are frozen. Files:
+  `scene-05-implementation-plan.md`, `README.md`, `narrative-spine.md`.
 - **Scene 04 responsive quote clearance** (user request, 2026-10-05). The
   desktop quote now scales fluidly by viewport width and height, with tighter
   responsive line and block spacing, so it stays clear of the statement

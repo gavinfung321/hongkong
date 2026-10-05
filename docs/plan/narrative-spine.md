@@ -781,6 +781,28 @@ Files: `index.html`, `src/ui/cityLights.js`, `src/ui/cityTouch.js`,
 `src/scene/bauhinia.js`, `src/scene/waterReflections.js`,
 `src/ui/pointerParallax.js`; `src/scene/createBollard.js` deleted.
 
+#### Scene 05 progressive-arrival plan (user request, 2026-10-05)
+
+**Goal:** turn Scene 05 into a clear arrival at Central using the existing
+label, title, verified Two IFC sentence, title sweep, corner branch and
+office-light interaction. The title and fact will establish IFC before the
+visitor is invited to explore the city lights.
+
+**Freeze throughout:** both cameras; IFC, wheel, skyline, piers, fairground,
+models and reflections; copy placement and wording; branch geometry and
+placement; touch-light size and strength; lens bokeh, cloud band, skyline
+wave, harbour boat, searchlights and wheel hover behavior. No new illustration
+or 3D layer.
+
+The detailed checklist lives in
+[`scene-05-implementation-plan.md`](scene-05-implementation-plan.md), the
+single source of truth for this pass. Status: **planned, 0 of 10 steps
+complete**.
+
+**Next implementation item:** step 1 — create Scene 05's configuration,
+preserve every current chapter value, and add a short camera hold with named
+reveal ranges.
+
 ## Checklist
 
 ### Story draft
@@ -814,5 +836,5 @@ Files: `index.html`, `src/ui/cityLights.js`, `src/ui/cityTouch.js`,
 
 ## Immediate next action
 
-Define Scene 05's controlled rollout and frozen scope before making new Scene
-05 changes.
+Complete Scene 05 step 1: extract its current values unchanged, then add its
+short camera hold and named reveal ranges.
