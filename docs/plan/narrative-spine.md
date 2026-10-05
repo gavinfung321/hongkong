@@ -960,6 +960,11 @@ footer is next.
 
 ## Immediate next action
 
-Scene 06 is approved (user approval, 2026-10-05). The footer checklist is
+Scene 06 is approved (user approval, 2026-10-05). The footer statement is
+accepted and on the page: “The crossing ends here. In the morning the
+ferries will cross again.” On phones the sail sits to the left of “The”.
+The making credit is in the colophon. “Original 3D scene and illustrated
+atmosphere” is gone. Checklist
 in [`footer-implementation-plan.md`](footer-implementation-plan.md). Status:
-planned, 0 of 8. Begin when the proposed statement is accepted.
+in progress, 7 of 8. The close is checked. Next: the user’s approval of
+the footer.

@@ -6,6 +6,36 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Colophon drops the atmosphere line** (user request, 2026-10-05).
+  “Original 3D scene and illustrated atmosphere” repeated the making credit
+  already in the colophon. HKAAA, the code line and the Dukling credit stay.
+  Files: `index.html`; plan: `footer-implementation-plan.md`, `interface.md`,
+  `narrative-spine.md`, `FINAL-NARRATIVE-COPY.md`.
+- **Footer sail sits left of “The” on phones** (user request, 2026-10-05).
+  The mark had been stacked above the statement so the old long line could
+  stay within four lines. The accepted two-line statement has room beside
+  it. Files: `src/styles.css`; plan: `footer-implementation-plan.md`,
+  `interface.md`, `narrative-spine.md`.
+- **Footer checks 5 to 7** (2026-10-05). Afterglow’s paragraph still leaves
+  with the existing copy fade. Bursts still dim to half and smoke to 70%.
+  The nav still returns only on scroll up. The footer has no motion of its
+  own. Return, the six chapter links, HKAAA and the Dukling credit all take
+  keyboard focus. The same words appear in the poster fallback and with
+  reduced motion. The page stays enhanced at 1440, 1178, 390 and 320, and
+  `npm run build` succeeds. Approval is still open. No footer code changed.
+  Files: `footer-implementation-plan.md`, `interface.md`, `narrative-spine.md`.
+- **Footer statement accepted** (user approval, 2026-10-05). The statement is
+  now “The crossing ends here. In the morning the ferries will cross again.”
+  The two sentences break onto two lines. “The harbour, vessels and skyline
+  are built and animated in code.” sits in the colophon, after the HKAAA
+  line. It stays two lines at 1440, 1178, 390 and 320. Return, columns, bar
+  and firework softening are unchanged. Files: `index.html`; plan:
+  `footer-implementation-plan.md`, `interface.md`, `narrative-spine.md`,
+  `FINAL-NARRATIVE-COPY.md`.
+- **Footer credits stay** (user question, 2026-10-05). “Created by Gavin Fung
+  at HKAAA” is the studio credit and link, not a duplicate of “© 2026 Gavin
+  Fung”. The Dukling line stays while that CC BY-SA photograph is in Scene 04.
+  No footer code changed. Files: `footer-implementation-plan.md`.
 - **Footer improvement plan** (user request, 2026-10-05). Added an eight-step
   checklist. The return, columns, bar, hairline, wash and firework softening
   stay. The proposed change is a shorter statement that answers Scene 06, with

@@ -714,9 +714,8 @@ a:focus-visible {
     margin-bottom: 36px;
   }
 
-  /* The mark sits above the statement so it keeps to four lines on phones. */
+  /* The sail stays left of "The" (user request, 2026-10-05). */
   .site-footer__statement {
-    flex-direction: column;
     gap: 14px;
     padding-bottom: 32px;
   }

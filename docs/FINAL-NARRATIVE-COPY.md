@@ -195,13 +195,9 @@ or destination behind these controls.
 
 ### Closing statement
 
-> One night, six chapters, one crossing. The journey runs from the old railway
-> clock at Tsim Sha Tsui to the lights of Central. The harbour, vessels and
-> skyline are built and animated in code.
+> The crossing ends here. In the morning the ferries will cross again.
 
-This replaces the current statement. It remains truthful after the atmosphere
-images and local fonts are added: it does not claim that every texture is made
-in code.
+Accepted 2026-10-05. It answers Scene 06 instead of retelling the night.
 
 ### Chapters column
 
@@ -226,13 +222,16 @@ details, not claims of unbroken physical or corporate continuity.
 
 - Created by Gavin Fung at HKAAA (added 2026-10-03, user choice: HKAAA is
   the author's studio; "HKAAA" links to https://hkaiautomation.com/)
-- Original 3D scene and illustrated atmosphere
+- The harbour, vessels and skyline are built and animated in code (moved
+  here from the statement, user approval, 2026-10-05)
 - Dukling photograph by Ank Kumar, CC BY-SA (shortened 2026-10-04, user
   request: the long Red Sails paragraph was too long; the public-domain
   junk needs no credit)
 
 "Built with Three.js and WebGL" and "Designed for desktop and mobile"
-were removed the same day (user request).
+were removed the same day (user request). "Original 3D scene and
+illustrated atmosphere" was removed 2026-10-05 (user request): it repeated
+the making line above it.
 
 Do not retain “Every model and texture made in code”; the approved WebP
 atmosphere and font files make that statement inaccurate.

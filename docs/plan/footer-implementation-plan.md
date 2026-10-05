@@ -1,6 +1,6 @@
 # Footer — Improvement Plan
 
-**Status:** planned, 0 of 8 steps complete
+**Status:** in progress, 7 of 8 steps complete
 **Created:** user request, 2026-10-05
 **Review:** <http://localhost:5173/#chapter-06> then scroll into the footer
 
@@ -18,6 +18,8 @@ Do not change:
 - the three columns, their headings, or the chapter links;
 - the landmark facts, years, or the decision to leave the wheel off that list;
 - the bottom bar: © 2026 Gavin Fung, 維港夜色, Hong Kong;
+- the colophon line “Created by Gavin Fung at HKAAA”, and the Dukling
+  photograph credit, while that photograph remains in Scene 04;
 - the cream hairline, the near-black wash, or how the bursts dim to half
   strength and the smoke to 70% as the footer rises;
 - Scene 06’s camera, bursts, smoke, or closing paragraph;
@@ -31,22 +33,23 @@ use any Kage lettering or copy.
 - The footer rises over Scene 06. A cream hairline, then “Return to the
   harbour,” then the statement beside the red-sail mark, then three columns,
   then the bottom bar.
-- The statement is ivory display type: “One night, six chapters, one
-  crossing. The journey runs from the old railway clock at Tsim Sha Tsui to
-  the lights of Central. The harbour, vessels and skyline are built and
-  animated in code.”
+- The statement is ivory display type, two lines: “The crossing ends here.
+  In the morning the ferries will cross again.” (user approval, 2026-10-05).
 - Scene 06 now ends on one paragraph: the light fades, the water stays, the
   ferries and the clock return in the morning, the harbour remains. The
-  footer statement repeats that journey and then switches into a production
-  note.
-- Chapters and landmarks sit side by side on phones, with the colophon
-  below. Landmark years drop to their own line. The bottom bar stacks.
+  footer answers that ending. The making credit sits in the colophon, after
+  the HKAAA line. “Original 3D scene and illustrated atmosphere” is gone
+  (user request, 2026-10-05).
+- On phones the red-sail mark stays to the left of “The”, on the first
+  line (user request, 2026-10-05). Chapters and landmarks sit side by side,
+  with the colophon below. Landmark years drop to their own line. The
+  bottom bar stacks.
 - Chapter copy, the vertical label, and the side pager fade as the footer
   rises. The nav bar is not forced back on.
 
-## Proposed words
+## Accepted words
 
-Not yet approved. Use these only if step 2 is accepted:
+Accepted (user approval, 2026-10-05). Now on the page:
 
 1. **Statement:** “The crossing ends here. In the morning the ferries will
    cross again.”
@@ -54,7 +57,17 @@ Not yet approved. Use these only if step 2 is accepted:
    built and animated in code.”
 
 The statement answers Scene 06 instead of retelling it. The making credit
-moves next to the other credits.
+sits with the other credits.
+
+**Credits** (user question, 2026-10-05): keep “Created by Gavin Fung at
+HKAAA”. It is not a copy of “© 2026 Gavin Fung”. The bar is the year and the
+name. The colophon is the studio, and HKAAA is the only link to it. Do not
+remove “Dukling photograph by Ank Kumar, CC BY-SA” while
+`plates/dukling-2016.webp` is on Scene 04. The caption “Now · Dukling, built
+1955” does not name the photographer or the licence, and CC BY-SA 4.0
+requires both. “Original 3D scene and illustrated atmosphere” is removed
+(user request, 2026-10-05). It repeated the making line. The painted sky
+stays in the asset notes.
 
 ## Files in scope
 
@@ -72,70 +85,71 @@ only after the words are approved.
 
 ### 1 — Keep the close that already works
 
-- [ ] Leave the return, columns, bar, hairline and wash in place.
-- [ ] Leave the firework dimming and the chapter-layer fade in place.
-- [ ] Do not restyle the footer to match the chapter beats.
+- [x] Leave the return, columns, bar, hairline and wash in place.
+- [x] Leave the firework dimming and the chapter-layer fade in place.
+- [x] Do not restyle the footer to match the chapter beats.
 
 **Done when:** the footer is still the same close, ready for a shorter
 statement.
 
 ### 2 — Let the statement answer the ending
 
-- [ ] Replace the three-sentence statement with the proposed two lines, once
+- [x] Replace the three-sentence statement with the proposed two lines, once
   accepted.
-- [ ] Move “built and animated in code” into the colophon.
-- [ ] Keep the red-sail mark beside the statement.
-- [ ] Keep the statement in the ivory display face.
+- [x] Move “built and animated in code” into the colophon.
+- [x] Keep the red-sail mark beside the statement.
+- [x] Keep the statement in the ivory display face.
 
 **Done when:** the footer does not retell the six chapters, and the making
 credit sits with the other credits.
 
 ### 3 — Desktop reading
 
-- [ ] Keep the statement to two lines at 1440 × 900 and 1178 × 1014.
-- [ ] Keep the three columns aligned, with headings and links readable over
+- [x] Keep the statement to two lines at 1440 × 900 and 1178 × 1014.
+- [x] Keep the three columns aligned, with headings and links readable over
   the dimmed bursts.
-- [ ] Keep “Return to the harbour” the first action.
+- [x] Keep “Return to the harbour” the first action.
 
 **Done when:** a desktop reader can return, read the close, and find a
 chapter without the statement crowding the columns.
 
 ### 4 — Mobile reading
 
-- [ ] Check 390 × 844 and 320 × 720.
-- [ ] Keep the mark above the statement, and the statement within four lines.
-- [ ] Keep chapters and landmarks side by side, the colophon below, and the
+- [x] Check 390 × 844 and 320 × 720.
+- [x] Keep the mark to the left of “The”, and the statement within four
+  lines (user request, 2026-10-05).
+- [x] Keep chapters and landmarks side by side, the colophon below, and the
   years on their own line.
-- [ ] Keep the stacked bottom bar from colliding with the home indicator.
+- [x] Keep the stacked bottom bar from colliding with the home indicator.
 
 **Done when:** a phone reads the same close without a cramped column or a
 clipped bar.
 
 ### 5 — Handoff from Scene 06
 
-- [ ] Let Scene 06’s paragraph leave with the existing copy fade.
-- [ ] Keep the bursts at half strength and the smoke at 70% behind the text.
-- [ ] Leave the nav bar on its current show-on-scroll-up behaviour.
+- [x] Let Scene 06’s paragraph leave with the existing copy fade.
+- [x] Keep the bursts at half strength and the smoke at 70% behind the text.
+- [x] Leave the nav bar on its current show-on-scroll-up behaviour.
 
 **Done when:** Afterglow ends, and the footer begins, without a second
 finale.
 
 ### 6 — Reduced motion, keyboard and fallback
 
-- [ ] The footer is already still. Do not add motion.
-- [ ] Confirm the return, chapter links, HKAAA link and photo credit are
+- [x] The footer is already still. Do not add motion.
+- [x] Confirm the return, chapter links, HKAAA link and photo credit are
   reachable by keyboard.
-- [ ] Confirm the same words appear in the poster-only fallback.
+- [x] Confirm the same words appear in the poster-only fallback.
 
 **Done when:** the close is readable with motion reduced and without the
 3D scene.
 
 ### 7 — Final review
 
-- [ ] Run `npm run build` once after the final adjustment.
-- [ ] Inspect the footer at 1440 × 900, 1178 × 1014, 390 × 844 and 320 × 720.
-- [ ] Confirm the page remains enhanced and does not enter fallback.
-- [ ] Do not create screenshots or recordings.
+- [x] Run `npm run build` once after the final adjustment.
+- [x] Inspect the footer at 1440 × 900, 1178 × 1014, 390 × 844 and 320 × 720.
+- [x] Confirm the page remains enhanced and does not enter fallback.
+- [x] Do not create screenshots or recordings.
 
 **Done when:** the existing footer picture is intact and the new lines are
 readable at all review sizes.
@@ -151,5 +165,6 @@ readable at all review sizes.
 
 ## Next action
 
-Begin step 2 when the proposed statement is accepted. Do not change the
-columns, the bar, or the firework softening in that step.
+Steps 1 to 7 are done (2026-10-05). The footer is presented for approval
+from <http://localhost:5173/#chapter-06>. Step 8 stays open until the user
+approves it. Do not change the columns, the bar, or the firework softening.

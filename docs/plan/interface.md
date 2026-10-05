@@ -513,16 +513,17 @@ Serif TC 700). Copy regions widened for 03 desktop, 02 and 06 phones.
 - **A richer footer**, after the layout of the user's Kage screenshot, with
   original copy (no Kage text, lettering or code):
   - the "Return to the harbour" button (3.12);
-  - a statement in large light type beside our red-sail mark: "One night,
-    six chapters, one crossing. The journey runs from the old railway clock
-    at Tsim Sha Tsui to the lights of Central. The harbour, vessels and
-    skyline are built and animated in code.";
+  - a statement in large light type beside our red-sail mark: "The crossing
+    ends here. In the morning the ferries will cross again." (user approval,
+    2026-10-05; the earlier three-sentence recap is gone);
   - a hairline, then three columns with small uppercase headings (user
     choice): **Chapters** (links to all six), **Landmarks and vessels**
     (facts, not links: Clock Tower completed 1915, Star Ferry origins in
     1880, Chinese junk before the 1950s, Two IFC completed 2003) and
-    **Colophon** (Created by Gavin Fung at HKAAA; Original 3D scene and
-    illustrated atmosphere; a short Dukling credit). "Built with Three.js
+    **Colophon** (Created by Gavin Fung at HKAAA; The harbour, vessels and
+    skyline are built and animated in code; a short Dukling credit).
+    "Original 3D scene and illustrated atmosphere" is gone (user request,
+    2026-10-05). "Built with Three.js
     and WebGL", "Designed for desktop and mobile", and the long Red Sails
     photo paragraph are gone (user request, 2026-10-04). The Dukling line
     stays short because that photograph is CC BY-SA;
@@ -560,19 +561,21 @@ Serif TC 700). Copy regions widened for 03 desktop, 02 and 06 phones.
   toward the columns (user request, 2026-10-04). A cream hairline, the same
   weight as the rules under the statement and above the bar, is the top
   edge of the footer, just above "Return to the harbour" (user request,
-  2026-10-04; the dark band above it was removed the same day). On mobile the
-  chapters and landmarks sit side by side with the colophon below, the
-  landmark years on their own line, and the bottom bar stacks. The space
+  2026-10-04; the dark band above it was removed the same day).   On mobile the red-sail mark stays to the left of “The” (user request,
+  2026-10-05). Chapters and landmarks sit side by side with the colophon
+  below, the landmark years on their own line, and the bottom bar stacks. The space
   above the return button on phones is tighter: 40 px of padding instead
   of 72 px (user choice, 2026-10-03).
 - Built in `index.html` (`.site-footer`) and `styles.css`;
   `src/ui/siteFooter.js` publishes `--footer-in` (0 → 1) and `is-at-footer`.
   Also works in the poster-only fallback, where it is a plain footer.
 - **Improvement checklist** (user request, 2026-10-05): the layout stays.
-  The statement still retells the night Scene 06 has just closed, and the
-  making credit shares its display type. The eight-step plan is in
+  The accepted statement answers Scene 06, and the making credit sits in
+  the colophon (user approval, 2026-10-05). The eight-step plan is in
   [`footer-implementation-plan.md`](footer-implementation-plan.md). Status:
-  planned, 0 of 8. No footer code has changed.
+  in progress, 7 of 8. Steps 5 to 7 are checked: the existing fade, the
+  half-strength bursts, keyboard, fallback, the four review sizes, and one
+  production build. Approval is still open.
 
 ### 3.14 Interface states (user request, 2026-10-03)
 
