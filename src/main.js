@@ -603,7 +603,7 @@ async function start(initGuard, header, loading) {
       water.update(dt);
       // The first wave waits for the entrance cover to lift.
       island.setWave(root.classList.contains('is-ready') ? waveLevel : 0);
-      island.update(time, dt, camera, parallax.pointer);
+      island.update(time, dt, camera, parallax.pointer, state.index === branchChapter && !stepped);
       foreground.update(time);
       atmosphere.update(time);
       searchlights.update(time);

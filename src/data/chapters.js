@@ -38,6 +38,7 @@ import { SCENE_01_CHAPTER } from '../story/scene01/config.js';
 import { SCENE_02_CHAPTER } from '../story/scene02/config.js';
 import { SCENE_03_CHAPTER } from '../story/scene03/config.js';
 import { SCENE_04_CHAPTER } from '../story/scene04/config.js';
+import { SCENE_05_CHAPTER } from '../story/scene05/config.js';
 
 export { HERO } from '../story/scene01/config.js';
 
@@ -88,51 +89,7 @@ export const chapters = [
       desktop: `${SB}/frame-05-city-of-light-rough.png`,
       mobile: `${SB}/frame-05-city-of-light-mobile-rough.png`,
     },
-    // Close to the wheel (about 140 m, IFC about 270 m) so perspective makes
-    // the wheel IFC's co-star at true scale (user choice, 2026-10-03).
-    camera: {
-      desktop: { position: [383.3, 16, -917.1], target: [426.6, 255, -1244.9], fov: 82, parallax: 1.8 },
-      mobile: { position: [264.4, 46.6, -900.2], target: [449.2, 184.8, -1226.9], fov: 80.2 },
-    },
-    copy: {
-      desktop: { left: 5, top: 11, right: 50, bottom: 37 },
-      mobile: { left: 6, top: 9, right: 62, bottom: 44 },
-    },
-    visibility: {
-      // city: the towers around IFC at 60%, so IFC leads (user choice, 2026-10-02).
-      // accents: LED crowns, strips and the four landmarks down to a quarter
-      // of that; reflections: IFC's and the wheel's columns twice as long and
-      // bright (user choices, 2026-10-03). The harbour-edge bollard and chain
-      // were removed (user request, 2026-10-04). 05's own layers (user
-      // choices, 2026-10-04; default 0 elsewhere): the corner branch
-      // (desktop only), the lens layer (lensBusy fills 05's denser pack;
-      // 03–04 keep three quiet discs), the cloud band, the light wave and
-      // the harbour boat.
-      desktop: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, accents: 0.25, reflections: 2, mist: 0.4, seaMist: 0, searchlights: 1, branch: 1, lens: 1, lensBusy: 1, cloudBand: 1, wave: 1, boat: 1 },
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 0, palms: 0, bauhinia: 0, bush: 0, bursts: 0, petals: 0.6, city: 0.6, accents: 0.25, reflections: 2, mist: 0.4, seaMist: 0, searchlights: 0.7, branch: 0, lens: 1, lensBusy: 1, cloudBand: 1, wave: 1, boat: 1 },
-    },
-    fogDensity: 0.00045,
-    // The ferry and junk are hidden from here on. The ferry keeps behind the
-    // cameras; the junk bears away left of the move from 04 and leaves the
-    // frame before it fades (transition review, 2026-10-03).
-    vessels: {
-      desktop: { ferry: [120, -430, 1], junk: [80, -480, 0.24] },
-      mobile: { ferry: [40, -370, 1], junk: [80, -480, 0.24] },
-    },
-    // The PNG draws the wheel about 3.5× its true size relative to IFC; the
-    // wheel stays true scale and the near camera makes up most of it: about
-    // 20% of the height on desktop (PNG 38–45%), 17% on phones (user choice
-    // 22–25%; any closer and IFC's crown leaves the frame).
-    probes: {
-      desktop: {
-        ifc: { left: 56, right: 67, top: 3, bottom: 91 },
-        wheel: { left: 28, right: 42, top: 74, bottom: 95 },
-      },
-      mobile: {
-        ifc: { left: 59, right: 90, top: 6, bottom: 80 },
-        wheel: { left: 7, right: 44, top: 65, bottom: 84 },
-      },
-    },
+    ...SCENE_05_CHAPTER,
   },
   {
     id: '06',

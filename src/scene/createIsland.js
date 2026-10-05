@@ -38,6 +38,7 @@ import { createCityDots } from './cityDots.js';
 import { createBeacons, createLandmarks, mastMesh } from './landmarks.js';
 import { prism } from './prism.js';
 import { curtainWall, facadeMaterial, facadeUVs, pierHall } from './facades.js';
+import { SCENE_05_CALLOUTS } from '../story/scene05/config.js';
 import { WORLD } from '../data/world.js';
 import { seededRandom } from './random.js';
 import { strut } from './strut.js';
@@ -809,9 +810,27 @@ export function createIsland() {
   let waveOn = 0;
   let wheelAngle = 0;
   let wheelBoost = 0;
+  let wheelTouchEnabled = false;
+  let wheelTouchDown = false;
+  let wheelHover = false;
+  let wheelTapLeft = 0;
+  let wheelCamera = null;
   const hubNdc = new Vector3();
   const rimX = new Vector3();
   const rimY = new Vector3();
+  const touchNdc = new Vector2();
+
+  function setWheelHover(next) {
+    if (wheelHover === next) return;
+    wheelHover = next;
+    window.dispatchEvent(new CustomEvent('wheelridehover', { detail: next }));
+  }
+
+  window.addEventListener('citylightreset', () => {
+    wheelTouchDown = false;
+    wheelTapLeft = 0;
+    setWheelHover(false);
+  });
 
   function overWheel(camera, pointer) {
     if (!camera || !pointer) return false;
@@ -830,6 +849,26 @@ export function createIsland() {
     const dy = (pointer.y - hubNdc.y) / ry;
     return dx * dx + dy * dy <= 1;
   }
+
+  window.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'mouse' || !wheelTouchEnabled || !wheelCamera) return;
+    touchNdc.set((event.clientX / innerWidth) * 2 - 1, 1 - (event.clientY / innerHeight) * 2);
+    if (!overWheel(wheelCamera, touchNdc)) return;
+    // This tap belongs to the wheel, not the city-light painting map.
+    event.stopImmediatePropagation();
+    wheelTouchDown = true;
+    wheelTapLeft = SCENE_05_CALLOUTS.wheelTapSeconds;
+    setWheelHover(true);
+  }, { passive: true });
+  window.addEventListener('pointerup', (event) => {
+    if (event.pointerType === 'mouse') return;
+    wheelTouchDown = false;
+    setWheelHover(false);
+  });
+  window.addEventListener('pointercancel', () => {
+    wheelTouchDown = false;
+    setWheelHover(false);
+  });
 
   function runWave(time) {
     if (waveLevel <= 0.001) {
@@ -854,9 +893,19 @@ export function createIsland() {
   // Continuous mode only; in reduced motion the wheel, mist, beacons and
   // landmark colours hold still, and there is no light wave. Hovering the
   // wheel in 05 (large on screen) speeds the turn about 16×.
-  function update(time, dt = 0, camera = null, pointer = null) {
+  function update(time, dt = 0, camera = null, pointer = null, touchEnabled = false) {
+    wheelCamera = camera;
+    wheelTouchEnabled = touchEnabled;
+    if (!wheelTouchEnabled) {
+      wheelTapLeft = 0;
+      wheelTouchDown = false;
+      setWheelHover(false);
+    }
     if (dt > 0) {
-      const target = overWheel(camera, pointer) ? 1 : 0;
+      wheelTapLeft = Math.max(0, wheelTapLeft - dt);
+      const hovered = overWheel(camera, pointer);
+      if (wheelTouchEnabled && !wheelTouchDown) setWheelHover(hovered);
+      const target = hovered || wheelTapLeft > 0 ? 1 : 0;
       wheelBoost += (target - wheelBoost) * (1 - Math.exp(-WHEEL_HOVER.ease * dt));
       wheelAngle += ((Math.PI * 2) / WHEEL_TURN) * MathUtils.lerp(1, WHEEL_HOVER.boost, wheelBoost) * dt;
       turn(wheelAngle);

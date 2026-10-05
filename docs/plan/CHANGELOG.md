@@ -6,6 +6,143 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Scene 05 callouts stay and dim on hover** (user request, 2026-10-05).
+  Both arrows now remain visible. “Light the skyline” points at Two IFC and
+  dims only while the buildings are hovered; “Hover me” sits beside the wheel
+  and dims only while the wheel is hovered. Each returns when the pointer
+  leaves. A touch dims only while the finger is down. Desktop, compact
+  desktop and both mobile sizes stayed clear of the copy without fallback.
+  Files: `index.html`, `src/story/scene05/config.js`, `src/ui/copyLayer.js`,
+  `src/ui/cityLights.js`, `src/ui/cityTouch.js`, `src/scene/createIsland.js`,
+  `src/styles.css`; plan: `scene-05-implementation-plan.md`,
+  `narrative-spine.md`.
+- **Scene 05 sequential callouts and mobile wheel tap** (user request,
+  2026-10-05). Replaced the long prompt with one responsive arrow callout that
+  advances from the skyline to the wheel only after a valid interaction.
+  Added touch parity by reusing the wheel's projected ellipse and existing
+  16× boost/easing for a non-stacking 2.5-second acceleration; valid wheel
+  taps no longer paint skyline lights. Desktop, mobile, reduced motion and
+  exit/re-entry checks passed at all four review sizes, and the single build
+  succeeded without screenshots. Files: `index.html`,
+  `src/story/scene05/config.js`, `src/ui/copyLayer.js`,
+  `src/ui/cityLights.js`, `src/ui/cityTouch.js`,
+  `src/scene/createIsland.js`, `src/main.js`, `src/styles.css`,
+  `docs/SCENE-MAP.md`; plan: `scene-05-implementation-plan.md`,
+  `narrative-spine.md`.
+- **Scene 05 mobile wheel-tap implementation plan** (user request,
+  2026-10-05). Documented why touch currently affects only skyline lights,
+  then specified reuse of the projected wheel hit area and existing 16×
+  acceleration/easing for a non-stacking 2.5-second mobile boost. Wheel taps
+  must not paint skyline lights; reduced motion remains still. No application
+  code changed. Files: `scene-05-implementation-plan.md`,
+  `narrative-spine.md`.
+- **Scene 05 target-callout direction approved** (user choice, 2026-10-05).
+  Chose sequential, action-specific callouts: “Light the skyline,” desktop
+  “Hover me,” mobile “Tap the lights” and mobile “Tap the wheel.” The approved
+  mobile wheel treatment will briefly apply its existing acceleration and
+  easing after a tap. Implementation remains pending. Files:
+  `scene-05-implementation-plan.md`, `narrative-spine.md`.
+- **Scene 05 target-callout redesign exploration** (user request,
+  2026-10-05). Documented why the current skyline and wheel prompts can
+  disappear too quickly and proposed sequential arrow callouts with shorter,
+  action-specific labels. Confirmed that mobile taps light the skyline but do
+  not accelerate the wheel. The plan now has a decision gate between omitting
+  the mobile wheel callout and adding brief tap parity before advertising it.
+  No application code changed. Files: `scene-05-implementation-plan.md`,
+  `narrative-spine.md`.
+- **Scene 05 per-visit skyline and wheel prompts** (user request,
+  2026-10-05). The skyline-light instruction now resets only after fully
+  leaving Scene 05. On fine-pointer desktop it changes after discovery to
+  “Join the wheel ride — hover to pick up speed” and dismisses on the first
+  live wheel hover. Mobile retains only the skyline instruction; reduced
+  motion and fallback keep prompts hidden. Existing city-light gestures,
+  wheel speed, boost, easing, hit area and visuals are unchanged. Desktop,
+  mobile and exit/re-entry checks passed without overlap or fallback; lints
+  and the single production build passed without screenshots. Files:
+  `index.html`, `src/ui/cityLights.js`, `src/ui/cityTouch.js`,
+  `src/scene/createIsland.js`, `src/styles.css`, `docs/SCENE-MAP.md`; plan:
+  `scene-05-implementation-plan.md`, `narrative-spine.md`.
+- **Scene 05 interaction-prompt follow-up plan** (user request, 2026-10-05).
+  Documented that the skyline hint currently dismisses for the full page
+  session, then planned a per-visit reset. After skyline discovery,
+  fine-pointer desktop will reuse the same line for “Join the wheel ride —
+  hover to pick up speed” and dismiss it after wheel hover. Mobile will omit
+  the wheel prompt because acceleration is currently hover-only. Existing
+  city-light and wheel behavior remain frozen. Files:
+  `scene-05-implementation-plan.md`, `narrative-spine.md`.
+- **Scene 04 recommendations adopted** (user approval, 2026-10-05). Approved
+  the 10 px mobile captions and the recommendation to preserve the existing
+  pacing, card hierarchy, quote resolution, cloth behavior and atmosphere.
+  Scene 04's improvement pass is complete. Files:
+  `scene-04-implementation-plan.md`, `narrative-spine.md`.
+- **Scene 04 improvement review and mobile caption refinement** (user
+  request, 2026-10-05). Completed the six-part review of pacing, comparison
+  hierarchy, quote resolution, responsive readability and atmosphere.
+  Existing timing and effects remain unchanged; the sole worthwhile change
+  raises mobile card captions from 9 px to 10 px. Mobile captions remain
+  contained, short landscape still omits cards, and desktop quote clearance
+  is unchanged. Lint checks and the single production build passed without
+  fallback or screenshots. Files: `src/styles.css`; plan:
+  `scene-04-implementation-plan.md`, `narrative-spine.md`.
+- **Scene 03 improvements approved** (user approval, 2026-10-05). The clearer
+  middle pauses and larger mobile supporting microtype are approved,
+  completing Scene 03's post-approval improvement pass. Files:
+  `scene-03-implementation-plan.md`, `narrative-spine.md`.
+- **Scene 03 approved improvement implementation** (user choice,
+  2026-10-05). Increased the two middle narrative pauses from 0.02 to 0.04
+  dwell share and raised mobile board supporting labels from 9 px to 10 px
+  plus the mobile 1888 line from 11 px to 12 px. Board tiles, ticket, camera,
+  placement, route behavior and atmosphere remain unchanged. Forward/reverse
+  sequencing and four responsive sizes passed without overlap or fallback;
+  lint checks and the single production build passed. No screenshots were
+  created. Files: `src/story/scene03/config.js`, `src/styles.css`; plan:
+  `scene-03-implementation-plan.md`, `narrative-spine.md`.
+- **Scene 03 improvement review R2–R6 — recommendations ready** (user
+  request, 2026-10-05). Reviewed board/route communication, ticket/panel
+  hierarchy, responsive readability and atmosphere synchronization. Existing
+  communication, interactions and atmosphere should remain unchanged. At
+  four review sizes all Scene 03 DOM elements remained inside the viewport
+  without overlap. The two low-risk candidates are slightly clearer pauses
+  between the middle beats and larger mobile supporting microtype. No
+  screenshots were created and no application value changed. Files:
+  `scene-03-implementation-plan.md`, `narrative-spine.md`.
+- **Scene 03 improvement review R1 — narrative pacing** (user request,
+  2026-10-05). Sampled the full Scene 03 sequence in forward and reverse
+  without screenshots. The opening-to-board handoff and final route hold are
+  well paced; the only candidate is increasing the two 0.02 dwell-share
+  pauses between the three middle story beats to about 0.04. No application
+  value, camera, position or behavior changed. Files:
+  `scene-03-implementation-plan.md`, `narrative-spine.md`.
+- **Scene 03 and 04 post-approval review plans** (user request, 2026-10-05).
+  Added six-step, read-only improvement checklists for each approved scene.
+  Scene 03 will review pacing, board/route communication, ticket/panel
+  hierarchy, responsive readability and atmosphere synchronization. Scene 04
+  will review pacing, Then/Now hierarchy, quote resolution, responsive
+  readability and cloth/atmosphere synchronization. Both reviews preserve
+  cameras, placements, artwork, wording and 3D composition, and require a
+  separate user choice before implementation. Files:
+  `scene-03-implementation-plan.md`, `scene-04-implementation-plan.md`,
+  `narrative-spine.md`.
+- **Scene 05 pre-approval interaction polish** (user request, 2026-10-05).
+  Made the title sweep scroll-linked and reversible; added a restrained
+  interaction hint that disappears after the first active mouse movement or
+  tap; and delayed the existing corner branch until the IFC sentence is
+  partly established. Bokeh remains unchanged after the timing and opacity
+  review. Desktop, mobile and reduced motion were verified without
+  screenshots, and the production build passed. Files: `index.html`,
+  `src/story/scene05/config.js`, `src/ui/copyLayer.js`,
+  `src/ui/cityLights.js`, `src/ui/cityTouch.js`, `src/styles.css`; plan:
+  `scene-05-implementation-plan.md`, `narrative-spine.md`.
+- **Scene 05 steps 1–8 — progressive Central arrival** (user request,
+  2026-10-05). Moved Scene 05's current values unchanged into its own config,
+  added a 45svh camera-held dwell, and sequenced the label, swept title,
+  verified IFC sentence, existing corner branch and office-light interaction.
+  Mobile, short mobile, reverse scrolling, reduced motion, fallback visibility
+  and semantic order were verified without screenshots. IFC, wheel, skyline,
+  copy, branch geometry, touch-light values and every existing city effect
+  remain unchanged. Files: `src/story/scene05/config.js`,
+  `src/data/chapters.js`, `src/ui/copyLayer.js`, `docs/SCENE-MAP.md`; plan:
+  `scene-05-implementation-plan.md`, `narrative-spine.md`.
 - **Dedicated Scene 05 implementation plan** (user request, 2026-10-05).
   Added a ten-step checklist for a progressive Central arrival: short
   camera-held reading time, label and title, verified IFC sentence, existing

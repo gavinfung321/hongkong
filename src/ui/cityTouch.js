@@ -1,4 +1,5 @@
 import { cityLight, cityTouchMap } from '../scene/cityLight.js';
+import { SCENE_05_CALLOUTS } from '../story/scene05/config.js';
 
 // 05's touch light (user choice, 2026-10-04): under a mouse, a few office
 // windows switch on around the pointer and off again just behind it; on
@@ -18,6 +19,7 @@ const TOUCH = {
 export function createCityTouch() {
   const { canvas, texture } = cityTouchMap;
   const ctx = canvas.getContext('2d');
+  const sceneCopy = document.querySelector('#chapter-05 .chapter__copy');
   ctx.fillStyle = '#000';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   const fine = matchMedia('(hover: hover) and (pointer: fine)');
@@ -25,16 +27,56 @@ export function createCityTouch() {
   let painted = null; // where the last frame's spot went
   const taps = [];
   let live = 0; // s left before the map has surely faded out
+  let active = false;
+  let skylineHover = false;
+  let skylineTouch = false;
+  let sceneVisible = false;
+
+  function overSkyline([x, y]) {
+    const breakpoint = document.documentElement.dataset.breakpoint === 'mobile' ? 'mobile' : 'desktop';
+    const bounds = SCENE_05_CALLOUTS.skylineHit[breakpoint];
+    const px = (x / innerWidth) * 100;
+    const py = (y / innerHeight) * 100;
+    return px >= bounds.left && px <= bounds.right && py >= bounds.top && py <= bounds.bottom;
+  }
+
+  function sceneOpen() {
+    return Boolean(sceneCopy && !sceneCopy.classList.contains('is-hidden'));
+  }
+
+  function setSkylineHover(next) {
+    const value = sceneOpen() && next;
+    if (skylineHover === value) return;
+    skylineHover = value;
+    window.dispatchEvent(new CustomEvent('citylighthover', { detail: value }));
+  }
 
   window.addEventListener('pointermove', (event) => {
-    if (event.pointerType === 'mouse' && fine.matches) pointer = [event.clientX, event.clientY];
+    if (event.pointerType === 'mouse' && fine.matches) {
+      pointer = [event.clientX, event.clientY];
+      setSkylineHover(overSkyline(pointer));
+    }
   }, { passive: true });
   document.documentElement.addEventListener('pointerleave', () => {
     pointer = null;
+    setSkylineHover(false);
   });
   window.addEventListener('pointerdown', (event) => {
-    if (event.pointerType !== 'mouse') taps.push([event.clientX, event.clientY]);
+    if (event.pointerType !== 'mouse') {
+      const tap = [event.clientX, event.clientY];
+      taps.push(tap);
+      skylineTouch = true;
+      setSkylineHover(overSkyline(tap));
+    }
   }, { passive: true });
+  window.addEventListener('pointerup', (event) => {
+    if (event.pointerType !== 'mouse') skylineTouch = false;
+    setSkylineHover(skylineTouch || (pointer ? overSkyline(pointer) : false));
+  });
+  window.addEventListener('pointercancel', () => {
+    skylineTouch = false;
+    setSkylineHover(false);
+  });
 
   function spot([x, y], radius, alpha) {
     const sx = canvas.width / innerWidth;
@@ -53,7 +95,16 @@ export function createCityTouch() {
 
   // camera: the main camera, after this frame's pose.
   function update(dt, level, camera) {
+    const visible = sceneCopy && !sceneCopy.classList.contains('is-hidden');
+    if (sceneVisible && !visible) {
+      skylineTouch = false;
+      setSkylineHover(false);
+      window.dispatchEvent(new Event('citylightreset'));
+    }
+    sceneVisible = visible;
+    if (visible && pointer && !skylineTouch) setSkylineHover(overSkyline(pointer));
     const uniforms = cityLight;
+    active = level > 0;
     if (level <= 0) {
       taps.length = 0;
       painted = null;

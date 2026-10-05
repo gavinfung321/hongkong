@@ -560,7 +560,7 @@ retain the title, standfirst, 1888 line, departure board and ticket.
 The detailed checklist and its completion status live in
 [`scene-03-implementation-plan.md`](scene-03-implementation-plan.md), the
 single source of truth for this pass. Status: **approved, 10 of 10 steps
-complete**.
+complete; post-approval review and both approved improvements complete**.
 
 **Update 2026-10-05:** step 1 is complete. Scene 03 now owns named ranges for
 the opening, board, human crossing, daily crossing and route panel. The
@@ -588,6 +588,38 @@ resized or moved, and the frozen 3D composition remains unchanged.
 **Decision (user approval, 2026-10-05): Scene 03 is approved as built.** The
 progressive crossing is complete and the controlled rollout may proceed to
 Scene 04 when requested.
+
+**Post-approval improvement review planned** (user request, 2026-10-05):
+review pacing, board-and-route communication, ticket-and-panel hierarchy,
+responsive readability and atmosphere synchronization without changing
+cameras, placement, artwork, wording or 3D composition. The review will
+produce prioritized recommendations only; implementation requires a separate
+user choice.
+
+**Review update 2026-10-05:** R1 confirmed that the complete sequence is
+ordered and reversible. The opening-to-board handoff and final route hold are
+well paced. The two 0.02 dwell-share pauses between the three middle story
+beats are the only pacing candidate; a later proposal may increase them to
+about 0.04 without changing the 60svh hold, camera or placement. No
+application value has changed.
+
+**Review update 2026-10-05:** R2–R5 are complete and R6's recommendations
+are ready. Board and route communication, ticket/panel hierarchy and existing
+atmosphere should remain unchanged. All DOM elements stayed in the viewport
+without overlap at 1440 × 900, 1178 × 1014, 390 × 844 and 320 × 720. The
+only additional candidate is increasing mobile supporting microtype: board
+head/labels from about 9 px to 10 px and “Crossing since 1888” from 11 px to
+12 px. No screenshots were created and no application value has changed.
+
+**Improvement update 2026-10-05** (user choice): the two middle reveal pauses
+are now 0.04 dwell share, using only Scene 03's configured ranges. Mobile
+board head/labels now compute to 10 px and “Crossing since 1888” to 12 px;
+board tiles, ticket and all placement remain unchanged. Forward/reverse
+sequencing and all four review sizes passed without overlap or fallback, and
+the production build passed once. Final user approval remains.
+
+**Decision (user approval, 2026-10-05):** the Scene 03 pacing and mobile
+microtype improvements are approved. Scene 03 is complete.
 
 ### Scene 04
 
@@ -693,6 +725,8 @@ pass over the untouched 3D composition.
 The detailed checklist lives in
 [`scene-04-implementation-plan.md`](scene-04-implementation-plan.md), the
 single source of truth for this pass. Status: **approved, 10 of 10 steps
+complete; responsive quote polish complete; post-approval improvement review
+complete; mobile caption improvement approved, 3 of 3 improvement steps
 complete**.
 
 **Update 2026-10-05:** steps 1–8 are complete. Scene 04 now owns its unchanged
@@ -715,6 +749,26 @@ height, with responsive line and block spacing. It keeps 36 px of clearance
 above the statement hairline at 870 × 786 and remains clear at the reference
 desktop sizes. Cards, statement, copy, 3D placement and mobile are unchanged.
 
+**Post-approval improvement review planned** (user request, 2026-10-05):
+review pacing, Then → Now hierarchy, quote-to-statement resolution,
+responsive readability and cloth/atmosphere synchronization without changing
+cameras, card placement, artwork, wording or 3D composition. The review will
+produce prioritized recommendations only; implementation requires a separate
+user choice.
+
+**Review and improvement update 2026-10-05** (user request): the existing
+pacing, card hierarchy, quote resolution, cloth activation and atmosphere all
+work as intended and remain unchanged. The sole worthwhile improvement was
+mobile caption readability; captions now compute to 10 px instead of 9 px.
+They remain contained at 390 × 844, short landscape still omits the cards,
+and desktop typography and quote clearance are unchanged. The production
+build passed once without fallback or screenshots.
+
+**Decision (user approval, 2026-10-05):** the Scene 04 review recommendations
+are adopted. The 10 px mobile captions are final, and all reviewed treatments
+recommended for preservation remain unchanged. Scene 04's improvement pass is
+complete.
+
 Different technique per scene (user request, 2026-10-04), all DOM over
 the untouched 3D: 02 layered fade with a memory print and timeline; 03
 index panels with a route line; 04 statement header with hanging photo
@@ -736,7 +790,8 @@ sentence, no extra beats.
 
 - Copy: label row "05 Two IFC" with the hairline; the title; one sentence
   (above, in the 05 arrival).
-- Title sweep: a band of warm light sweeps once across the title (1.5 s).
+- Title sweep: a band of warm light crosses the title with the scroll and
+  reverses with it (user request, 2026-10-05).
 - Touch light, kept small (user request, 2026-10-04: "way too much"):
   about 50 px under a mouse, a quarter of the offices, half as bright,
   fading in 0.3 s; a tap on phones. Only in 05, off in reduced motion.
@@ -774,6 +829,7 @@ sentence, no extra beats.
 Files: `index.html`, `src/ui/cityLights.js`, `src/ui/cityTouch.js`,
 `src/ui/copyLayer.js`, `src/scene/cityLight.js`, `src/scene/cityWindows.js`,
 `src/scene/facades.js`, `src/styles.css`, `src/data/chapters.js`,
+`src/story/scene05/config.js`,
 `src/data/atmosphere.js`, `src/main.js`, `src/scroll/cameraRig.js`,
 `src/scene/createIsland.js`, `src/scene/createLensBokeh.js`,
 `src/scene/createCornerBranch.js`, `src/scene/createHarbourBoat.js`,
@@ -796,12 +852,59 @@ or 3D layer.
 
 The detailed checklist lives in
 [`scene-05-implementation-plan.md`](scene-05-implementation-plan.md), the
-single source of truth for this pass. Status: **planned, 0 of 10 steps
-complete**.
+single source of truth for this pass. Status: **awaiting approval, 9 of 10
+steps complete; both callouts stay visible and dim only on their own
+target**.
 
-**Next implementation item:** step 1 — create Scene 05's configuration,
-preserve every current chapter value, and add a short camera hold with named
-reveal ranges.
+**Update 2026-10-05:** steps 1–8 are complete. Scene 05 now owns its unchanged
+chapter values, a 45svh camera hold and named reveal ranges. The label
+establishes the arrival, the swept title follows, then the verified IFC
+sentence and existing corner branch appear together. The existing office
+touch light becomes available last. Mobile keeps its authored copy treatment
+and no branch; reduced motion uses a static title, stepped sentence and no
+touch lighting. Lens bokeh, cloud band, skyline wave, harbour boat,
+searchlights, wheel behavior and every frozen 3D value remain unchanged.
+
+**Pre-approval polish (user request, 2026-10-05):** the warm title sweep is
+now scroll-linked and fully reversible. A restrained interaction hint appears
+after the sentence and disappears after the first active mouse movement or
+tap; fallback and reduced motion omit it. The branch now begins after the
+sentence is partly established. Bokeh remains unchanged after the timing and
+opacity review because it does not compete with the copy.
+
+**Interaction-prompt follow-up completed** (user request, 2026-10-05): the
+skyline hint now resets only after a full Scene 05 exit. On fine-pointer
+desktop, skyline discovery replaces the line with “Join the wheel ride —
+hover to pick up speed,” which disappears after the first wheel hover.
+Mobile retains only the skyline prompt because the wheel acceleration is
+hover-only. Wheel speed, boost, easing, hit area and reduced-motion behavior
+remain unchanged. Desktop, mobile, exit/re-entry and reduced motion passed
+without overlap, fallback, screenshots or recordings; the production build
+passed once.
+
+**Target-callout redesign completed** (user request and choice, 2026-10-05):
+two restrained arrows stay visible together. “Light the skyline” / “Tap the
+lights” points at Two IFC. “Hover me” / “Tap the wheel” sits beside the wheel.
+Each arrow dims only while its own target is hovered or pressed, then returns
+when the pointer leaves.
+
+**User choice 2026-10-05:** add the brief mobile wheel tap boost and use the
+action-specific labels “Light the skyline,” desktop “Hover me,” mobile “Tap
+the lights” and mobile “Tap the wheel.” This direction is now implemented.
+
+**Mobile wheel-tap completed** (user request, 2026-10-05): touch reuses the
+wheel's projected ellipse and existing 16× boost/easing for a non-stacking
+2.5-second acceleration. Valid wheel taps do not paint skyline lights; misses
+continue normally. Reduced motion remains still, and scene exit resets the
+timer and callouts.
+
+Desktop, compact desktop, mobile and short-mobile checks passed without
+overlap or fallback. Centre, rim and adjacent miss targets passed at both
+mobile sizes; reduced motion and exit/re-entry also passed. The single
+production build succeeded without screenshots or recordings.
+
+**Next action:** review Scene 05 at <http://localhost:5173/#chapter-05> for
+final approval.
 
 ## Checklist
 
@@ -836,5 +939,5 @@ reveal ranges.
 
 ## Immediate next action
 
-Complete Scene 05 step 1: extract its current values unchanged, then add its
-short camera hold and named reveal ranges.
+Review Scene 05 at <http://localhost:5173/#chapter-05>, then complete its final
+multi-size check before approval.

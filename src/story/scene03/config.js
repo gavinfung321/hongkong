@@ -48,8 +48,8 @@ export const SCENE_03_CROSSING = {
     opening: [0.38, 0.5],
     board: [0.08, 0.2],
     humanCrossing: [0.24, 0.4],
-    dailyCrossing: [0.42, 0.56],
-    routePanel: [0.58, 0.7],
+    dailyCrossing: [0.44, 0.56],
+    routePanel: [0.6, 0.7],
   },
   // The dot waits until the route panel has fully arrived.
   route: [0.7, 0.96],

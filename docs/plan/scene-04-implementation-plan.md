@@ -1,6 +1,8 @@
 # Scene 04 — Progressive Story Implementation Plan
 
-**Status:** approved, 10 of 10 steps complete
+**Status:** approved, 10 of 10 implementation steps complete; responsive
+quote polish complete; improvement review complete; approved improvement
+implementation approved, 3 of 3 steps complete
 **Created:** user request, 2026-10-05  
 **Review:** <http://localhost:5173/#chapter-04>
 
@@ -222,6 +224,144 @@ with tighter responsive spacing. It clears the statement rule by 36 px at
 870 × 786 and remains clear at 1178 × 1014 and 1440 × 900. Mobile remains
 unchanged. The production build passed; no screenshots were created.
 
+## Post-approval improvement review
+
+This is a review pass, not authorization to change the scene. Complete the
+checks below, present a short prioritized proposal, and wait for approval
+before implementing anything (user request, 2026-10-05).
+
+Keep the entire frozen scope above and the approved responsive quote fix.
+Preserve both cameras, junk pose and sails, card placement and artwork,
+statement placement, copy, 3D atmosphere and mobile composition. Prefer
+timing, opacity and state clarity over new elements or movement.
+
+### R1 — Review narrative pacing
+
+- [x] Inspect the opening → historical junk → contemporary Dukling → quote →
+  statement rhythm in forward and reverse scrolling.
+- [x] Identify pauses that feel rushed, empty or visually simultaneous.
+- [x] Propose range adjustments only where they clarify the Then → Now story.
+- [x] Keep the existing 60svh hold, camera and junk completely unchanged.
+
+**Completed 2026-10-05:** live forward and reverse sampling confirmed a clear
+opening → historical → contemporary → quote → statement sequence. Every
+handoff already has a 0.04 dwell-share pause, the final statement retains a
+readable hold, and the sequence reverses cleanly. No range adjustment is
+justified.
+
+### R2 — Review comparison hierarchy
+
+- [x] Confirm the historical card clearly leads before the contemporary card.
+- [x] Check whether the active card needs restrained emphasis while both
+  cards remain visible.
+- [x] Consider timing or opacity only; avoid sliding, bouncing or resizing.
+- [x] Preserve both crops, grades, captions, angles and positions.
+
+**Completed 2026-10-05:** the historical card reaches full visibility before
+the contemporary card begins, then both remain equal for direct comparison.
+Dimming either completed card would weaken the Then → Now relationship.
+Keep both cards' timing, opacity, artwork and placement unchanged.
+
+### R3 — Review quote and resolution
+
+- [x] Check the handoff from the completed comparison to the quote and final
+  statement.
+- [x] Confirm the quote remains clear of the responsive statement rule at all
+  desktop review sizes.
+- [x] Check whether the final statement has enough reading time.
+- [x] Preserve wording, typography intent, placement and mobile quote
+  omission.
+
+**Completed 2026-10-05:** the quote completes before the statement begins,
+and the statement remains fully available before the scene exits. Quote
+clearance measured 35 px at 1440 × 900 and 160.5 px at 1178 × 1014. The
+existing responsive quote fix and all resolution timing should remain.
+
+### R4 — Review responsive readability
+
+- [x] Inspect reference desktop, compact desktop, mobile and short-landscape
+  compositions.
+- [x] Check captions, card relationship and final statement at each size.
+- [x] Record any spacing or legibility issue without changing copy-safe
+  regions or card placement.
+- [x] Preserve side-by-side mobile cards and the existing short-landscape
+  omission.
+
+**Completed 2026-10-05:** cards, captions, quote and statement remained inside
+the viewport without overlap at 1440 × 900, 1178 × 1014 and 390 × 844; short
+landscape correctly omitted the cards. The sole readability candidate is the
+9 px mobile caption type. Raising it to 10 px should improve “Then” and “Now”
+legibility without moving or resizing either card.
+
+### R5 — Review cloth and atmosphere synchronization
+
+- [x] Check whether each cloth simulation begins naturally with its card.
+- [x] Compare wind haze and memory veil timing with the Then → Now sequence.
+- [x] Confirm clouds, bokeh, water and wake remain subordinate to the junk.
+- [x] If needed, propose timing or opacity refinements only; add no new layer.
+
+**Completed 2026-10-05:** each cloth simulation starts only when its own card
+becomes visible. Wind haze rises to 45% with the historical card and reaches
+full strength with the contemporary card. The quiet lens treatment, wake,
+water and veil remain subordinate. No effect timing or opacity change is
+needed.
+
+### R6 — Present recommendations
+
+- [x] Separate worthwhile improvements from changes that would merely add
+  activity.
+- [x] Rank recommendations by narrative benefit and implementation risk.
+- [x] State explicitly when an existing treatment should remain unchanged.
+- [x] Obtain user approval before changing application code or styles.
+
+**Review deliverable:** a concise list of recommended improvements, preserved
+elements and rejected ideas. Implementation and build verification will be
+planned only after the user chooses which recommendations to pursue.
+
+**Recommendations and user authorization 2026-10-05:**
+
+1. **Increase mobile caption type from 9 px to 10 px — medium readability
+   benefit, low risk.** Keep caption wording, letter spacing, cards and
+   placement unchanged.
+2. **Keep everything else unchanged.** Pacing, card hierarchy,
+   quote/statement resolution, cloth activation, wind haze, veil, lens
+   treatment, wake and water already support the story. Reject extra active
+   states, movement, opacity changes and new visual layers.
+
+The user's instruction to review and execute authorizes recommendation 1.
+
+## Approved improvement implementation
+
+### I1 — Increase mobile caption readability
+
+- [x] Raise only Scene 04's mobile card caption type from 9 px to 10 px.
+- [x] Keep caption wording, spacing, cards and placement unchanged.
+
+### I2 — Verify the approved change
+
+- [x] Confirm both captions remain readable and contained at 390 × 844.
+- [x] Confirm short landscape still omits the cards.
+- [x] Recheck 1440 × 900 and 1178 × 1014 without changing desktop.
+- [x] Run `npm run build` once after the adjustment.
+
+**Completed 2026-10-05:** mobile captions now compute to 10 px and remain
+contained at 390 × 844; the longer Dukling caption wraps naturally to two
+lines. Short landscape still omits the cards. Desktop captions remain 11 px,
+with the existing quote clearance unchanged at 35 px for 1440 × 900 and
+160.5 px for 1178 × 1014. The page remained enhanced, lint checks passed and
+the production build passed once. No screenshots or recordings were created.
+
+### I3 — Approval gate
+
+- [x] Present Scene 04 at <http://localhost:5173/#chapter-04>.
+- [x] Obtain final user approval for the mobile caption improvement.
+- [x] Record the final decision before continuing to another scene.
+
+**Completed 2026-10-05:** the user approved and adopted the review
+recommendations. The 10 px mobile captions are final; all reviewed pacing,
+hierarchy, quote, cloth and atmosphere treatments remain unchanged as
+recommended.
+
 ## Verification discipline
 
 For each implementation item, inspect only Scene 04 and its mapped files. Run
@@ -230,5 +370,4 @@ create screenshots or recordings.
 
 ## Next action
 
-Scene 04 is complete. Define Scene 05's controlled rollout and frozen scope
-before making new Scene 05 changes.
+Scene 04's post-approval improvement pass is complete.

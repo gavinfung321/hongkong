@@ -28,13 +28,14 @@
 // intro. The harbour darkens around an opening on the sails, and the existing
 // sea haze builds with the two cards (`--wind`); the petals stay.
 //
-// 05 (`data-story="lights"`): the label, title and words come as the camera
-// settles, with no darkening; cityLights.js sweeps the title, and `touch`
-// runs the office-window touch light (cityTouch.js) while it shows.
+// 05 (`data-story="lights"`): the label and swept title establish Central,
+// then the IFC sentence and corner branch arrive before `touch` enables the
+// office-window light (cityTouch.js). The city remains undarkened.
 import { smoothstep } from '../scroll/cameraRig.js';
 import { SCENE_02_REVEAL, SCENE_02_STEAM } from '../story/scene02/config.js';
 import { SCENE_03_CROSSING } from '../story/scene03/config.js';
 import { SCENE_04_STORY } from '../story/scene04/config.js';
+import { SCENE_05_ARRIVAL } from '../story/scene05/config.js';
 import { createDepartureBoard } from './departureBoard.js';
 import { createCityLights } from './cityLights.js';
 const RISE = 48; // px travelled while fading: in from below, out through the top
@@ -70,6 +71,7 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       ticket: copy.querySelector('.chapter__ticket'),
       crossing: copy.dataset.story === 'crossing',
       lights: copy.dataset.story === 'lights' ? createCityLights(copy) : null,
+      lightHints: [...(copy.closest('.chapter')?.querySelectorAll('[data-light-hint]') ?? [])],
       statement: copy.querySelector('.chapter__statement'),
       statementIntro: copy.querySelector('.chapter__statement-intro'),
       photos: copy.querySelector('.chapter__photos'),
@@ -135,13 +137,24 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       ? SCENE_03_CROSSING.reveal.opening
       : story.statement
         ? SCENE_04_STORY.reveal.opening
-        : LABEL;
+        : story.lights
+          ? SCENE_05_ARRIVAL.reveal.label
+          : LABEL;
     const label = stepped ? 1 : smoothstep(i + opening[0], i + opening[1], p);
+    const title = story.lights && !stepped
+      ? smoothstep(i + SCENE_05_ARRIVAL.reveal.title[0], i + SCENE_05_ARRIVAL.reveal.title[1], p)
+      : label;
     const base = stepped
       ? (i === index ? 1 : 0)
       : smoothstep(i + DARK.approach, key - copyFull, rendered) * (1 - smoothstep(DARK.lift[0], DARK.lift[1], rendered - key));
-    for (const element of [story.label, story.title, story.standfirst, story.since, ...story.beats]) setVar(element, '--enter', label);
-    for (const beat of story.beats) beat.toggleAttribute('data-enter-hidden', label === 0);
+    for (const element of [story.label, story.standfirst, story.since]) setVar(element, '--enter', label);
+    setVar(story.title, '--enter', title);
+    if (!story.lights) {
+      for (const beat of story.beats) {
+        setVar(beat, '--enter', label);
+        beat.toggleAttribute('data-enter-hidden', label === 0);
+      }
+    }
     const sink = stepped ? 1 : 1 - smoothstep(DARK.sink[0], DARK.sink[1], p - key);
     if (story.crossing) {
       const board = level(SCENE_03_CROSSING.reveal.board);
@@ -169,8 +182,24 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       return { mode: base * SCENE_03_CROSSING.dark, yield: base * SCENE_03_CROSSING.dark, wind: human * base };
     }
     if (story.lights) {
-      story.lights.update(label > 0 && base > 0, stepped);
-      return { mode: 0, touch: stepped ? 0 : base };
+      const sweep = level(SCENE_05_ARRIVAL.reveal.sweep);
+      const body = level(SCENE_05_ARRIVAL.reveal.body) * sink;
+      const branch = level(SCENE_05_ARRIVAL.reveal.branch) * sink;
+      const hint = (stepped ? 0 : level(SCENE_05_ARRIVAL.reveal.hint)) * sink;
+      const interaction = level(SCENE_05_ARRIVAL.reveal.interaction) * sink;
+      const [sentence] = story.beats;
+      setVar(sentence, '--enter', body);
+      sentence?.toggleAttribute('data-enter-hidden', body === 0);
+      for (const hintElement of story.lightHints) {
+        setVar(hintElement, '--enter', hint);
+        hintElement.toggleAttribute('data-enter-hidden', hint === 0);
+      }
+      story.lights.update(sweep, stepped);
+      return {
+        mode: 0,
+        touch: stepped ? 0 : interaction * base,
+        words: branch * base,
+      };
     }
     if (story.statement) {
       setVar(story.statement, '--enter', label);
@@ -232,10 +261,9 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
   // In stepped mode only the active chapter's copy is shown. Returns the
   // story levels for the 3D layers; `yield` thins the petals.
   function update(p, { stepped = false, index = 0, hero, rendered = p, dwell = [] } = {}) {
-    const levels = { mode: 0, ghost: 0, dust: 0, steam: 0, wind: 0, yield: 0, touch: 0 };
+    const levels = { mode: 0, ghost: 0, dust: 0, steam: 0, wind: 0, yield: 0, touch: 0, words: 0 };
     let veil = '';
     let wind = '';
-    let words = 0;
     copies.forEach((copy, i) => {
       if (stories[i]) {
         const story = updateStory(p, rendered, i, dwell[i] ?? 0, stepped, index);
@@ -245,10 +273,6 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       }
       const shownValue = i === 0 ? opacityAt(p, i, hero) : Math.min(opacityAt(p, i, hero), opacityAt(rendered, i, hero));
       const value = stepped ? (i === index ? 1 : 0) : Math.round(shownValue * 100) / 100;
-      if (stories[i]?.lights) {
-        const enter = stepped ? value : smoothstep(i + LABEL[0], i + LABEL[1], p);
-        words = enter * value;
-      }
       if (value === opacities[i]) return;
       opacities[i] = value;
       const leaving = i === 0 || p > i + 0.5;
@@ -274,7 +298,6 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
     } else if ('wind' in root.dataset) {
       delete root.dataset.wind;
     }
-    levels.words = words;
     return levels;
   }
 
