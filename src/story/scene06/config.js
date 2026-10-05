@@ -98,20 +98,12 @@ export const SCENE_06_CHAPTER = {
   },
 };
 
-// Label and title use chapter progress on approach. The remaining ranges are
-// shares of Scene 06's dwell and remain reversible. Tracking is the sentence's
-// starting letter-spacing in em; phones use the shorter range so the wide
-// state stays inside the column.
+// Label and title use chapter progress on approach. The closing paragraph is
+// a share of Scene 06's dwell and remains reversible.
 export const SCENE_06_AFTERIMAGE = {
   reveal: {
     label: [0.34, 0.42],
     title: [0.42, 0.5],
-    sentence: [0.1, 0.28],
-    gather: [0.1, 0.48],
-    resolve: [0.54, 0.76],
-  },
-  tracking: {
-    desktop: 0.16,
-    mobile: 0.05,
+    line: [0.1, 0.32],
   },
 };

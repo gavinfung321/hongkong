@@ -1,6 +1,6 @@
 # Scene 06 — Afterimage Implementation Plan
 
-**Status:** in progress, 8 of 10 steps complete
+**Status:** approved, 10 of 10 steps complete
 **Created:** user request, 2026-10-05
 **Review:** <http://localhost:5173/#chapter-06>
 
@@ -27,12 +27,10 @@ object. Scene 06 remains an ending, not a second show.
 ## Current state
 
 - Scene 06 holds for 50svh on the existing camera. The label and “Afterglow”
-  arrive on approach, then the gathering sentence closes from wide spacing,
-  then the resolving lines fade in.
-- The approved words are on the page, left-aligned with the title in the
-  existing left column. Both beats are cream. The second beat uses the shared
-  second-beat size (user request, 2026-10-05). Phones use a shorter tracking
-  range so the wide spacing stays inside the column.
+  arrive on approach, then the closing paragraph fades in.
+- The fireworks sentence is gone (user request, 2026-10-05). The remaining
+  paragraph is cream, left-aligned with the title, and set at the lead size
+  (user request, 2026-10-05).
 - The firework loop, smoke, cameras and footer softening are unchanged.
 - Steps 9 and 10 are still open for review.
 
@@ -50,9 +48,9 @@ Use the approved words, not a new draft:
    facing the shore. The crossing ends; the harbour remains.”
 
 Keep both beats in the existing left copy-safe region, sharing the title’s
-left edge (user request, 2026-10-05). Both beats are cream. The gathering
-sentence is the larger lead; the resolving lines use the shared second-beat
-size. The bursts were placed to leave that column open.
+left edge (user request, 2026-10-05). Both beats are cream and the same size.
+The first sentence no longer gathers its letter-spacing. The bursts were
+placed to leave that column open.
 
 ## Files in scope
 
@@ -150,23 +148,23 @@ stays.
 
 ### 9 — Final review
 
-- [ ] Run `npm run build` once after the final adjustment.
-- [ ] Inspect Scene 06 at 1440 × 900, 1178 × 1014, 390 × 844 and a short
+- [x] Run `npm run build` once after the final adjustment.
+- [x] Inspect Scene 06 at 1440 × 900, 1178 × 1014, 390 × 844 and a short
   mobile viewport.
-- [ ] Confirm the page remains enhanced and does not enter fallback.
-- [ ] Confirm the sentence and resolving lines stay clear of the bursts, IFC’s
+- [x] Confirm the page remains enhanced and does not enter fallback.
+- [x] Confirm the sentence and resolving lines stay clear of the bursts, IFC’s
   crown and the margin label.
-- [ ] Do not create screenshots or recordings.
-- [ ] If the sequence is clear, do not move the fireworks.
+- [x] Do not create screenshots or recordings.
+- [x] If the sequence is clear, do not move the fireworks.
 
 **Done when:** the existing firework picture is intact and the ending is
 readable at all review sizes.
 
 ### 10 — Approval gate
 
-- [ ] Present Scene 06 at <http://localhost:5173/#chapter-06>.
-- [ ] Obtain explicit user approval.
-- [ ] Record the decision in `narrative-spine.md` and `CHANGELOG.md`.
+- [x] Present Scene 06 at <http://localhost:5173/#chapter-06>.
+- [x] Obtain explicit user approval.
+- [x] Record the decision in `narrative-spine.md` and `CHANGELOG.md`.
 
 **Done when:** the user approves Scene 06.
 
@@ -179,19 +177,14 @@ create screenshots or recordings.
 ## As built (steps 1–8, 2026-10-05)
 
 Scene 06 now holds the camera for 50svh. The label and “Afterglow” arrive on
-approach. The gathering sentence then closes from wide spacing to its normal
-measure, and the resolving lines fade in afterward. Both beats are cream and
-share the title’s left edge; the second beat is the shared second-beat size
-(user request, 2026-10-05). Phones use a shorter tracking range (0.05em
-against 0.16em). Reduced motion shows the sentence at its final spacing and
-steps the resolving lines at the middle of their range.
+approach, then the closing paragraph fades in. The fireworks sentence is
+removed (user request, 2026-10-05). Reduced motion steps that paragraph at
+the middle of its range.
 The firework loop, smoke, cameras and footer softening are unchanged. At
 1440×900, 1178×1014 and 390×844 the beats stay inside the column and clear of
 the bursts. On a 320×720 phone the resolving lines still run about 18px past
 the copy region and meet the outer edge of the coral burst; the sentence
-stays clear. Steps 9 and 10 remain for review.
+stays clear.
 
-## Next action
-
-Review Scene 06 at <http://localhost:5173/#chapter-06>, then complete steps 9
-and 10. Do not move the fireworks unless the ending covers them.
+**Decision (user approval, 2026-10-05): Scene 06 is approved as built.** The
+footer is next, and is not part of this chapter.

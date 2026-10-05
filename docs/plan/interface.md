@@ -568,6 +568,11 @@ Serif TC 700). Copy regions widened for 03 desktop, 02 and 06 phones.
 - Built in `index.html` (`.site-footer`) and `styles.css`;
   `src/ui/siteFooter.js` publishes `--footer-in` (0 → 1) and `is-at-footer`.
   Also works in the poster-only fallback, where it is a plain footer.
+- **Improvement checklist** (user request, 2026-10-05): the layout stays.
+  The statement still retells the night Scene 06 has just closed, and the
+  making credit shares its display type. The eight-step plan is in
+  [`footer-implementation-plan.md`](footer-implementation-plan.md). Status:
+  planned, 0 of 8. No footer code has changed.
 
 ### 3.14 Interface states (user request, 2026-10-03)
 

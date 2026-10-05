@@ -393,7 +393,7 @@ a:focus-visible {
 .chapter__body {
   max-width: 36ch;
   margin-top: 1rem;
-  color: var(--color-soft);
+  color: var(--color-cream);
   font-size: 1rem;
   line-height: 1.6;
 }
@@ -433,6 +433,18 @@ a:focus-visible {
   margin-top: 0.875rem;
   font-size: 0.9375rem;
   line-height: 1.6;
+}
+
+#chapter-06 .chapter__afterimage {
+  font-size: 1.1875rem;
+  line-height: 1.55;
+  letter-spacing: normal;
+}
+
+/* Scene 02: both beats are cream (user request, 2026-10-05). The second beat
+   had been the softer body gray. Phones still show one paragraph. */
+.is-enhanced #chapter-02 .chapter__beat {
+  color: var(--color-cream);
 }
 
 /* A story chapter's timeline: years over short labels, between hairlines. */
@@ -1584,10 +1596,8 @@ html:not(.is-enhanced) .vertical-text {
   transition: transform 150ms linear;
 }
 
-/* Scene 06: both beats share the title's left edge and the cream lead colour
-   (user request, 2026-10-05). The gathering sentence still closes its
-   letter-spacing from --gather-wide to the normal measure. The second beat
-   uses the shared second-beat size. */
+/* Scene 06: one closing paragraph, cream, on the title's left edge
+   (user request, 2026-10-05). */
 .is-enhanced #chapter-06 .chapter__title {
   margin-top: 0.25rem;
 }
@@ -1596,28 +1606,14 @@ html:not(.is-enhanced) .vertical-text {
   margin-top: 0.4rem;
 }
 
-.is-enhanced .chapter__afterimage,
-.is-enhanced .chapter__afterimage-rest {
-  margin-inline: 0;
-  color: var(--color-cream);
-  text-align: left;
-}
-
 .is-enhanced .chapter__afterimage {
   max-width: 34ch;
+  margin-inline: 0;
+  color: var(--color-cream);
   font-size: 1.1875rem;
   line-height: 1.55;
-  letter-spacing: calc(var(--gather-wide, 0.16) * 1em * (1 - var(--gather, 1)));
-}
-
-.is-enhanced .chapter__afterimage + .chapter__afterimage-rest {
-  margin-top: 0.875rem;
-}
-
-.is-enhanced .chapter__afterimage-rest {
-  max-width: 40ch;
-  font-size: 0.9375rem;
-  line-height: 1.6;
+  text-align: left;
+  letter-spacing: normal;
 }
 
 [data-breakpoint="mobile"].is-enhanced #chapter-06 .chapter__title {
@@ -1626,10 +1622,6 @@ html:not(.is-enhanced) .vertical-text {
 
 [data-breakpoint="mobile"].is-enhanced #chapter-06 .chapter__body {
   margin-top: 0.3rem;
-}
-
-.is-stepped .chapter__afterimage {
-  letter-spacing: normal;
 }
 
 /* The timeline sits at the foot of the screen under the copy column, clear
@@ -1788,7 +1780,7 @@ html:not(.is-enhanced) .vertical-text {
 .chapter__standfirst {
   max-width: 30ch;
   margin: 0.5rem 0 0;
-  color: var(--color-soft);
+  color: var(--color-cream);
   font-size: 0.9375rem;
   line-height: 1.5;
 }
@@ -2461,7 +2453,7 @@ html:not(.is-enhanced) .vertical-text {
 .chapter__statement-intro {
   max-width: 40ch;
   margin: 1rem 0 0;
-  color: var(--color-soft);
+  color: var(--color-cream);
   font-size: 1rem;
   line-height: 1.6;
 }
@@ -3039,29 +3031,19 @@ html:not(.is-enhanced) .vertical-text {
   line-height: 1.55;
 }
 
-/* Scene 06 phones: same cream, same left edge, shared mobile beat sizes. */
-[data-breakpoint="mobile"].is-enhanced #chapter-06 .chapter__afterimage,
-[data-breakpoint="mobile"].is-enhanced #chapter-06 .chapter__afterimage-rest {
+/* Scene 06 phones: the closing paragraph, at the shared phone lead size. */
+[data-breakpoint="mobile"].is-enhanced #chapter-06 .chapter__afterimage {
   max-width: none;
   color: var(--color-cream);
-  text-align: left;
-}
-
-[data-breakpoint="mobile"].is-enhanced #chapter-06 .chapter__afterimage {
   font-size: 1.0625rem;
   line-height: 1.5;
+  text-align: left;
+  letter-spacing: normal;
 }
 
-[data-breakpoint="mobile"].is-enhanced #chapter-06 .chapter__afterimage-rest {
-  margin-top: 0.5rem;
-  font-size: 0.8125rem;
-  line-height: 1.55;
-}
-
-/* 02 on phones: one paragraph, the same size and colour as the second used
-   to be, so the tower stays clear (user request, 2026-10-04). */
+/* 02 on phones: one paragraph, at the shared beat colour, sized so the tower
+   stays clear (user request, 2026-10-04; colour aligned 2026-10-05). */
 [data-breakpoint="mobile"].is-enhanced #chapter-02 .chapter__beat:first-child {
-  color: var(--color-soft);
   font-size: 0.8125rem;
   line-height: 1.55;
 }

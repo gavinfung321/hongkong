@@ -33,8 +33,8 @@
 // office-window light (cityTouch.js). The city remains undarkened.
 //
 // 06 (`data-story="afterimage"`): the label and title establish the ending,
-// then one sentence gathers from wide spacing and the resolving lines fade
-// in. The firework loop stays on its own clock. The harbour remains undarkened.
+// then the closing paragraph fades in. The firework loop stays on its own
+// clock. The harbour remains undarkened.
 import { smoothstep } from '../scroll/cameraRig.js';
 import { SCENE_02_REVEAL, SCENE_02_STEAM } from '../story/scene02/config.js';
 import { SCENE_03_CROSSING } from '../story/scene03/config.js';
@@ -105,9 +105,6 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       copy.style.setProperty('--copy-top', top);
       copy.style.setProperty('--copy-right', right);
       copy.style.setProperty('--copy-bottom', bottom);
-      if (stories[i]?.afterimage) {
-        setVar(stories[i].beats[0], '--gather-wide', SCENE_06_AFTERIMAGE.tracking[breakpoint]);
-      }
     });
     shown.clear();
     // After the breakpoint attribute is set, so the phone card is in the column.
@@ -214,15 +211,10 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       };
     }
     if (story.afterimage) {
-      const sentence = level(SCENE_06_AFTERIMAGE.reveal.sentence) * sink;
-      const gather = stepped ? 1 : level(SCENE_06_AFTERIMAGE.reveal.gather);
-      const resolve = level(SCENE_06_AFTERIMAGE.reveal.resolve) * sink;
-      const [gathering, rest] = story.beats;
-      setVar(gathering, '--enter', sentence);
-      setVar(gathering, '--gather', gather);
-      gathering?.toggleAttribute('data-enter-hidden', sentence === 0);
-      setVar(rest, '--enter', resolve);
-      rest?.toggleAttribute('data-enter-hidden', resolve === 0);
+      const line = level(SCENE_06_AFTERIMAGE.reveal.line) * sink;
+      const [ending] = story.beats;
+      setVar(ending, '--enter', line);
+      ending?.toggleAttribute('data-enter-hidden', line === 0);
       return { mode: 0 };
     }
     if (story.statement) {

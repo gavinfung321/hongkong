@@ -6,6 +6,39 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Footer improvement plan** (user request, 2026-10-05). Added an eight-step
+  checklist. The return, columns, bar, hairline, wash and firework softening
+  stay. The proposed change is a shorter statement that answers Scene 06, with
+  the making credit moved into the colophon. No footer code changed. Files:
+  `footer-implementation-plan.md`, `interface.md`, `README.md`,
+  `narrative-spine.md`.
+- **Scene 06 closing paragraph uses the lead size** (user request, 2026-10-05).
+  With one paragraph left, the smaller second-beat size read as a caption
+  under Afterglow. It is now 1.1875rem on desktop and 1.0625rem on phones,
+  still cream and on the title’s left edge. Files: `src/styles.css`; plan:
+  `scene-06-implementation-plan.md`.
+- **Scene 06 drops the fireworks sentence** (user request, 2026-10-05). The
+  first beat only described the bursts already on screen. The closing
+  paragraph remains, and it fades in after the title. Files: `index.html`,
+  `src/ui/copyLayer.js`, `src/story/scene06/config.js`, `src/styles.css`;
+  plan: `scene-06-implementation-plan.md`, `narrative-spine.md`.
+- **Scene 06 beats match** (user request, 2026-10-05). The first sentence no
+  longer closes its letter-spacing, and it uses the second beat’s size:
+  0.9375rem on desktop, 0.8125rem on phones. Both stay cream and left-aligned.
+  Files: `src/styles.css`, `src/ui/copyLayer.js`, `src/story/scene06/config.js`;
+  plan: `scene-06-implementation-plan.md`, `narrative-spine.md`.
+- **Chapter beats share cream** (user request, 2026-10-05). Scene 03’s
+  standfirst, “Kowloon to the Island…”, was the softer gray. The reading line
+  in every chapter is now cream: 01’s paragraph, both of 02’s beats including
+  the phone paragraph, 03’s standfirst, 04’s statement, 05’s sentence and both
+  of 06’s beats. Titles stay ivory. Panels, the ticket and the footer stay
+  the softer gray. Files: `src/styles.css`; plan: `narrative-spine.md`.
+- **Scene 06 approved; Scene 02 beats share a colour** (user approval and
+  request, 2026-10-05). Scene 06’s afterimage is approved as built. Scene 02
+  already had its progressive-story implementation; its second paragraph was
+  still the softer body gray. Both Scene 02 beats are now cream. Phone Scene
+  02 still shows one softer paragraph. Files: `src/styles.css`; plan:
+  `scene-06-implementation-plan.md`, `narrative-spine.md`.
 - **Scene 06 beats share colour and alignment** (user request, 2026-10-05).
   Both beats are cream and share the title’s left edge. The gathering
   sentence is no longer centred. The resolving lines return to the shared

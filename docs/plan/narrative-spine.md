@@ -365,6 +365,8 @@ placement throughout.
 
 The Scene 02 progressive-story follow-up is complete.
 
+**Beat colour** (user request, 2026-10-05): every chapter’s reading line is cream. Scene 03’s standfirst and Scene 04’s statement had been the softer gray. Scene 02’s phone paragraph is cream too. Titles stay ivory. Panel, ticket and footer text stay the softer gray.
+
 ### 3D background
 
 - Keep the existing camera, Clock Tower, palms, water and atmospheric motion.
@@ -774,10 +776,8 @@ the untouched 3D: 02 layered fade with a memory print and timeline; 03
 index panels with a route line; 04 statement header with hanging photo
 cards; 05 a title sweep and a small patch of offices lit by the pointer,
 with 3D layers around Two IFC (built, below).
-Chosen for 06 (user choice, 2026-10-04), built in steps 1–8 (2026-10-05):
-one sentence whose letters close in from wide spacing, then the resolving
-lines fade in. Both beats are cream and share the title’s left edge
-(user request, 2026-10-05).
+Chosen for 06 (user choice, 2026-10-04), revised 2026-10-05: the fireworks
+sentence is removed. The closing paragraph fades in after the title.
 
 ### Scene 05
 
@@ -917,16 +917,15 @@ The controlled rollout continues with Scene 06.
 ### Scene 06
 
 Steps 1–8 are built (2026-10-05). The chapter holds for 50svh on the existing
-camera. The label and “Afterglow” arrive first, then the gathering sentence
-closes from wide spacing inside the left column, then the resolving lines fade
-in. Both beats are cream, left-aligned with the title, and the second beat
-uses the shared second-beat size (user request, 2026-10-05). Phones use the shorter tracking range. Reduced motion
-shows the final spacing and steps the resolving lines. The firework loop,
+camera. The label and “Afterglow” arrive first, then the closing paragraph fades in.
+The fireworks sentence is removed, and the remaining paragraph uses the lead
+size (user request, 2026-10-05). Reduced motion steps that paragraph. The firework loop,
 smoke and footer softening are unchanged. The checklist lives in
 [`scene-06-implementation-plan.md`](scene-06-implementation-plan.md). Status:
-**in progress, 8 of 10 steps complete**.
+**approved, 10 of 10 steps complete**.
 
-**Next action:** review Scene 06, then complete steps 9 and 10.
+**Decision (user approval, 2026-10-05): Scene 06 is approved as built.** The
+footer is next.
 
 ## Checklist
 
@@ -954,13 +953,13 @@ smoke and footer softening are unchanged. The checklist lives in
 ### Decision
 
 - [x] Approve and continue, revise once, or remove (approved, 2026-10-04)
-- [ ] If approved, roll out one chapter at a time (06 next: afterimage only)
+- [x] If approved, roll out one chapter at a time (06 approved, 2026-10-05)
 - [ ] Use no more than two or three illustrations in total
 - [ ] Update `FINAL-NARRATIVE-COPY.md` only after the direction is approved
 - [ ] Record only kept decisions in `CHANGELOG.md`
 
 ## Immediate next action
 
-Review Scene 06 at <http://localhost:5173/#chapter-06>. Steps 1–8 are built;
-steps 9 and 10 remain. The checklist is in
-[`scene-06-implementation-plan.md`](scene-06-implementation-plan.md).
+Scene 06 is approved (user approval, 2026-10-05). The footer checklist is
+in [`footer-implementation-plan.md`](footer-implementation-plan.md). Status:
+planned, 0 of 8. Begin when the proposed statement is accepted.
