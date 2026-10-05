@@ -233,10 +233,9 @@ bursts, a smoke puff and a cloud tail were added on the left, below the copy.
 
 ## Transitions (user request, 2026-10-03)
 
-A continuous review of the whole journey
-(`review-shots/transitions/TRANSITION-REVIEW.md`) found six transition
-issues; the user approved all six, fixed in order with the holds left
-as they were:
+A continuous review of the whole journey found six transition issues;
+the user approved all six, fixed in order with the holds left as they
+were. The local pictures from that review were removed 2026-10-06.
 
 1. The camera keeps an even pace by distance through each move, and its
    look turns with distance; a move can set the share of the turn at each

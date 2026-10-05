@@ -168,8 +168,7 @@ all six.
      - **Checked:** composition probe and copy overflow at 1440 × 900,
        1156 × 766 and phone: only the four older misses; IFC and the wheel
        stay clear through the hold and the pass. Draw calls: 03 unchanged
-       (desktop 120, phone 116), 04 desktop 94 (was 93). Review shots in
-       `review-shots/ferry-pass/` (not committed).
+       (desktop 120, phone 116), 04 desktop 94 (was 93).
    - **Clock Tower, rebuilt from photos and bigger in 02 (user request,
      2026-10-01).** "In 02, make the clock tower bigger … the tree is
      blocking the clock tower." Measured against the user's photos, the old

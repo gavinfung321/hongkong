@@ -299,7 +299,7 @@ Only after priorities 1 and 2:
 ### Review and fixes, 2026-10-04 (user choice)
 
 Walked through 01–06 at 1440 × 900 and 390 × 844 (hold frames, reduced
-motion; captures in `review-shots/p3/`). 02, 03, 04 and 05 on desktop and
+motion). 02, 03, 04 and 05 on desktop and
 02, 03 and 05 on phones were clean. Fixed:
 
 - **Moon too strong in 01 and 06** (it competed with the Clock Tower and

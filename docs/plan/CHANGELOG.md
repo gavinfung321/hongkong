@@ -6,6 +6,10 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-06
 
+- **Local review shots removed** (user request, 2026-10-06). The
+  `review-shots/` folder was scratch on this machine, not in git and not
+  on the page. It is gone. The changelog entries that name it stay as
+  the record of where those pictures were.
 - **Closed plans folded together** (user request, 2026-10-06). The
   finished scene 03–06 checklists, the crossing plan, the footer, the
   accent colours, the hero wordmark and the organization plan now live
