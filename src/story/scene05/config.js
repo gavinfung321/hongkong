@@ -58,11 +58,11 @@ export const SCENE_05_CALLOUTS = {
   // Both callouts stay visible. Each dims only while its own target is hovered.
   positions: {
     desktop: {
-      skyline: { x: 74, y: 38, angle: 172 },
+      skyline: { x: 74, y: 54, angle: 176 },
       wheel: { x: 25, y: 71, angle: 22 },
     },
     mobile: {
-      skyline: { x: 36, y: 48, angle: 8 },
+      skyline: { x: 48, y: 48, angle: 8 },
       wheel: { x: 24, y: 58, angle: 78 },
     },
   },

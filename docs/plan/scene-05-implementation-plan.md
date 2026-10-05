@@ -1,7 +1,7 @@
 # Scene 05 — Progressive Arrival Implementation Plan
 
-**Status:** awaiting approval, 9 of 10 steps complete; both callouts stay
-visible and dim only while their own target is hovered
+**Status:** awaiting approval, 9 of 10 steps complete; callout visual review
+implemented
 **Created:** user request, 2026-10-05
 **Review:** <http://localhost:5173/#chapter-05>
 
@@ -446,7 +446,79 @@ The sequential callouts disappeared after the first hover (user request,
 arrow stayed inside the viewport, clear of the copy, and returned to full
 strength after the pointer left its target. The page remained enhanced.
 
+## Callout visual review
+
+Reviewed 2026-10-05 before any further visual change (user request). The
+callouts are worth keeping. The interactions are invisible until someone
+tries them, and a short labeled arrow is lighter than the earlier sentence.
+The current treatment is heavier than the scene needs.
+
+### 1 — The yellow line
+
+The amber line is the callout’s left border, with a dark wash behind the
+words. It is not needed. The arrow already shows where to look, and the line
+does not point at the target. On the skyline callout it sits on the opposite
+side from Two IFC, so the label reads as a small interface chip rather than a
+caption in the sky.
+
+**Recommendation:** remove the left border and the dark wash. Keep the cream
+label and the warm arrow.
+
+### 2 — Desktop skyline position
+
+“Light the skyline” is at 74% across and 38% down. The corner branch enters
+from the top-right and its foliage reaches into that same area, so the label
+sits in the sprig. The branch placement stays frozen.
+
+**Recommendation:** lower only this desktop callout to about 54% down, still
+beside Two IFC’s shaft and above the wheel callout. Adjust the arrow angle
+only if it no longer aims into the tower.
+
+### 3 — Mobile skyline position
+
+“Tap the lights” sits left of Two IFC, with a clear gap on a 390-wide phone.
+It was kept there so it would not cover the copy. On a 320-wide phone the
+copy and Two IFC leave only a narrow opening, so the label cannot sit on the
+tower.
+
+**Recommendation:** move it right until the arrow meets Two IFC’s left edge,
+staying below the copy. Do not cover the tower or the sentence.
+
+### 4 — Shorter mobile words
+
+“Tap the lights” and “Tap the wheel” are the widest part of the mobile
+callouts. The arrow already identifies the target, so the words only need to
+name the action (user question, 2026-10-05).
+
+**Recommendation:** use **“Tap me”** for both mobile callouts. Keep desktop
+as “Light the skyline” and “Hover me”, because a desktop pointer hovers and
+the skyline action is lighting rather than tapping.
+
+### What to preserve
+
+- Both arrows remain visible and dim only on their own target.
+- The wheel callout stays beside the wheel.
+- Desktop wording stays “Light the skyline” and “Hover me”.
+- No change to the branch, camera, copy, wheel boost or city-light strength.
+- No extra icon, box, shadow or second rule.
+
+### Decision gate
+
+- [x] Approve removing the yellow line and dark wash.
+- [x] Approve lowering the desktop skyline callout below the branch.
+- [x] Approve moving the mobile skyline callout closer to Two IFC.
+- [x] Approve “Tap me” for both mobile callouts.
+- [x] Implement only after those choices. Then recheck 1440 × 900,
+  1178 × 1014, 390 × 844 and 320 × 720 without screenshots.
+
+**Completed 2026-10-05:** the amber rule and dark wash are gone. The desktop
+skyline label is at 54% down, beside Two IFC and below the branch. Both mobile
+labels read “Tap me,” and the skyline arrow meets the tower’s left edge
+without covering the copy. Desktop wording, wheel placement, dimming, camera
+and branch are unchanged. All four review sizes stayed inside the viewport
+without fallback.
+
 ## Next action
 
-Present the completed Scene 05 interaction at
-<http://localhost:5173/#chapter-05> for the step 10 approval gate.
+Present Scene 05 at <http://localhost:5173/#chapter-05> for the step 10
+approval gate.

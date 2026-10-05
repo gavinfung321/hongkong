@@ -853,8 +853,7 @@ or 3D layer.
 The detailed checklist lives in
 [`scene-05-implementation-plan.md`](scene-05-implementation-plan.md), the
 single source of truth for this pass. Status: **awaiting approval, 9 of 10
-steps complete; both callouts stay visible and dim only on their own
-target**.
+steps complete; callout visual review implemented**.
 
 **Update 2026-10-05:** steps 1–8 are complete. Scene 05 now owns its unchanged
 chapter values, a 45svh camera hold and named reveal ranges. The label
@@ -902,6 +901,13 @@ Desktop, compact desktop, mobile and short-mobile checks passed without
 overlap or fallback. Centre, rim and adjacent miss targets passed at both
 mobile sizes; reduced motion and exit/re-entry also passed. The single
 production build succeeded without screenshots or recordings.
+
+**Callout visual review implemented** (user request, 2026-10-05): the amber
+left rule and dark wash are removed. The desktop skyline label now sits at
+54% down, below the corner branch and beside Two IFC. Both mobile labels read
+“Tap me,” and that skyline arrow meets the tower’s left edge without covering
+the copy. Desktop wording remains “Light the skyline” and “Hover me.” The four
+review sizes passed without fallback.
 
 **Next action:** review Scene 05 at <http://localhost:5173/#chapter-05> for
 final approval.

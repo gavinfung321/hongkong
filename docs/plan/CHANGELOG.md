@@ -6,6 +6,22 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Scene 05 callout visual refinement** (user request, 2026-10-05). Removed
+  the amber left rule and dark wash. Lowered the desktop skyline label below
+  the corner branch, moved the mobile skyline arrow to Two IFC’s left edge,
+  and shortened both mobile labels to “Tap me.” Desktop wording, wheel
+  placement, dimming, camera and branch are unchanged. Four review sizes
+  passed without overlap or fallback, and the production build passed. No
+  screenshots were created. Files: `index.html`, `src/story/scene05/config.js`,
+  `src/styles.css`; plan: `scene-05-implementation-plan.md`,
+  `narrative-spine.md`.
+- **Scene 05 callout visual review** (user request, 2026-10-05). The labeled
+  arrows should stay, but the amber left rule and dark wash are unnecessary.
+  The desktop skyline label should move below the corner branch, and the
+  mobile label should move closer to Two IFC without covering the copy. Both
+  mobile labels should become “Tap me”; desktop wording stays unchanged.
+  Implementation waits for approval. No application code changed. Files:
+  `scene-05-implementation-plan.md`, `narrative-spine.md`.
 - **Scene 05 callouts stay and dim on hover** (user request, 2026-10-05).
   Both arrows now remain visible. “Light the skyline” points at Two IFC and
   dims only while the buildings are hovered; “Hover me” sits beside the wheel
