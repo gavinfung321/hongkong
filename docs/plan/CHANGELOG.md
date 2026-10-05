@@ -6,6 +6,46 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Hero 香港 shade approved** (user approval, 2026-10-05). The warm feet
+  are closed. The top stays white, the lower strokes stay a dark cream, and
+  the placement is unchanged. No code changed in this step. Files:
+  `hero-wordmark-colour-plan.md`, `interface.md`, `narrative-spine.md`,
+  `README.md`.
+- **Hero 香港 feet warmed** (user request, 2026-10-05). The lower shade
+  leaves grey-violet for a dark cream, so the strokes stay visible over the
+  water and the moon. The white top, the placement and the scroll fade are
+  unchanged. Files: `src/scene/createWordmark.js`; plan:
+  `hero-wordmark-colour-plan.md`, `interface.md`, `narrative-spine.md`.
+- **Hero 香港 colour plan** (user request, 2026-10-05). The word is white
+  at the top and grey-violet at the feet. The feet lose their strokes over
+  the water and turn muddy on the moon. The proposed change warms the
+  lower shade and leaves placement alone. No wordmark code changed. Files:
+  `hero-wordmark-colour-plan.md`, `interface.md`, `README.md`,
+  `narrative-spine.md`.
+- **Accent plan approved** (user approval, 2026-10-05). The eight-step
+  colour split is closed. Orange stays the sail, the scroll stroke, the
+  nav, the menu mark and the link hover. Yellow stays the timeline, the
+  ferry due digits and the callout arrows. The Scene 02 year cards keep
+  the insets reviewed the same day. No code changed in this step. Files:
+  `accent-colour-plan.md`, `interface.md`, `narrative-spine.md`, `README.md`.
+- **Accent colours applied** (user request, 2026-10-05). The scroll stroke,
+  the nav underline, the menu’s current chapter and text-link hover,
+  including HKAAA, use the sail’s orange. The hero “01 / 06” stays cream.
+  The timeline, the ferry due digits and the callout arrows stay yellow.
+  Approval is still open. Files: `src/styles.css`; plan:
+  `accent-colour-plan.md`, `interface.md`, `narrative-spine.md`, `README.md`.
+- **1915 draws its line while current** (user request, 2026-10-05). The
+  first year had no left border, so the active colour never became a
+  stroke. It now uses the same yellow line as the later years, one gap to
+  the left, and only while 1915 is current. The numerals stay put. Files:
+  `src/styles.css`; plan: `accent-colour-plan.md`, `interface.md`,
+  `narrative-spine.md`.
+- **Accent colour plan** (user request, 2026-10-05). The logo stays orange.
+  Yellow stays on light in the picture. Proposed, not applied: an orange
+  scroll stroke, nav underline and footer hover; the timeline, the ferry
+  due digits and the callout arrows stay yellow. 1915 has no left line
+  because the first year is built without one. No site code changed. Files:
+  `accent-colour-plan.md`, `interface.md`, `README.md`, `narrative-spine.md`.
 - **Footer approved** (user approval, 2026-10-05). The eight-step close is
   done and closed for now. The statement answers Scene 06, the sail sits
   left of “The” on phones, and the colophon keeps HKAAA, the code line and

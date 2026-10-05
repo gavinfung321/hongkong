@@ -20,11 +20,13 @@ const FONT_SIZE = 640;
 const GAP = 0.14; // extra space between characters, as a fraction of the font size
 const PAD = 16;
 // [fraction of glyph height, colour]; the shading begins a third of the way down.
+// The feet are a dark cream, not dusk violet, so the strokes stay visible
+// over the water and the moon (user request, 2026-10-05).
 const SHADE = [
   [0, '#fff'],
   [0.32, '#fff'],
-  [0.7, 'rgb(140, 130, 165)'],
-  [1, 'rgba(44, 38, 74, 0.95)'],
+  [0.7, 'rgb(196, 174, 148)'],
+  [1, 'rgba(118, 92, 68, 0.95)'],
 ];
 const STEPPED_FADE = 0.3; // seconds
 
@@ -43,7 +45,7 @@ function drawText(text) {
   canvas.width = Math.ceil(width + PAD * 2);
   canvas.height = Math.ceil(ascent + descent + PAD * 2);
   ctx.font = font;
-  // Lit from above: full strength on top, sinking into dusk violet at the feet.
+  // Lit from above: full strength on top, sinking into a dark cream at the feet.
   // The material colour (cream) multiplies these values.
   const shade = ctx.createLinearGradient(0, PAD, 0, PAD + ascent + descent);
   for (const [stop, colour] of SHADE) shade.addColorStop(stop, colour);

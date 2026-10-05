@@ -960,6 +960,5 @@ footer is next.
 
 ## Immediate next action
 
-The footer is approved (user approval, 2026-10-05) and closed for now.
-Checklist in [`footer-implementation-plan.md`](footer-implementation-plan.md).
-Status: approved, 8 of 8. No further footer work until asked.
+The footer, the accent split and the hero 香港 shade are approved and
+closed (user approval, 2026-10-05). No further wordmark work until asked.

@@ -29,6 +29,8 @@ file (user choice, 2026-10-02).
 | [`scene-05-implementation-plan.md`](scene-05-implementation-plan.md) | Scene 05's ten-step progressive-arrival implementation checklist and approval gate | Controlled narrative rollout |
 | [`scene-06-implementation-plan.md`](scene-06-implementation-plan.md) | Scene 06's ten-step afterimage implementation checklist and approval gate | Controlled narrative rollout |
 | [`footer-implementation-plan.md`](footer-implementation-plan.md) | Footer's approved close: the two-line statement, the making credit in the colophon | Approved 2026-10-05 |
+| [`accent-colour-plan.md`](accent-colour-plan.md) | Accent split: orange for the brand, yellow for light in the picture | Approved 2026-10-05 |
+| [`hero-wordmark-colour-plan.md`](hero-wordmark-colour-plan.md) | Hero 香港: the top stays white and the feet are a dark cream | Approved 2026-10-05 |
 | [`checks.md`](checks.md) | Performance budget and acceptance checks | 5, 8 |
 | [`CHANGELOG.md`](CHANGELOG.md) | Dated history of changes, newest first; the old files list | 7 |
 | [`HANDOFF.md`](HANDOFF.md) | Briefing for a fresh chat: how we work, standing rules, the next task | — |

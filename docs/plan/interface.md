@@ -112,7 +112,11 @@ How it is built:
   (`createWordmark.js`). A blocked font keeps the fallback.
 - Colour: warm cream (`--color-cream`), slightly fogged so it sits in the
   scene rather than on the glass. The lower two thirds shade down into dusk
-  violet, as if lit from above (user request, 2026-10-01, after Kage).
+  violet, as if lit from above (user request, 2026-10-01, after Kage). The
+  feet are now a dark cream so the strokes stay readable (user request,
+  2026-10-05). Checklist in
+  [`hero-wordmark-colour-plan.md`](hero-wordmark-colour-plan.md). Status:
+  approved, 6 of 6 (user approval, 2026-10-05). Closed.
 - Position and size are authored per breakpoint in `chapters.js` (a new `hero`
   block), like the camera poses.
 - The canvas is decorative (`aria-hidden`); the real heading is the hidden
@@ -175,8 +179,12 @@ How it is built:
   up, or when it receives keyboard focus (user request, 2026-10-01).
   - Proposed links: Clock Tower · Star Ferry · Red Sails · City of Light ·
     Afterglow (chapter 01 is reached through the logo).
-  - The current chapter's link is underlined in warm amber (`--color-warm`).
-    Coral stays reserved for the junk's sails.
+  - The current chapter's link is underlined in the sail’s orange
+    (`--color-coral`, user request, 2026-10-05). The scroll stroke and link
+    hover use the same orange. Yellow stays on the timeline, the ferry due
+    digits and the callout arrows. Approved and closed (user approval,
+    2026-10-05), in
+    [`accent-colour-plan.md`](accent-colour-plan.md).
   - On hover, each English label rolls up and its Chinese label (from 3.6)
     rolls in from below (user request, 2026-10-01). Keyboard focus no
     longer swaps it, so the visible name matches the one announced (user
