@@ -968,7 +968,8 @@ footer is next.
 
 ## Immediate next action
 
-Scene 03 desktop presence is on the page (user choice, 2026-10-05): two
-sentences, the year on the countdown, a larger countdown low in the water,
-and a larger ticket. The phone is unchanged. Awaiting a look at
-<http://localhost:5173/#chapter-03>.
+Scene 05’s desktop callouts are on the page (user choice, 2026-10-05).
+The labels are 0.875rem, they stay at full strength, and they sit close
+to Two IFC and the wheel. The phone is unchanged. Awaiting a look at
+<http://localhost:5173/#chapter-05>. Scene 03’s desktop pass is on the
+page and can be closed when asked.

@@ -6,6 +6,19 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Scene 05 desktop callouts** (user choice, 2026-10-05). On a wide
+  screen the labels are 0.875rem, the arrow grows with them, and they
+  stay at full strength. “Light the skyline” sits just beside Two IFC.
+  “Hover me” sits just above the wheel. The phone stays “Tap me” at
+  0.625rem, in the same places, and still dims while pressed. Files:
+  `src/story/scene05/config.js`, `src/styles.css`; plan:
+  `scene-05-implementation-plan.md`, `narrative-spine.md`, `README.md`.
+- **Scene 05 callout review** (user request, 2026-10-05). On a large
+  desktop the labels are 0.625rem, sit in the gaps beside Two IFC and the
+  wheel, and dim to 32% on their own target. Options are a larger desktop
+  size, whether the dim stays, and moving each label close to its target.
+  No page change. Files: `scene-05-implementation-plan.md`,
+  `narrative-spine.md`.
 - **Scene 03 desktop ticket eased** (user choice, 2026-10-05). The ticket
   was the loudest object along the bottom. It is now about three quarters
   of that width, so the countdown stays the thing you watch. The phone

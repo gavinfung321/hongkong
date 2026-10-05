@@ -27,7 +27,7 @@ file (user choice, 2026-10-02).
 | [`scene-03-implementation-plan.md`](scene-03-implementation-plan.md) | Scene 03's ten-step progressive-story implementation checklist and approval gate | Controlled narrative rollout |
 | [`scene-03-crossing-plan.md`](scene-03-crossing-plan.md) | Scene 03 desktop: two sentences, a lower larger countdown, a larger ticket. Phone unchanged | Built 2026-10-05, awaiting a look |
 | [`scene-04-implementation-plan.md`](scene-04-implementation-plan.md) | Scene 04's ten-step then-and-now implementation checklist and approval gate | Controlled narrative rollout |
-| [`scene-05-implementation-plan.md`](scene-05-implementation-plan.md) | Scene 05's ten-step progressive-arrival implementation checklist and approval gate | Controlled narrative rollout |
+| [`scene-05-implementation-plan.md`](scene-05-implementation-plan.md) | Scene 05's arrival, plus larger desktop callouts close to Two IFC and the wheel | Built 2026-10-05, awaiting a look |
 | [`scene-06-implementation-plan.md`](scene-06-implementation-plan.md) | Scene 06's ten-step afterimage implementation checklist and approval gate | Controlled narrative rollout |
 | [`footer-implementation-plan.md`](footer-implementation-plan.md) | Footer's approved close: the two-line statement, the making credit in the colophon | Approved 2026-10-05 |
 | [`accent-colour-plan.md`](accent-colour-plan.md) | Accent split: orange for the brand, yellow for light in the picture | Approved 2026-10-05 |

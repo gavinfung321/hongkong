@@ -523,5 +523,85 @@ without fallback.
 
 ## Next action
 
-Scene 05 is approved. Continue with
-[`scene-06-implementation-plan.md`](scene-06-implementation-plan.md).
+Scene 05’s desktop callouts are on the page (user choice, 2026-10-05):
+S2, D2, and the closer place. Awaiting a look at
+<http://localhost:5173/#chapter-05>. The phone is unchanged.
+
+## Desktop callout size and dim (user request, 2026-10-05)
+
+On a large desktop the two labels read as a whisper, and each sits in a
+gap rather than against its target. “Light the skyline” is at 74% across
+and 54% down, in the dark between Two IFC and the branch. “Hover me” is
+at 25% across and 71% down, in the dark left of the wheel. Both are
+0.625rem, uppercase, widely tracked. The arrow is 3rem wide. The phone
+uses the same size for “Tap me”, and this pass does not change the phone.
+
+The labels should stay close to the wheel and to Two IFC (user request,
+2026-10-05). A larger word still belongs against the thing it names, not
+farther out in the sky. The branch stays clear of “Light the skyline”.
+The wheel’s rim stays readable around “Hover me”. Positions remain in
+`SCENE_05_CALLOUTS` in `src/story/scene05/config.js`.
+
+While the pointer is on the buildings, only the skyline label falls to
+32% opacity. While it is on the wheel, only the wheel label does. Each
+returns as soon as the pointer leaves. The lights and the wheel are
+already the response.
+
+### Size
+
+**S1 — A small step.** Desktop labels become 0.75rem. The arrow grows
+with them. Still a caption. On a large monitor they may still feel small
+next to the tower.
+
+**S2 — A clear step.** Desktop labels become 0.875rem, and the arrow
+grows in proportion. Readable across the picture without matching the
+chapter sentence, which is 1.1875rem. Check that “Light the skyline”
+stays out of the branch and off the tower. Positions stay in
+`src/story/scene05/config.js` unless the longer line needs a nudge.
+
+**S3 — Leave them.** 0.625rem stays. The arrows do the pointing and the
+words stay quiet.
+
+### Dim
+
+**D1 — Keep it.** The label steps back to 32% while you are on its
+target, then returns. It marks “you found it.”
+
+**D2 — Drop it.** Both labels stay at full strength. The lit windows and
+the turning wheel are the feedback. This matches making the words easier
+to see: they no longer vanish at the moment the interaction starts.
+
+**D3 — Soften it.** Dim only to about 70%, so the label still reads while
+the pointer is on the target.
+
+### Place
+
+Desktop only. Move each label in until the arrow is a short step onto its
+target.
+
+- “Light the skyline” moves left, toward Two IFC’s shaft, and stays below
+  the branch.
+- “Hover me” moves right, toward the wheel, and stays off the hub.
+
+### Recommendation
+
+S2, D2, and the closer place. Desktop only. The phone, the wording, the
+branch, the camera and the light strength stay as they are.
+
+### Checklist
+
+- [x] Pick S1, S2 or S3. S2 (user choice, 2026-10-05).
+- [x] Pick D1, D2 or D3. D2 (user choice, 2026-10-05).
+- [x] Move the desktop labels close to Two IFC and the wheel.
+- [x] If the words grow, scale the desktop arrow with them.
+- [x] Recheck a large desktop and a phone at
+  <http://localhost:5173/#chapter-05>. The phone labels stay 0.625rem
+  and stay where they are.
+
+**On the page (2026-10-05):** desktop labels are 0.875rem. The arrow is
+4.2rem by 1.6rem. “Light the skyline” sits just right of Two IFC’s shaft,
+below the branch, at 71% across and 52% down, arrow aimed back at the
+tower. “Hover me” sits just above the wheel, at 32% across and 68% down.
+Desktop labels stay at full strength while the pointer is on the target.
+The phone still reads “Tap me” at 0.625rem, in the same places, and still
+dims to 32% only while pressed.

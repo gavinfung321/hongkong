@@ -2733,6 +2733,24 @@ html:not(.is-enhanced) .vertical-text {
   opacity: calc(var(--enter, 0) * 0.32);
 }
 
+/* Desktop labels are large enough to read across the picture, and they
+   stay at full strength. The arrow grows with the type. The phone keeps
+   the 0.625rem label and the press dim (user choice, 2026-10-05). */
+[data-breakpoint="desktop"].is-enhanced .chapter__light-hint {
+  max-width: min(42vw, 22rem);
+  font-size: 0.875rem;
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__light-hint-arrow {
+  width: 4.2rem;
+  height: 1.6rem;
+  stroke-width: 1.75;
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__light-hint[data-dim] {
+  opacity: var(--enter, 0);
+}
+
 .is-enhanced .chapter__light-hint[data-enter-hidden],
 .is-stepped .chapter__light-hint {
   visibility: hidden;

@@ -55,11 +55,13 @@ export const SCENE_05_CALLOUTS = {
     desktop: { left: 42, right: 96, top: 20, bottom: 76 },
     mobile: { left: 44, right: 96, top: 20, bottom: 72 },
   },
-  // Both callouts stay visible. Each dims only while its own target is hovered.
+  // Both callouts stay visible. On a phone each dims only while its own
+  // target is pressed. On desktop they stay at full strength (user choice,
+  // 2026-10-05) and sit close to Two IFC and the wheel.
   positions: {
     desktop: {
-      skyline: { x: 74, y: 54, angle: 176 },
-      wheel: { x: 25, y: 71, angle: 22 },
+      skyline: { x: 71, y: 52, angle: 168 },
+      wheel: { x: 32, y: 68, angle: 28 },
     },
     mobile: {
       skyline: { x: 48, y: 48, angle: 8 },
