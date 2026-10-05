@@ -442,9 +442,17 @@ a:focus-visible {
 }
 
 /* Scene 02: both beats are cream (user request, 2026-10-05). The second beat
-   had been the softer body gray. Phones still show one paragraph. */
+   had been the softer body gray. On desktop they share the quieter size, so
+   the two paragraphs read as one passage (user choice, 2026-10-06). Phones
+   still show one paragraph. */
 .is-enhanced #chapter-02 .chapter__beat {
   color: var(--color-cream);
+}
+
+[data-breakpoint="desktop"].is-enhanced #chapter-02 .chapter__beat:first-child {
+  max-width: 40ch;
+  font-size: 0.9375rem;
+  line-height: 1.6;
 }
 
 /* A story chapter's timeline: years over short labels, between hairlines. */
@@ -2994,11 +3002,12 @@ html:not(.is-enhanced) .vertical-text {
   letter-spacing: normal;
 }
 
-/* 02 on phones: one paragraph, at the shared beat colour, sized so the tower
-   stays clear (user request, 2026-10-04; colour aligned 2026-10-05). */
+/* 02 on phones: one paragraph, at the shared phone paragraph size. The title
+   stays the loud line, and the sentence still ends above the dome (user
+   choice, 2026-10-06). */
 [data-breakpoint="mobile"].is-enhanced #chapter-02 .chapter__beat:first-child {
-  font-size: 0.8125rem;
-  line-height: 1.55;
+  font-size: 0.9375rem;
+  line-height: 1.58;
 }
 
 [data-breakpoint="mobile"].is-enhanced #chapter-02 .chapter__beat + .chapter__beat {
@@ -3034,6 +3043,14 @@ html:not(.is-enhanced) .vertical-text {
   .is-enhanced .chapter__beat + .chapter__beat {
     font-size: 0.8125rem;
   }
+
+  /* Scene 02: the short window matches both beats (user choice, 2026-10-06). */
+  [data-breakpoint="desktop"].is-enhanced #chapter-02 .chapter__beat:first-child,
+  .is-enhanced #chapter-02 .chapter__beat + .chapter__beat {
+    font-size: 0.8125rem;
+    line-height: 1.55;
+  }
+
   .side-pager {
     display: none;
   }

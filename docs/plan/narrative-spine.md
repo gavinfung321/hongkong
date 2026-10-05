@@ -367,6 +367,42 @@ The Scene 02 progressive-story follow-up is complete.
 
 **Beat colour** (user request, 2026-10-05): every chapter’s reading line is cream. Scene 03’s standfirst and Scene 04’s statement had been the softer gray. Scene 02’s phone paragraph is cream too. Titles stay ivory. Panel, ticket and footer text stay the softer gray.
 
+### Scene 02 beat size (user request, 2026-10-06)
+
+On desktop the two paragraphs are one story, but they are not one size.
+Beat 1 is 1.1875rem, line-height 1.55, measure 34ch. Beat 2 is 0.9375rem,
+line-height 1.6, measure 40ch. Both are already cream. The title is the
+loud line. The size step makes the second paragraph, the one about the
+station being demolished and the tower being kept, read as a footnote.
+
+The lead size lives on the shared rule `.chapter__beat:first-child`.
+Other chapters use that rule. This pass overrides `#chapter-02` only.
+
+**Recommendation.** Bring beat 1 down to beat 2. Same size, same line
+height, same 40ch measure, so the two paragraphs read as one passage.
+Growing beat 2 up to 1.1875rem would crowd the print. Leaving the step
+keeps a hierarchy the title already provides.
+
+- Desktop: `#chapter-02 .chapter__beat:first-child` becomes 0.9375rem,
+  line-height 1.6, max-width 40ch.
+- A short landscape window still steps the shared sizes (0.9375rem then
+  0.8125rem). Scene 02 matches both at 0.8125rem there.
+- Phone stays one paragraph. Beat 2 stays hidden. Beat 1 is 0.9375rem,
+  the shared phone paragraph size (user choice, 2026-10-06).
+
+No change to the title, the cream colour, the print, the timeline, or
+any other chapter.
+
+- [x] Match Scene 02’s two desktop beats at beat 2’s size and measure.
+- [x] Match them on a short landscape window.
+- [x] Leave the phone as one paragraph.
+- [ ] Look at <http://localhost:5173/#chapter-02>.
+
+**On the page (2026-10-06):** desktop beat 1 is 0.9375rem, line-height
+1.6, measure 40ch, the same as beat 2. A short landscape window sets both
+to 0.8125rem. The phone shows one paragraph at 0.9375rem, line-height
+1.58, and it still ends above the dome.
+
 ### 3D background
 
 - Keep the existing camera, Clock Tower, palms, water and atmospheric motion.
@@ -968,8 +1004,7 @@ footer is next.
 
 ## Immediate next action
 
-Scene 05’s desktop callouts are on the page (user choice, 2026-10-05).
-The labels are 0.875rem, they stay at full strength, and they sit close
-to Two IFC and the wheel. The phone is unchanged. Awaiting a look at
-<http://localhost:5173/#chapter-05>. Scene 03’s desktop pass is on the
-page and can be closed when asked.
+Scene 02’s phone paragraph is 0.9375rem (user choice, 2026-10-06).
+Awaiting a look at <http://localhost:5173/#chapter-02>. Desktop beats
+already match. Scene 05’s desktop callouts and Scene 03’s desktop pass
+are on the page and can be closed when asked.

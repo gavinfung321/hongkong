@@ -4,6 +4,24 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Newest first.
 One entry per change: what changed, why, and the files. Older history also
 lives in the dated notes inside each area file, and in `git log`.
 
+## 2026-10-06
+
+- **Scene 02 phone paragraph** (user choice, 2026-10-06). The single phone
+  sentence comes up from 0.8125rem to 0.9375rem, the shared phone
+  paragraph size. It still ends above the dome. Beat 2 stays hidden.
+  Desktop is unchanged. Files: `src/styles.css`; plan: `narrative-spine.md`.
+- **Scene 02 beats match** (user choice, 2026-10-06). On desktop the first
+  paragraph comes down to the second: 0.9375rem, the same line height and
+  the same measure, so they read as one passage. A short landscape window
+  matches both at the smaller size. The phone stays one paragraph. Other
+  chapters keep the larger lead. Files: `src/styles.css`; plan:
+  `narrative-spine.md`.
+- **Scene 02 beat size** (user request, 2026-10-06). On desktop the first
+  paragraph is 1.1875rem and the second is 0.9375rem. The recommendation
+  is to bring the first down to the second, in Scene 02 only, so they
+  read as one passage. The phone stays one paragraph. No page change.
+  Files: `narrative-spine.md`.
+
 ## 2026-10-05
 
 - **Scene 05 desktop callouts** (user choice, 2026-10-05). On a wide
