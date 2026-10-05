@@ -2476,9 +2476,9 @@ html:not(.is-enhanced) .vertical-text {
   margin: 0;
   color: var(--color-cream);
   font-family: var(--font-display-en);
-  font-size: 1.375rem;
+  font-size: clamp(1.0625rem, min(2.1vw, 2.35lvh), 1.375rem);
   font-style: italic;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
 .chapter__quote::before {
@@ -2486,7 +2486,7 @@ html:not(.is-enhanced) .vertical-text {
   display: block;
   width: 24px;
   height: 1px;
-  margin-bottom: 0.75rem;
+  margin-bottom: clamp(0.5rem, 1.2lvh, 0.75rem);
   background: var(--color-coral);
 }
 
@@ -2522,7 +2522,7 @@ html:not(.is-enhanced) .vertical-text {
 }
 
 .is-enhanced .chapter__quote {
-  margin-top: 0.5rem;
+  margin-top: clamp(0.125rem, 0.7lvh, 0.5rem);
   opacity: var(--enter, 1);
 }
 

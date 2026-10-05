@@ -6,6 +6,14 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Scene 04 responsive quote clearance** (user request, 2026-10-05). The
+  desktop quote now scales fluidly by viewport width and height, with tighter
+  responsive line and block spacing, so it stays clear of the statement
+  hairline on short windows. Verified 36 px of clearance at 870 × 786 plus
+  the 1178 × 1014 and 1440 × 900 references; mobile remains unchanged.
+  Cards, statement, copy and 3D placement are unchanged. Files:
+  `src/styles.css`; plan: `scene-04-implementation-plan.md`,
+  `narrative-spine.md`.
 - **Scene 04 final review and approval** (user approval, 2026-10-05).
   Completed the production build and final checks at 1440 × 900,
   1178 × 1014, 390 × 844 and short landscape sizes without screenshots.

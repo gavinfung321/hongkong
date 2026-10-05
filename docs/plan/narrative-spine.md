@@ -709,6 +709,12 @@ unchanged.
 final build and multi-size review passed without fallback, overlap, resizing
 or removal. The controlled rollout may proceed to Scene 05 when requested.
 
+**Post-approval quote polish** (user request, 2026-10-05): the desktop quote
+now scales fluidly between 17 px and 22 px using both viewport width and
+height, with responsive line and block spacing. It keeps 36 px of clearance
+above the statement hairline at 870 × 786 and remains clear at the reference
+desktop sizes. Cards, statement, copy, 3D placement and mobile are unchanged.
+
 Different technique per scene (user request, 2026-10-04), all DOM over
 the untouched 3D: 02 layered fade with a memory print and timeline; 03
 index panels with a route line; 04 statement header with hanging photo

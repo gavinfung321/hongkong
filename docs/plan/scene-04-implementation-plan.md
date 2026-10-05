@@ -209,6 +209,19 @@ to Scene 05.
 **Completed 2026-10-05:** Scene 04 was approved as built (user approval,
 2026-10-05). The progressive-story implementation is complete.
 
+## Post-approval responsive polish
+
+- [x] Make the desktop quote's type size, line height and surrounding spacing
+  respond to both viewport width and height (user request, 2026-10-05).
+- [x] Keep the quote clear of the statement hairline on short desktop windows.
+- [x] Preserve card, statement, copy and 3D placement.
+- [x] Keep the quote omitted on mobile.
+
+**Completed 2026-10-05:** the quote now scales fluidly from 17 px to 22 px
+with tighter responsive spacing. It clears the statement rule by 36 px at
+870 × 786 and remains clear at 1178 × 1014 and 1440 × 900. Mobile remains
+unchanged. The production build passed; no screenshots were created.
+
 ## Verification discipline
 
 For each implementation item, inspect only Scene 04 and its mapped files. Run
