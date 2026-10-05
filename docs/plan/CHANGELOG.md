@@ -6,6 +6,12 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Footer approved** (user approval, 2026-10-05). The eight-step close is
+  done and closed for now. The statement answers Scene 06, the sail sits
+  left of “The” on phones, and the colophon keeps HKAAA, the code line and
+  the Dukling credit. No footer code changed in this step. Files:
+  `footer-implementation-plan.md`, `interface.md`, `narrative-spine.md`,
+  `README.md`.
 - **Colophon drops the atmosphere line** (user request, 2026-10-05).
   “Original 3D scene and illustrated atmosphere” repeated the making credit
   already in the colophon. HKAAA, the code line and the Dukling credit stay.

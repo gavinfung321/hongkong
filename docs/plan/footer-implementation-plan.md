@@ -1,14 +1,13 @@
 # Footer — Improvement Plan
 
-**Status:** in progress, 7 of 8 steps complete
+**Status:** approved, 8 of 8 steps complete (user approval, 2026-10-05)
 **Created:** user request, 2026-10-05
 **Review:** <http://localhost:5173/#chapter-06> then scroll into the footer
 
 ## Goal
 
-Keep the footer as the quiet close after Afterglow. The layout already
-works. The statement still retells the night that Scene 06 has just ended,
-and its making credit sits in the same display type as the story.
+Keep the footer as the quiet close after Afterglow. The statement answers
+the ending. The making credit sits in the colophon with the other credits.
 
 ## Frozen scope
 
@@ -156,15 +155,14 @@ readable at all review sizes.
 
 ### 8 — Approval gate
 
-- [ ] Present the footer from <http://localhost:5173/#chapter-06>.
-- [ ] Obtain explicit user approval.
-- [ ] Record the decision in `interface.md` and `CHANGELOG.md`.
-- [ ] Update `FINAL-NARRATIVE-COPY.md` only after that approval.
+- [x] Present the footer from <http://localhost:5173/#chapter-06>.
+- [x] Obtain explicit user approval.
+- [x] Record the decision in `interface.md` and `CHANGELOG.md`.
+- [x] Update `FINAL-NARRATIVE-COPY.md` only after that approval.
 
 **Done when:** the user approves the footer.
 
 ## Next action
 
-Steps 1 to 7 are done (2026-10-05). The footer is presented for approval
-from <http://localhost:5173/#chapter-06>. Step 8 stays open until the user
-approves it. Do not change the columns, the bar, or the firework softening.
+Closed (user approval, 2026-10-05). The footer stays as approved. No further
+footer work until asked.

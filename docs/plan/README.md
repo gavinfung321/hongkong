@@ -28,7 +28,7 @@ file (user choice, 2026-10-02).
 | [`scene-04-implementation-plan.md`](scene-04-implementation-plan.md) | Scene 04's ten-step then-and-now implementation checklist and approval gate | Controlled narrative rollout |
 | [`scene-05-implementation-plan.md`](scene-05-implementation-plan.md) | Scene 05's ten-step progressive-arrival implementation checklist and approval gate | Controlled narrative rollout |
 | [`scene-06-implementation-plan.md`](scene-06-implementation-plan.md) | Scene 06's ten-step afterimage implementation checklist and approval gate | Controlled narrative rollout |
-| [`footer-implementation-plan.md`](footer-implementation-plan.md) | Footer's eight-step close: a shorter statement, the making credit in the colophon | After Scene 06 |
+| [`footer-implementation-plan.md`](footer-implementation-plan.md) | Footer's approved close: the two-line statement, the making credit in the colophon | Approved 2026-10-05 |
 | [`checks.md`](checks.md) | Performance budget and acceptance checks | 5, 8 |
 | [`CHANGELOG.md`](CHANGELOG.md) | Dated history of changes, newest first; the old files list | 7 |
 | [`HANDOFF.md`](HANDOFF.md) | Briefing for a fresh chat: how we work, standing rules, the next task | — |

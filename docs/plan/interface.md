@@ -570,12 +570,10 @@ Serif TC 700). Copy regions widened for 03 desktop, 02 and 06 phones.
   `src/ui/siteFooter.js` publishes `--footer-in` (0 → 1) and `is-at-footer`.
   Also works in the poster-only fallback, where it is a plain footer.
 - **Improvement checklist** (user request, 2026-10-05): the layout stays.
-  The accepted statement answers Scene 06, and the making credit sits in
-  the colophon (user approval, 2026-10-05). The eight-step plan is in
+  The statement answers Scene 06, and the making credit sits in the
+  colophon. The eight-step plan is in
   [`footer-implementation-plan.md`](footer-implementation-plan.md). Status:
-  in progress, 7 of 8. Steps 5 to 7 are checked: the existing fade, the
-  half-strength bursts, keyboard, fallback, the four review sizes, and one
-  production build. Approval is still open.
+  approved, 8 of 8 (user approval, 2026-10-05). Closed for now.
 
 ### 3.14 Interface states (user request, 2026-10-03)
 
