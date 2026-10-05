@@ -49,8 +49,8 @@ export const SCENE_01_CHAPTER = {
   visibility: {
     // Desktop keeps the foreground framing and searchlights. Mobile opens the
     // water to the lower edge and uses palms at the Clock Tower's foot.
-    desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 0, bauhinia: 1, bush: 1, bursts: 0, petals: 0.8, city: 0.75, mist: 0, seaMist: 1, haze: 0.5, searchlights: 0.6, moon: 0.75, junkGlow: 0.5 },
-    mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, deck: 0, railing: 0, palms: 1, bauhinia: 0, bush: 0, bursts: 0, petals: 0.8, city: 0.75, mist: 0.6, seaMist: 1, haze: 0.5, searchlights: 0, moon: 0.75, junkGlow: 0.5 },
+    desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 0, bauhinia: 1, bush: 1, bursts: 0, petals: 0.8, city: 0.68, mist: 0, seaMist: 1, haze: 0.5, searchlights: 0.48, moon: 0.75, junkGlow: 0.5 },
+    mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, deck: 0, railing: 0, palms: 1, bauhinia: 0, bush: 0, bursts: 0, petals: 0.8, city: 0.68, mist: 0.6, seaMist: 1, haze: 0.5, searchlights: 0, moon: 0.75, junkGlow: 0.5 },
   },
   fogDensity: 0.00045,
   vessels: {

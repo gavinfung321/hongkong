@@ -20,9 +20,14 @@ import {
   Vector4,
 } from 'three';
 import { MIST_SHEET } from '../data/atmosphere.js';
-import { WORLD } from '../data/world.js';
 import { aimCamera, poseFov } from '../scroll/cameraRig.js';
-import { SCENE_02_GHOST, SCENE_02_LAYOUT } from '../story/scene02/config.js';
+import {
+  SCENE_02_DUST as DUST,
+  SCENE_02_GHOST,
+  SCENE_02_LAYOUT,
+  SCENE_02_STEAM as STEAM,
+  SCENE_02_STIR as STIR,
+} from '../story/scene02/config.js';
 import { seededRandom } from './random.js';
 
 // Chapter 02's story layers in the scene (narrative spine, user choice,
@@ -47,55 +52,7 @@ import { seededRandom } from './random.js';
 // the tower.
 const CHAPTER = '02';
 
-// Swarms of motes (user choice, 2026-10-04: more volume from depth and
-// light, not just count). Each fills a box in metres: `ahead` / `lift` from
-// the hold pose's camera, or centred `at` in the world. size: metres;
-// gain: brightness; spare: share that only joins with the print; near: the
-// out-of-focus layer, slower and softer. rise: metres per second.
-const LAMP_Y = 6.3;
-const lampSwarms = (count, size, box) =>
-  WORLD.foreground.lamps.map(([x, , z]) => ({ at: [x, LAMP_Y, z], box, count, size, spare: 0.25 }));
-const DUST = {
-  colour: [1, 0.84, 0.6],
-  rise: [0.08, 0.22],
-  desktop: [
-    { ahead: 22, lift: 4, box: [34, 16, 24], count: 110, size: 0.2, spare: 0.3 },
-    { at: [-62, 6.5, -9], box: [14, 10, 8], count: 50, size: 0.26, gain: 1.2, spare: 0.3 },
-    ...lampSwarms(12, 0.17, [3.5, 3, 3.5]),
-    { ahead: 5.5, lift: 0.5, box: [7, 4, 3], count: 7, size: 0.22, gain: 0.4, near: true },
-  ],
-  mobile: [
-    { ahead: 70, lift: 10, box: [30, 26, 50], count: 55, size: 0.5, spare: 0.3 },
-    { at: [-60, 9, -9], box: [18, 14, 12], count: 24, size: 0.45, spare: 0.3 },
-    ...lampSwarms(6, 0.4, [5, 4, 5]),
-    { ahead: 5, lift: 0.4, box: [3.5, 5, 3], count: 5, size: 0.2, gain: 0.4, near: true },
-  ],
-};
 const dustCount = (list) => list.reduce((sum, swarm) => sum + swarm.count, 0);
-// The pointer's push at full stir: radius, and how far a mote is pushed
-// aside and carried along, in ndc (the screen is 2 tall).
-const STIR = { radius: 0.28, push: 0.07, carry: 0.05 };
-
-// y: the drift's foot; stretch: its height over the art's own; travel:
-// share of its width it drifts over `period` seconds, fading in and out at
-// the ends; two drifts half a period apart.
-const STEAM = {
-  band: 'billow',
-  colour: 0xfff0dc,
-  opacity: 0.75,
-  stretch: 3,
-  period: 46,
-  travel: 0.3,
-  feather: [0.3, 0.2], // share of the width and height faded at the edges
-  desktop: [
-    { x: 22, y: 84, width: 46, depth: 38, phase: 0 },
-    { x: 34, y: 86, width: 40, depth: 42, phase: 0.5, mirror: true },
-  ],
-  mobile: [
-    { x: 40, y: 83, width: 110, depth: 112, phase: 0 },
-    { x: 60, y: 87, width: 90, depth: 118, phase: 0.5, mirror: true },
-  ],
-};
 // Reduced motion holds this moment: both drifts half in.
 const STILL_TIME = STEAM.period * 0.25;
 

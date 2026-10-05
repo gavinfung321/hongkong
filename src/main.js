@@ -43,6 +43,16 @@ import { createLoadingScreen } from './ui/loadingScreen.js';
 const params = new URLSearchParams(window.location.search);
 const root = document.documentElement;
 const footerElement = document.querySelector('.site-footer');
+const CHAPTER_ONE_ALIAS = window.location.hash === '#chapter-01';
+
+// Scene 01 is the hero opening rather than a second landing point. Treat its
+// chapter hash as an alias for the canonical root before the browser can make
+// a late native jump to the chapter's scroll section.
+if (CHAPTER_ONE_ALIAS) {
+  history.scrollRestoration = 'manual';
+  history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+  window.scrollTo({ top: 0, behavior: 'auto' });
+}
 
 const INIT_TIMEOUT = 8000;
 const VEIL_IN = 150;
@@ -428,6 +438,18 @@ async function start(initGuard, header, loading) {
     window.scrollTo({ top: conductor.scrollForKeyframe(index), behavior: 'auto' });
   }
 
+  function landOnOpeningAlias() {
+    history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    conductor.reset();
+  }
+
+  // Covers same-document hash changes, which do not rerun the module-level
+  // cold-load alias handling above (typed hashes and browser navigation).
+  window.addEventListener('hashchange', () => {
+    if (window.location.hash === '#chapter-01') landOnOpeningAlias();
+  });
+
   document.addEventListener('click', (event) => {
     const link = event.target.closest?.('a[href^="#chapter-"], a[href="#top"]');
     if (!link) return;
@@ -618,6 +640,13 @@ async function start(initGuard, header, loading) {
       window.clearTimeout(initGuard);
       performance.mark('vh:first-frame');
       loading.finish(() => {
+        // Some browsers restore the hash target's scroll position after the
+        // module starts. Correct the Scene 01 alias again behind the opaque
+        // entrance cover, immediately before revealing the first frame.
+        if (CHAPTER_ONE_ALIAS) {
+          window.scrollTo({ top: 0, behavior: 'auto' });
+          conductor.reset();
+        }
         // The opening glide, on visits from the top only: it starts under the
         // still-opaque cover and eases in as the cover fades.
         const fromTop = !/^#chapter-0[1-6]$/.test(location.hash) && window.scrollY <= 2;

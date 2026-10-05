@@ -35,6 +35,7 @@
 // probes:      composition targets (% of viewport) checked by the debug probe.
 
 import { SCENE_01_CHAPTER } from '../story/scene01/config.js';
+import { SCENE_02_CHAPTER } from '../story/scene02/config.js';
 import { SCENE_03_CHAPTER } from '../story/scene03/config.js';
 
 export { HERO } from '../story/scene01/config.js';
@@ -57,78 +58,7 @@ export const SCROLL = {
 
 export const chapters = [
   SCENE_01_CHAPTER,
-  {
-    id: '02',
-    slug: 'kowloon-edge',
-    title: 'The Kowloon Edge',
-    storyboard: {
-      desktop: `${SB}/frame-02-kowloon-edge-rough.png`,
-      mobile: `${SB}/frame-02-kowloon-edge-mobile-rough.png`,
-    },
-    camera: {
-      desktop: {
-        position: [-81.6, 6.5, 33],
-        target: [196.2, 137.9, -223],
-        fov: 61.4,
-        keepHeight: true,
-        // The first waypoint sits back from the tower and the look turns
-        // early, so the tower slides out instead of whipping past
-        // (transition review, 2026-10-03; viaTurn: cameraRig.js).
-        via: [[-28, 7, 37], [5, 5, -90]],
-        viaTurn: [0.4, 0.7],
-      },
-      mobile: {
-        position: [-59.6, 4.8, 108.2],
-        target: [-59.1, 82.8, -284.1],
-        fov: 36.6,
-        via: [[-44, 8, 90], [-24, 6, -35]],
-      },
-    },
-    // Two beats, the lead larger than the second, and on desktop the ca.
-    // 1915 memory print under them; the timeline row sits at the foot of the
-    // screen (narrative spine prototype, user requests, 2026-10-04). The
-    // print's lower edge may pass behind the ferry's masts in memory mode.
-    copy: {
-      desktop: { left: 50, top: 11, right: 97, bottom: 82 },
-      mobile: { left: 8, top: 7.5, right: 92, bottom: 30 },
-    },
-    // Time to read the header before the print and timeline come up (user
-    // request, 2026-10-04).
-    dwell: 80,
-    visibility: {
-      // afterglow: the red-orange sky low on the right (02 only; createScene.js).
-      // city, slopeLights: the skyline and Mid-Levels behind the tower dimmed,
-      // as on mobile, so the tower and afterglow lead (atmospheric depth
-      // Priority F, user choice, 2026-10-04).
-      desktop: { ferry: 1, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bush: 0, bursts: 0, city: 0.6, slopeLights: 0.7, mist: 0.5, seaMist: 0, haze: 0.8, searchlights: 0, afterglow: 1 },
-      // Fainter shore mist: the phone looks straight at the tower's foot.
-      // city, slopeLights: Central Plaza, BOC and the Mid-Levels lights
-      // behind the tower dimmed, so the tower leads (user choice, 2026-10-03).
-      mobile: { ferry: 0, junk: 0, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 1, bauhinia: 0, bush: 0, bursts: 0, city: 0.35, slopeLights: 0.5, mist: 0.2, seaMist: 0, haze: 0.8, searchlights: 0, afterglow: 1 },
-    },
-    fogDensity: 0.00045,
-    vessels: {
-      desktop: { ferry: [-1.4, 5.3, -0.2], junk: [120, -80, 0] },
-      mobile: { ferry: [20, -120, 0.8], junk: [120, -80, 0] },
-    },
-    probes: {
-      desktop: {
-        // keepHeight: on narrow windows the sides are trimmed, so the ferry
-        // sits inside 60–84 (it stays whole down to a 1.1 aspect).
-        tower: { left: 16, right: 34, top: 3, bottom: 88 },
-        ferry: { left: 60, right: 84, top: 71, bottom: 87 },
-        ifc: { offscreen: true, behind: 'tower' },
-        wheel: { offscreen: true, behind: 'tower' },
-        horizon: 80,
-      },
-      mobile: {
-        tower: { left: 33, right: 64, top: 20, bottom: 82 },
-        ifc: { offscreen: true, behind: 'tower' },
-        wheel: { offscreen: true, behind: 'tower' },
-        horizon: 80,
-      },
-    },
-  },
+  SCENE_02_CHAPTER,
   {
     id: '03',
     slug: 'across-the-water',
