@@ -24,6 +24,7 @@ file (user choice, 2026-10-02).
 | [`atmosphere.md`](atmosphere.md) | Clouds, shore mist, open-water wisps, searchlights, fireworks in 06 (no bow spray) | 4.5 stop 6, part 3g |
 | [`atmospheric-depth-polish.md`](atmospheric-depth-polish.md) | Step-by-step vignette, grain, depth haze, local light motion and selective foreground experiments | Post-Milestone 2 polish |
 | [`narrative-spine.md`](narrative-spine.md) | Hybrid 3D and editorial-story direction, six-chapter arc and scene 02 prototype gate | Post-Milestone 2 narrative test |
+| [`scene-03-implementation-plan.md`](scene-03-implementation-plan.md) | Scene 03's ten-step progressive-story implementation checklist and approval gate | Controlled narrative rollout |
 | [`checks.md`](checks.md) | Performance budget and acceptance checks | 5, 8 |
 | [`CHANGELOG.md`](CHANGELOG.md) | Dated history of changes, newest first; the old files list | 7 |
 | [`HANDOFF.md`](HANDOFF.md) | Briefing for a fresh chat: how we work, standing rules, the next task | — |

@@ -6,6 +6,58 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Scene 03 approved** (user approval, 2026-10-05). The progressive ferry
+  crossing is approved as built, completing all ten implementation steps.
+  Scene 04 may now be planned as the next controlled rollout. Files:
+  `scene-03-implementation-plan.md`, `narrative-spine.md`.
+- **Scene 03 steps 4–9 — complete progressive crossing for review** (user
+  request, 2026-10-05). “A Daily Crossing” and “The Route” now arrive as
+  separate reversible beats; the route dot waits for its panel, and the board
+  advances without counting backward while the visitor remains in Scene 03.
+  The existing wind haze begins with the ticket and human-crossing beat.
+  Verified the unchanged composition at 1440 × 900, 1178 × 1014, 390 × 844
+  and 320 × 720, plus reduced motion, without screenshots; the production
+  build passed and the page remained enhanced. Camera, ferry, water, models,
+  element placement and artwork are unchanged. Step 10 remains the explicit
+  approval gate. Files: `src/story/scene03/config.js`,
+  `src/ui/copyLayer.js`, `src/ui/departureBoard.js`; plan:
+  `scene-03-implementation-plan.md`, `narrative-spine.md`.
+- **Scene 03 step 3 — introduce the human crossing** (user request,
+  2026-10-05). The existing ticket and “Facing Forward” panel now enter
+  together as one human-crossing beat. “A Daily Crossing” and “The Route”
+  remain grouped in the following range for step 4. Ticket motion, wording,
+  element placement and 3D composition are unchanged. Files:
+  `src/ui/copyLayer.js`; plan: `scene-03-implementation-plan.md`,
+  `narrative-spine.md`.
+- **Scene 03 step 2 — establish the departure** (user request, 2026-10-05).
+  The label, title and standfirst now arrive first, followed by the existing
+  split-flap departure board. The still-grouped ticket and panels wait for the
+  later human-crossing range, creating a clear departure beat without moving
+  any element or changing wording, camera or 3D composition. Files:
+  `src/ui/copyLayer.js`; plan: `scene-03-implementation-plan.md`,
+  `narrative-spine.md`.
+- **Scene 03 step 1 — reveal ranges** (user request, 2026-10-05).
+  Added named opening, board, human-crossing, daily-crossing and route-panel
+  ranges to Scene 03's config. The existing opening now reads its unchanged
+  values from that config, keeping forward/reverse behavior while leaving the
+  camera, vessels, dwell and visible composition unchanged. Files:
+  `src/story/scene03/config.js`, `src/ui/copyLayer.js`; plan:
+  `scene-03-implementation-plan.md`, `narrative-spine.md`.
+- **Dedicated Scene 03 implementation plan** (user request, 2026-10-05).
+  Added a standalone ten-step checklist as the single source of truth for the
+  controlled Scene 03 rollout, including frozen scope, per-step acceptance
+  conditions, verification discipline and the approval gate before Scene 04.
+  Linked it from the plan index and narrative summary. Files:
+  `docs/plan/scene-03-implementation-plan.md`, `docs/plan/README.md`,
+  `docs/plan/narrative-spine.md`, `docs/plan/CHANGELOG.md`.
+- **Scene 02 approval and Scene 03 progressive-story plan** (user approval
+  and request, 2026-10-05). Scene 02 is approved after its progressive-story
+  follow-up. Scene 03 now has a tracked ten-step checklist covering reversible
+  reveal ranges, departure, ticket and seat detail, daily-crossing and route
+  panels, board synchronization, mobile pacing, existing atmosphere timing,
+  reduced motion, final review and an approval gate. Its camera, ferry, water,
+  3D atmosphere and approved composition are frozen. Files:
+  `docs/plan/narrative-spine.md`, `docs/plan/CHANGELOG.md`.
 - **Scene 02 final balance review** (user request, 2026-10-05). Checked
   1440 × 900, 1178 × 1014 and 390 × 844 without screenshots. The archive
   clears the timeline vertically and the responsive 1915 horizontally; it

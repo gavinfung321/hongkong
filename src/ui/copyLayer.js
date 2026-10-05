@@ -10,8 +10,9 @@
 // (createStoryLayers.js) take their levels from here.
 //
 // 03 (`data-story="crossing"`) is an index of panels instead: the harbour
-// darkens further (SCENE_03_CROSSING.dark), the panels come with the title, and the
-// route dot runs from Tsim Sha Tsui to Central across the dwell. Phones
+// darkens further (SCENE_03_CROSSING.dark), then the opening, board, ticket
+// with the first panel, daily-crossing panel and route panel arrive in order.
+// The route dot starts once its panel is available. Phones
 // leave the index off and keep the full departure card under the
 // standfirst. The ticket sits low in the open water (user request,
 // 2026-10-04).
@@ -128,7 +129,8 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
     const level = stepped
       ? ([from, to]) => (dwell >= (from + to) / 2 ? 1 : 0)
       : ([from, to]) => smoothstep(from, to, dwell);
-    const label = stepped ? 1 : smoothstep(i + LABEL[0], i + LABEL[1], p);
+    const opening = story.crossing ? SCENE_03_CROSSING.reveal.opening : LABEL;
+    const label = stepped ? 1 : smoothstep(i + opening[0], i + opening[1], p);
     const base = stepped
       ? (i === index ? 1 : 0)
       : smoothstep(i + DARK.approach, key - copyFull, rendered) * (1 - smoothstep(DARK.lift[0], DARK.lift[1], rendered - key));
@@ -136,7 +138,11 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
     for (const beat of story.beats) beat.toggleAttribute('data-enter-hidden', label === 0);
     const sink = stepped ? 1 : 1 - smoothstep(DARK.sink[0], DARK.sink[1], p - key);
     if (story.crossing) {
-      const enter = story.panels.map(() => label);
+      const board = level(SCENE_03_CROSSING.reveal.board);
+      const human = level(SCENE_03_CROSSING.reveal.humanCrossing);
+      const daily = level(SCENE_03_CROSSING.reveal.dailyCrossing);
+      const routePanel = level(SCENE_03_CROSSING.reveal.routePanel);
+      const enter = [human, daily, routePanel];
       story.panels.forEach((panel, k) => {
         setVar(panel, '--enter', enter[k]);
         panel.toggleAttribute('data-enter-hidden', !enter[k]);
@@ -146,15 +152,15 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       const route = level(SCENE_03_CROSSING.route);
       setVar(story.route, '--route', route);
       setVar(story.route?.closest('.chapter__panel'), '--route', route);
-      setVar(story.board, '--enter', label);
-      story.flaps?.update(label > 0 && base > 0, SCENE_03_CROSSING.due.filter((share) => route >= share).length, stepped);
+      setVar(story.board, '--enter', board);
+      story.flaps?.update(board > 0 && base > 0, SCENE_03_CROSSING.due.filter((share) => route >= share).length, stepped);
       if (story.ticket) {
-        setVar(story.ticket, '--enter', label);
-        story.ticket.toggleAttribute('data-enter-hidden', label === 0);
-        if (label >= SCENE_03_CROSSING.flip) story.ticket.toggleAttribute('data-flipped', true);
-        else if (label === 0) story.ticket.toggleAttribute('data-flipped', false);
+        setVar(story.ticket, '--enter', human);
+        story.ticket.toggleAttribute('data-enter-hidden', human === 0);
+        if (human >= SCENE_03_CROSSING.flip) story.ticket.toggleAttribute('data-flipped', true);
+        else if (human === 0) story.ticket.toggleAttribute('data-flipped', false);
       }
-      return { mode: base * SCENE_03_CROSSING.dark, yield: base * SCENE_03_CROSSING.dark, wind: label * base };
+      return { mode: base * SCENE_03_CROSSING.dark, yield: base * SCENE_03_CROSSING.dark, wind: human * base };
     }
     if (story.lights) {
       story.lights.update(label > 0 && base > 0, stepped);

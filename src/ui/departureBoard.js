@@ -96,7 +96,10 @@ export function createDepartureBoard(element) {
       to.forEach(({ tile, char }, k) => aim(tile, char, 4 + k + Math.floor(Math.random() * 3), instant));
     }
     const step = Math.min(DUE.length - 1, Math.max(0, routeStep));
-    if (step === status) return;
+    // The physical-style board counts forward while Scene 03 remains active;
+    // reverse scrolling moves the route dot back without making the board
+    // count backwards. Leaving the scene still blanks and resets it.
+    if (!arriving && step <= status) return;
     const text = DUE[step];
     due.forEach((tile, k) => aim(tile, text[k], (arriving ? 6 + k : 3) + Math.floor(Math.random() * 3), instant));
     status = step;

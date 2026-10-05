@@ -395,8 +395,9 @@ Keep the prototype only if:
 If the result is weaker or merely busier, remove the prototype and retain the
 current short-copy 3D showcase.
 
-**Decision (user request, 2026-10-04): scene 02 is approved as built**
-("so far 02 is good"); the rollout continues with scene 03.
+**Decision (user request, 2026-10-04; reaffirmed 2026-10-05): scene 02 is
+approved as built.** The progressive-story follow-up is also approved (user
+approval, 2026-10-05); the rollout continues with scene 03.
 
 ## Phase 4 — Controlled rollout
 
@@ -537,6 +538,56 @@ dwell is 80svh (was 130).
 
 Files: `index.html`, `src/data/chapters.js`, `src/ui/copyLayer.js`,
 `src/styles.css`.
+
+### Scene 03 progressive-story plan (user request, 2026-10-05)
+
+**Goal:** turn the existing 60svh hold into a clear ferry-crossing sequence
+using the current words, departure board, ticket, three panels and route.
+Do not add another illustration unless the completed sequence still has a
+specific narrative gap.
+
+**Freeze throughout:** the desktop and mobile cameras; ferry pose, scale and
+route; water, wake, buoy, skyline, haze and lens effects; copy-safe regions;
+ticket and board artwork; the desktop panel-row placement. Scene 03 remains a
+narrative-and-wording pass only.
+
+**Current state:** the label, title and standfirst establish the departure,
+then the board arrives. The ticket and “Facing Forward” form the
+human-crossing beat, followed by “A Daily Crossing”, “The Route”, and finally
+the route dot and synchronized countdown. Phones omit the panel index and
+retain the title, standfirst, 1888 line, departure board and ticket.
+
+The detailed checklist and its completion status live in
+[`scene-03-implementation-plan.md`](scene-03-implementation-plan.md), the
+single source of truth for this pass. Status: **approved, 10 of 10 steps
+complete**.
+
+**Update 2026-10-05:** step 1 is complete. Scene 03 now owns named ranges for
+the opening, board, human crossing, daily crossing and route panel. The
+camera, vessels, dwell and visible timing are unchanged.
+
+**Update 2026-10-05:** step 2 is complete; status is **in progress, 2 of 10
+steps complete**. The label, title and standfirst arrive first, followed by the
+existing departure board. The ticket and panels wait for the later
+human-crossing range. Wording, split-flap behavior and placement are unchanged.
+
+**Update 2026-10-05:** step 3 is complete. The existing ticket and “Facing
+Forward” panel now share the human-crossing range. Ticket behavior, wording
+and placement are unchanged; the remaining two panels wait for the following
+range.
+
+**Update 2026-10-05:** steps 4–9 are complete; status is **awaiting approval,
+9 of 10 steps complete**. “A Daily Crossing” and “The Route” now have separate
+reversible entrances, and the route dot waits for the route panel. The board
+advances with the route but does not count backward within the scene. Existing
+wind haze begins with the human-crossing beat. Mobile, reduced motion and
+semantic order were verified, and the production build passed at reference
+desktop, compact desktop and mobile sizes without fallback. No element was
+resized or moved, and the frozen 3D composition remains unchanged.
+
+**Decision (user approval, 2026-10-05): Scene 03 is approved as built.** The
+progressive crossing is complete and the controlled rollout may proceed to
+Scene 04 when requested.
 
 ### Scene 04
 
@@ -725,6 +776,5 @@ Files: `index.html`, `src/ui/cityLights.js`, `src/ui/cityTouch.js`,
 
 ## Immediate next action
 
-Review the built text-only scene 03 ("the crossing") with the user:
-approve, revise once, or remove. No other chapter changes before 03 is
-decided.
+Define Scene 04's controlled rollout and frozen scope before making new Scene
+04 changes.

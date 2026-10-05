@@ -42,7 +42,17 @@ export const SCENE_03_CHAPTER = {
 
 // Scroll-linked panel, route, board and ticket entrance timing.
 export const SCENE_03_CROSSING = {
-  route: [0.1, 0.9],
+  // `opening` is chapter progress on approach; the remaining reveal ranges
+  // are shares of Scene 03's dwell and are consumed in order.
+  reveal: {
+    opening: [0.38, 0.5],
+    board: [0.08, 0.2],
+    humanCrossing: [0.24, 0.4],
+    dailyCrossing: [0.42, 0.56],
+    routePanel: [0.58, 0.7],
+  },
+  // The dot waits until the route panel has fully arrived.
+  route: [0.7, 0.96],
   dark: 0.7,
   due: [0.3, 0.55, 0.8],
   flip: 0.2,
