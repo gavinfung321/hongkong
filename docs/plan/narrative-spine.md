@@ -999,13 +999,13 @@ footer is next.
 
 - [x] Approve and continue, revise once, or remove (approved, 2026-10-04)
 - [x] If approved, roll out one chapter at a time (06 approved, 2026-10-05)
-- [ ] Use no more than two or three illustrations in total
+- [x] Use no more than two or three illustrations in total (recorded
+  2026-10-06: one print in 02, two photographs in 04)
 - [x] Update `FINAL-NARRATIVE-COPY.md` only after the direction is approved
   (recorded 2026-10-06; the page is the source)
 - [ ] Record only kept decisions in `CHANGELOG.md`
 
 ## Immediate next action
 
-Scenes 02, 03 and 05 are closed (user approval, 2026-10-06).
-`FINAL-NARRATIVE-COPY.md` now records the live chapter sentences. The
-page is unchanged by that record.
+The organization plan is closed (user request, 2026-10-06). No change is
+queued. A new chat starts from `HANDOFF.md`.

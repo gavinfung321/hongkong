@@ -1,10 +1,10 @@
 # Milestone 2 — Page Shell and Kage-style Look Test
 
-**Status:** approved 2026-10-01 and built step by step, with a review stop
-after each step. Live at <https://gavinfung321.github.io/hongkong/>; every
-push to `main` redeploys. Still open: the colour pass and the rest of the
-iPhone measurement (first iPhone 11 reading of 01 and 02 in `checks.md`,
-2026-10-02; see "Open" below).
+**Status:** Milestone 2 is closed (2026-10-03). The six chapters, the
+footer and the colours are built. The organization plan is closed
+(2026-10-06). Live at <https://gavinfung321.github.io/hongkong/>; every
+push to `main` redeploys. No plan is open. Start a new chat from
+[`HANDOFF.md`](HANDOFF.md).
 
 This plan follows the approved grey-box (`CURSOR-GREYBOX-BRIEF.md`, review in
 `greybox-review/REVIEW.md`). It does not change the existing plan files or the
@@ -34,7 +34,8 @@ file (user choice, 2026-10-02).
 | [`hero-wordmark-colour-plan.md`](hero-wordmark-colour-plan.md) | Hero 香港: the top stays white and the feet are a dark cream | Approved 2026-10-05 |
 | [`checks.md`](checks.md) | Performance budget and acceptance checks | 5, 8 |
 | [`CHANGELOG.md`](CHANGELOG.md) | Dated history of changes, newest first; the old files list | 7 |
-| [`HANDOFF.md`](HANDOFF.md) | Briefing for a fresh chat: how we work, standing rules, the next task | — |
+| [`project-organization-plan.md`](project-organization-plan.md) | Line up the words, the docs and the code, then remove only what nothing uses | Closed 2026-10-06 |
+| [`HANDOFF.md`](HANDOFF.md) | Current briefing: how we work, where things are, what is built | Updated 2026-10-06 |
 
 References elsewhere to "part 3e", "section 3.11", "stop 4" and so on keep
 their old numbers; the table above says which file holds them.
@@ -90,7 +91,7 @@ The milestone has two halves:
 - **Interface:** 香港 wordmark (on the water on desktop, in the sky on
   phones); "Scroll to cross" in the hero (phones add "01 / 06"; no chapter
   numbers on desktop); nav bar that slides away while scrolling down; menu;
-  vertical 東方明珠 and chapter labels; side pager on desktop only; cursor
+  vertical 東方之珠 and chapter labels (01 stays 維港); side pager on desktop only; cursor
   ring and parallax on desktop; "Return to the harbour" at the top of the
   footer; loading screen.
 - **Models:** everything built in code, no GLB files: Star Ferry, junk,
@@ -299,7 +300,7 @@ Stop for the user's review after each step, as in the grey-box.
 1. **Tagline under the logo:** first "Victoria Harbour, after dark", because
    "Pearl of the Orient" seemed to conflict with the world bible's tone
    rules. Later changed to "Pearl of the Orient" at the user's request
-   (2026-10-01), matching the vertical 東方明珠.
+   (2026-10-01). The vertical title is now 東方之珠 (user request, 2026-10-06).
 2. **Chinese labels:** the six labels in 3.6, as proposed.
 3. **Railing artwork:** made with an AI image tool. The tool, its commercial
    licence terms and the prompt are recorded in `ASSET-LEDGER.md` before the
@@ -313,19 +314,17 @@ Stop for the user's review after each step, as in the grey-box.
 
 ## After this milestone
 
-| Milestone | Content |
-|---|---|
-| 3. Assets | No GLB models: like Kage, every 3D object is built in code (user decision, 2026-10-01; section 4, step 2b). The ferry, junk, Clock Tower, IFC and wheel are already rebuilt from reference photos, with the user's Meshy models and photos as references only. Remaining cutouts including the user's bauhinia petals, display fonts (the bauhinia tree is built in code, 2026-10-02). Also the user's stone railing (built in code with lanterns and tall lamps, 2026-10-02), promenade palms, wet paving tiles (built in code, 2026-10-02) and more realistic skyline buildings (`ASSET-LEDGER.md`, "User reminders", 2026-10-01) |
-| 4. Atmosphere, all chapters | Follow `ATMOSPHERE-EFFECTS-BRIEF.md`: clouds and local mist, ferry spray (tried and dropped, user choice, 2026-10-03), restrained searchlights, global print texture, chapter colour progression, and illustrated fireworks with smoke and embers. Local glows remain the baseline; a soft bloom is built (Milestone 2, part 3e, step 5; user choice, 2026-10-02). Coral clouds and the harbour mist are built (Milestone 2, part 3g; user request, 2026-10-02). |
-| 5. Copy and launch | Follow `FINAL-NARRATIVE-COPY.md` for the proposed final chapter, interface, footer, fallback and metadata wording. Final poster images are stills of the opening frame (user request, 2026-10-04; they replace the drawn fallback poster, for fallback only — a normal visit does not load them). An entrance screen with real build progress, after Kage's technique (3.12; user request, 2026-10-02). A full performance pass on both iPhones (closed, user, 2026-10-04: fine). Deployment. |
+The look test, the six chapters, the footer, the colours and the live site
+are built. The organization plan is closed (2026-10-06). No plan is open.
 
-**Published early (user choice, 2026-10-02).** The work in progress is live at
-<https://gavinfung321.github.io/hongkong/> from the public repo
-`gavinfung321/hongkong` ("hongkong" chosen over "hong-kong": shorter, matches
-the HONG KONG wordmark, easy to type on a phone). Every push to `main`
-rebuilds the site (`.github/workflows/deploy.yml`), so the iPhone checks can
-use the live address. Before the first push, three bauhinia reference photos
-of unknown rights were removed from the whole history; they stay on the
-user's computer. Milestone 5's remaining step is publishing this work.
-The poster stills, the social image, the phone speed check and the
-fallback introduction are done.
+The table below is the history of milestones 3–5, not a task list.
+
+| Milestone | What happened |
+|---|---|
+| 3. Assets | Every 3D object is built in code. The ferry, junk, Clock Tower, IFC, wheel, railing, lamps, palms, paving and bauhinia tree are on the page. |
+| 4. Atmosphere | Coral clouds, harbour mist, searchlights and the firework show are on the page. Ferry spray was tried and dropped (user choice, 2026-10-03). |
+| 5. Copy and launch | The live words are in `index.html` and recorded in `FINAL-NARRATIVE-COPY.md`. The site has been live since 2026-10-02. The share image was retaken 2026-10-06. The phone check is closed. |
+
+**Published (user choice, 2026-10-02).** Live at
+<https://gavinfung321.github.io/hongkong/> from `gavinfung321/hongkong`.
+Every push to `main` rebuilds the site (`.github/workflows/deploy.yml`).

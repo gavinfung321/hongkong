@@ -687,11 +687,11 @@ script 1.4 s, first 3D frame 1.7 s).
     `?entrance=slow` (each stage waits 0.5 s), `?entrance=hold` (stays on
     100%), `?entrance=fail` (start-up throws, shows the fallback handoff).
 - **Favicon:** `public/favicon.svg`, the sail mark on night navy.
-- **Poster (user request, 2026-10-04):** the greybox drawing is replaced
-  by stills of the opening frame, `posters/harbour-poster-desktop.webp`
-  (1016×648, 59 KB) and `posters/harbour-poster-mobile.webp` (390×844,
-  24 KB). They include the in-scene 香港 and no interface chrome. A
-  normal visit does not request them. The inline script adds the images
+- **Poster (user request, 2026-10-06):** stills of the current opening
+  frame, `posters/harbour-poster-desktop.webp` (1016×648, 49 KB) and
+  `posters/harbour-poster-mobile.webp` (390×844, 22 KB). They include
+  the warmed 香港 and no interface chrome. A normal visit does not
+  request them. The inline script adds the images
   on fallback or when the 12 s timer lifts the cover; without JavaScript
   a `noscript` pair shows them. Phones use the portrait still (the same
   `max-aspect-ratio: 4/5` switch as before).

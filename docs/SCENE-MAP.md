@@ -7,10 +7,13 @@ Shared by every scene:
 | Concern | Files |
 |---|---|
 | Words | `index.html`, the `#chapter-01` … `#chapter-06` section |
-| Layout | The scene's `src/story/sceneNN/config.js` when listed below; scenes not yet separated remain in `src/data/chapters.js`. Shared copy placement is in `src/styles.css` |
+| Layout | That scene's `src/story/sceneNN/config.js`. Shared copy placement is in `src/styles.css` |
+| Scroll | `src/data/chapters.js` — `SCROLL`, and the `chapters` list that assembles the six configs. It does not hold a chapter's camera, copy, dwell or visibility |
 | Animation | `src/scroll/cameraRig.js`, `src/scroll/scrollConductor.js`, `src/ui/copyLayer.js`, `src/scene/gating.js` |
 
-Clouds, mist and haze: the chapter's `visibility` in its scene config (or `src/data/chapters.js` for scenes not yet separated), with sheets in `src/data/atmosphere.js` and `src/scene/createAtmosphere.js`. Open those only when the change is the air.
+`chapters.js` re-exports `HERO` from scene 01. Scenes 01 and 02 keep their id, slug, title and storyboard inside their config. Scenes 03–06 add those four fields in `chapters.js` when the list is assembled.
+
+Clouds, mist and haze: the chapter's `visibility` in its scene config, with sheets in `src/data/atmosphere.js` and `src/scene/createAtmosphere.js`. Open those only when the change is the air.
 
 | Scene | Content | Layout | Animation | Visual effects |
 |---|---|---|---|---|

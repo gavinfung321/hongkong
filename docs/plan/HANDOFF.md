@@ -1,125 +1,98 @@
-# Handoff — Milestone 2 closed; next milestone to choose
+# Handoff
 
-Written 2026-10-02 to start a fresh chat; updated 2026-10-03. Read this
-file, then [`README.md`](README.md) and
-[`../milestone-2-review/REVIEW.md`](../milestone-2-review/REVIEW.md).
+Written 2026-10-06. Start here. The six chapters, the footer and the
+colours are built. No plan is open.
 
 ## The project and the user
 
-- Victoria Harbour 3D scroll site: Vite 8, three.js 0.186, everything built
-  in code (no GLB files). Six chapters, 01–06, plus a hero.
-- The user is a designer, new to coding, on Windows; tests on iPhone 11/13.
+- Victoria Harbour 3D scroll site: Vite, three.js, everything built in
+  code (no GLB files). A hero, then chapters 01–06.
+- The user is a designer, on Windows, and reviews on desktop and on
+  iPhone. They prefer to work in the code.
 - Live at <https://gavinfung321.github.io/hongkong/> (repo
-  `gavinfung321/hongkong`). Every push to `main` deploys through GitHub
-  Actions; after pushing, watch it (`gh run list --limit 1`,
-  `gh run watch <id> --exit-status`).
-- Dev server: `npm run dev`, then <http://localhost:5173/hongkong/>.
-  `?hold=N` opens chapter N at its hold; `?debug` adds `window.__vh`
-  (scene, camera, world, solver tools); `?fps` shows the frame-rate overlay.
-  Phone measurement switches (live): `?dpr=1.25`, `?aa=0`, `?bloom=0`,
-  `?off=water,clouds,mist,palms,petals,beams`, `?grade=0` (see
-  `checks.md`).
+  `gavinfung321/hongkong`). Every push to `main` deploys. After a push,
+  watch the Action.
+- Review at <http://localhost:5173/>. Do not use another port. Dev serves
+  the site at `/`; the `/hongkong/` base is only the GitHub Pages build.
+- `?hold=N` opens chapter N at its hold. `?debug` adds `window.__vh`.
+  `?fps` shows the frame rate. Phone switches live in `checks.md`:
+  `?dpr=1.25`, `?aa=0`, `?bloom=0`,
+  `?off=water,clouds,mist,palms,petals,beams`, `?grade=0`.
 
-## How the user likes to work
+## How we work
 
-- Often asks to "analyze first": report findings and recommendations, then
-  ask with multiple-choice options; an answer counts as approval to code.
-- Plain-language updates, outcome first.
-- Do not take screenshots or open a browser to check (user request,
-  2026-10-04). The user reviews at <http://localhost:5173/>.
-- Commit and push each approved change, then watch the deploy.
+- Plan first when the user asks for a plan. An approval is the go-ahead
+  to build that step.
+- Plain language, outcome first.
+- The user reviews the page. Do not take screenshots unless asked.
+- Commit only when asked.
+- One harbour chapter: read `docs/SCENE-MAP.md` first and open only the
+  files in that scene's row.
 
 ## Standing rules
 
-- Update the plan with every change (`.cursor/rules/keep-plan-updated.mdc`):
-  the area file in `docs/plan/`, one line in `CHANGELOG.md`, and `checks.md`
-  only if a check or budget figure changes. New artwork goes in
-  `docs/ASSET-LEDGER.md`. Commit plan edits with the code.
+- Update the plan with every change to behaviour, look or content: the
+  area file in `docs/plan/`, one entry in `CHANGELOG.md`, and `checks.md`
+  only if a check or a budget figure changes. New artwork goes in
+  `docs/ASSET-LEDGER.md`.
 - Never edit `~/.cursor/plans/*.plan.md`.
-- Licence: no Kage code, images, lettering or copy; techniques only.
-- Working speed (user request, 2026-10-04; full note in `README.md`): no
-  screenshots, no extra checks, no cleanup pass for its own sake. Only
-  imported code and requested images affect load time.
-- Never commit `docs/references/atmosphere/`, `docs/references/bauhinia/generated/`,
-  `docs/references/foreground/` or the bauhinia photos (all gitignored).
-  `docs/references/production-candidates/` is committed.
-- Don't commit other agents' files: `docs/FINAL-NARRATIVE-COPY.md`
-  (untracked) and `docs/TYPOGRAPHY-INTERFACE-BRIEF.md` (modified) are left
-  out on purpose.
-- Nothing may cover 香港 in the hero; IFC leads in brightness.
-- Edit files with the editor tools; PowerShell `Set-Content` / `Out-File`
-  can change the encoding.
+- No Kage code, images, lettering or copy. Techniques only, with original
+  or licensed assets.
+- Nothing may cover 香港 in the hero. IFC leads in brightness.
+- Do not commit `docs/references/atmosphere/`,
+  `docs/references/bauhinia/generated/`, `docs/references/foreground/` or
+  the bauhinia photos. They are gitignored.
+- Edit files with the editor tools. PowerShell `Set-Content` and
+  `Out-File` can change the encoding.
+- A cleanup whose only aim is a smaller download waits until a measured
+  figure is over budget. Unused comments are not downloaded. A file in
+  `public/` is downloaded only when the page asks for it.
 
-## Current state
+## Where things are
 
-Milestone 2 is built (see README "Current state at a glance"). The latest
-work, all done and deployed: clouds and mist (finished: the user said "we
-done with mist"), lamps re-spaced, hero chapter numbers removed on desktop,
-stronger 04 cloud, the plan split into `docs/plan/`. Since then: the
-cloud ceiling (two layers in every chapter, wind drift; see
-`atmosphere.md`), user petal artwork, automatic phone sharpness. On
-2026-10-03: searchlights, a bow spray (tried, then removed as too
-forceful; the user declined a code-built bow foam too),
-the film grade, and the Milestone 2 review. The user approved 01 and
-raised the budgets (draw calls ≤ 220, code-drawn textures ≤ 32), so
-Milestone 2 is closed. The phone re-measure is closed (user, 2026-10-04:
-fine). The colophon keeps "Created by Gavin Fung at HKAAA". The paper
-grain was passed. The fallback poster is a still of the opening frame
-(desktop and phone, loaded only when the 3D scene is unavailable). A
-shared link shows that same hero, cropped to 1200×630. The readable
-story opens with the two approved fallback lines. Publishing this work
-is what remains.
+Current record. These describe the site now:
 
-## Fireworks: all three steps done (user choice, 2026-10-02)
+- [`../SCENE-MAP.md`](../SCENE-MAP.md) — which files own each chapter.
+- [`../FINAL-NARRATIVE-COPY.md`](../FINAL-NARRATIVE-COPY.md) — the live
+  words, one record. The page is the source. Retired drafts are not
+  repeated there.
+- [`../ASSET-LEDGER.md`](../ASSET-LEDGER.md) — shipped art, fonts and rights.
+- [`README.md`](README.md) — the plan index and the look at a glance.
 
-Built from `ATMOSPHERE-EFFECTS-BRIEF.md` §6.7, one step at a time, with a
-review after each. No next task is set; ask the user.
+Each chapter's settings live in `src/story/scene01` through `scene06`.
+`src/data/chapters.js` gathers those six and holds the shared scroll
+numbers. Scenes 03–06 attach their id, slug, title and storyboard in that
+list. Words are in `index.html`. The map is `docs/SCENE-MAP.md`.
 
-1. **Still bursts (done 2026-10-02):** `src/scene/createFireworks.js`
-   replaced the ring markers with cards of `firework-burst.webp`: eight
-   on desktop, six on phones, 35% bigger than the markers (user request);
-   see `atmosphere.md`, "Fireworks in 06".
-2. **The show (done 2026-10-02):** an 8 s loop with rockets, ignition,
-   opening, cooling, fading and falling spark streaks; reduced motion
-   holds a composed moment; see `atmosphere.md`. The user's React
-   "fireworks-show" component was a technique reference only.
-3. **Smoke (done 2026-10-02):** three faint wisps on desktop, two on
-   phones, beside and below the biggest bursts, drifting and thinning
-   over 5 s (`smoke` in chapter 06, `FIREWORKS.smoke`). The falling
-   sparks cover the brief's embers.
+History. These are not the task list:
 
-Where things are:
+- `docs/CURSOR-GREYBOX-BRIEF.md`, `docs/WORLD-BIBLE.md`,
+  `docs/ATMOSPHERE-EFFECTS-BRIEF.md`, `docs/TYPOGRAPHY-INTERFACE-BRIEF.md`
+- `docs/greybox-review/` and `docs/milestone-2-review/`
+- `docs/MILESTONE-2-PLAN.md` (split into this folder on 2026-10-02)
+- Closed plans in this folder: the scene 03–06 implementation plans, the
+  crossing plan, the footer, the accent colours, the hero wordmark, and
+  `project-organization-plan.md` (closed 2026-10-06)
+- `CHANGELOG.md` — the dated history. Do not rewrite it.
 
-- Show: `createFireworks` in `src/scene/createFireworks.js` (`place`,
-  `setLevel`, `load`, `update`, `setStill`, and `hold(t)` for tests),
-  placed in front of the 06 pose from `bursts` in chapter 06 of
-  `src/data/chapters.js` (place, size, colour, strength, rotate, mirror,
-  squash, `at`); artwork, colours, halo and all timing in `FIREWORKS` in
-  `src/data/atmosphere.js`. Everything is a pure function of the show
-  time (`pose(t)`). The `bursts` visibility level is 1 only in 06. The
-  smoke wisps live in the same module. With `?debug`,
-  `window.__vh.fireworks.hold(t)` freezes the show at any moment.
-- Artwork: `public/atmosphere/firework-burst.webp` and
-  `public/atmosphere/firework-smoke.webp` (re-encoded to 285 KB) are in
-  use; `firework-embers.webp` stays unused in
-  `docs/references/production-candidates/`.
-- A similar card technique: `src/scene/createAtmosphere.js` (feathered
-  ShaderMaterial cards cut from a sprite sheet, placed from screen
-  positions at a chapter pose).
+## What is built
 
-## Checks used so far
+- Hero 香港: white at the top, dark cream at the feet.
+- Vertical title 東方之珠. Chapter 01's label stays 維港.
+- Chapters 01–06, including Scene 02's two paragraphs, Scene 03's
+  crossing, Scene 04's then-and-now, Scene 05's callouts, and Scene 06's
+  closing paragraph.
+- Footer, orange for the brand, yellow for light in the picture.
+- Share image `posters/harbour-social.jpg`, and the two fallback posters,
+  retaken 2026-10-06 from the current opening frame. A normal visit does
+  not download the share image. The fallback stills load only when the
+  3D scene cannot.
+- The footer says the Star Ferry's origins are in 1880: the first
+  crossing, Morning Star. Scene 03 says "Crossing since 1888": the year
+  the Kowloon Ferry Company was founded. Both stay (user choice,
+  2026-10-06).
 
-Local test scripts lived in `%TEMP%\vh-shot` (they may be gone; rewrite if
-needed). They drove headless Edge (playwright-core, SwiftShader):
+## Next
 
-- screenshots of every hold on desktop (1440 × 900) and phone (390 × 844);
-- the composition probe (only known misses: desktop and narrow 05
-  wheel.left/right; mobile 01 ifc.top; mobile 03 ifc.left, wheel.left;
-  plus box-only copy-region flags in desktop 01 and 03 and phone 02 and
-  04, with no text on a subject — see the review);
-- draw calls per hold (desktop 06 is about 64 now);
-- bright-pixel counts so IFC keeps the lead.
-
-Software rendering is slow (a full screenshot set takes about 2 minutes),
-so check only the chapters a change touches, plus a full set before
-pushing.
+Nothing is queued. The site described above is current. A new chat starts
+from this file.

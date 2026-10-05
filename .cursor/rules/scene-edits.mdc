@@ -11,7 +11,7 @@ For work on one harbour chapter (01–06):
 - Open only files mapped to the affected scene.
 - Do not read `CHANGELOG.md`, old plans, review screenshots or unrelated scenes unless explicitly requested.
 - Do not create screenshots or recordings unless explicitly requested.
-- Keep editable layout values in the scene's configuration (`src/data/chapters.js`, or the configuration block named for that scene in the map).
+- Keep editable layout values in the scene's `src/story/sceneNN/config.js`. `src/data/chapters.js` holds the shared scroll numbers and the assembled list.
 - For small changes, run only `npm run build` and inspect the affected scene at http://localhost:5173/#chapter-0N.
 
-A ticket change in scene 03 reads the map, then opens `#chapter-03` in `index.html`, chapter `03` in `src/data/chapters.js`, the 03 blocks in `src/styles.css`, `src/ui/ticketCard.js` and `src/ui/departureBoard.js`.
+A ticket change in scene 03 reads the map, then opens `#chapter-03` in `index.html`, `src/story/scene03/config.js`, the 03 blocks in `src/styles.css`, `src/ui/ticketCard.js` and `src/ui/departureBoard.js`.

@@ -6,6 +6,53 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-06
 
+- **Organization plan closed** (user request, 2026-10-06). The briefing,
+  the copy record and the scene map describe the site. No page change.
+  The commit waits until it is asked for. Files: `HANDOFF.md`, `README.md`,
+  `project-organization-plan.md`, `narrative-spine.md`.
+- **Ferry dates and fallback posters** (user choice, 2026-10-06). Both
+  dates stay. 1880 is the first crossing, Dorabjee Naorojee Mithaiwala’s
+  steamboat Morning Star. 1888 is the year the Kowloon Ferry Company was
+  founded and registered. The two fallback posters are retaken from the
+  current opening frame: desktop 1016×648, 49 KB; phone 390×844, 22 KB.
+  The illustration count is recorded as three (one print in 02, two
+  photographs in 04), which meets the spine’s limit. Nothing was added
+  or removed. Files: `public/posters/harbour-poster-desktop.webp`,
+  `public/posters/harbour-poster-mobile.webp`; plan: `interface.md`,
+  `narrative-spine.md`, `project-organization-plan.md`, `HANDOFF.md`,
+  `README.md`; `docs/ASSET-LEDGER.md`, `docs/FINAL-NARRATIVE-COPY.md`.
+- **Unused files** (user request, 2026-10-06). Inventory of `public/` and
+  `src/`. Every image, font and the favicon is requested. The four font
+  licence texts stay. Removed six `.gitkeep` placeholders, including the
+  empty `public/cutouts`, `public/models` and `public/textures` folders.
+  All 72 source modules are imported. No shipped asset removed. The page
+  is unchanged. Files: those `.gitkeep` files, `README.md`; plan:
+  `project-organization-plan.md`, `HANDOFF.md`, `README.md`,
+  `narrative-spine.md`.
+- **Scene map** (user request, 2026-10-06). `SCENE-MAP.md` now sends
+  every chapter to `src/story/sceneNN/config.js`. `chapters.js` is the
+  shared scroll numbers and the assembled list; scenes 03–06 still
+  attach id, slug, title and storyboard there. The README plan table already
+  named every file in `docs/plan/`. The page is unchanged. Files:
+  `docs/SCENE-MAP.md`, `.cursor/rules/scene-edits.mdc`; plan:
+  `project-organization-plan.md`, `HANDOFF.md`, `README.md`,
+  `narrative-spine.md`.
+- **Copy record** (user request, 2026-10-06). `FINAL-NARRATIVE-COPY.md`
+  now states the words on the page once. Retired drafts and the old
+  implementation list are out of the reading path. The 1880 footer line
+  and Scene 03’s 1888 stay. The page is unchanged. Files:
+  `docs/FINAL-NARRATIVE-COPY.md`; plan: `project-organization-plan.md`,
+  `HANDOFF.md`, `README.md`, `narrative-spine.md`.
+- **Briefing brought up to date** (user request, 2026-10-06). A new chat
+  starts from `HANDOFF.md`: the six chapters are built, the review address
+  is <http://localhost:5173/>, and the October look test is history. The
+  plan index matches that. No page change. Files: `HANDOFF.md`,
+  `README.md`, `project-organization-plan.md`, `narrative-spine.md`.
+- **Project organization plan** (user request, 2026-10-06). The site is
+  built, and the briefing a new person would read is still the October
+  look test. A checklist lines up the words, the docs and the code, then
+  removes only unused files. No page change. Files:
+  `project-organization-plan.md`, `README.md`, `narrative-spine.md`.
 - **Social preview retaken** (user request, 2026-10-06). The share image is
   the opening frame again, cropped to 1200×630, now with the warmed 香港.
   A page visit still does not download it. Files:
