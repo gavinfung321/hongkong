@@ -9,8 +9,7 @@ approved production assets.
 These are generated in code from primitive geometry and simple materials. They
 are prototypes, not files to source or polish.
 
-Chapters are numbered `01–06` to match the storyboard frames. Full geometry
-specifications are in `CURSOR-GREYBOX-BRIEF.md` section 6.
+Chapters are numbered `01–06`. The models are built in code.
 
 | Working asset | Representation | Chapters | Purpose | Exit test |
 |---|---|---:|---|---|
@@ -118,7 +117,7 @@ on GitHub Pages), with each family's licence beside the files. Upright styles
 only; no italics. Subsetting with HarfBuzz (`subset-font` 2.x run from a temp
 folder, not a project dependency), WOFF2 output, all OpenType layout features
 kept (tabular figures, vertical forms), name records 0 to 14 kept (copyright,
-version, licence and licence URL). Typography brief: `TYPOGRAPHY-INTERFACE-BRIEF.md`.
+version, licence and licence URL).
 
 | Runtime file | Family, weights | Source (version) | Subset | Size | Licence file |
 |---|---|---|---|---:|---|
@@ -186,9 +185,7 @@ respective `docs/references/*/generated/` folders. The smaller review copies are
 in `docs/references/production-candidates/`. They are staging files, not runtime
 assets, until a row below says it was moved into `public/`.
 
-Their approved, conditional and reference-only roles are defined in
-`ASSET-INTEGRATION-BLUEPRINT.md`; dimensions, sizes and alpha checks are recorded
-in `ASSET-QA-REPORT.md`.
+Their roles are in the table below.
 
 | Staged filename | Type | Chapters | Current decision | Source / provenance |
 |---|---|---:|---|---|

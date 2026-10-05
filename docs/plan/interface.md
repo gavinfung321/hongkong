@@ -491,13 +491,11 @@ landmark-overlap check for all twelve frames, exactly as in the grey-box.
 - Mobile uses smaller type and tighter spacing so it stays on one line.
 - Built as `.pill-link` (`.site-footer__return`) in `index.html` and
   `styles.css`. Since the typography pass (2026-10-03) the label is Inter
-  500 in sentence case, as the typography brief asks, instead of thin
-  tracked capitals.
+  500 in sentence case, instead of thin tracked capitals.
 
 ### Typography system (user request, 2026-10-03)
 
-The approved `docs/TYPOGRAPHY-INTERFACE-BRIEF.md`, self-hosted (files in
-`ASSET-LEDGER.md`, "Fonts"): Cormorant Garamond 600 for chapter titles, the
+Self-hosted (files in `ASSET-LEDGER.md`, "Fonts"): Cormorant Garamond 600 for chapter titles, the
 tagline, mobile menu titles and the footer statement; Inter 400 to 600 for
 body, kickers, nav, buttons and footer text; Noto Serif TC for 香港 (700),
 東方明珠 and 維港夜色 (600); Noto Sans TC 500 for the chapter labels. Tokens

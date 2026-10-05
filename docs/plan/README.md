@@ -6,11 +6,9 @@ footer and the colours are built. The organization plan is closed
 push to `main` redeploys. No plan is open. Start a new chat from
 [`HANDOFF.md`](HANDOFF.md).
 
-This plan follows the approved grey-box (`CURSOR-GREYBOX-BRIEF.md`, review in
-`greybox-review/REVIEW.md`). It does not change the existing plan files or the
-approved camera journey. Until 2026-10-02 it was one file,
-`docs/MILESTONE-2-PLAN.md`; it was split so each update touches one short
-file (user choice, 2026-10-02).
+It does not change the approved camera journey. Until 2026-10-02 it was
+one file; it was split so each update touches one short file (user
+choice, 2026-10-02). The pre-production briefs were removed 2026-10-06.
 
 ## How this plan is organised
 
@@ -110,8 +108,7 @@ Nothing open in the look test. The colour pass (was item 6) is done: a
 film grade over the finished frame, kept because 01 clearly improved (user
 choice, 2026-10-03; see "Film grade" in [`scene-city.md`](scene-city.md)).
 Build step 6 (measure and review) is done and Milestone 2 is closed
-(2026-10-03; see
-[`../milestone-2-review/REVIEW.md`](../milestone-2-review/REVIEW.md)).
+(2026-10-03). The written review was removed 2026-10-06.
 The iPhone speed check is closed (user, 2026-10-04: fine as it is). The
 colophon keeps "Created by Gavin Fung at HKAAA" (user, 2026-10-04).
 The paper grain is passed (user, 2026-10-04). The fallback poster is a
@@ -278,13 +275,10 @@ Stop for the user's review after each step, as in the grey-box.
 5. **Look test on 01.** The layers in section 4, one at a time, with
    before-and-after screenshots.
 6. **Measure and review.** Laptop numbers by me; iPhone 11 and 13 numbers by
-   the user. Refresh all twelve review screenshots, write
-   `docs/milestone-2-review/REVIEW.md`, commit. **Done 2026-10-03; the
-   milestone is closed.** The review, 14 screenshots (hero included) and
-   laptop numbers are in
-   [`../milestone-2-review/`](../milestone-2-review/REVIEW.md). The user
+   the user. **Done 2026-10-03; the milestone is closed.** The user
    approved 01 and raised the draw-call and texture budgets; the phone
-   re-measure is carried to Milestone 5 (user choice).
+   re-measure was later closed (user, 2026-10-04). The review notes and
+   pictures were removed 2026-10-06.
 
 ## Decisions (resolved 2026-10-01)
 

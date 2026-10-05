@@ -66,14 +66,12 @@ list. Words are in `index.html`. The map is `docs/SCENE-MAP.md`.
 
 History. These are not the task list:
 
-- `docs/CURSOR-GREYBOX-BRIEF.md`, `docs/WORLD-BIBLE.md`,
-  `docs/ATMOSPHERE-EFFECTS-BRIEF.md`, `docs/TYPOGRAPHY-INTERFACE-BRIEF.md`
-- `docs/greybox-review/` and `docs/milestone-2-review/` — the written
-  notes. The pictures were removed 2026-10-06.
-- `docs/MILESTONE-2-PLAN.md` (split into this folder on 2026-10-02)
 - [`closed-plans.md`](closed-plans.md) — the finished checklists, folded
   into one file on 2026-10-06
 - `CHANGELOG.md` — the dated history. Do not rewrite it.
+
+The pre-production briefs, the grey-box review and the look-test notes
+were removed 2026-10-06.
 
 ## What is built
 

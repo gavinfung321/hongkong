@@ -5,8 +5,7 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Old sections 5 and
 
 ## 5. Performance budget
 
-Measured with the `?fps` overlay on a production build, as in
-`greybox-review/PERFORMANCE.md`.
+Measured with the `?fps` overlay on a production build.
 
 | Metric | Laptop | iPhone 11 |
 |---|---|---|
@@ -21,8 +20,7 @@ Measured with the `?fps` overlay on a production build, as in
 **Laptop, Milestone 2 review (2026-10-03):** production build in Cursor's
 browser (AMD Radeon 860M, 1187 × 952, pixel ratio 1), 36 s scroll from the
 top to the footer: 60 fps average (display limit), 1% low 57.7, worst
-second 60, no frame over 50 ms (longest 17.6 ms). JS 210.5 KB gzip. See
-`docs/milestone-2-review/REVIEW.md`.
+second 60, no frame over 50 ms (longest 17.6 ms). JS 210.5 KB gzip.
 
 **First iPhone 11 reading (user, 2026-10-02, live site, before the
 shader fix):** 01 hold 47 fps, 1% low 41, worst second 33, 148 calls,

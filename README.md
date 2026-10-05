@@ -5,7 +5,7 @@ A cinematic, scroll-controlled Three.js journey through Victoria Harbour.
 ## Current stage
 
 The six chapters, the footer and the colours are built. Start from
-`docs/plan/HANDOFF.md`. The grey-box review is history.
+`docs/plan/HANDOFF.md`.
 
 ```
 npm install
@@ -25,7 +25,7 @@ npm run preview    # serve dist/ at http://localhost:4173/  (add ?fps)
 
 ## Project structure
 
-- `docs/` — the current record (`plan/HANDOFF.md`, `SCENE-MAP.md`, `FINAL-NARRATIVE-COPY.md`, `ASSET-LEDGER.md`) and the history briefs
+- `docs/` — the current record (`plan/HANDOFF.md`, `SCENE-MAP.md`, `FINAL-NARRATIVE-COPY.md`, `ASSET-LEDGER.md`)
 - `public/atmosphere/` — clouds, mist, petals, foliage, fireworks
 - `public/plates/` — the memory print, the two photographs, the ticket
 - `public/posters/` — the share image and the two fallback stills

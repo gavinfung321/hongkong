@@ -6,6 +6,11 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-06
 
+- **Old briefs removed** (user request, 2026-10-06). The pre-production
+  briefs, the grey-box review, the look-test notes and the root
+  `HANDOFF.md` are gone. The page does not use them. Storyboards,
+  reference art, `closed-plans.md` and the changelog stay. No page
+  change.
 - **Local review shots removed** (user request, 2026-10-06). The
   `review-shots/` folder was scratch on this machine, not in git and not
   on the page. It is gone. The changelog entries that name it stay as
