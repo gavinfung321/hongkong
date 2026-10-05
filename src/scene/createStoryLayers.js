@@ -473,7 +473,9 @@ export function createStoryLayers(chapters, renderer, { onLoad, tower } = {}) {
     ghost.visible = g > 0.001 && ghostArt !== null;
     dustUniforms.uLevel.value = d;
     dustUniforms.uNear.value = g;
-    dustUniforms.uSwell.value = s;
+    // Late-timeline steam can rise above 1; the archive's spare dust should
+    // stay at its authored full level rather than strengthening with it.
+    dustUniforms.uSwell.value = Math.min(1, s);
     dust.visible = d > 0.001;
     for (const card of steam) card.mesh.visible = s > 0.001;
     return true;

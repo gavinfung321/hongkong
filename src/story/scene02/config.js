@@ -81,6 +81,21 @@ export const SCENE_02_LAYOUT = {
   ghostRight: 98,
 };
 
+// Scroll-tied story sequence. `intro` is chapter progress on approach; the
+// remaining ranges are shares of scene 02's dwell.
+export const SCENE_02_REVEAL = {
+  intro: [0.38, 0.5],
+  historical: [0.14, 0.42],
+  timeline: {
+    reveal: [0.54, 0.64],
+    transitions: [
+      [0.68, 0.72],
+      [0.78, 0.82],
+      [0.88, 0.92],
+    ],
+  },
+};
+
 const LAMP_Y = 6.3;
 const lampSwarms = (count, size, box) =>
   WORLD.foreground.lamps.map(([x, , z]) => ({ at: [x, LAMP_Y, z], box, count, size, spare: 0.25 }));
@@ -110,6 +125,7 @@ export const SCENE_02_STEAM = {
   band: 'billow',
   colour: 0xfff0dc,
   opacity: 0.75,
+  milestoneBoost: 0.22,
   stretch: 3,
   period: 46,
   travel: 0.3,

@@ -4,6 +4,38 @@ Part of the Milestone 2 plan (index: [README.md](README.md)). Newest first.
 One entry per change: what changed, why, and the files. Older history also
 lives in the dated notes inside each area file, and in `git log`.
 
+## 2026-10-05
+
+- **Scene 02 dust and steam synchronization** (user request, 2026-10-05).
+  Warm dust now starts with the opening paragraph, steam follows the
+  historical paragraph and archive, and the same tower-base steam gains a
+  restrained 22% lift during the 1975–1978 milestones. Spare archive dust is
+  capped at its authored full level so the late emphasis does not make the
+  scene busier. Files: `src/story/scene02/config.js`,
+  `src/ui/copyLayer.js`, `src/scene/createStoryLayers.js`; plan:
+  `narrative-spine.md`.
+- **Scene 02 mobile timeline readability** (user request, 2026-10-05).
+  Mobile labels increase from 9 px to 10 px, the final milestone receives the
+  widest column, and phones at 360 px or narrower use a 2×2 grid. The 24 px
+  years, wording, active-milestone behaviour and desktop layout are unchanged.
+  Files: `src/styles.css`; plan: `narrative-spine.md`.
+- **Scene 02 progressive beats and active timeline** (user request,
+  2026-10-05). The historical paragraph and archive now develop together
+  after the opening beat. The timeline follows as one row, with a reversible
+  active milestone moving through 1915, 1921, 1975 and 1978; the active year
+  brightens and grows slightly, its rule gains a restrained amber glow, prior
+  dates remain visible, and nothing bounces or slides. The camera, tower,
+  composition and responsive 1915 are unchanged. Files:
+  `src/story/scene02/config.js`, `src/ui/copyLayer.js`, `src/styles.css`;
+  plan: `narrative-spine.md`.
+- **Scene 02 progressive-story checklist** (user request, 2026-10-05).
+  Recorded the current reveal groundwork and the remaining order: finish the
+  narrative beat grouping, add active timeline milestones, improve mobile
+  timeline spacing, synchronize dust and steam, then perform the final
+  visual-balance review. The camera, tower, copy distance, archive placement
+  and responsive 1915 placement are frozen. Files:
+  `docs/plan/narrative-spine.md`, `docs/plan/CHANGELOG.md`.
+
 ## 2026-10-04
 
 - **02 ghost full size, legs toward the words** (user request, 2026-10-04).

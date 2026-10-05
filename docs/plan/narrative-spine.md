@@ -324,6 +324,43 @@ The six drafts are approved (user request, 2026-10-04). Scene 02 now runs:
 Reviewed once (1440 × 900, 1180 × 820, 390 × 844, reduced motion) at
 each step of the entrance: no console errors, layers in order as above.
 
+### Scene 02 progressive-story follow-up (user request, 2026-10-05)
+
+This checklist supersedes the earlier entrance sequence above. Freeze the
+camera, tower, copy-to-tower distance, archive placement and responsive 1915
+placement throughout.
+
+- [x] Move Scene 02's editable settings into
+  `src/story/scene02/config.js`.
+- [x] Add a reversible progressive-reveal foundation: opening material,
+  historical paragraph, archive and timeline use separate scroll ranges.
+- [x] Add reversible per-date timeline ranges as groundwork for active
+  milestones.
+- [x] **1 — Progressive narrative reveal:** the label, title and opening
+  paragraph are the first beat; the historical paragraph and archive
+  photograph develop together as the second beat; the timeline starts last.
+  The tower and camera stay still (completed 2026-10-05).
+- [x] **2 — Active timeline milestones:** the active state moves through 1915
+  → 1921 → 1975 → 1978. The active year brightens and grows by up to 7%, its
+  connecting rule gains a restrained amber glow, previous dates remain visible
+  but subdued, and future dates stay quieter. The emphasis crossfades without
+  bounce or slide (completed 2026-10-05).
+- [x] **3 — Mobile timeline readability:** labels are 10 px with tighter
+  tracking, “Station Demolished” has the widest column, and phones at 360 px
+  or narrower use a 2×2 milestone grid. The years stay at 24 px and the
+  timeline content is unchanged (completed 2026-10-05).
+- [x] **4 — Atmosphere synchronization:** warm dust begins with the opening
+  paragraph, steam comes in with the historical paragraph and archive, and
+  the existing steam gains a restrained 22% lift during the 1975–1978
+  milestones. The archive's spare dust is capped at its authored full level,
+  so the late steam emphasis does not thicken the particle field. Both effects
+  remain localized around the tower's base (completed 2026-10-05).
+- [ ] **5 — Final visual-balance review:** inspect desktop, compact desktop and
+  mobile after sequencing is complete. Only then consider reducing archive
+  brightness or size; do not add rain, foreground objects or heavier particles.
+
+The next implementation item is **5 — Final visual-balance review**.
+
 ### 3D background
 
 - Keep the existing camera, Clock Tower, palms, water and atmospheric motion.

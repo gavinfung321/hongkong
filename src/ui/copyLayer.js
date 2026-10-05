@@ -3,15 +3,11 @@
 // in than the damped camera allows: on a quick scroll a chapter's copy waits
 // for its scene instead of flashing over the previous one.
 //
-// A story chapter (`.chapter__copy--story`) arrives in two steps (user
-// requests, 2026-10-04). As the camera comes in, the harbour darkens to
-// DARK.arrive of memory mode (`--memory-mode` on the root); as it settles,
-// the label, title, beats, 1915 ghost, memory print and timeline fade in
-// together (user request, 2026-10-04: show everything at once, as 03 does
-// with its panels). They sink as the camera leaves, and the darkness lifts
-// early in the move out. All of it is scroll-tied, so it reverses on the
-// way back. The 3D story layers (createStoryLayers.js) take their levels
-// from here.
+// Scene 02 reveals progressively: label, title and first paragraph; second
+// paragraph; archive print and caption; then the complete timeline. They sink
+// as the camera leaves, and the darkness lifts early in the move out. All of
+// it is scroll-tied, so it reverses on the way back. The 3D story layers
+// (createStoryLayers.js) take their levels from here.
 //
 // 03 (`data-story="crossing"`) is an index of panels instead: the harbour
 // darkens further (SCENE_03_CROSSING.dark), the panels come with the title, and the
@@ -35,6 +31,7 @@
 // settles, with no darkening; cityLights.js sweeps the title, and `touch`
 // runs the office-window touch light (cityTouch.js) while it shows.
 import { smoothstep } from '../scroll/cameraRig.js';
+import { SCENE_02_REVEAL, SCENE_02_STEAM } from '../story/scene02/config.js';
 import { SCENE_03_CROSSING } from '../story/scene03/config.js';
 import { createDepartureBoard } from './departureBoard.js';
 import { createCityLights } from './cityLights.js';
@@ -44,8 +41,8 @@ const STATEMENT = { full: 0.7 };
 // until the camera settles, and the rest with the print. Past the keyframe
 // the print and timeline sink over `sink`, the darkness lifts over `lift`.
 const DARK = { arrive: 0.55, approach: 0.1, sink: [0.02, 0.1], lift: [0.02, 0.14] };
-// The first step: progress into the chapter, as the camera settles.
-const LABEL = [0.38, 0.5];
+// Other story scenes use scene 02's established approach timing.
+const LABEL = SCENE_02_REVEAL.intro;
 
 export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
   const copies = sections.map((section) => section.querySelector('.chapter__copy'));
@@ -84,6 +81,7 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       route: copy.querySelector('.chapter__route'),
       memory: copy.querySelector('.chapter__memory'),
       facts: copy.querySelector('.chapter__facts'),
+      factItems: [...copy.querySelectorAll('.chapter__facts > div')],
     };
   });
   const shown = new Map();
@@ -172,18 +170,36 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
         wind: photos * base,
       };
     }
-    const print = label * sink;
+    const [firstBeat, secondBeat] = story.beats;
+    setVar(firstBeat, '--enter', label);
+    firstBeat?.toggleAttribute('data-enter-hidden', label === 0);
+    const historical = level(SCENE_02_REVEAL.historical) * sink;
+    setVar(secondBeat, '--enter', historical);
+    secondBeat?.toggleAttribute('data-enter-hidden', historical === 0);
+    setVar(story.memory, '--memory-reveal', historical);
 
-    setVar(story.memory, '--memory-reveal', print);
-    setVar(story.facts, '--enter', print);
+    const timeline = level(SCENE_02_REVEAL.timeline.reveal) * sink;
+    setVar(story.facts, '--enter', timeline);
+    const changes = SCENE_02_REVEAL.timeline.transitions.map(level);
+    const active = [
+      1 - changes[0],
+      changes[0] * (1 - changes[1]),
+      changes[1] * (1 - changes[2]),
+      changes[2],
+    ];
+    story.factItems.forEach((item, k) => {
+      setVar(item, '--active', active[k] ?? 0);
+      setVar(item, '--past', k < changes.length ? changes[k] : 0);
+    });
+    const lateSteam = Math.min(1, active[2] + active[3]);
 
-    const mode = base * (DARK.arrive + (1 - DARK.arrive) * print);
+    const mode = base * (DARK.arrive + (1 - DARK.arrive) * historical);
     return {
       mode,
       yield: mode,
       ghost: label * base,
-      dust: base,
-      steam: print * base,
+      dust: label * base,
+      steam: historical * base * (1 + timeline * lateSteam * SCENE_02_STEAM.milestoneBoost),
     };
   }
 
