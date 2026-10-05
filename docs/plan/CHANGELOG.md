@@ -6,6 +6,11 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-06
 
+- **Social preview retaken** (user request, 2026-10-06). The share image is
+  the opening frame again, cropped to 1200×630, now with the warmed 香港.
+  A page visit still does not download it. Files:
+  `public/posters/harbour-social.jpg`; plan: `interface.md`,
+  `docs/ASSET-LEDGER.md`, `docs/FINAL-NARRATIVE-COPY.md`.
 - **Vertical title includes 之** (user request, 2026-10-06). The title reads
   東方之珠. 之 was missing from Noto Serif TC, so it was drawn from another
   face. It is now in the weight-600 file with 東, 方 and 珠. Files:
