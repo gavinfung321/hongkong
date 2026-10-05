@@ -2195,7 +2195,38 @@ html:not(.is-enhanced) .vertical-text {
   position: static;
   width: fit-content;
   max-width: 100%;
-  margin-top: 0.875rem;
+  margin-top: 0.75rem;
+  padding: 0.625rem 0.7rem 0.7rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__board-head {
+  gap: 0.4rem;
+  margin-bottom: 0.625rem;
+  font-size: 0.5625rem;
+  letter-spacing: 0.18em;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__board-row {
+  grid-template-columns: 4rem auto;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__board-row + .chapter__board-row {
+  margin-top: 0.25rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__board-label {
+  font-size: 0.5625rem;
+  line-height: 1.5rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__board-tiles {
+  gap: 1.5px;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__board-tile {
+  width: 1rem;
+  height: 1.5rem;
+  font-size: 0.8125rem;
 }
 
 @media (orientation: landscape) and (max-height: 500px) {
