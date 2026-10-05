@@ -1,5 +1,5 @@
-// The single chapter configuration. Every scroll threshold, camera pose, copy
-// region, visibility value, fog value, and composition target lives here.
+// The chapter collection. Scene-specific configuration is progressively kept
+// in src/story/sceneNN/config.js and assembled here for the shared engines.
 //
 // camera:      position / target in world metres, vertical fov in degrees.
 //              Optional via: [[x, y, z], ...] waypoints the camera passes on
@@ -34,7 +34,10 @@
 //              (vesselRoutes.js).
 // probes:      composition targets (% of viewport) checked by the debug probe.
 
+import { SCENE_01_CHAPTER } from '../story/scene01/config.js';
 import { SCENE_03_CHAPTER } from '../story/scene03/config.js';
+
+export { HERO } from '../story/scene01/config.js';
 
 const SB = '/docs/storyboards';
 
@@ -52,107 +55,8 @@ export const SCROLL = {
   dwellLand: 0.24,
 };
 
-// The 香港 wordmark in the hero, authored on screen at chapter 01's opening pose.
-// x / foot: % of the viewport where the characters' feet are; width: % of the
-// viewport width; depth: metres ahead of the camera. It is drawn in front of
-// everything, but it is a fixed object in the world: it never moves itself,
-// the camera moves past it (chapter 01's holdDolly push, the mouse parallax,
-// the opening glide), and it fades from the first scroll by progress leaveEnd
-// (the hero is p < 0; chapter 01's hold starts at 0.36). Close, so that the
-// camera's moves shift it against the far harbour (after the Kage reference's
-// word; user choice, 2026-10-04: it was 47 m out on the water on desktop and
-// 190 m on phones, and slid down out of frame by script).
-export const HERO = {
-  wordmark: {
-    text: '香港',
-    // Desktop floats over the harbour beyond the railing, raised over the
-    // boats (user request, 2026-10-02); its feet must stay below the horizon
-    // (57.5% at the opening pose). Mobile floats in the empty sky between the
-    // copy and the moon (user request, 2026-10-02).
-    // Mobile fadeEnd: a little sooner than desktop, the phone hero being
-    // shorter in reading time. Mobile clear: px kept free under 01's
-    // copy on short screens, moving the feet down to maxFoot %, then shrinking
-    // (user request, 2026-10-03).
-    // Short landscape (phones turned sideways, under 500 px tall): the desktop
-    // word keeps clear of 01's copy the same way, standing lower and smaller
-    // (interface audit IS-03, user request, 2026-10-03).
-    desktop: { x: 50, foot: 74, width: 60, depth: 16 },
-    desktopShort: { clear: 14, maxFoot: 84 },
-    mobile: { x: 50, foot: 42, width: 78, depth: 25, fadeEnd: 0.8, clear: 14, maxFoot: 48 },
-  },
-  leaveEnd: 0.2,
-  // Fractions of the way to leaveEnd: the wordmark and chapter 01's copy stay
-  // whole until fadeStart, so the camera is seen nearing the word, then fade
-  // by fadeEnd (a breakpoint's own fadeEnd wins; user choice, 2026-10-04,
-  // was gone by 0.6, 0.4 on phones).
-  fadeStart: 0.15,
-  fadeEnd: 0.9,
-  // The opening glide (after the Kage reference; user choice, 2026-10-04):
-  // as the entrance cover lifts on a visit from the top, the camera eases in
-  // from `back` metres behind and `rise` above the opening pose.
-  glide: { back: 6, rise: 0.6, duration: 2.4 },
-};
-
 export const chapters = [
-  {
-    id: '01',
-    slug: 'harbour-at-dusk',
-    title: 'Harbour at Dusk',
-    storyboard: {
-      desktop: `${SB}/frame-01-harbour-at-dusk-rough.png`,
-      mobile: `${SB}/frame-01-harbour-at-dusk-mobile-rough.png`,
-    },
-    camera: {
-      desktop: {
-        position: [-13, 5.9, 99.5],
-        target: [-2.4, 30.5, -299.6],
-        fov: 41.5,
-        holdDolly: [0, 0, -10],
-        via: [[-50, 7, 58]],
-      },
-      mobile: { position: [-43.1, 9, 99], target: [7.6, 121.5, -281.4], fov: 77.7, holdDolly: [1.3, 0, -9.9] },
-    },
-    copy: {
-      desktop: { left: 5, top: 8.5, right: 36, bottom: 34 },
-      mobile: { left: 8, top: 9, right: 92, bottom: 39 },
-    },
-    visibility: {
-      // No shore mist on desktop: from here its drifts join the wisps into one band.
-      // Withheld (atmospheric depth Priority F, user choice, 2026-10-04):
-      // skyline at 75%; petals at 80% (were 50%, raised for a fuller opening,
-      // user choice, 2026-10-04). Searchlights stay (01 and 05 only).
-      // moon 0.75 and the junk's sail reflection at half, so the Clock Tower
-      // leads (Priority 3 balance, user choice, 2026-10-04).
-      desktop: { ferry: 1, junk: 1, ifc: 1, wheel: 1, deck: 1, railing: 1, palms: 0, bauhinia: 1, bush: 1, bursts: 0, petals: 0.8, city: 0.75, mist: 0, seaMist: 1, haze: 0.5, searchlights: 0.6, moon: 0.75, junkGlow: 0.5 },
-      // No deck: the mobile storyboard has open water right to the bottom edge.
-      // Palms at the tower's foot, as in the storyboard (user choice, 2026-10-03).
-      mobile: { ferry: 0, junk: 1, ifc: 1, wheel: 1, deck: 0, railing: 0, palms: 1, bauhinia: 0, bush: 0, bursts: 0, petals: 0.8, city: 0.75, mist: 0.6, seaMist: 1, haze: 0.5, searchlights: 0, moon: 0.75, junkGlow: 0.5 },
-    },
-    fogDensity: 0.00045,
-    vessels: {
-      desktop: { ferry: [-29.2, -103.6, 0], junk: [26.1, -53.1, 0] },
-      mobile: { ferry: [-19.7, -89.9, 0], junk: [-18.1, -23.2, 0] },
-    },
-    probes: {
-      desktop: {
-        tower: { left: 9, right: 17, top: 3, bottom: 60 },
-        ferry: { left: 33, right: 49, bottom: 64 },
-        junk: { left: 61, right: 77, bottom: 64 },
-        // IFC sits right of the PNG (70–74) so the junk's sails don't hide it.
-        ifc: { left: 79, right: 83, top: 18 },
-        wheel: { left: 71.4, right: 74.6, bottom: 56 },
-        horizon: 57.5,
-      },
-      mobile: {
-        tower: { left: 5, right: 19, top: 42, bottom: 72 },
-        junk: { left: 44, right: 75, bottom: 74 },
-        // Right edge 1% wider than the PNG: the rebuilt IFC has the true 57 m width.
-        ifc: { left: 81, right: 89, top: 46 },
-        wheel: { left: 73, right: 79, bottom: 70 },
-        horizon: 70,
-      },
-    },
-  },
+  SCENE_01_CHAPTER,
   {
     id: '02',
     slug: 'kowloon-edge',
