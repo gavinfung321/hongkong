@@ -6,6 +6,13 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Dedicated Scene 04 implementation plan** (user request, 2026-10-05).
+  Added a ten-step checklist for progressively revealing the existing
+  red-sails title, historical card, contemporary card, quote and final
+  statement, with mobile, atmosphere, reduced-motion, verification and
+  approval gates. The camera, junk, water, 3D atmosphere, card artwork,
+  wording and composition are frozen. Files:
+  `scene-04-implementation-plan.md`, `README.md`, `narrative-spine.md`.
 - **Scene 03 approved** (user approval, 2026-10-05). The progressive ferry
   crossing is approved as built, completing all ten implementation steps.
   Scene 04 may now be planned as the next controlled rollout. Files:

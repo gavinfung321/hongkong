@@ -667,15 +667,36 @@ request, 2026-10-04).
   sailing junks were Hong Kong's main fishing boats. The few that sail
   the harbour now carry visitors, keeping the shape of that memory on the
   water."). Beat 1 described the junk the 3D already shows, so it goes.
-- Timing: the label and statement come as the camera settles; the cards
-  hang in at dwell share 0.2–0.5 and leave with the camera; a 60svh
-  dwell (none before).
+- Timing: the label, statement, cards and quote currently share the entrance
+  as the camera settles, then leave with the camera; a 60svh dwell holds the
+  composition.
 - Still to do: the same sheet for 02's 1915 print (user request,
   2026-10-04), once 04's feel is approved.
 
 Files: `index.html`, `src/data/chapters.js`, `src/ui/copyLayer.js`,
 `src/ui/paperCard.js`, `src/main.js`, `src/styles.css`,
 `public/plates/junk-before-1945.webp`, `public/plates/dukling-2016.webp`.
+
+#### Scene 04 progressive-story plan (user request, 2026-10-05)
+
+**Goal:** turn the existing 60svh hold into a progressive then-and-now story
+using the current label, title, two photographs, captions, quote and statement.
+The sequence will establish Red Sails, reveal the working junk, add its
+present-day counterpart, then resolve why that shape remains a harbour symbol.
+
+**Freeze throughout:** both cameras; junk pose, scale, route, sails and
+timing; ferry transition, water, wake, skyline, clouds, mist, lens effects and
+moon; copy-safe regions and element placement; photograph artwork, captions,
+cloth behavior and approved wording. Scene 04 remains a narrative-and-wording
+pass over the untouched 3D composition.
+
+The detailed checklist lives in
+[`scene-04-implementation-plan.md`](scene-04-implementation-plan.md), the
+single source of truth for this pass. Status: **planned, 0 of 10 steps
+complete**.
+
+**Next implementation item:** step 1 — create Scene 04's configuration and
+named reveal ranges without changing any current value or visible behavior.
 
 Different technique per scene (user request, 2026-10-04), all DOM over
 the untouched 3D: 02 layered fade with a memory print and timeline; 03
