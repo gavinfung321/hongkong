@@ -1,8 +1,8 @@
 # Grey-box review notes (build steps 2–11)
 
-The screenshots in this folder show the 12 hold poses: `01-desktop.png` …
-`06-mobile.png`. Desktop is 1440 × 900 and mobile is 390 × 844. Compare each
-one with its storyboard PNG in `docs/storyboards/`.
+The 12 hold pictures were removed (user request, 2026-10-06). The notes
+below stay. Desktop was 1440 × 900 and mobile was 390 × 844. The
+storyboards are still in `docs/storyboards/`.
 
 ## Running it
 

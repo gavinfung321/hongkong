@@ -115,7 +115,7 @@ How it is built:
   violet, as if lit from above (user request, 2026-10-01, after Kage). The
   feet are now a dark cream so the strokes stay readable (user request,
   2026-10-05). Checklist in
-  [`hero-wordmark-colour-plan.md`](hero-wordmark-colour-plan.md). Status:
+  [`closed-plans.md`](closed-plans.md#hero-wordmark). Status:
   approved, 6 of 6 (user approval, 2026-10-05). Closed.
 - Position and size are authored per breakpoint in `chapters.js` (a new `hero`
   block), like the camera poses.
@@ -185,7 +185,7 @@ How it is built:
     hover use the same orange. Yellow stays on the timeline, the ferry due
     digits and the callout arrows. Approved and closed (user approval,
     2026-10-05), in
-    [`accent-colour-plan.md`](accent-colour-plan.md).
+    [`closed-plans.md`](closed-plans.md#accent).
   - On hover, each English label rolls up and its Chinese label (from 3.6)
     rolls in from below (user request, 2026-10-01). Keyboard focus no
     longer swaps it, so the visible name matches the one announced (user
@@ -581,7 +581,7 @@ Serif TC 700). Copy regions widened for 03 desktop, 02 and 06 phones.
 - **Improvement checklist** (user request, 2026-10-05): the layout stays.
   The statement answers Scene 06, and the making credit sits in the
   colophon. The eight-step plan is in
-  [`footer-implementation-plan.md`](footer-implementation-plan.md). Status:
+  [`closed-plans.md`](closed-plans.md#footer). Status:
   approved, 8 of 8 (user approval, 2026-10-05). Closed for now.
 
 ### 3.14 Interface states (user request, 2026-10-03)

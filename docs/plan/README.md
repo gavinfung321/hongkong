@@ -24,17 +24,9 @@ file (user choice, 2026-10-02).
 | [`atmosphere.md`](atmosphere.md) | Clouds, shore mist, open-water wisps, searchlights, fireworks in 06 (no bow spray) | 4.5 stop 6, part 3g |
 | [`atmospheric-depth-polish.md`](atmospheric-depth-polish.md) | Step-by-step vignette, grain, depth haze, local light motion and selective foreground experiments | Post-Milestone 2 polish |
 | [`narrative-spine.md`](narrative-spine.md) | Hybrid 3D and editorial-story direction, six-chapter arc and scene 02 prototype gate | Post-Milestone 2 narrative test |
-| [`scene-03-implementation-plan.md`](scene-03-implementation-plan.md) | Scene 03's ten-step progressive-story implementation checklist and approval gate | Controlled narrative rollout |
-| [`scene-03-crossing-plan.md`](scene-03-crossing-plan.md) | Scene 03 desktop: two sentences, a lower larger countdown, a larger ticket. Phone unchanged | Closed 2026-10-06 |
-| [`scene-04-implementation-plan.md`](scene-04-implementation-plan.md) | Scene 04's ten-step then-and-now implementation checklist and approval gate | Controlled narrative rollout |
-| [`scene-05-implementation-plan.md`](scene-05-implementation-plan.md) | Scene 05's arrival, plus larger desktop callouts close to Two IFC and the wheel | Closed 2026-10-06 |
-| [`scene-06-implementation-plan.md`](scene-06-implementation-plan.md) | Scene 06's ten-step afterimage implementation checklist and approval gate | Controlled narrative rollout |
-| [`footer-implementation-plan.md`](footer-implementation-plan.md) | Footer's approved close: the two-line statement, the making credit in the colophon | Approved 2026-10-05 |
-| [`accent-colour-plan.md`](accent-colour-plan.md) | Accent split: orange for the brand, yellow for light in the picture | Approved 2026-10-05 |
-| [`hero-wordmark-colour-plan.md`](hero-wordmark-colour-plan.md) | Hero 香港: the top stays white and the feet are a dark cream | Approved 2026-10-05 |
+| [`closed-plans.md`](closed-plans.md) | Finished checklists: scenes 03–06, the crossing, the footer, the accent colours, the hero wordmark, and the organization pass | Closed 2026-10-06 |
 | [`checks.md`](checks.md) | Performance budget and acceptance checks | 5, 8 |
 | [`CHANGELOG.md`](CHANGELOG.md) | Dated history of changes, newest first; the old files list | 7 |
-| [`project-organization-plan.md`](project-organization-plan.md) | Line up the words, the docs and the code, then remove only what nothing uses | Closed 2026-10-06 |
 | [`HANDOFF.md`](HANDOFF.md) | Current briefing: how we work, where things are, what is built | Updated 2026-10-06 |
 
 References elsewhere to "part 3e", "section 3.11", "stop 4" and so on keep

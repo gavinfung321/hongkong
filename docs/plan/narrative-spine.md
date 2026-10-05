@@ -597,7 +597,7 @@ the route dot and synchronized countdown. Phones omit the panel index and
 retain the title, standfirst, 1888 line, departure board and ticket.
 
 The detailed checklist and its completion status live in
-[`scene-03-implementation-plan.md`](scene-03-implementation-plan.md), the
+[`closed-plans.md`](closed-plans.md#scene-03), the
 single source of truth for this pass. Status: **approved, 10 of 10 steps
 complete; post-approval review and both approved improvements complete**.
 
@@ -666,7 +666,7 @@ with the minutes, on desktop and on a phone. “Crossing since 1888” sits
 under the standfirst. The dot and the countdown share most of the 60svh
 hold in four even stretches, and the board counts back with the scroll.
 The ferry, the cameras and the ticket picture are unchanged. Detail is in
-[`scene-03-crossing-plan.md`](scene-03-crossing-plan.md). Awaiting a look.
+[`closed-plans.md`](closed-plans.md#scene-03-crossing). Awaiting a look.
 
 ### Scene 04
 
@@ -770,7 +770,7 @@ cloth behavior and approved wording. Scene 04 remains a narrative-and-wording
 pass over the untouched 3D composition.
 
 The detailed checklist lives in
-[`scene-04-implementation-plan.md`](scene-04-implementation-plan.md), the
+[`closed-plans.md`](closed-plans.md#scene-04), the
 single source of truth for this pass. Status: **approved, 10 of 10 steps
 complete; responsive quote polish complete; post-approval improvement review
 complete; mobile caption improvement approved, 3 of 3 improvement steps
@@ -897,7 +897,7 @@ wave, harbour boat, searchlights and wheel hover behavior. No new illustration
 or 3D layer.
 
 The detailed checklist lives in
-[`scene-05-implementation-plan.md`](scene-05-implementation-plan.md), the
+[`closed-plans.md`](closed-plans.md#scene-05), the
 single source of truth for this pass. Status: **approved, 10 of 10 steps
 complete; callout visual review implemented**.
 
@@ -966,7 +966,7 @@ camera. The label and “Afterglow” arrive first, then the closing paragraph f
 The fireworks sentence is removed, and the remaining paragraph uses the lead
 size (user request, 2026-10-05). Reduced motion steps that paragraph. The firework loop,
 smoke and footer softening are unchanged. The checklist lives in
-[`scene-06-implementation-plan.md`](scene-06-implementation-plan.md). Status:
+[`closed-plans.md`](closed-plans.md#scene-06). Status:
 **approved, 10 of 10 steps complete**.
 
 **Decision (user approval, 2026-10-05): Scene 06 is approved as built.** The

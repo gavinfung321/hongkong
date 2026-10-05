@@ -6,6 +6,15 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-06
 
+- **Closed plans folded together** (user request, 2026-10-06). The
+  finished scene 03–06 checklists, the crossing plan, the footer, the
+  accent colours, the hero wordmark and the organization plan now live
+  in `closed-plans.md`. The files that describe the site now stay
+  separate. No page change.
+- **Review pictures removed** (user request, 2026-10-06). The 12 grey-box
+  holds and the 14 milestone holds are gone. The written reviews stay.
+  The page is unchanged. Files: `docs/greybox-review/`,
+  `docs/milestone-2-review/`; plan: `HANDOFF.md`.
 - **Organization plan closed** (user request, 2026-10-06). The briefing,
   the copy record and the scene map describe the site. No page change.
   The commit waits until it is asked for. Files: `HANDOFF.md`, `README.md`,

@@ -68,11 +68,11 @@ History. These are not the task list:
 
 - `docs/CURSOR-GREYBOX-BRIEF.md`, `docs/WORLD-BIBLE.md`,
   `docs/ATMOSPHERE-EFFECTS-BRIEF.md`, `docs/TYPOGRAPHY-INTERFACE-BRIEF.md`
-- `docs/greybox-review/` and `docs/milestone-2-review/`
+- `docs/greybox-review/` and `docs/milestone-2-review/` — the written
+  notes. The pictures were removed 2026-10-06.
 - `docs/MILESTONE-2-PLAN.md` (split into this folder on 2026-10-02)
-- Closed plans in this folder: the scene 03–06 implementation plans, the
-  crossing plan, the footer, the accent colours, the hero wordmark, and
-  `project-organization-plan.md` (closed 2026-10-06)
+- [`closed-plans.md`](closed-plans.md) — the finished checklists, folded
+  into one file on 2026-10-06
 - `CHANGELOG.md` — the dated history. Do not rewrite it.
 
 ## What is built

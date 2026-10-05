@@ -14,18 +14,9 @@ the site (your choice).
 
 ## Screenshots
 
-At the hold of each chapter, dev build, 2026-10-03. Desktop is 1440 × 900,
-phone 390 × 844.
-
-| Chapter | Desktop | Phone |
-|---|---|---|
-| Hero | `00-hero-desktop.png` | `00-hero-mobile.png` |
-| 01 Harbour at Dusk | `01-desktop.png` | `01-mobile.png` |
-| 02 The Kowloon Edge | `02-desktop.png` | `02-mobile.png` |
-| 03 Across the Water | `03-desktop.png` | `03-mobile.png` |
-| 04 Red Sails | `04-desktop.png` | `04-mobile.png` |
-| 05 City of Light | `05-desktop.png` | `05-mobile.png` |
-| 06 Afterglow | `06-desktop.png` | `06-mobile.png` |
+The 14 hold pictures (hero and chapters 01–06, desktop and phone) were
+removed (user request, 2026-10-06). They were taken 2026-10-03. Desktop
+was 1440 × 900 and phone was 390 × 844. The written checks below stay.
 
 What Milestone 2 added, in short: the page shell (nav bar, menu, 香港
 wordmark, "Scroll to cross", vertical Chinese labels, side pager, cursor
@@ -101,8 +92,9 @@ searchlights and fireworks hold one pose.
 ### 6. Frame 01 approved against the storyboard — pass
 
 Every layer was reviewed with you as it was built (see
-[`../plan/CHANGELOG.md`](../plan/CHANGELOG.md)), and you approved
-`01-desktop.png` and `01-mobile.png` (2026-10-03).
+[`../plan/CHANGELOG.md`](../plan/CHANGELOG.md)), and you approved the
+desktop and phone frames of 01 (2026-10-03). Those pictures were removed
+with the rest on 2026-10-06.
 
 ### 7. Performance budget — laptop pass; phones carried to Milestone 5
 
