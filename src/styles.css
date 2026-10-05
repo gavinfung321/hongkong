@@ -1785,18 +1785,8 @@ html:not(.is-enhanced) .vertical-text {
   pointer-events: none;
 }
 
-/* 03's index panels: numbered, outlined cells holding the two beats and the
-   route, a technique learnt from Kage's chapter grid (no Kage code, type or
-   copy; user request, 2026-10-04). Without the 3D story they stack as plain
-   content. */
-.chapter__panels {
-  display: grid;
-  gap: 0.75rem;
-  margin-top: 1.25rem;
-}
-
-/* One line under 03's title, setting up the panels (user choice,
-   2026-10-04); no wider than the title, so it ends left of the mast. */
+/* One line under 03's title (user choice, 2026-10-04); no wider than the
+   title, so it ends left of the mast. */
 .chapter__standfirst {
   max-width: 30ch;
   margin: 0.5rem 0 0;
@@ -1821,14 +1811,32 @@ html:not(.is-enhanced) .vertical-text {
   transition: opacity 150ms linear;
 }
 
-/* The same date as the route panel's meta. Phones have no route panel, so
-   it sits under the standfirst (user request, 2026-10-04). */
-.chapter__since {
+/* Desktop second beat (user choice, 2026-10-05). Phones keep the single
+   standfirst. */
+.chapter__meaning {
+  max-width: 38ch;
+  margin: 0.85rem 0 0;
+  color: var(--color-soft);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.is-enhanced .chapter__meaning {
+  opacity: var(--enter, 1);
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__meaning {
   display: none;
 }
 
-[data-breakpoint="mobile"].is-enhanced .chapter__since {
-  display: block;
+.is-stepped .chapter__meaning {
+  transition: opacity 150ms linear;
+}
+
+/* The year stays under the standfirst on phones. On desktop it captions
+   the countdown, and this line is kept for reading order only (user
+   choice, 2026-10-05). */
+.chapter__since {
   margin: 0.75rem 0 0;
   color: var(--color-muted);
   font-size: 0.75rem;
@@ -1836,6 +1844,9 @@ html:not(.is-enhanced) .vertical-text {
   letter-spacing: 0.16em;
   line-height: 1.2;
   text-transform: uppercase;
+}
+
+.is-enhanced .chapter__since {
   opacity: var(--enter, 1);
 }
 
@@ -1843,37 +1854,18 @@ html:not(.is-enhanced) .vertical-text {
   transition: opacity 150ms linear;
 }
 
-.chapter__panel {
-  position: relative;
-  padding: 1.125rem 1.375rem 1.25rem;
-  border: 1px solid rgb(243 233 210 / 0.16);
+[data-breakpoint="desktop"].is-enhanced .chapter__since {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-.chapter__panel-index,
-.chapter__panel-meta {
-  margin: 0;
-  color: var(--color-muted);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-.chapter__panel-meta {
-  margin-top: 1rem;
-}
-
-.chapter__panel-title {
-  margin: 0.75rem 0 0;
-  color: var(--color-ivory);
-  font-family: var(--font-display-en);
-  font-size: 1.5rem;
-  font-weight: 600;
-  line-height: 1.15;
-}
-
-.chapter__panel-title span,
 .chapter__route-ends span span {
   margin-left: 0.4em;
   color: var(--color-muted);
@@ -1883,20 +1875,14 @@ html:not(.is-enhanced) .vertical-text {
   letter-spacing: 0.2em;
 }
 
-.chapter__panel-body {
-  margin: 0.625rem 0 0;
-  color: var(--color-soft);
-  font-size: 0.875rem;
-  line-height: 1.6;
-}
-
-/* The route: a hairline from Tsim Sha Tsui to Central, lit behind a
-   ferry-green dot that crosses with the scroll (copyLayer.js sets --route;
-   green, user request, 2026-10-04). */
+/* The route sits on the departure board: a hairline from Tsim Sha Tsui to
+   Central, lit behind a ferry-green dot that crosses with the scroll
+   (copyLayer.js sets --route on the board; green, user request, 2026-10-04).
+   The minutes above it are the same crossing (user choice, 2026-10-05). */
 .chapter__route {
   position: relative;
   height: 2px;
-  margin-top: 1.5rem;
+  margin-top: 0.875rem;
   background:
     radial-gradient(circle at 30% 50%, rgb(243 233 210 / 0.5) 0 2px, transparent 2.5px),
     radial-gradient(circle at 55% 50%, rgb(243 233 210 / 0.5) 0 2px, transparent 2.5px),
@@ -1959,194 +1945,6 @@ html:not(.is-enhanced) .vertical-text {
   text-shadow: 0 0 12px rgb(109 214 151 / calc(var(--route, 0) * 0.35));
 }
 
-/* On desktop the panels form one row along the foot of the screen, cells
-   sharing their hairlines. All cells fade in together with the title
-   (copyLayer.js sets --enter; user request, 2026-10-04). */
-[data-breakpoint="desktop"].is-enhanced .chapter__panels {
-  position: fixed;
-  left: max(var(--page-inset), env(safe-area-inset-left), calc(var(--copy-left) * 1vw));
-  right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 64px);
-  bottom: max(5lvh, calc(env(safe-area-inset-bottom) + 16px));
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0;
-  margin: 0;
-}
-
-.is-enhanced .chapter__panel {
-  border: 0;
-  border-bottom: 1px solid rgb(243 233 210 / calc(0.18 * var(--enter, 1)));
-  /* A matte near-black on desktop, no glass (user request, 2026-10-04). */
-  background-color: rgb(6 5 16 / calc(0.9 * var(--enter, 1)));
-  background-image: linear-gradient(90deg, rgb(47 122 76 / calc(0.32 * var(--panel-tint))), transparent 50%);
-  transform: rotateX(-80deg);
-  transform-origin: 50% 0;
-  transition: --panel-tint 550ms ease, transform 900ms cubic-bezier(0.3, 1.45, 0.5, 1);
-}
-
-/* The route panel slowly acquires ferry green as the journey advances. The
-   same --route value also drives the board's countdown in copyLayer.js. */
-.is-enhanced .chapter__panel--route {
-  background-image: linear-gradient(
-    90deg,
-    rgb(47 122 76 / calc(0.08 + var(--route, 0) * 0.2 + var(--panel-tint) * 0.2)),
-    transparent 72%
-  );
-}
-
-/* Each panel flips over on its top edge as it comes, settling with a small
-   overshoot, like the ferry's reversible seat backs; all three together
-   (copyLayer.js sets data-flipped; user choice, 2026-10-04). */
-.is-enhanced .chapter__panels {
-  perspective: 1600px;
-}
-
-.is-enhanced .chapter__panel[data-flipped] {
-  transform: none;
-}
-
-/* Hover, after Kage's lesson rows (technique only): the panel stays put; a
-   ferry-green tint fades in from its left edge, the words slide right and
-   the index turns green (user requests, 2026-10-04). */
-@property --panel-tint {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 0;
-}
-
-.is-enhanced .chapter__panel > * {
-  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1), color 400ms ease;
-}
-
-@media (hover: hover) {
-  .is-enhanced .chapter__panel:hover {
-    --panel-tint: 1;
-  }
-
-  .is-enhanced .chapter__panel:hover > * {
-    transform: translateX(6px);
-  }
-
-  .is-enhanced .chapter__panel:hover .chapter__panel-index {
-    color: var(--color-ferry-light);
-  }
-}
-
-.is-enhanced .chapter__panel::before,
-.is-enhanced .chapter__panel::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: rgb(243 233 210 / 0.18);
-  pointer-events: none;
-}
-
-.is-enhanced .chapter__panel::before {
-  right: 0;
-  height: 1px;
-  opacity: var(--enter, 1);
-}
-
-.is-enhanced .chapter__panel::after {
-  bottom: 0;
-  width: 1px;
-  opacity: var(--enter, 1);
-}
-
-[data-breakpoint="desktop"].is-enhanced .chapter__panel:last-child,
-[data-breakpoint="mobile"].is-enhanced .chapter__panel {
-  border-right: 1px solid rgb(243 233 210 / calc(0.18 * var(--enter, 1)));
-}
-
-.is-enhanced .chapter__panel > * {
-  opacity: var(--enter, 1);
-}
-
-.is-enhanced .chapter__panel[data-enter-hidden] {
-  visibility: hidden;
-}
-
-.is-stepped .chapter__panel,
-.is-stepped .chapter__panel > * {
-  transition: opacity 150ms linear, background-color 150ms linear;
-}
-
-.is-stepped .chapter__panel {
-  transform: none;
-}
-
-.is-stepped .chapter__panel:hover > * {
-  transform: none;
-}
-
-/* The index is a desktop row. On phones it would read as a numbered flow
-   with only its last step showing (user request, 2026-10-04). */
-[data-breakpoint="mobile"].is-enhanced .chapter__panels {
-  display: none;
-}
-
-/* The index shares the title's line, to save a row per panel. */
-[data-breakpoint="mobile"].is-enhanced .chapter__panel {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 0.5rem;
-  align-items: baseline;
-}
-
-[data-breakpoint="mobile"].is-enhanced .chapter__panel > * {
-  grid-column: 1 / -1;
-}
-
-[data-breakpoint="mobile"].is-enhanced .chapter__panel > .chapter__panel-index,
-[data-breakpoint="mobile"].is-enhanced .chapter__panel > .chapter__panel-title {
-  grid-column: auto;
-  margin-top: 0;
-}
-
-[data-breakpoint="mobile"].is-enhanced .chapter__panel-index::after {
-  content: " ·";
-}
-
-[data-breakpoint="mobile"].is-enhanced .chapter__panel {
-  padding: 1.125rem 1.125rem 1.25rem;
-  border-bottom: 0;
-  background-color: rgb(6 5 16 / calc(0.55 * var(--enter, 1)));
-  text-shadow: 0 1px 2px rgb(4 4 14 / 0.9), 0 0 12px rgb(4 4 14 / 0.6);
-}
-
-[data-breakpoint="mobile"].is-enhanced .chapter__panel:last-child {
-  border-bottom: 1px solid rgb(243 233 210 / calc(0.18 * var(--enter, 1)));
-}
-
-[data-breakpoint="mobile"].is-enhanced .chapter__panel-title {
-  margin-top: 0.5rem;
-  font-size: 1.25rem;
-}
-
-[data-breakpoint="mobile"].is-enhanced .chapter__panel-body {
-  font-size: 0.8125rem;
-  line-height: 1.55;
-  text-wrap: pretty;
-}
-
-@media (orientation: landscape) and (max-height: 500px) {
-  .is-enhanced .chapter__panel {
-    padding: 0.625rem 0.875rem 0.75rem;
-  }
-
-  .is-enhanced .chapter__panel-title {
-    margin-top: 0.375rem;
-    font-size: 1.125rem;
-  }
-
-  .is-enhanced .chapter__panel-body {
-    font-size: 0.75rem;
-  }
-
-  .is-enhanced .chapter__panel-meta {
-    display: none;
-  }
-}
 
 /* 03's departure board: split-flap tiles with a hairline across the
    middle, the destination in cream and the countdown in amber
@@ -2317,6 +2115,119 @@ html:not(.is-enhanced) .vertical-text {
   font-size: 0.8125rem;
 }
 
+/* Desktop: the countdown sits low on the same side as the words, clear of
+   the ticket. Due tiles are about twice the sky-board size (user choice,
+   2026-10-05). The phone board stays in the column. */
+[data-breakpoint="desktop"].is-enhanced {
+  --scene03-ticket: min(22.5vw, 24rem);
+  --scene03-ticket-right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 64px + 2rem);
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__board {
+  top: auto;
+  right: auto;
+  bottom: max(6lvh, calc(env(safe-area-inset-bottom) + 20px));
+  left: max(var(--page-inset), env(safe-area-inset-left), calc(var(--copy-left) * 1vw));
+  padding: 1.15rem 1.35rem 1.2rem;
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__board-head {
+  margin-bottom: 1rem;
+  font-size: 0.75rem;
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__board-head::before {
+  width: 8px;
+  height: 8px;
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__board-row {
+  grid-template-columns: 6.5rem auto;
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__board-row + .chapter__board-row {
+  margin-top: 0.6rem;
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__board-label {
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__board-tiles {
+  gap: 3px;
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__board-tile {
+  width: 1.65rem;
+  height: 2.35rem;
+  font-size: 1.25rem;
+}
+
+[data-breakpoint="desktop"].is-enhanced [data-board="due"] .chapter__board-tile {
+  width: 2.25rem;
+  height: 3.25rem;
+  font-size: 1.75rem;
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__route {
+  height: 3px;
+  margin-top: 1.25rem;
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__route-dot {
+  width: 18px;
+  height: 12px;
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__route-ends {
+  margin-top: 0.85rem;
+  font-size: 0.875rem;
+}
+
+.chapter__board-since {
+  margin: 0.85rem 0 0;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+[data-breakpoint="desktop"].is-enhanced .chapter__board-since {
+  font-size: 0.8125rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced .chapter__board-since {
+  display: none;
+}
+
+/* A short wide window: the countdown and the ticket share the bottom and
+   shrink before they meet the title (user choice, 2026-10-05). */
+@media (max-height: 820px) {
+  [data-breakpoint="desktop"].is-enhanced {
+    --scene03-ticket: min(18vw, 18rem);
+  }
+
+  [data-breakpoint="desktop"].is-enhanced .chapter__board {
+    bottom: max(4lvh, calc(env(safe-area-inset-bottom) + 12px));
+    padding: 0.85rem 1rem 0.9rem;
+  }
+
+  [data-breakpoint="desktop"].is-enhanced .chapter__board-tile {
+    width: 1.35rem;
+    height: 1.9rem;
+    font-size: 1rem;
+  }
+
+  [data-breakpoint="desktop"].is-enhanced [data-board="due"] .chapter__board-tile {
+    width: 1.7rem;
+    height: 2.4rem;
+    font-size: 1.3rem;
+  }
+}
+
 @media (orientation: landscape) and (max-height: 500px) {
   .is-enhanced .chapter__board,
   [data-breakpoint="mobile"].is-enhanced .chapter__board {
@@ -2333,8 +2244,7 @@ html:not(.is-enhanced) .vertical-text {
 }
 
 /* 03's ticket: our own artwork as a stiff card (ticketCard.js), hung over
-   the open water at the lower right, just above the panels (copyLayer.js
-   measures --panels-height); it flips in on its top edge with the panels.
+   the open water at the lower right. It flips in on its top edge.
    The stub is a second layer of the same artwork over the right 25.6%, so
    it can lift at the perforation. Under a mouse the card tilts toward the
    pointer, a band of light follows it and the stub lifts (a tap does the
@@ -2367,7 +2277,7 @@ html:not(.is-enhanced) .vertical-text {
 [data-breakpoint].is-enhanced .chapter__ticket {
   position: fixed;
   right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 64px + 2rem);
-  bottom: calc(max(5lvh, calc(env(safe-area-inset-bottom) + 16px)) + var(--panels-height, 10rem) + 2.25rem);
+  bottom: max(5lvh, calc(env(safe-area-inset-bottom) + 16px));
   width: min(15vw, 16.5rem);
   max-width: none;
   margin: 0;
@@ -2436,6 +2346,11 @@ html:not(.is-enhanced) .vertical-text {
   right: calc(max(var(--page-inset), env(safe-area-inset-right)) + 40px);
   bottom: max(5lvh, calc(env(safe-area-inset-bottom) + 16px));
   width: 46vw;
+}
+
+/* Desktop ticket, quieter than the countdown (user choice, 2026-10-05). */
+[data-breakpoint="desktop"].is-enhanced .chapter__ticket {
+  width: var(--scene03-ticket);
 }
 
 @media (orientation: landscape) and (max-height: 500px) {

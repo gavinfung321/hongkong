@@ -2,8 +2,9 @@
 // flip through a few letters before landing, left to right, as the board
 // comes in. The "due" row follows the route thresholds in copyLayer.js, so
 // the marker and countdown always describe the same point in the crossing.
-// It flips only the tiles that change. Leaving the chapter blanks the tiles
-// so they flip in again on return. Stepped mode sets the words directly.
+// Scrolling back steps the minutes back with the dot. It flips only the
+// tiles that change. Leaving the chapter blanks the tiles so they flip in
+// again on return. Stepped mode sets the words directly.
 // English only in the tiles; the Chinese is in the labels and the route
 // panel's "Central 中環" (user choice, 2026-10-04).
 import { SCENE_03_BOARD } from '../story/scene03/config.js';
@@ -96,12 +97,11 @@ export function createDepartureBoard(element) {
       to.forEach(({ tile, char }, k) => aim(tile, char, 4 + k + Math.floor(Math.random() * 3), instant));
     }
     const step = Math.min(DUE.length - 1, Math.max(0, routeStep));
-    // The physical-style board counts forward while Scene 03 remains active;
-    // reverse scrolling moves the route dot back without making the board
-    // count backwards. Leaving the scene still blanks and resets it.
-    if (!arriving && step <= status) return;
+    // Forward and back follow the route dot. Leaving the scene still blanks it.
+    if (!arriving && step === status) return;
     const text = DUE[step];
-    due.forEach((tile, k) => aim(tile, text[k], (arriving ? 6 + k : 3) + Math.floor(Math.random() * 3), instant));
+    const lead = arriving ? 6 : 3;
+    due.forEach((tile, k) => aim(tile, text[k], lead + k + Math.floor(Math.random() * 3), instant));
     status = step;
   }
 

@@ -25,6 +25,7 @@ file (user choice, 2026-10-02).
 | [`atmospheric-depth-polish.md`](atmospheric-depth-polish.md) | Step-by-step vignette, grain, depth haze, local light motion and selective foreground experiments | Post-Milestone 2 polish |
 | [`narrative-spine.md`](narrative-spine.md) | Hybrid 3D and editorial-story direction, six-chapter arc and scene 02 prototype gate | Post-Milestone 2 narrative test |
 | [`scene-03-implementation-plan.md`](scene-03-implementation-plan.md) | Scene 03's ten-step progressive-story implementation checklist and approval gate | Controlled narrative rollout |
+| [`scene-03-crossing-plan.md`](scene-03-crossing-plan.md) | Scene 03 desktop: two sentences, a lower larger countdown, a larger ticket. Phone unchanged | Built 2026-10-05, awaiting a look |
 | [`scene-04-implementation-plan.md`](scene-04-implementation-plan.md) | Scene 04's ten-step then-and-now implementation checklist and approval gate | Controlled narrative rollout |
 | [`scene-05-implementation-plan.md`](scene-05-implementation-plan.md) | Scene 05's ten-step progressive-arrival implementation checklist and approval gate | Controlled narrative rollout |
 | [`scene-06-implementation-plan.md`](scene-06-implementation-plan.md) | Scene 06's ten-step afterimage implementation checklist and approval gate | Controlled narrative rollout |

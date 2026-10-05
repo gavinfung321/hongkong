@@ -7,7 +7,7 @@ export const SCENE_03_CHAPTER = {
     desktop: { position: [77.6, 2.2, -323], target: [40.2, 50.7, -718.3], fov: 56.9 },
     mobile: { position: [-31.2, 1.8, -218.1], target: [41.8, 112.7, -595.4], fov: 80.1, via: [[60, 3, -300]] },
   },
-  // Label and title at top-left; panels form a desktop row at the foot.
+  // Label and title at top-left. The route line lives on the departure board.
   copy: {
     desktop: { left: 5, top: 11, right: 42, bottom: 40 },
     mobile: { left: 8, top: 9, right: 92, bottom: 37 },
@@ -40,21 +40,20 @@ export const SCENE_03_CHAPTER = {
   },
 };
 
-// Scroll-linked panel, route, board and ticket entrance timing.
+// Scroll-linked board, ticket and route timing.
 export const SCENE_03_CROSSING = {
   // `opening` is chapter progress on approach; the remaining reveal ranges
-  // are shares of Scene 03's dwell and are consumed in order.
+  // are shares of Scene 03's dwell.
   reveal: {
     opening: [0.38, 0.5],
-    board: [0.08, 0.2],
-    humanCrossing: [0.24, 0.4],
-    dailyCrossing: [0.44, 0.56],
-    routePanel: [0.6, 0.7],
+    board: [0.08, 0.18],
+    ticket: [0.22, 0.36],
   },
-  // The dot waits until the route panel has fully arrived.
-  route: [0.7, 0.96],
+  // The dot and the minutes share most of the hold, in even stretches.
+  // Each quarter is one reading: 3 MIN, 2 MIN, 1 MIN, ARRIVING.
+  route: [0.1, 0.96],
   dark: 0.7,
-  due: [0.3, 0.55, 0.8],
+  due: [0.25, 0.5, 0.75],
   flip: 0.2,
 };
 

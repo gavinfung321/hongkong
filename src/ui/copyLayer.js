@@ -9,19 +9,15 @@
 // it is scroll-tied, so it reverses on the way back. The 3D story layers
 // (createStoryLayers.js) take their levels from here.
 //
-// 03 (`data-story="crossing"`) is an index of panels instead: the harbour
-// darkens further (SCENE_03_CROSSING.dark), then the opening, board, ticket
-// with the first panel, daily-crossing panel and route panel arrive in order.
-// The route dot starts once its panel is available. Phones
-// leave the index off and keep the full departure card under the
-// standfirst. The ticket sits low in the open water (user request,
-// 2026-10-04).
-// The sea haze drifts at the ferry's waterline
-// with the panels (`--wind`). The panels flip over on their top edge as
-// they come, like the seat backs, and the ticket (ticketCard.js) flips in
-// with them while the departure board (departureBoard.js) flips its
-// letters in; the board then counts down with the route (user choices,
-// 2026-10-04).
+// 03 (`data-story="crossing"`): the harbour darkens further
+// (SCENE_03_CROSSING.dark), then the opening, the departure board and the
+// ticket arrive. The route line lives on the board. Its dot and the due
+// minutes share most of the hold, and both follow the scroll in either
+// direction (user choice, 2026-10-05). Phones keep the same board under
+// the standfirst. The ticket sits low in the open water (user request,
+// 2026-10-04). The sea haze drifts at the ferry's waterline with the
+// ticket (`--wind`). The ticket (ticketCard.js) flips in on its top edge
+// while the departure board (departureBoard.js) flips its letters in.
 //
 // 04 (`data-story="statement"`): the label and title establish Red Sails,
 // followed by the historical card, contemporary card, quote and statement
@@ -54,22 +50,9 @@ const LABEL = SCENE_02_REVEAL.intro;
 export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
   const copies = sections.map((section) => section.querySelector('.chapter__copy'));
   const opacities = copies.map(() => -1);
-  const measures = [];
   const stories = copies.map((copy) => {
     if (!copy.classList.contains('chapter__copy--story')) return null;
     const board = copy.querySelector('.chapter__board');
-    // The ticket hangs just above the panels row on desktop (--panels-height).
-    const panels = copy.querySelector('.chapter__panels');
-    if (panels) {
-      const measure = () => {
-        copy.style.setProperty('--panels-height', `${panels.offsetHeight}px`);
-      };
-      const observer = new ResizeObserver(measure);
-      observer.observe(panels);
-      observer.observe(copy);
-      window.addEventListener('resize', measure);
-      measures.push(measure);
-    }
     return {
       board,
       flaps: board && createDepartureBoard(board),
@@ -86,10 +69,9 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       label: copy.querySelector('.chapter__label'),
       title: copy.querySelector('.chapter__title'),
       standfirst: copy.querySelector('.chapter__standfirst'),
+      meaning: copy.querySelector('.chapter__meaning'),
       since: copy.querySelector('.chapter__since'),
       beats: [...copy.querySelectorAll('.chapter__beat')],
-      panels: [...copy.querySelectorAll('.chapter__panel')],
-      route: copy.querySelector('.chapter__route'),
       memory: copy.querySelector('.chapter__memory'),
       facts: copy.querySelector('.chapter__facts'),
       factItems: [...copy.querySelectorAll('.chapter__facts > div')],
@@ -107,8 +89,6 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       copy.style.setProperty('--copy-bottom', bottom);
     });
     shown.clear();
-    // After the breakpoint attribute is set, so the phone card is in the column.
-    measures.forEach((measure) => measure());
   }
 
   // Chapter 01's copy belongs to the hero: showing on load, leaving with the
@@ -156,7 +136,7 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
     const base = stepped
       ? (i === index ? 1 : 0)
       : smoothstep(i + DARK.approach, key - copyFull, rendered) * (1 - smoothstep(DARK.lift[0], DARK.lift[1], rendered - key));
-    for (const element of [story.label, story.standfirst, story.since]) setVar(element, '--enter', label);
+    for (const element of [story.label, story.standfirst, story.meaning, story.since]) setVar(element, '--enter', label);
     setVar(story.title, '--enter', title);
     if (!story.lights && !story.afterimage) {
       for (const beat of story.beats) {
@@ -167,28 +147,21 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
     const sink = stepped ? 1 : 1 - smoothstep(DARK.sink[0], DARK.sink[1], p - key);
     if (story.crossing) {
       const board = level(SCENE_03_CROSSING.reveal.board);
-      const human = level(SCENE_03_CROSSING.reveal.humanCrossing);
-      const daily = level(SCENE_03_CROSSING.reveal.dailyCrossing);
-      const routePanel = level(SCENE_03_CROSSING.reveal.routePanel);
-      const enter = [human, daily, routePanel];
-      story.panels.forEach((panel, k) => {
-        setVar(panel, '--enter', enter[k]);
-        panel.toggleAttribute('data-enter-hidden', !enter[k]);
-        if (enter[k] >= SCENE_03_CROSSING.flip) panel.toggleAttribute('data-flipped', true);
-        else if (enter[k] === 0) panel.toggleAttribute('data-flipped', false);
-      });
-      const route = level(SCENE_03_CROSSING.route);
-      setVar(story.route, '--route', route);
-      setVar(story.route?.closest('.chapter__panel'), '--route', route);
+      const ticket = level(SCENE_03_CROSSING.reveal.ticket);
+      const [routeFrom, routeTo] = SCENE_03_CROSSING.route;
+      const route = stepped
+        ? (dwell >= (routeFrom + routeTo) / 2 ? 1 : 0)
+        : Math.min(1, Math.max(0, (dwell - routeFrom) / (routeTo - routeFrom)));
       setVar(story.board, '--enter', board);
+      setVar(story.board, '--route', route);
       story.flaps?.update(board > 0 && base > 0, SCENE_03_CROSSING.due.filter((share) => route >= share).length, stepped);
       if (story.ticket) {
-        setVar(story.ticket, '--enter', human);
-        story.ticket.toggleAttribute('data-enter-hidden', human === 0);
-        if (human >= SCENE_03_CROSSING.flip) story.ticket.toggleAttribute('data-flipped', true);
-        else if (human === 0) story.ticket.toggleAttribute('data-flipped', false);
+        setVar(story.ticket, '--enter', ticket);
+        story.ticket.toggleAttribute('data-enter-hidden', ticket === 0);
+        if (ticket >= SCENE_03_CROSSING.flip) story.ticket.toggleAttribute('data-flipped', true);
+        else if (ticket === 0) story.ticket.toggleAttribute('data-flipped', false);
       }
-      return { mode: base * SCENE_03_CROSSING.dark, yield: base * SCENE_03_CROSSING.dark, wind: human * base };
+      return { mode: base * SCENE_03_CROSSING.dark, yield: base * SCENE_03_CROSSING.dark, wind: ticket * base };
     }
     if (story.lights) {
       const sweep = level(SCENE_05_ARRIVAL.reveal.sweep);

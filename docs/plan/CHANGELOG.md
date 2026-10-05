@@ -6,6 +6,43 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Scene 03 desktop ticket eased** (user choice, 2026-10-05). The ticket
+  was the loudest object along the bottom. It is now about three quarters
+  of that width, so the countdown stays the thing you watch. The phone
+  ticket is unchanged. Files: `src/styles.css`; plan:
+  `scene-03-crossing-plan.md`.
+- **Scene 03 countdown lines up with the words** (user request, 2026-10-05).
+  On desktop the board moves to the lower left, under the sentences, and
+  stays clear of the ticket. The phone is unchanged. Files: `src/styles.css`;
+  plan: `scene-03-crossing-plan.md`.
+- **Scene 03 desktop presence built** (user choice, 2026-10-05). W2, C2,
+  T1. Desktop gains the commute sentence. “Since 1888” captions the
+  countdown instead of sitting alone. The countdown sits low, beside a
+  ticket about twice as wide, and both shrink on a short window. The
+  phone column is unchanged. Files: `index.html`, `src/styles.css`,
+  `src/ui/copyLayer.js`; plan: `scene-03-crossing-plan.md`,
+  `narrative-spine.md`, `README.md`.
+- **Scene 03 desktop presence** (user request, 2026-10-05). The phone is
+  fine. A wide window looks empty: one line, “Crossing since 1888” on its
+  own, a small countdown in the sky, and a small ticket. Options are
+  written for a second beat, where the year goes, a lower larger
+  countdown, and a larger desktop ticket. No page change. Files:
+  `scene-03-crossing-plan.md`, `narrative-spine.md`, `README.md`.
+- **Scene 03 is one crossing** (user choice, 2026-10-05). Option A. The
+  three cards are gone. The route line and the place names sit on the
+  departure board with the minutes, on desktop and on a phone. The dot
+  and the countdown share most of the hold in four even stretches, and
+  the board counts back when the scroll does. “Crossing since 1888” sits
+  under the standfirst. The ferry and the ticket picture are unchanged.
+  Files: `index.html`, `src/story/scene03/config.js`, `src/ui/copyLayer.js`,
+  `src/ui/departureBoard.js`, `src/styles.css`; plan:
+  `scene-03-crossing-plan.md`, `narrative-spine.md`, `README.md`,
+  `SCENE-MAP.md`.
+- **Scene 03 crossing plan** (user request, 2026-10-05). The countdown and
+  the route only move together in the last quarter of the hold, so 3 MIN
+  jumps to 1 MIN, and the three cards read as separate topics. 01 and 02
+  do not tell the ferry story. Options are written; the page is unchanged.
+  Files: `scene-03-crossing-plan.md`, `narrative-spine.md`, `README.md`.
 - **Hero 香港 shade approved** (user approval, 2026-10-05). The warm feet
   are closed. The top stays white, the lower strokes stay a dark cream, and
   the placement is unchanged. No code changed in this step. Files:

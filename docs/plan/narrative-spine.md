@@ -623,6 +623,14 @@ the production build passed once. Final user approval remains.
 **Decision (user approval, 2026-10-05):** the Scene 03 pacing and mobile
 microtype improvements are approved. Scene 03 is complete.
 
+**Crossing reopen (user choice, 2026-10-05): option A.** The three cards
+are gone. The route line and the place names sit on the departure board,
+with the minutes, on desktop and on a phone. “Crossing since 1888” sits
+under the standfirst. The dot and the countdown share most of the 60svh
+hold in four even stretches, and the board counts back with the scroll.
+The ferry, the cameras and the ticket picture are unchanged. Detail is in
+[`scene-03-crossing-plan.md`](scene-03-crossing-plan.md). Awaiting a look.
+
 ### Scene 04
 
 **As built (user requests and choices, 2026-10-04): statement header and
@@ -960,5 +968,7 @@ footer is next.
 
 ## Immediate next action
 
-The footer, the accent split and the hero 香港 shade are approved and
-closed (user approval, 2026-10-05). No further wordmark work until asked.
+Scene 03 desktop presence is on the page (user choice, 2026-10-05): two
+sentences, the year on the countdown, a larger countdown low in the water,
+and a larger ticket. The phone is unchanged. Awaiting a look at
+<http://localhost:5173/#chapter-03>.
