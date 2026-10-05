@@ -774,9 +774,10 @@ the untouched 3D: 02 layered fade with a memory print and timeline; 03
 index panels with a route line; 04 statement header with hanging photo
 cards; 05 a title sweep and a small patch of offices lit by the pointer,
 with 3D layers around Two IFC (built, below).
-Chosen for 06 (user choice, 2026-10-04), not yet built: one centred
-sentence whose letters close in from wide spacing, then the sources fade
-in.
+Chosen for 06 (user choice, 2026-10-04), built in steps 1–8 (2026-10-05):
+one sentence whose letters close in from wide spacing, then the resolving
+lines fade in. Both beats are cream and share the title’s left edge
+(user request, 2026-10-05).
 
 ### Scene 05
 
@@ -852,8 +853,8 @@ or 3D layer.
 
 The detailed checklist lives in
 [`scene-05-implementation-plan.md`](scene-05-implementation-plan.md), the
-single source of truth for this pass. Status: **awaiting approval, 9 of 10
-steps complete; callout visual review implemented**.
+single source of truth for this pass. Status: **approved, 10 of 10 steps
+complete; callout visual review implemented**.
 
 **Update 2026-10-05:** steps 1–8 are complete. Scene 05 now owns its unchanged
 chapter values, a 45svh camera hold and named reveal ranges. The label
@@ -909,8 +910,23 @@ left rule and dark wash are removed. The desktop skyline label now sits at
 the copy. Desktop wording remains “Light the skyline” and “Hover me.” The four
 review sizes passed without fallback.
 
-**Next action:** review Scene 05 at <http://localhost:5173/#chapter-05> for
-final approval.
+**Decision (user approval, 2026-10-05): Scene 05 is approved as built.** The
+progressive arrival, persistent callouts and mobile wheel tap are complete.
+The controlled rollout continues with Scene 06.
+
+### Scene 06
+
+Steps 1–8 are built (2026-10-05). The chapter holds for 50svh on the existing
+camera. The label and “Afterglow” arrive first, then the gathering sentence
+closes from wide spacing inside the left column, then the resolving lines fade
+in. Both beats are cream, left-aligned with the title, and the second beat
+uses the shared second-beat size (user request, 2026-10-05). Phones use the shorter tracking range. Reduced motion
+shows the final spacing and steps the resolving lines. The firework loop,
+smoke and footer softening are unchanged. The checklist lives in
+[`scene-06-implementation-plan.md`](scene-06-implementation-plan.md). Status:
+**in progress, 8 of 10 steps complete**.
+
+**Next action:** review Scene 06, then complete steps 9 and 10.
 
 ## Checklist
 
@@ -938,12 +954,13 @@ final approval.
 ### Decision
 
 - [x] Approve and continue, revise once, or remove (approved, 2026-10-04)
-- [ ] If approved, roll out one chapter at a time (03 next: narrative and wording effects only)
+- [ ] If approved, roll out one chapter at a time (06 next: afterimage only)
 - [ ] Use no more than two or three illustrations in total
 - [ ] Update `FINAL-NARRATIVE-COPY.md` only after the direction is approved
 - [ ] Record only kept decisions in `CHANGELOG.md`
 
 ## Immediate next action
 
-Review Scene 05 at <http://localhost:5173/#chapter-05>, then complete its final
-multi-size check before approval.
+Review Scene 06 at <http://localhost:5173/#chapter-06>. Steps 1–8 are built;
+steps 9 and 10 remain. The checklist is in
+[`scene-06-implementation-plan.md`](scene-06-implementation-plan.md).

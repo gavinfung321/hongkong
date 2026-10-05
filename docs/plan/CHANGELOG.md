@@ -6,6 +6,33 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Scene 06 beats share colour and alignment** (user request, 2026-10-05).
+  Both beats are cream and share the title’s left edge. The gathering
+  sentence is no longer centred. The resolving lines return to the shared
+  second-beat size, 0.9375rem on desktop and 0.8125rem on phones. The
+  letter-spacing close and the firework loop are unchanged. Files:
+  `src/styles.css`; plan: `scene-06-implementation-plan.md`,
+  `narrative-spine.md`.
+- **Scene 06 afterimage, steps 1–8** (user request, 2026-10-05). Scene 06 now
+  holds for 50svh. The label and “Afterglow” arrive on approach, the gathering
+  sentence closes from wide spacing to its normal measure, and the resolving
+  lines fade in afterward. Phones use a shorter tracking range. Reduced motion
+  shows the final spacing and steps the resolving lines. Firework bursts,
+  smoke, cameras and the footer’s smoke softening are unchanged. The beats
+  stay clear of the bursts at the three larger review sizes; on a 320×720
+  phone the resolving lines still meet the lower coral burst. Steps 9 and
+  10 remain for review. Files: `src/story/scene06/config.js`,
+  `src/data/chapters.js`, `index.html`, `src/ui/copyLayer.js`, `src/styles.css`,
+  `docs/SCENE-MAP.md`; plan: `scene-06-implementation-plan.md`,
+  `narrative-spine.md`.
+- **Scene 05 approved and Scene 06 plan opened** (user approval, 2026-10-05).
+  Scene 05's arrival, callouts and mobile wheel tap are approved as built.
+  Added a ten-step checklist for Scene 06: a short camera-held reading, the
+  approved afterimage in two beats, a gathering sentence, then the resolving
+  line, with mobile, reduced-motion, review and approval gates. Fireworks,
+  smoke, camera and burst placement stay frozen. No Scene 06 application code
+  changed. Files: `scene-05-implementation-plan.md`,
+  `scene-06-implementation-plan.md`, `README.md`, `narrative-spine.md`.
 - **Scene 05 callout visual refinement** (user request, 2026-10-05). Removed
   the amber left rule and dark wash. Lowered the desktop skyline label below
   the corner branch, moved the mobile skyline arrow to Two IFC’s left edge,

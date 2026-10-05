@@ -1,7 +1,6 @@
 # Scene 05 — Progressive Arrival Implementation Plan
 
-**Status:** awaiting approval, 9 of 10 steps complete; callout visual review
-implemented
+**Status:** approved, 10 of 10 steps complete; callout visual review implemented
 **Created:** user request, 2026-10-05
 **Review:** <http://localhost:5173/#chapter-05>
 
@@ -412,13 +411,17 @@ clear at all review sizes.
 
 ### 10 — Approval gate
 
-- [ ] Present Scene 05 at <http://localhost:5173/#chapter-05>.
-- [ ] Obtain explicit user approval.
-- [ ] Record the decision in `narrative-spine.md` and `CHANGELOG.md`.
-- [ ] Do not plan or change Scene 06 before approval.
+- [x] Present Scene 05 at <http://localhost:5173/#chapter-05>.
+- [x] Obtain explicit user approval.
+- [x] Record the decision in `narrative-spine.md` and `CHANGELOG.md`.
+- [x] Do not plan or change Scene 06 before approval.
 
 **Done when:** the user approves Scene 05 and the controlled rollout can move
 to Scene 06.
+
+**Decision (user approval, 2026-10-05): Scene 05 is approved as built.** The
+arrival, callouts and mobile wheel tap are complete. Scene 06 may now be
+planned.
 
 ## Verification discipline
 
@@ -520,5 +523,5 @@ without fallback.
 
 ## Next action
 
-Present Scene 05 at <http://localhost:5173/#chapter-05> for the step 10
-approval gate.
+Scene 05 is approved. Continue with
+[`scene-06-implementation-plan.md`](scene-06-implementation-plan.md).

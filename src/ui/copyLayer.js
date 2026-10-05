@@ -31,11 +31,16 @@
 // 05 (`data-story="lights"`): the label and swept title establish Central,
 // then the IFC sentence and corner branch arrive before `touch` enables the
 // office-window light (cityTouch.js). The city remains undarkened.
+//
+// 06 (`data-story="afterimage"`): the label and title establish the ending,
+// then one sentence gathers from wide spacing and the resolving lines fade
+// in. The firework loop stays on its own clock. The harbour remains undarkened.
 import { smoothstep } from '../scroll/cameraRig.js';
 import { SCENE_02_REVEAL, SCENE_02_STEAM } from '../story/scene02/config.js';
 import { SCENE_03_CROSSING } from '../story/scene03/config.js';
 import { SCENE_04_STORY } from '../story/scene04/config.js';
 import { SCENE_05_ARRIVAL } from '../story/scene05/config.js';
+import { SCENE_06_AFTERIMAGE } from '../story/scene06/config.js';
 import { createDepartureBoard } from './departureBoard.js';
 import { createCityLights } from './cityLights.js';
 const RISE = 48; // px travelled while fading: in from below, out through the top
@@ -71,6 +76,7 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       ticket: copy.querySelector('.chapter__ticket'),
       crossing: copy.dataset.story === 'crossing',
       lights: copy.dataset.story === 'lights' ? createCityLights(copy) : null,
+      afterimage: copy.dataset.story === 'afterimage',
       lightHints: [...(copy.closest('.chapter')?.querySelectorAll('[data-light-hint]') ?? [])],
       statement: copy.querySelector('.chapter__statement'),
       statementIntro: copy.querySelector('.chapter__statement-intro'),
@@ -99,6 +105,9 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       copy.style.setProperty('--copy-top', top);
       copy.style.setProperty('--copy-right', right);
       copy.style.setProperty('--copy-bottom', bottom);
+      if (stories[i]?.afterimage) {
+        setVar(stories[i].beats[0], '--gather-wide', SCENE_06_AFTERIMAGE.tracking[breakpoint]);
+      }
     });
     shown.clear();
     // After the breakpoint attribute is set, so the phone card is in the column.
@@ -139,17 +148,20 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
         ? SCENE_04_STORY.reveal.opening
         : story.lights
           ? SCENE_05_ARRIVAL.reveal.label
-          : LABEL;
+          : story.afterimage
+            ? SCENE_06_AFTERIMAGE.reveal.label
+            : LABEL;
     const label = stepped ? 1 : smoothstep(i + opening[0], i + opening[1], p);
-    const title = story.lights && !stepped
-      ? smoothstep(i + SCENE_05_ARRIVAL.reveal.title[0], i + SCENE_05_ARRIVAL.reveal.title[1], p)
+    const titleRange = story.afterimage ? SCENE_06_AFTERIMAGE.reveal.title : SCENE_05_ARRIVAL.reveal.title;
+    const title = (story.lights || story.afterimage) && !stepped
+      ? smoothstep(i + titleRange[0], i + titleRange[1], p)
       : label;
     const base = stepped
       ? (i === index ? 1 : 0)
       : smoothstep(i + DARK.approach, key - copyFull, rendered) * (1 - smoothstep(DARK.lift[0], DARK.lift[1], rendered - key));
     for (const element of [story.label, story.standfirst, story.since]) setVar(element, '--enter', label);
     setVar(story.title, '--enter', title);
-    if (!story.lights) {
+    if (!story.lights && !story.afterimage) {
       for (const beat of story.beats) {
         setVar(beat, '--enter', label);
         beat.toggleAttribute('data-enter-hidden', label === 0);
@@ -200,6 +212,18 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
         touch: stepped ? 0 : interaction * base,
         words: branch * base,
       };
+    }
+    if (story.afterimage) {
+      const sentence = level(SCENE_06_AFTERIMAGE.reveal.sentence) * sink;
+      const gather = stepped ? 1 : level(SCENE_06_AFTERIMAGE.reveal.gather);
+      const resolve = level(SCENE_06_AFTERIMAGE.reveal.resolve) * sink;
+      const [gathering, rest] = story.beats;
+      setVar(gathering, '--enter', sentence);
+      setVar(gathering, '--gather', gather);
+      gathering?.toggleAttribute('data-enter-hidden', sentence === 0);
+      setVar(rest, '--enter', resolve);
+      rest?.toggleAttribute('data-enter-hidden', resolve === 0);
+      return { mode: 0 };
     }
     if (story.statement) {
       setVar(story.statement, '--enter', label);

@@ -1584,6 +1584,54 @@ html:not(.is-enhanced) .vertical-text {
   transition: transform 150ms linear;
 }
 
+/* Scene 06: both beats share the title's left edge and the cream lead colour
+   (user request, 2026-10-05). The gathering sentence still closes its
+   letter-spacing from --gather-wide to the normal measure. The second beat
+   uses the shared second-beat size. */
+.is-enhanced #chapter-06 .chapter__title {
+  margin-top: 0.25rem;
+}
+
+.is-enhanced #chapter-06 .chapter__body {
+  margin-top: 0.4rem;
+}
+
+.is-enhanced .chapter__afterimage,
+.is-enhanced .chapter__afterimage-rest {
+  margin-inline: 0;
+  color: var(--color-cream);
+  text-align: left;
+}
+
+.is-enhanced .chapter__afterimage {
+  max-width: 34ch;
+  font-size: 1.1875rem;
+  line-height: 1.55;
+  letter-spacing: calc(var(--gather-wide, 0.16) * 1em * (1 - var(--gather, 1)));
+}
+
+.is-enhanced .chapter__afterimage + .chapter__afterimage-rest {
+  margin-top: 0.875rem;
+}
+
+.is-enhanced .chapter__afterimage-rest {
+  max-width: 40ch;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+[data-breakpoint="mobile"].is-enhanced #chapter-06 .chapter__title {
+  font-size: 2rem;
+}
+
+[data-breakpoint="mobile"].is-enhanced #chapter-06 .chapter__body {
+  margin-top: 0.3rem;
+}
+
+.is-stepped .chapter__afterimage {
+  letter-spacing: normal;
+}
+
 /* The timeline sits at the foot of the screen under the copy column, clear
    of the 鐘樓 label in the right margin. */
 .is-enhanced .chapter__facts {
@@ -2986,6 +3034,25 @@ html:not(.is-enhanced) .vertical-text {
 
 [data-breakpoint="mobile"].is-enhanced .chapter__beat + .chapter__beat {
   max-width: none;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+/* Scene 06 phones: same cream, same left edge, shared mobile beat sizes. */
+[data-breakpoint="mobile"].is-enhanced #chapter-06 .chapter__afterimage,
+[data-breakpoint="mobile"].is-enhanced #chapter-06 .chapter__afterimage-rest {
+  max-width: none;
+  color: var(--color-cream);
+  text-align: left;
+}
+
+[data-breakpoint="mobile"].is-enhanced #chapter-06 .chapter__afterimage {
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+[data-breakpoint="mobile"].is-enhanced #chapter-06 .chapter__afterimage-rest {
   margin-top: 0.5rem;
   font-size: 0.8125rem;
   line-height: 1.55;
