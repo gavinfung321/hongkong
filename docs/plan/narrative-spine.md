@@ -355,11 +355,15 @@ placement throughout.
   milestones. The archive's spare dust is capped at its authored full level,
   so the late steam emphasis does not thicken the particle field. Both effects
   remain localized around the tower's base (completed 2026-10-05).
-- [ ] **5 — Final visual-balance review:** inspect desktop, compact desktop and
-  mobile after sequencing is complete. Only then consider reducing archive
-  brightness or size; do not add rain, foreground objects or heavier particles.
+- [x] **5 — Final visual-balance review:** checked 1440 × 900 desktop,
+  1178 × 1014 compact desktop and 390 × 844 mobile without screenshots
+  (2026-10-05). The archive ends 11–21% of viewport height above the timeline,
+  keeps the authored 1.5% horizontal gap from the responsive 1915, and remains
+  absent on mobile. Sequencing resolves the earlier competition, so archive
+  brightness and size stay unchanged. No rain, foreground objects or heavier
+  particles were added.
 
-The next implementation item is **5 — Final visual-balance review**.
+The Scene 02 progressive-story follow-up is complete.
 
 ### 3D background
 

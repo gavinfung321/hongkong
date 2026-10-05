@@ -6,6 +6,13 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Scene 02 final balance review** (user request, 2026-10-05). Checked
+  1440 × 900, 1178 × 1014 and 390 × 844 without screenshots. The archive
+  clears the timeline vertically and the responsive 1915 horizontally; it
+  remains absent on mobile. Progressive sequencing resolves the earlier
+  competition, so archive brightness and size remain unchanged and no new
+  effects were added. Files: `docs/plan/narrative-spine.md`,
+  `docs/plan/CHANGELOG.md`.
 - **Scene 02 dust and steam synchronization** (user request, 2026-10-05).
   Warm dust now starts with the opening paragraph, steam follows the
   historical paragraph and archive, and the same tower-base steam gains a
