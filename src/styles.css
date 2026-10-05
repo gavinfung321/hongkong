@@ -2499,7 +2499,6 @@ html:not(.is-enhanced) .vertical-text {
    underneath keeps the layout and the alt text. */
 .is-enhanced .chapter__photos {
   position: relative;
-  opacity: var(--enter, 1);
 }
 
 /* An ink pool keeping the captions clear of the moon and sails. */
@@ -2509,10 +2508,12 @@ html:not(.is-enhanced) .vertical-text {
   inset: -40px -48px -48px;
   z-index: -1;
   background: radial-gradient(closest-side, rgb(10 9 26 / 0.62), rgb(10 9 26 / 0.34) 60%, transparent);
+  opacity: var(--enter, 1);
   pointer-events: none;
 }
 
 .is-enhanced .chapter__photo {
+  opacity: var(--enter, 1);
   transform: translateY(calc((1 - var(--enter, 1)) * -10px)) rotate(-1.5deg);
 }
 
@@ -2522,6 +2523,13 @@ html:not(.is-enhanced) .vertical-text {
 
 .is-enhanced .chapter__quote {
   margin-top: 0.5rem;
+  opacity: var(--enter, 1);
+}
+
+.is-enhanced .chapter__photo[data-enter-hidden],
+.is-enhanced .chapter__quote[data-enter-hidden],
+.is-enhanced .chapter__statement-intro[data-enter-hidden] {
+  visibility: hidden;
 }
 
 /* Desktop: larger cards stepping down the left column, "Now" set to its
@@ -2665,7 +2673,9 @@ html:not(.is-enhanced) .vertical-text {
   }
 }
 
-.is-stepped .chapter__photos,
+.is-stepped .chapter__photos::before,
+.is-stepped .chapter__photo,
+.is-stepped .chapter__quote,
 .is-stepped .chapter__statement::before,
 .is-stepped .chapter__statement-intro {
   transition: opacity 150ms linear;

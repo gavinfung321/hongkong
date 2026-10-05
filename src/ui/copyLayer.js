@@ -23,10 +23,10 @@
 // letters in; the board then counts down with the route (user choices,
 // 2026-10-04).
 //
-// 04 (`data-story="statement"`): the label, statement header and both photo
-// cards come as the camera settles (user request, 2026-10-04), and the
-// harbour darkens to its full veil around an opening on the sails. A sea
-// haze drifts across the water with them (`--wind`); the petals stay.
+// 04 (`data-story="statement"`): the label and title establish Red Sails,
+// followed by the historical card, contemporary card, quote and statement
+// intro. The harbour darkens around an opening on the sails, and the existing
+// sea haze builds with the two cards (`--wind`); the petals stay.
 //
 // 05 (`data-story="lights"`): the label, title and words come as the camera
 // settles, with no darkening; cityLights.js sweeps the title, and `touch`
@@ -34,10 +34,10 @@
 import { smoothstep } from '../scroll/cameraRig.js';
 import { SCENE_02_REVEAL, SCENE_02_STEAM } from '../story/scene02/config.js';
 import { SCENE_03_CROSSING } from '../story/scene03/config.js';
+import { SCENE_04_STORY } from '../story/scene04/config.js';
 import { createDepartureBoard } from './departureBoard.js';
 import { createCityLights } from './cityLights.js';
 const RISE = 48; // px travelled while fading: in from below, out through the top
-const STATEMENT = { full: 0.7 };
 // Memory mode reaches `arrive` from `approach[0]` of the way into the chapter
 // until the camera settles, and the rest with the print. Past the keyframe
 // the print and timeline sink over `sink`, the darkness lifts over `lift`.
@@ -71,8 +71,10 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
       crossing: copy.dataset.story === 'crossing',
       lights: copy.dataset.story === 'lights' ? createCityLights(copy) : null,
       statement: copy.querySelector('.chapter__statement'),
+      statementIntro: copy.querySelector('.chapter__statement-intro'),
       photos: copy.querySelector('.chapter__photos'),
       figures: [...copy.querySelectorAll('.chapter__photo')],
+      quote: copy.querySelector('.chapter__quote'),
       label: copy.querySelector('.chapter__label'),
       title: copy.querySelector('.chapter__title'),
       standfirst: copy.querySelector('.chapter__standfirst'),
@@ -129,7 +131,11 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
     const level = stepped
       ? ([from, to]) => (dwell >= (from + to) / 2 ? 1 : 0)
       : ([from, to]) => smoothstep(from, to, dwell);
-    const opening = story.crossing ? SCENE_03_CROSSING.reveal.opening : LABEL;
+    const opening = story.crossing
+      ? SCENE_03_CROSSING.reveal.opening
+      : story.statement
+        ? SCENE_04_STORY.reveal.opening
+        : LABEL;
     const label = stepped ? 1 : smoothstep(i + opening[0], i + opening[1], p);
     const base = stepped
       ? (i === index ? 1 : 0)
@@ -168,12 +174,26 @@ export function createCopyLayer(sections, chapters, { copyFull, copyFade }) {
     }
     if (story.statement) {
       setVar(story.statement, '--enter', label);
-      const photos = label * sink;
-      setVar(story.photos, '--enter', photos);
-      for (const figure of story.figures) figure.toggleAttribute('data-enter-hidden', photos === 0);
+      const historical = level(SCENE_04_STORY.reveal.historical) * sink;
+      const contemporary = level(SCENE_04_STORY.reveal.contemporary) * sink;
+      const quote = level(SCENE_04_STORY.reveal.quote) * sink;
+      const statement = level(SCENE_04_STORY.reveal.statement) * sink;
+      const cards = [historical, contemporary];
+      setVar(story.photos, '--enter', historical);
+      story.figures.forEach((figure, k) => {
+        const enter = cards[k] ?? 0;
+        setVar(figure, '--enter', enter);
+        figure.toggleAttribute('data-enter-hidden', enter === 0);
+      });
+      setVar(story.quote, '--enter', quote);
+      story.quote?.toggleAttribute('data-enter-hidden', quote === 0);
+      setVar(story.statementIntro, '--enter', statement);
+      story.statementIntro?.toggleAttribute('data-enter-hidden', statement === 0);
+      const wind = historical * SCENE_04_STORY.windAtHistorical
+        + contemporary * (1 - SCENE_04_STORY.windAtHistorical);
       return {
-        mode: base * STATEMENT.full,
-        wind: photos * base,
+        mode: base * SCENE_04_STORY.dark,
+        wind: wind * base,
       };
     }
     const [firstBeat, secondBeat] = story.beats;

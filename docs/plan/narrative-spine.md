@@ -692,11 +692,22 @@ pass over the untouched 3D composition.
 
 The detailed checklist lives in
 [`scene-04-implementation-plan.md`](scene-04-implementation-plan.md), the
-single source of truth for this pass. Status: **planned, 0 of 10 steps
+single source of truth for this pass. Status: **approved, 10 of 10 steps
 complete**.
 
-**Next implementation item:** step 1 — create Scene 04's configuration and
-named reveal ranges without changing any current value or visible behavior.
+**Update 2026-10-05:** steps 1–8 are complete. Scene 04 now owns its unchanged
+chapter values and named reveal ranges. The opening establishes the label and
+title, followed by the historical card, contemporary card, quote and final
+statement intro. Each cloth card activates only with its own entrance, while
+the existing wind haze builds across the comparison. Mobile keeps the cards
+side by side and omits the quote; reduced motion uses stepped still
+photographs. Reverse scrolling, non-enhanced content and semantic order were
+verified. Camera, junk, water, atmosphere, artwork, wording and placement are
+unchanged.
+
+**Decision (user approval, 2026-10-05): Scene 04 is approved as built.** The
+final build and multi-size review passed without fallback, overlap, resizing
+or removal. The controlled rollout may proceed to Scene 05 when requested.
 
 Different technique per scene (user request, 2026-10-04), all DOM over
 the untouched 3D: 02 layered fade with a memory print and timeline; 03
@@ -797,5 +808,5 @@ Files: `index.html`, `src/ui/cityLights.js`, `src/ui/cityTouch.js`,
 
 ## Immediate next action
 
-Define Scene 04's controlled rollout and frozen scope before making new Scene
-04 changes.
+Define Scene 05's controlled rollout and frozen scope before making new Scene
+05 changes.

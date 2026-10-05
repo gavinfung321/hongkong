@@ -6,6 +6,25 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-05
 
+- **Scene 04 final review and approval** (user approval, 2026-10-05).
+  Completed the production build and final checks at 1440 × 900,
+  1178 × 1014, 390 × 844 and short landscape sizes without screenshots.
+  The page remained enhanced, the existing composition stayed intact, and
+  the progressive then-and-now story is approved as built. Scene 04's ten
+  implementation steps are complete. Files:
+  `scene-04-implementation-plan.md`, `narrative-spine.md`.
+- **Scene 04 steps 1–8 — progressive then-and-now story** (user request,
+  2026-10-05). Moved Scene 04's current values unchanged into its own config
+  and added reversible ranges for the title, historical card, contemporary
+  card, quote and final statement. Each existing cloth card activates with
+  its entrance, and the existing wind haze builds across the comparison.
+  Verified mobile, short landscape, reduced motion, reverse scrolling,
+  fallback visibility and reading order without screenshots. Camera, junk,
+  water, 3D atmosphere, card artwork, wording, sizing and placement are
+  unchanged. Files: `src/story/scene04/config.js`,
+  `src/data/chapters.js`, `src/ui/copyLayer.js`, `src/styles.css`,
+  `docs/SCENE-MAP.md`; plan: `scene-04-implementation-plan.md`,
+  `narrative-spine.md`.
 - **Dedicated Scene 04 implementation plan** (user request, 2026-10-05).
   Added a ten-step checklist for progressively revealing the existing
   red-sails title, historical card, contemporary card, quote and final
