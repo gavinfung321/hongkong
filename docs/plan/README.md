@@ -3,7 +3,8 @@
 **Status:** Milestone 2 is closed (2026-10-03). The six chapters, the
 footer and the colours are built. The organization plan is closed
 (2026-10-06). Live at <https://gavinfung321.github.io/hongkong/>; every
-push to `main` redeploys. No plan is open. Start a new chat from
+push to `main` redeploys. The repository README is written; see
+[`readme-plan.md`](readme-plan.md). Start a new chat from
 [`HANDOFF.md`](HANDOFF.md).
 
 It does not change the approved camera journey. Until 2026-10-02 it was
@@ -25,6 +26,7 @@ choice, 2026-10-02). The pre-production briefs were removed 2026-10-06.
 | [`closed-plans.md`](closed-plans.md) | Finished checklists: scenes 03–06, the crossing, the footer, the accent colours, the hero wordmark, and the organization pass | Closed 2026-10-06 |
 | [`checks.md`](checks.md) | Performance budget and acceptance checks | 5, 8 |
 | [`CHANGELOG.md`](CHANGELOG.md) | Dated history of changes, newest first; the old files list | 7 |
+| [`readme-plan.md`](readme-plan.md) | The repository README: links, preview, what it does, how to run it | Written 2026-10-06 |
 | [`HANDOFF.md`](HANDOFF.md) | Current briefing: how we work, where things are, what is built | Updated 2026-10-06 |
 
 References elsewhere to "part 3e", "section 3.11", "stop 4" and so on keep

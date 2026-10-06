@@ -1007,5 +1007,5 @@ footer is next.
 
 ## Immediate next action
 
-The organization plan is closed (user request, 2026-10-06). No change is
-queued. A new chat starts from `HANDOFF.md`.
+Nothing is queued. The repository README is written (user request,
+2026-10-06). See `readme-plan.md`. The harbour page was not changed.

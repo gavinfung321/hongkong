@@ -92,5 +92,6 @@ were removed 2026-10-06.
 
 ## Next
 
-Nothing is queued. The site described above is current. A new chat starts
-from this file.
+Nothing is queued. The repository README is written (user request,
+2026-10-06). The harbour page was not changed. A new chat starts from
+this file.

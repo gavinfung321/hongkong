@@ -6,6 +6,16 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-06
 
+- **Repository README** (user request, 2026-10-06). The repository page
+  now opens with the harbour, the live link, the share image, what the
+  site does, how it is built, and how to run it. The harbour page is
+  unchanged. Files: `README.md`; plan: `readme-plan.md`, `HANDOFF.md`,
+  `README.md`, `narrative-spine.md`.
+- **README plan** (user request, 2026-10-06). A checklist for the
+  repository page: title, links, the existing share image, what the
+  harbour does, how it is built, and how to run it. The README is
+  unchanged until the plan is approved. No page change. Files:
+  `readme-plan.md`, `HANDOFF.md`, `README.md`, `narrative-spine.md`.
 - **Old briefs removed** (user request, 2026-10-06). The pre-production
   briefs, the grey-box review, the look-test notes and the root
   `HANDOFF.md` are gone. The page does not use them. Storyboards,
