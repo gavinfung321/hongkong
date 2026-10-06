@@ -161,13 +161,13 @@ How it is built:
   markers are gone. Menu buttons are named "Open chapter menu" and "Close
   chapter menu"; the footer return is named "Return to the beginning of the
   harbour crossing". No loading, fallback or social image UI was added.
-- **Social image** (user request, 2026-10-04; retaken 2026-10-06): a
-  shared link shows the hero. `posters/harbour-social.jpg` is the opening
-  frame cropped to 1200×630, the usual share-card shape, with the Clock
-  Tower, the warmed 香港, the ferry, the red sails and the skyline. It is
-  a JPEG so chat apps that skip WebP still show it. A visit to the page
-  does not download it; only the link preview does. The approved alt text
-  is unchanged.
+- **Social image** (user request, 2026-10-04; retaken 2026-10-06;
+  recentered the same day, user request): a shared link shows the hero.
+  `posters/harbour-social.jpg` is the opening frame cropped to 1200×630,
+  the usual share-card shape, with 香港 in the middle, the Clock Tower,
+  the ferry, the red sails and the skyline. It is a JPEG so chat apps
+  that skip WebP still show it. A visit to the page does not download it;
+  only the link preview does. The approved alt text is unchanged.
 
 ### 3.4 Nav bar and mobile menu
 

@@ -21,9 +21,9 @@ or lettering is taken from anywhere else.
    `docs/plan/HANDOFF.md` for someone joining the work. There is no
    separate prompt file.
 4. **Preview.** `public/posters/harbour-social.jpg`, the opening frame
-   already in the repo (1200×630, warmed 香港, no interface chrome).
-   The alt text names the Clock Tower, the ferry, the red sails and the
-   skyline.
+   already in the repo (1200×630, warmed 香港, centered in the frame,
+   no interface chrome). The alt text names the Clock Tower, the ferry,
+   the red sails and the skyline.
 5. **What it does.** Four short points from the built site: the camera
    moves with the scroll through six chapters; the harbour, boats and
    skyline are built in code; the words sit over the picture; phones,

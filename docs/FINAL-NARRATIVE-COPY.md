@@ -212,8 +212,8 @@ chapters of water, vessels, landmarks and light.
 **Share image alt:** Victoria Harbour at night, with the Clock Tower, a
 Star Ferry, red sails and the illuminated skyline of Central.
 
-The image is `posters/harbour-social.jpg`, the hero cropped to 1200×630,
-retaken 2026-10-06. A visit does not download it.
+The image is `posters/harbour-social.jpg`, the hero cropped to 1200×630
+and centered on 香港, retaken 2026-10-06. A visit does not download it.
 
 ---
 

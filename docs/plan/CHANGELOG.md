@@ -6,6 +6,12 @@ lives in the dated notes inside each area file, and in `git log`.
 
 ## 2026-10-06
 
+- **Share image centered** (user request, 2026-10-06). The repository
+  preview and the link card were cropped so 香港 sat toward the right
+  edge. The same opening frame is cropped again at 1200×630 with the
+  characters in the middle. The harbour page is unchanged. Files:
+  `public/posters/harbour-social.jpg`; plan: `interface.md`,
+  `ASSET-LEDGER.md`, `FINAL-NARRATIVE-COPY.md`, `readme-plan.md`.
 - **Repository README** (user request, 2026-10-06). The repository page
   now opens with the harbour, the live link, the share image, what the
   site does, how it is built, and how to run it. The harbour page is
